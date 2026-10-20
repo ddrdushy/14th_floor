@@ -1,0 +1,31 @@
+/* Deduction room: extra questions (where, what) beside the suspects. */
+.dq { margin: 40px 0 0; }
+.dq-title { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.9rem, 4.5vw, 2.8rem); line-height: 1; margin: 0 0 8px; }
+.dq .lede { margin-bottom: 18px; }
+.dq-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.dq-option {
+  position: relative; display: grid; gap: 6px; align-content: start; text-align: left; min-height: 112px;
+  background: var(--paper); color: var(--ink); padding: 16px 16px 14px 56px; border: 3px solid transparent;
+  box-shadow: var(--shadow-paper); transition: transform 0.15s, border-color 0.15s;
+}
+.dq-option:hover { transform: translateY(-2px); }
+.dq-option[aria-pressed='true'] { border-color: var(--thread); }
+.dq-option strong { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; line-height: 1.05; }
+.dq-note { font-family: var(--font-doc); font-size: 0.86rem; color: var(--ink-soft); }
+.dq-pin {
+  position: absolute; left: 14px; top: 16px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--slate); color: var(--paper); font-family: var(--font-display); font-weight: 800;
+}
+.dq-option[aria-pressed='true'] .dq-pin { background: var(--thread); }
+.deduce-bar .doc { max-width: 70ch; }
+
+/* Case titles inside a cinematic */
+.cine-casetitle .kicker { font-family: var(--font-doc); color: var(--mist); letter-spacing: 0.08em; margin: 0 0 6px; }
+.cine-casetitle .name { font-family: var(--font-display); font-weight: 800; font-size: clamp(3.4rem, 12vw, 8rem); line-height: 0.95; color: var(--sodium); text-shadow: 0 0 30px rgba(232, 163, 61, 0.45); }
+.cine-casetitle .thread { height: 3px; background: var(--thread); margin: 18px auto 0; width: min(64vw, 560px); box-shadow: 0 0 12px rgba(216, 50, 61, 0.7); }
+
+/* Closed file: extra answers */
+.closed-answers { margin: 0; padding: 0; list-style: none; }
+.closed-answers li { font-family: var(--font-doc); margin: 0 0 6px; }
+.hub-actions .btn--small { min-width: 0; }
+.closed-file h1 { padding-right: min(150px, 30%); }
