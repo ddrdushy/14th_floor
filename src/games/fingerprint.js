@@ -3,6 +3,7 @@
 import { h } from '../core/ui.js';
 import { shuffle, randInt } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'fingerprint', name: 'Fingerprint Match', category: 'Forensics' };
 
@@ -235,3 +236,32 @@ export function mount(el, ctx) {
     devSolve() { stage = 2; selected = answerIdx; declare(); },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Find out whose finger left the print.',
+  steps: [
+    'Look at the lifted print at the top.',
+    'Step 1: choose its pattern: Whorl, Loop or Arch.',
+    'Prints with a different pattern are set aside for you.',
+    'Step 2: tap a print on file to put it on the bench.',
+    'Drag the red copy over it. If the lines match, tap Declare a match.',
+  ],
+  example: {
+    caption: 'These lines come in, turn back, and go out the same side. That is a Loop.',
+    render(el) {
+      const box = (x, label, body, pick) =>
+        rect(x, 8, 108, 112, { fill: '#f4efe3', stroke: pick ? C.red : '#b9ae95', sw: pick ? 3.5 : 1.5, rx: 4 }) +
+        `<g fill="none" stroke="${C.ink}" stroke-width="2.2" stroke-linecap="round">${body(x + 54, 66)}</g>` +
+        text(x + 54, 140, label, { size: 15, weight: 700 });
+      const whorl = (cx, cy) => [8, 16, 24, 32].map((r) => `<ellipse cx="${cx}" cy="${cy}" rx="${r * 1.2}" ry="${r * 1.35}"/>`).join('');
+      const loop = (cx, cy) => [30, 22, 14, 6].map((w) => `<path d="M${cx - w} ${cy + 44} V${cy} A${w} ${w} 0 0 1 ${cx + w} ${cy} V${cy + 44}"/>`).join('');
+      const arch = (cx, cy) => [-36, -24, -12, 0, 12, 24, 36].map((d) => `<path d="M${cx - 44} ${cy + d + 10} Q${cx} ${cy + d - 18} ${cx + 44} ${cy + d + 10}"/>`).join('');
+      let s = box(10, 'Whorl', whorl) + box(136, 'Loop', loop, true) + box(262, 'Arch', arch);
+      s += badge(232, 18, true, 11);
+      put(el, svg(380, 150, s, 'Three print patterns: whorl, loop and arch. Loop is chosen.'));
+    },
+  },
+  tips: ['A wrong match crosses that person out and counts as a wrong call.', 'The Magnifier rules out one innocent person for you.'],
+  controls: { touch: 'Tap to choose. Drag the red print; use the Rotate slider to turn it.', keys: 'Mouse: drag the red print. Use the sliders to turn and fade it.' },
+};

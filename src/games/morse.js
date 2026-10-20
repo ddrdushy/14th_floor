@@ -2,6 +2,7 @@
 import { h, svgEl } from '../core/ui.js';
 import { shuffle, pick, randInt } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'morse', name: 'Morse Intercept', category: 'Code Breaking' };
 export const demo = { variant: 'visual', params: { difficulty: 'hard' } };
@@ -337,3 +338,66 @@ export function mount(el, ctx) {
     },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+const moExample = {
+  caption: 'Three dots is S. Three dashes is O. So the word is SOS.',
+  render(el) {
+    let s = rect(8, 12, 364, 52, { fill: '#ecdcb4', stroke: '#b9a272', sw: 1, dash: '4 3' });
+    const dot = (x) => `<circle cx="${x}" cy="38" r="5" fill="${C.ink}"/>`;
+    const dash = (x) => `<rect x="${x - 4}" y="34" width="26" height="8" rx="4" fill="${C.ink}"/>`;
+    [40, 58, 76].forEach((x) => { s += dot(x); });
+    [148, 184, 220].forEach((x) => { s += dash(x); });
+    [296, 314, 332].forEach((x) => { s += dot(x); });
+    [[58, 'S'], [195, 'O'], [314, 'S']].forEach(([x, L]) => {
+      s += `<path d="M${x - 30} 74 v6 h60 v-6" fill="none" stroke="${C.red}" stroke-width="2"/>` + text(x, 104, L, { size: 24, weight: 800, fill: C.red, font: 'display' });
+    });
+    put(el, svg(380, 116, s, 'Morse tape: dot dot dot, dash dash dash, dot dot dot spells SOS'));
+  },
+};
+export const howTo = {
+  goal: 'Decode the Morse code tape and type each word.',
+  steps: [
+    'Each letter is a group of dots (short) and dashes (long).',
+    'A wider gap means a new letter starts.',
+    'Find each group on the Morse reference card below.',
+    'Type the word in the box under it. Right answers lock in.',
+    'A letter is smudged? Guess it from the rest of the message.',
+  ],
+  example: moExample,
+  tips: ['Tap Play the message to see it flash on the lamp and hear it.'],
+  variants: {
+    audio: {
+      goal: 'Listen to the radio message in Morse code and type each word.',
+      steps: [
+        'Tap Play the message, or ▶ to hear one word.',
+        'A short beep is a dot. A long beep is a dash.',
+        'A longer silence means a new letter, or a new word.',
+        'Find each group on the Morse reference card below.',
+        'Type each word in its box. Right answers lock in.',
+      ],
+      example: { ...moExample, caption: 'Beep beep beep is S. Beeeep beeeep beeeep is O. So the word is SOS.' },
+      tips: ['Choose Slow speed, and play one word at a time.'],
+    },
+    tapcode: {
+      goal: 'Decode the knocks on the cell wall and type each word.',
+      steps: [
+        'Each letter is two groups of knocks.',
+        'The first group gives the row of the grid.',
+        'The second group gives the column.',
+        'C and K share one square.',
+        'Type each word in its box. Right answers lock in.',
+      ],
+      example: {
+        caption: '3 knocks, then 1 knock: row 3, column 1. That is L.',
+        render(el) {
+          let s = text(20, 30, '●●●', { size: 22, anchor: 'start', fill: C.red }) + text(78, 30, '●', { size: 22, anchor: 'start', fill: C.blue }) + text(20, 56, 'row 3, column 1', { size: 13, anchor: 'start', fill: C.soft });
+          s += grid(170, 14, 5, 5, 26, (r, c) => ({ t: TAP_ROWS[r][c] === 'C' ? 'C/K' : TAP_ROWS[r][c], size: TAP_ROWS[r][c] === 'C' ? 10 : 14, font: 'ui', fill: r === 2 && c === 0 ? C.yellow : r === 2 ? '#f6e7b8' : C.paper }), { sw: 0.8 });
+          s += ring(183, 79, 17) + arrow(100, 48, 160, 76, { bend: -10, sw: 2.5 });
+          put(el, svg(380, 150, s, 'Tap code: three knocks then one knock is the letter L'));
+        },
+      },
+      tips: [],
+    },
+  },
+};

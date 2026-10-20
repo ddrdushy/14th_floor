@@ -1,6 +1,7 @@
 // Nonogram: rebuild a picture from row and column run counts.
 import { h } from '../core/ui.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'nonogram', name: 'Nonogram', category: 'Logic' };
 
@@ -122,3 +123,28 @@ export function mount(el, ctx) {
     devSolve() { pic.forEach((row, r) => row.forEach((v, c) => { cells[r * C + c] = v ? 1 : 2; })); render(); check(); },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Fill in squares to reveal a hidden picture.',
+  steps: [
+    'The numbers beside each row and above each column are clues.',
+    '"3 1" means: 3 filled squares in a row, a gap, then 1.',
+    'Tap or drag across squares to fill them.',
+    'Switch to ✕ Mark empty for squares that must stay blank.',
+    'A clue fades when its line is right. Finish every line.',
+  ],
+  example: {
+    caption: 'Row clue "3 1": three filled squares, at least one gap, then one more. ✕ marks squares that stay empty.',
+    render(el) {
+      const fill = [1, 1, 1, 2, 1, 2, 2, 2];
+      let s = rect(10, 28, 76, 34, { fill: '#efe6d0', stroke: C.line, sw: 1 }) + text(48, 52, '3  1', { size: 20, weight: 700, font: 'display' });
+      s += grid(92, 28, 1, 8, 34, (r, c) => (fill[c] === 1 ? { fill: C.ink } : { t: '✕', color: C.soft, size: 16, font: 'ui' }), { sw: 1 });
+      s += `<path d="M94 72 v6 h98 v-6" fill="none" stroke="${C.red}" stroke-width="2"/>` + text(143, 98, '3', { size: 18, weight: 700, fill: C.red, font: 'display' });
+      s += `<path d="M230 72 v6 h30 v-6" fill="none" stroke="${C.red}" stroke-width="2"/>` + text(245, 98, '1', { size: 18, weight: 700, fill: C.red, font: 'display' });
+      put(el, svg(380, 108, s, 'A row with the clue 3 1 solved: three filled squares, a gap, one filled square'));
+    },
+  },
+  tips: ['Start with big numbers: a 13 in a 15-square row fixes most of it.'],
+  controls: { touch: 'Tap or drag to fill. Pick ✕ Mark empty first to mark blanks.', keys: 'Mouse: click or drag to fill.' },
+};

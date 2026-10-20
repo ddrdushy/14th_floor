@@ -5,6 +5,7 @@
 import { h } from '../core/ui.js';
 import { shuffle, pick, mulberry32 } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'lineup', name: 'Police Lineup', category: 'Memory' };
 export const demo = { variant: 'single', params: { rounds: 3, studySeconds: [12, 10, 8] } };
@@ -437,3 +438,64 @@ export function mount(el, ctx) {
     _answer: () => (variant === 'changed' ? [...R.changed] : R.row.map((p, i) => (p.who ? i : -1)).filter((i) => i >= 0)),
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Remember a face, then pick the same person out of a lineup.',
+  steps: [
+    ({ params }) => { const s = params.studySeconds || [12, 10, 8]; return `Tap Show the still. You see a face for ${Array.isArray(s) ? s[0] : s} seconds.`; },
+    'Study it: hair, glasses, ears, nose, eyebrows, moles, scars.',
+    'Then a row of very similar faces appears.',
+    'Tap the one you saw, then tap That one.',
+    ({ params }) => `Get ${params.rounds || 3} rounds right. A wrong pick gives you a new face.`,
+  ],
+  example: {
+    caption: 'You studied the face on the left. In the lineup, number 2 is the same person. The others each differ in one detail.',
+    render(el) {
+      const r = mulberry32(20240607);
+      const base = randomFace(r);
+      base.glasses = 0;
+      const a = { ...base, glasses: 1 }, c = vary(r, base, 'hair');
+      el.innerHTML = `<div class="ht-faces">
+        <figure class="ht-face is-study">${faceSvg(base, { cctv: 'CAM 03' })}<figcaption>You study</figcaption></figure>
+        <span class="ht-arrow" aria-hidden="true">→</span>
+        <figure class="ht-face">${faceSvg(a, { lineup: true, num: '1' })}<figcaption>glasses</figcaption></figure>
+        <figure class="ht-face is-pick">${faceSvg(base, { lineup: true, num: '2' })}<figcaption><b style="color:${C.red}">Same ✓</b></figcaption></figure>
+        <figure class="ht-face">${faceSvg(c, { lineup: true, num: '3' })}<figcaption>hair</figcaption></figure>
+      </div>`;
+    },
+  },
+  tips: ['Each face in the row differs by only one small detail.'],
+  variants: {
+    pair: {
+      goal: 'Remember two faces, then pick both out of one lineup.',
+      steps: [
+        'Tap Show the still. You see the driver and the passenger.',
+        'Study both faces: hair, glasses, ears, nose, eyebrows, moles.',
+        'Then a row of similar faces appears.',
+        'Tap the two you saw, then tap Those two.',
+        ({ params }) => `Get ${params.rounds || 3} rounds right. A wrong pick gives you new faces.`,
+      ],
+    },
+    changed: {
+      goal: 'Remember a face, then spot what changed weeks later.',
+      steps: [
+        'Tap Show the still and study the face.',
+        'Then you see the same person, weeks later.',
+        'Tap every part that changed. Ignore the shirt.',
+        'Tap These changed. Mark nothing that stayed the same.',
+        ({ params }) => `Get ${params.rounds || 3} rounds right to finish.`,
+      ],
+      example: {
+        caption: 'Hair and glasses can change. Ears, nose and moles stay the same.',
+        render(el) {
+          const r = mulberry32(20240607);
+          const base = randomFace(r);
+          base.glasses = 0;
+          const later = { ...base, glasses: 2 };
+          el.innerHTML = `<div class="ht-faces"><figure class="ht-face is-study">${faceSvg(base, { cctv: 'CAM 03' })}<figcaption>Before</figcaption></figure><span class="ht-arrow" aria-hidden="true">→</span><figure class="ht-face is-pick">${faceSvg(later, { cctv: 'CAM 07' })}<figcaption><b style="color:${C.red}">Glasses</b></figcaption></figure></div>`;
+        },
+      },
+    },
+  },
+};

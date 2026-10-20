@@ -1,6 +1,7 @@
 // Who's lying: each person is wholly truthful or wholly lying. Find the one consistent assignment.
 import { h } from '../core/ui.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'whoslying', name: "Who's Lying", category: 'Profiling' };
 
@@ -92,3 +93,29 @@ export function mount(el, ctx) {
     devSolve() { people.forEach((p) => { verdict[p.id] = params.liars.includes(p.id) ? 'lie' : 'truth'; }); render(); check(); },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Decide who is telling the truth and who is lying.',
+  steps: [
+    'A truthful person says only true things.',
+    'A liar says only false things. Every sentence they say is false.',
+    'For each person, tap Telling the truth or Lying.',
+    'Check that every statement fits your choices.',
+    'Tap Give Farah your verdict. Only one set of answers fits.',
+  ],
+  example: {
+    caption: 'The lift log shows the lift worked, so Bala is lying. Ali said Bala lies, so Ali tells the truth.',
+    render(el) {
+      const card = (x, name, l1, l2, note, verdict, ok) =>
+        rect(x, 8, 176, 132, { fill: '#fbf7ec', stroke: C.line, sw: 1.5, rx: 4 }) +
+        text(x + 12, 32, name, { size: 17, weight: 800, anchor: 'start', font: 'display' }) +
+        text(x + 12, 56, l1, { size: 14, anchor: 'start', font: 'doc' }) + text(x + 12, 74, l2, { size: 14, anchor: 'start', font: 'doc' }) +
+        (note ? text(x + 12, 94, note, { size: 11.5, anchor: 'start', fill: C.soft }) : '') +
+        chip(x + 12, 102, 152, 30, verdict, { fill: ok ? '#dbe9de' : '#f3d3d0', stroke: ok ? C.green : C.red, color: ok ? C.green : C.red });
+      const s = card(8, 'Ali', '"Bala is', 'lying."', '', 'Telling the truth', true) + card(196, 'Bala', '"The lift was', 'broken."', 'Lift log: it worked all night.', 'Lying', false);
+      put(el, svg(380, 148, s, 'Ali tells the truth, Bala is lying'));
+    },
+  },
+  tips: ['Start with a statement you can check against a hard fact.', 'If a truthful person says "X is lying", then X is lying.'],
+};

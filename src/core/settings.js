@@ -4,6 +4,7 @@ import { h } from './ui.js';
 import { state, save } from './state.js';
 import { app } from './app.js';
 import { sfx, startRain, stopRain, applySfxVolume, unlock } from './audio.js';
+import { showLoopTutorial } from './howto.js';
 
 let openPanel = null;
 
@@ -43,6 +44,16 @@ export function openSettings() {
       resolve();
     };
     const onKey = (e) => { if (e.key === 'Escape') close(); };
+    const replayTutorial = () => {
+      // forget which puzzles were explained, then show the case explainer right away
+      state().seenHowTo = {};
+      state().seenLoop = false;
+      save();
+      close();
+      setTimeout(() => {
+        showLoopTutorial().then((r) => { if (r === 'done') { state().seenLoop = true; save(); } });
+      }, 200);
+    };
 
     const panel = h('div', { class: 'settings-panel', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'set-title' },
       h('header', { class: 'set-head' },
@@ -60,6 +71,11 @@ export function openSettings() {
           if (v) { unlock(); startRain(0.22); sfx.click(); } else stopRain();
         }),
         sliderRow('Sound effects volume', 'set-sfx-vol', () => s.sfxVolume ?? 0.8, (v) => { s.sfxVolume = v; save(); applySfxVolume(); }, () => sfx.good())),
+      h('section', { class: 'set-group' },
+        h('h3', {}, 'Help'),
+        h('div', { class: 'set-row set-row--help' },
+          h('p', { class: 'set-help' }, 'See how a case works again. Each puzzle will also show its "How to play" card the next time you open it.'),
+          h('button', { class: 'btn btn--paper set-replay', type: 'button', onclick: replayTutorial }, 'Replay tutorial'))),
       h('p', { class: 'set-note' }, 'Headphones recommended. Settings are saved on this device.'),
       h('div', { class: 'set-actions' }, h('button', { class: 'btn btn--primary', onclick: close }, 'Done')));
 

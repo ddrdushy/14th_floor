@@ -1,6 +1,7 @@
 // Logic grid: three categories, five items each, classic X / tick elimination grid.
 import { h } from '../core/ui.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'logicgrid', name: 'Logic Grid', category: 'Logic' };
 
@@ -136,3 +137,31 @@ export function mount(el, ctx) {
     },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Use the clues to work out where each person was and what they held.',
+  steps: [
+    'Read a clue.',
+    'Tap a square once for ✕: this pair is not possible.',
+    'Tap it again for ✓: this pair is true.',
+    'Each person gets exactly one ✓ in each group.',
+    'Tap a clue to cross it out once you have used it.',
+  ],
+  example: {
+    caption: 'Clue: "Mei was in the lift." Tap that square twice for ✓. Its row and column fill with ✕.',
+    render(el) {
+      const cols = ['Lobby', 'Lift', 'Roof'], rows = ['Ali', 'Mei', 'Raj'];
+      let s = '';
+      cols.forEach((c, i) => { s += text(104 + i * 38 + 19, 40, c, { size: 12, weight: 600 }); });
+      rows.forEach((r, i) => { s += text(96, 50 + i * 38 + 24, r, { size: 14, weight: 600, anchor: 'end' }); });
+      s += grid(104, 50, 3, 3, 38, (r, c) => (r === 1 && c === 1 ? { t: '✓', fill: '#dbe9de', color: C.green, size: 22, font: 'ui' } : r === 1 || c === 1 ? { t: '✕', color: C.soft, size: 18, font: 'ui' } : null), { sw: 1 });
+      s += rect(242, 52, 128, 70, { fill: '#f6e7b8', stroke: C.line, sw: 1, rx: 4 });
+      s += text(252, 74, 'Clue', { size: 12, weight: 700, anchor: 'start', fill: C.soft }) + text(252, 94, '"Mei was in', { size: 14, anchor: 'start', font: 'doc' }) + text(252, 112, 'the lift."', { size: 14, anchor: 'start', font: 'doc' });
+      s += arrow(240, 96, 166, 107, { bend: -14, sw: 2.5 });
+      put(el, svg(380, 172, s, 'A small logic grid with Mei and Lift ticked and the rest of that row and column crossed'));
+    },
+  },
+  tips: ['Auto-cross is on: each ✓ fills the rest of its row and column with ✕.', 'Start with the clues that give a direct fact.'],
+  controls: { touch: 'Tap a square: once ✕, twice ✓, three times empty.', keys: 'Mouse: click a square to cycle ✕, ✓ and empty.' },
+};

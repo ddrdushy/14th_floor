@@ -2,6 +2,7 @@
 import { h } from '../core/ui.js';
 import { shuffle } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'riddles', name: 'Riddles', category: 'Lateral thinking' };
 export const demo = { variant: 'mixed', params: {} };
@@ -237,3 +238,28 @@ export function mount(el, ctx) {
     },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Answer the riddles and explain the strange situations.',
+  steps: [
+    'Read the riddle slowly. Every word is a clue.',
+    'Type a short answer and tap Answer.',
+    'Small spelling mistakes are fine.',
+    'A situation needs the key idea in a few words, not a long story.',
+    'Stuck? Tap Ask for a clue. Clues are limited, so choose well.',
+  ],
+  example: {
+    caption: 'A towel gets wetter as it dries you. Type "towel" and tap Answer.',
+    render(el) {
+      let s = rect(8, 8, 364, 128, { fill: '#fbf7ec', stroke: C.line, sw: 1.5, rx: 4 });
+      s += `<circle cx="28" cy="30" r="12" fill="${C.ink}"/>` + text(28, 35, '1', { size: 13, weight: 700, fill: C.paper }) + text(48, 35, 'Riddle', { size: 13, weight: 700, anchor: 'start', fill: C.soft });
+      s += text(24, 64, 'What gets wetter the more it dries?', { size: 16, anchor: 'start', font: 'doc' });
+      s += rect(24, 82, 200, 38, { fill: '#fff', stroke: C.soft, sw: 1.5, rx: 3 }) + text(36, 107, 'towel', { size: 17, anchor: 'start', fill: C.blue, weight: 600 });
+      s += chip(236, 82, 90, 38, 'Answer', { fill: C.ink, color: C.paper, stroke: C.ink }) + badge(346, 101, true, 13);
+      put(el, svg(380, 144, s, 'A riddle answered with the word towel'));
+    },
+  },
+  tips: ['The Magnifier adds a clue for free, without using your clue count.'],
+  controls: { touch: 'Tap the box, type, then tap Answer.', keys: 'Type and press Enter.' },
+};

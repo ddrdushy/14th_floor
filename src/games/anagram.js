@@ -2,6 +2,7 @@
 import { h } from '../core/ui.js';
 import { shuffle, pick } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'anagram', name: 'Anagrams', category: 'Words' };
 export const demo = { variant: 'words', params: { difficulty: 'hard' } };
@@ -375,3 +376,42 @@ export function mount(el, ctx) {
     },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Unscramble each word, then use the circled letters to make one final word.',
+  steps: [
+    'Each line shows the letters of one word, mixed up.',
+    'Tap the letters in the right order to spell the word.',
+    'Tap a slot to take its letter back.',
+    'Each solved word sends its circled letter down to the final word.',
+    'Unscramble the final word at the bottom to finish.',
+  ],
+  example: {
+    caption: 'B L I A I rearranged spells ALIBI. Its circled letter (B) goes to the final word.',
+    render(el) {
+      let s = '';
+      'BLIAI'.split('').forEach((L, i) => { s += chip(70 + i * 50, 10, 42, 42, L, { size: 20, weight: 700, fill: '#efe2bf' }); });
+      'ALIBI'.split('').forEach((L, i) => {
+        s += rect(70 + i * 50, 92, 42, 42, { fill: C.paper, stroke: C.ink, sw: 1.5, rx: 4 }) + text(91 + i * 50, 120, L, { size: 22, weight: 700, fill: C.blue, font: 'display' });
+      });
+      s += ring(91 + 3 * 50, 113, 25);
+      s += arrow(40, 31, 40, 108, { bend: 0, sw: 2.5 });
+      put(el, svg(380, 144, s, 'Scrambled tiles BLIAI arranged into ALIBI'));
+    },
+  },
+  tips: ['The Magnifier places one correct letter for you.'],
+  controls: { touch: 'Tap letter tiles. Tap a filled slot to remove its letter.', keys: 'Type the letters. Backspace removes the last one.' },
+  variants: {
+    phrase: {
+      goal: 'Unscramble each phrase, then use the circled letters to make one final word.',
+      steps: [
+        'Each line is a phrase with its letters mixed up.',
+        'Gaps between the slots show where words end.',
+        'Tap the letters in order to fill the slots.',
+        'Each solved phrase sends its circled letter to the final word.',
+        'Unscramble the final word at the bottom to finish.',
+      ],
+    },
+  },
+};

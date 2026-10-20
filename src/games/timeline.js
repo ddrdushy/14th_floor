@@ -2,6 +2,7 @@
 import { h } from '../core/ui.js';
 import { shuffle } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'timeline', name: 'Timeline', category: 'Logic' };
 
@@ -97,3 +98,43 @@ export function mount(el, ctx) {
     devSolve() { order = params.order.slice(); render(); check(); },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Put the camera frames in the order they happened.',
+  steps: [
+    'Read the clock and the note on each frame.',
+    'Tap ↑ or ↓ to move a frame earlier or later.',
+    'Earliest at the top, latest at the bottom.',
+    'Tap Check the order. It says how many frames are in the right place.',
+    'Keep moving frames until all of them are right.',
+  ],
+  example: {
+    caption: '23:25 happened before 23:40. Tap ↑ to move that frame up.',
+    render(el) {
+      const frame = (y, clock, label, hl) =>
+        rect(40, y, 290, 40, { fill: hl ? '#f6e3a8' : C.paper, stroke: C.line, sw: 1.5, rx: 3 }) +
+        rect(48, y + 8, 64, 24, { fill: '#1d2a30', stroke: 'none', sw: 0, rx: 2 }) + text(80, y + 25, clock, { size: 14, fill: '#cfe8c8', font: 'doc' }) +
+        text(124, y + 26, label, { size: 14, anchor: 'start', font: 'doc' });
+      let s = frame(10, '23:10', 'Lobby: guard at desk', false) + frame(60, '23:40', 'Car park: van leaves', false) + frame(110, '23:25', 'Lift: going up to 14', true);
+      s += chip(338, 114, 34, 32, '↑', { size: 18, fill: C.yellow, stroke: C.ink }) + tap(355, 130);
+      s += arrow(32, 132, 32, 64, { bend: 22, sw: 3 });
+      put(el, svg(380, 160, s, 'Three camera frames; the 23:25 frame should move above 23:40'));
+    },
+  },
+  tips: ['Some clock digits are hidden. Use the details: wet clothes, the lift, a door.', 'A frame fixed by the Magnifier is pinned and cannot move.'],
+  controls: { touch: 'Tap ↑ or ↓ on a frame.', keys: 'Mouse: drag a frame onto another to swap them, or use the arrows.' },
+  variants: {
+    log: {
+      goal: 'Put the log entries in the order they happened.',
+      steps: [
+        'Read the clock and the note on each entry.',
+        'Tap ↑ or ↓ to move an entry earlier or later.',
+        'Earliest at the top, latest at the bottom.',
+        'Tap Check the order. It says how many are in the right place.',
+        'Keep moving entries until all of them are right.',
+      ],
+      tips: ['Some clock digits are smudged. Use what each entry says to place it.', 'An entry fixed by the Magnifier is pinned and cannot move.'],
+    },
+  },
+};

@@ -11,6 +11,7 @@ import { sfx } from '../core/audio.js';
 import { app } from '../core/app.js';
 import { specialtyOf } from '../core/avatar.js';
 import { backButton, icon } from '../core/nav.js';
+import { resolveHowTo, showGameHowTo, showLoopTutorial, needsLoopTutorial, markLoopSeen, seenHowTo, markHowToSeen, closeHowTo, howToButton, goalLine, isHowToOpen } from '../core/howto.js';
 
 function fogLayer(canvas, seedKey, hotspot) {
   const g = canvas.getContext('2d');
@@ -113,7 +114,10 @@ export async function mount(host, { caseId, levelId }) {
   // game column
   const sheet = h('div', { class: 'game-sheet' });
   const mod = await GAMES[level.game]();
+  const ht = resolveHowTo(mod, { params: level.params, variant: level.variant });
   sheet.append(h('h2', {}, mod.meta.name), h('p', { class: 'game-brief' }, `${CATEGORY_OF[level.game]} puzzle.`));
+  // with a howTo the old rules paragraph is hidden (styles/howto.css) and a one-line goal replaces it
+  if (ht) { sheet.classList.add('has-howto'); sheet.append(goalLine(ht, () => openHowTo())); }
   const gameEl = h('div', {});
   sheet.append(gameEl);
 
@@ -124,13 +128,20 @@ export async function mount(host, { caseId, levelId }) {
   const top = h('header', { class: 'topbar' },
     backButton('Case map', () => go('map', { caseId }), 'Map'),
     h('div', { class: 'topbar-title' }, h('strong', {}, level.title), h('span', {}, `${level.phase}. ${mod.meta.name}.`)),
-    timerEl, hintBtn,
+    timerEl, howToButton(() => openHowTo()), hintBtn,
     h('button', { class: 'btn btn--small nav-dup', onclick: () => go('board', { caseId, back: 'puzzle', levelId }) }, 'Board'),
     isDev() ? h('button', { class: 'btn btn--small dev-btn', onclick: () => game.devSolve?.() }, 'Solve (dev)') : null);
 
+  const gameCol = h('div', { class: 'game-col' }, sheet);
   const root = h('section', { class: 'screen puzzle-screen' }, top,
-    h('div', { class: 'puzzle-body' }, evidenceCol, h('div', { class: 'game-col' }, sheet)));
+    h('div', { class: 'puzzle-body' }, evidenceCol, gameCol));
   host.append(root);
+  const anchor = { topbar: top, panel: gameCol };
+  // the "How to play" card; it never pauses or resets the game underneath
+  function openHowTo() {
+    const fallbackText = gameEl.querySelector('.game-rules')?.textContent || `${CATEGORY_OF[level.game]} puzzle.`;
+    return showGameHowTo({ name: mod.meta.name, ht, fallbackText, anchor }).then((r) => { if (r === 'done') markHowToSeen(level.game); return r; });
+  }
 
   const fog = fogLayer(fogCanvas, `${caseId}${levelId}`, ev.hotspot);
   requestAnimationFrame(() => fog.draw());
@@ -165,8 +176,20 @@ export async function mount(host, { caseId, levelId }) {
   };
   const game = mod.mount(gameEl, ctx) || {};
 
+  // first puzzle ever: how a case works; first time with this game: its rules
+  (async () => {
+    if (needsLoopTutorial()) {
+      const r = await showLoopTutorial({ anchor, hints: cs.hints, next: !seenHowTo(level.game) });
+      if (r !== 'done' || destroyed) return;
+      markLoopSeen();
+    }
+    if (!seenHowTo(level.game) && !solved) {
+      await openHowTo();
+    }
+  })();
+
   const tick = setInterval(() => {
-    if (document.hidden || solved) return;
+    if (document.hidden || solved || isHowToOpen()) return;
     elapsed++;
     timerEl.textContent = fmtTime(elapsed);
     if (elapsed % 10 === 0) {
@@ -236,6 +259,7 @@ export async function mount(host, { caseId, levelId }) {
   return {
     destroy() {
       destroyed = true;
+      closeHowTo();
       clearInterval(tick);
       window.removeEventListener('resize', onResize);
       game.destroy?.();

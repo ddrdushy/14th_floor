@@ -264,7 +264,10 @@ export class OfficeScene {
       this.boardItems.add(mesh, pin);
       pins.push(pin.position.clone());
     };
-    suspects.forEach((sp, i) => addCard({ ...sp, kind: 'suspect' }, -0.75 + i * 0.75, 0.38, 0.32, 0.4, (i - 1) * 0.03));
+    // three suspects sit 0.75 apart; more than three squeeze into the same 1.5 span so the row stays on the board
+    const sStep = suspects.length > 1 ? Math.min(0.75, 1.5 / (suspects.length - 1)) : 0;
+    const sStart = -(sStep * (suspects.length - 1)) / 2;
+    suspects.forEach((sp, i) => addCard({ ...sp, kind: 'suspect' }, sStart + i * sStep, 0.38, 0.32, 0.4, (i - 1) * 0.03));
     const evPins = [];
     evidence.forEach((ev, i) => {
       const col = i % 6, row = Math.floor(i / 6);

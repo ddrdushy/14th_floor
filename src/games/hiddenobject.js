@@ -5,6 +5,7 @@ import { h } from '../core/ui.js';
 import { shuffle, pick, randInt } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
 import { icon, iconSvg } from './_icons_c.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'hiddenobject', name: 'Hidden Objects', category: 'Observation' };
 export const demo = { variant: 'list', params: { scene: 'desk', targets: 12, objects: 66 } };
@@ -378,3 +379,49 @@ export function mount(el, ctx) {
     _targets: () => targets.map((t) => ({ kind: t.kind, x: t.x, y: t.y })),
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+const hoExample = (sil) => ({
+  caption: sil ? 'The list shows the key\'s outline only. Find the key in the picture and tap it.' : 'The brass key is on the list. Find it in the picture and tap it.',
+  render(el) {
+    let s = rect(8, 8, 250, 142, { fill: '#6e5236', stroke: '#4a3624', sw: 2, rx: 3 });
+    const put1 = (name, x, y, rot = 0, sc = 1.15) => `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${sc})">${icon(name)}</g>`;
+    s += put1('envelope', 200, 44, 8, 1.4) + put1('coin', 122, 118) + put1('pen', 150, 52, 35) + put1('phone', 214, 112, -12) + put1('glasses', 84, 98, 10) + put1('watch', 34, 120, -20) + put1('key', 62, 44, 25);
+    s += ring(62, 44, 25) + tap(62, 44);
+    s += text(272, 28, 'Find:', { size: 14, weight: 700, anchor: 'start' });
+    if (sil) {
+      s += `<g transform="translate(290 54) scale(.8)" opacity=".9" fill="none">${icon('key').replace(/fill="[^"]*"/g, 'fill="#bdb4a0"')}</g>` + badge(318, 54, true, 9);
+      s += `<g transform="translate(290 92) scale(.8)">${icon('lighter').replace(/fill="[^"]*"/g, 'fill="#bdb4a0"')}</g>`;
+    } else {
+      s += text(272, 58, 'brass key', { size: 14, anchor: 'start', font: 'doc', fill: C.soft }) + `<line x1="270" y1="53" x2="350" y2="53" stroke="${C.red}" stroke-width="2.5"/>`;
+      s += text(272, 84, 'lighter', { size: 14, anchor: 'start', font: 'doc' }) + text(272, 110, 'USB stick', { size: 14, anchor: 'start', font: 'doc' });
+    }
+    put(el, svg(380, 158, s, 'A cluttered desk; the key is circled and ticked off the list'));
+  },
+});
+export const howTo = {
+  goal: ({ params }) => `Find the ${params.targets || 12} objects on the list, hidden in the picture.`,
+  steps: [
+    'Look at the list of objects under the picture.',
+    'Find one in the picture and tap it.',
+    'A found object gets a red circle and is ticked off.',
+    'Tap + to zoom in on small things. Drag to look around.',
+    'Tap carefully. Wrong taps are counted.',
+  ],
+  example: hoExample(false),
+  tips: ['The Magnifier draws a circle around the area to search.'],
+  controls: { touch: 'Tap to mark. Pinch or tap + to zoom. Drag to move.', keys: 'Click the picture, then: arrows move a cursor, Enter marks, + and − zoom.' },
+  variants: {
+    silhouette: {
+      goal: ({ params }) => `Find the ${params.targets || 12} objects shown as outlines under the picture.`,
+      steps: [
+        'Under the picture is a list of outlines (shapes, no names).',
+        'Find an object with that shape in the picture and tap it.',
+        'A found object gets a red circle and its name appears.',
+        'Tap + to zoom in on small things. Drag to look around.',
+        'Tap carefully. Wrong taps are counted.',
+      ],
+      example: hoExample(true),
+    },
+  },
+};

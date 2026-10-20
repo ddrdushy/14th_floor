@@ -2,6 +2,7 @@
 import { h } from '../core/ui.js';
 import { shuffle, pick, mulberry32 } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'iqmatrix', name: 'Pattern Matrix', category: 'Pattern' };
 export const demo = { variant: 'rows', params: { count: 6 } };
@@ -376,3 +377,51 @@ export function mount(el, ctx) {
     },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+const iqTile = (t, x, y, s) => tileSvg(t).replace('<svg ', `<svg x="${x}" y="${y}" width="${s}" height="${s}" `);
+export const howTo = {
+  goal: 'Find the tile that completes each 3 by 3 pattern.',
+  steps: [
+    'Look across each row. What changes from tile to tile?',
+    'The same rules work in all three rows.',
+    'Use them on the last row to picture the missing tile.',
+    'Tap the option that matches.',
+    ({ params }) => `Solve ${Math.min(Math.max(params.count || 6, 3), 8)} panels. Two wrong picks bring a new panel.`,
+  ],
+  example: {
+    caption: 'In every row the shape grows: small, medium, large. The missing tile is the large triangle.',
+    render(el) {
+      const shapes = ['circle', 'square', 'triangle'];
+      let s = '';
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+        const x = 10 + c * 46, y = 8 + r * 46;
+        s += rect(x, y, 42, 42, { fill: C.paper, stroke: C.line, sw: 1.2, rx: 3 });
+        if (r === 2 && c === 2) s += rect(x, y, 42, 42, { fill: '#f6e7b8', stroke: C.ink, sw: 1.5, rx: 3, dash: '4 3' }) + text(x + 21, y + 29, '?', { size: 22, weight: 800, font: 'display' });
+        else s += iqTile({ shape: shapes[r], count: 1, fill: 'ink', size: c, rot: 0, lines: 0 }, x + 2, y + 2, 38);
+      }
+      const opts = [{ shape: 'triangle', size: 0 }, { shape: 'circle', size: 2 }, { shape: 'triangle', size: 2 }];
+      opts.forEach((o, i) => {
+        const x = 200 + i * 58, y = 54;
+        s += rect(x, y, 50, 50, { fill: C.paper, stroke: i === 2 ? C.red : C.soft, sw: i === 2 ? 3 : 1.2, rx: 4 }) + iqTile({ ...o, count: 1, fill: 'ink', rot: 0, lines: 0 }, x + 4, y + 4, 42);
+        s += text(x + 25, y + 68, String(i + 1), { size: 13, weight: 700, fill: C.soft });
+      });
+      s += arrow(316, 50, 150, 118, { bend: 30, sw: 2.5 });
+      put(el, svg(380, 150, s, 'A 3 by 3 pattern where shapes grow; the answer is the large triangle'));
+    },
+  },
+  tips: ['Check one thing at a time: shape, number, colour, size, turn.', 'The Magnifier writes down one of the hidden rules.'],
+  controls: { touch: 'Tap an option.', keys: 'Press 1 to 8 to pick an option.' },
+  variants: {
+    columns: {
+      steps: [
+        'Look down each column. What changes from tile to tile?',
+        'The same rules work in all three columns.',
+        'Use them on the last column to picture the missing tile.',
+        'Tap the option that matches.',
+        ({ params }) => `Solve ${Math.min(Math.max(params.count || 6, 3), 8)} panels. Two wrong picks bring a new panel.`,
+      ],
+      example: { caption: 'Here the rule runs down each column instead of across each row.' },
+    },
+  },
+};

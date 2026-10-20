@@ -2,6 +2,7 @@
 import { h } from '../core/ui.js';
 import { pick, shuffle, mulberry32 } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'colorword', name: 'Lie Detector', category: 'Speed' };
 export const demo = { variant: 'stroop', params: { difficulty: 'hard' } };
@@ -280,3 +281,75 @@ export function mount(el, ctx) {
     },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+const cwCfg = (params = {}) => SETTINGS[params.difficulty || 'hard'] || SETTINGS.hard;
+function cwButtons(x0, y, pick, swatchOnly = false) {
+  let s = '';
+  COLOURS.slice(0, 4).forEach((c, i) => {
+    const x = x0 + i * 88;
+    s += rect(x, y, 80, 38, { fill: C.paper, stroke: c.id === pick ? C.red : C.soft, sw: c.id === pick ? 3 : 1.2, rx: 5 }) + rect(x + 8, y + 11, 16, 16, { fill: c.hex, stroke: 'none', sw: 0, rx: 3 });
+    if (!swatchOnly) s += text(x + 30, y + 24, c.word.toLowerCase(), { size: 13, anchor: 'start', weight: 600 });
+  });
+  return s;
+}
+export const howTo = {
+  goal: 'Tap the colour of the ink, not the colour the word names.',
+  steps: [
+    'Tap Start round. Colour words flash up, like BLUE.',
+    'Look at the ink colour. Ignore what the word says.',
+    'Tap the button for the ink colour, quickly.',
+    ({ params }) => `Get ${cwCfg(params).need} of ${cwCfg(params).trials} right to pass a round.`,
+    ({ params }) => `Pass all ${cwCfg(params).rounds.length} rounds. Each round is faster.`,
+  ],
+  example: {
+    caption: 'The word says BLUE, but the ink is red. Tap red.',
+    render(el) {
+      let s = text(190, 56, 'BLUE', { size: 46, weight: 800, fill: '#b3202a', font: 'display' });
+      s += cwButtons(16, 86, 'red');
+      put(el, svg(380, 134, s, 'The word BLUE printed in red ink; the red button is the answer'));
+    },
+  },
+  tips: ['Missed some? Tap Retry. The Magnifier can give you more time per word.'],
+  controls: { touch: 'Tap a colour button.', keys: ({ params }) => `Press 1 to ${cwCfg(params).colours}, or the first letter: ${COLOURS.slice(0, cwCfg(params).colours).map((c) => c.key.toUpperCase()).join(', ')} (K is black).` },
+  variants: {
+    switch: {
+      goal: 'Above each word it says INK or WORD. Answer the one it asks for.',
+      steps: [
+        'Tap Start round. A colour word flashes up with INK or WORD above it.',
+        'INK: tap the colour of the ink.',
+        'WORD: tap the colour the word names.',
+        ({ params }) => `Get ${cwCfg(params).need} of ${cwCfg(params).trials} right to pass a round.`,
+        ({ params }) => `Pass all ${cwCfg(params).rounds.length} rounds. Each round is faster.`,
+      ],
+      example: {
+        caption: 'Left: INK, so answer the ink: blue. Right: WORD, so answer what it says: red.',
+        render(el) {
+          let s = rect(8, 8, 176, 104, { fill: C.paper, stroke: C.line, sw: 1.2, rx: 4 }) + rect(196, 8, 176, 104, { fill: C.paper, stroke: C.line, sw: 1.2, rx: 4 });
+          s += text(96, 32, 'INK', { size: 14, weight: 800, fill: C.soft }) + text(96, 72, 'GREEN', { size: 34, weight: 800, fill: '#2a4a8a', font: 'display' });
+          s += text(284, 32, 'WORD', { size: 14, weight: 800, fill: C.red }) + text(284, 72, 'RED', { size: 34, weight: 800, fill: '#1d1a16', font: 'display' });
+          s += text(96, 100, 'Tap blue', { size: 14, weight: 700, fill: C.blue }) + text(284, 100, 'Tap red', { size: 14, weight: 700, fill: C.red });
+          put(el, svg(380, 120, s, 'INK means answer the ink colour; WORD means answer the word'));
+        },
+      },
+    },
+    reverse: {
+      goal: 'Tap the colour the word names, not the colour of the ink.',
+      steps: [
+        'Tap Start round. Colour words flash up in the wrong ink.',
+        'Read the word. Ignore the ink colour.',
+        'Tap the colour patch that matches the word.',
+        ({ params }) => `Get ${cwCfg(params).need} of ${cwCfg(params).trials} right to pass a round.`,
+        ({ params }) => `Pass all ${cwCfg(params).rounds.length} rounds. Each round is faster.`,
+      ],
+      example: {
+        caption: 'The word says BLUE (in red ink). Tap the blue patch.',
+        render(el) {
+          let s = text(190, 56, 'BLUE', { size: 46, weight: 800, fill: '#b3202a', font: 'display' });
+          s += cwButtons(16, 86, 'blue', true);
+          put(el, svg(380, 134, s, 'The word BLUE in red ink; the blue patch is the answer'));
+        },
+      },
+    },
+  },
+};

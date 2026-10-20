@@ -11,6 +11,7 @@ import './styles/games-c.css';
 import './styles/games-b.css';
 import './styles/front.css';
 import './styles/cases.css';
+import './styles/howto.css';
 import './styles/mobile.css';
 
 import { register, go } from './core/router.js';

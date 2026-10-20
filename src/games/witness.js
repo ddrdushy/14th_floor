@@ -2,6 +2,7 @@
 import { h, fmtTime } from '../core/ui.js';
 import { shuffle } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'witness', name: 'Witness Recall', category: 'Memory' };
 
@@ -107,3 +108,29 @@ export function mount(el, ctx) {
     devSolve() { ctx.onSolved(); },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Remember what the witness said, then answer questions about it.',
+  steps: [
+    ({ params }) => `Tap Read the statement. You have ${params.readSeconds || 90} seconds to read it.`,
+    'Read carefully: times, names, numbers, colours and small details.',
+    'Then the statement is hidden and questions appear.',
+    'Tap one answer for each question, then tap Hand in your answers.',
+    ({ params }) => `Get ${params.pass || 7} of ${params.questions?.length || 9} right to pass. If not, read it again.`,
+  ],
+  example: {
+    caption: 'Notice details like the time. A question will ask about it later.',
+    render(el) {
+      let s = rect(8, 8, 172, 138, { fill: '#fbf7ec', stroke: C.line, sw: 1.5 });
+      s += text(18, 28, 'Statement', { size: 13, weight: 700, anchor: 'start', font: 'doc' });
+      [44, 62, 98, 116, 134].forEach((y, i) => { s += rect(18, y - 7, [150, 132, 140, 120, 96][i], 6, { fill: '#cfc6b2', stroke: 'none', sw: 0, rx: 3 }); });
+      s += rect(18, 70, 152, 22, { fill: '#f6e3a8', stroke: 'none', sw: 0 }) + text(22, 86, 'heard it at 11:40 PM', { size: 13, anchor: 'start', font: 'doc' });
+      s += text(200, 30, 'What time did', { size: 14, weight: 700, anchor: 'start' }) + text(200, 48, 'she hear it?', { size: 14, weight: 700, anchor: 'start' });
+      s += chip(200, 62, 78, 36, '11:15') + chip(288, 62, 78, 36, '11:40', { fill: C.ink, color: C.paper, stroke: C.ink }) + chip(200, 106, 78, 36, '12:05');
+      s += arrow(172, 82, 284, 82, { bend: 26, sw: 2.5 });
+      put(el, svg(380, 154, s, 'A statement with the time 11:40 highlighted, and a question answered 11:40'));
+    },
+  },
+  tips: ['Finished reading early? Tap "I\'m ready" to go to the questions.', 'Times, numbers and Malay words are often asked about.'],
+};

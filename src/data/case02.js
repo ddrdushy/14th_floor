@@ -163,7 +163,11 @@ export const CASE02 = {
       id: 'c2_01', phase: 'Port gate', title: 'Locker 31',
       game: 'safecracker', variant: 'classic',
       brief: 'The crane operators\' rest room behind Gate 3 smells of Milo and diesel. Azman\'s locker has a five-digit padlock, and Tony Kwan says the master key went missing on Tuesday. Ten tries before the lock jams and the guard comes to see who is rattling it.',
-      params: { digits: 5, tries: 10 },
+      params: {
+        digits: 5, tries: 10, bonus: 5, repeats: false,
+        clue: 'Salmah, on the phone: "Every code he has, he puts a 3 and a 1 in it somewhere. Locker 31, so he will not forget."',
+        contains: [3, 1],
+      },
       evidence: {
         img: 'ev_c2_locker', hotspot: { x: 0.52, y: 0.55, r: 0.15 },
         title: 'He meant to come back',

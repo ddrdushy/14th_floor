@@ -5,6 +5,7 @@
 import { h } from '../core/ui.js';
 import { shuffle, pick } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'dna', name: 'DNA Gel', category: 'Forensics' };
 export const demo = { variant: 'single', params: { suspects: 7 } };
@@ -301,3 +302,50 @@ export function mount(el, ctx) {
     _answer: () => answer,
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+function dnGel(el, lanes, x0 = 96, opts = {}) {
+  let s = rect(8, 8, 364, 150, { fill: '#0b0f12', stroke: '#2c363e', sw: 2, rx: 4 });
+  lanes.forEach(([label, bands, mark], i) => {
+    const x = x0 + i * 76;
+    s += text(x, 150, label, { size: 13, fill: i === 0 ? '#ffd2a8' : C.mist, font: 'doc' });
+    bands.forEach((y) => { s += `<rect x="${x - 20}" y="${y - 3}" width="40" height="6" rx="3" fill="#ffb27a"/><rect x="${x - 22}" y="${y - 5}" width="44" height="10" rx="5" fill="#ffb27a" opacity=".25"/>`; });
+    if (mark === 'ok') s += `<rect x="${x - 26}" y="16" width="52" height="118" fill="none" stroke="${C.amber}" stroke-width="2.5"/>` + badge(x + 26, 18, true, 10);
+    if (mark === 'no') s += badge(x + 26, 18, false, 10);
+  });
+  if (opts.ruler) s += `<line x1="14" y1="${opts.ruler}" x2="366" y2="${opts.ruler}" stroke="${C.amber}" stroke-width="1.5" stroke-dasharray="6 4"/><path d="M8 ${opts.ruler - 6} L18 ${opts.ruler} L8 ${opts.ruler + 6}Z" fill="${C.amber}"/>`;
+  s += text(40, 32, 'X = scene', { size: 11, fill: '#ffd2a8', anchor: 'start', font: 'doc' });
+  put(el, svg(380, 166, s, opts.label || 'A DNA gel with matching bands'));
+}
+export const howTo = {
+  goal: 'Find the person whose DNA matches the sample from the crime scene.',
+  steps: [
+    'Lane X is the sample from the crime scene.',
+    'Each numbered lane is one suspect.',
+    'A match has the same bands as X, at the same heights.',
+    'Drag the orange ruler up or down to compare heights.',
+    'Tap the matching lane, then tap Declare a match.',
+  ],
+  example: {
+    caption: 'Lane 2 has bands at the same heights as X. Lane 1 has one band too low, so it is not a match.',
+    render: (el) => dnGel(el, [['X', [44, 78, 118]], ['1', [44, 96, 118], 'no'], ['2', [44, 78, 118], 'ok']], 120, { ruler: 78 }),
+  },
+  tips: ['Relatives share most bands. One band out of place rules them out.', 'Tap + to zoom in when two bands are close together.'],
+  controls: { touch: 'Drag the orange line. Tap a lane or a name to pick it.', keys: 'Click the ruler, then use the up and down arrows.' },
+  variants: {
+    mixed: {
+      goal: 'The crime scene sample is a mix of two people. Find both.',
+      steps: [
+        'Lane X is a mix of DNA from two people.',
+        'Every band in X must come from one of the two.',
+        'Every band of both people must also be in X.',
+        'Drag the orange ruler to compare heights.',
+        'Tap the two lanes, then tap Declare these two.',
+      ],
+      example: {
+        caption: 'Lanes 1 and 2 together make every band in X. Lane 3 has a band that X does not have.',
+        render: (el) => dnGel(el, [['X', [36, 62, 96, 124]], ['1', [36, 96], 'ok'], ['2', [62, 124], 'ok'], ['3', [36, 80], 'no']], 96, { ruler: 96, label: 'A mixed DNA sample matching lanes 1 and 2 together' }),
+      },
+    },
+  },
+};

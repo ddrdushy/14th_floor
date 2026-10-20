@@ -4,6 +4,8 @@ import { h } from '../core/ui.js';
 import { shuffle } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
 import { iconSvg } from './_icons_c.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
+import { icon as htIcon } from './_icons_c.js';
 
 export const meta = { id: 'rebus', name: 'Picture Words', category: 'Lateral thinking' };
 export const demo = { variant: 'mixed', params: { count: 10 } };
@@ -241,3 +243,27 @@ export function mount(el, ctx) {
 export function selfTest() {
   return PUZZLES.filter(([a, e]) => evaluate(parse(e)) !== a).map(([a, e]) => `${a}: ${e} -> ${evaluate(parse(e))}`);
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Solve each picture sum to make a word.',
+  steps: [
+    'Say the name of each picture.',
+    'Plus (+) joins the words or letters together.',
+    'Minus (−) takes those letters out again.',
+    'Some pictures go by sound: an eye can mean the letter I.',
+    'Type the word, tap Check, and solve every card.',
+  ],
+  example: {
+    caption: 'KEY + BOARD = KEYBOARD.  FL + DOOR − D = FLOOR.',
+    render(el) {
+      const pic = (name, x, y) => `<g transform="translate(${x} ${y}) scale(1.25)">${htIcon(name)}</g>`;
+      const word = (s2, x, y, col = C.ink) => text(x, y, s2, { size: 22, weight: 800, fill: col, font: 'display', anchor: 'start' });
+      let s = pic('key', 36, 36) + text(36, 76, 'key', { size: 12, fill: C.soft }) + word('+', 70, 44) + word('BOARD', 92, 44) + word('=', 178, 44) + word('KEYBOARD', 202, 44, C.green);
+      s += word('FL', 14, 124) + word('+', 46, 124) + pic('door', 90, 116) + text(90, 156, 'door', { size: 12, fill: C.soft }) + word('−', 122, 124) + word('D', 146, 124) + word('=', 178, 124) + word('FLOOR', 202, 124, C.green);
+      put(el, svg(380, 164, s, 'Picture sums: key plus board is keyboard; F L plus door minus D is floor'));
+    },
+  },
+  tips: ['Say the sum out loud. It often helps.', 'The Magnifier names the pictures, then gives the first letters.'],
+  controls: { touch: 'Tap the box, type, then tap Check.', keys: 'Type the word and press Enter.' },
+};

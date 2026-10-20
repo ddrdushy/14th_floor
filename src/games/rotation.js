@@ -4,6 +4,7 @@
 import { h } from '../core/ui.js';
 import { shuffle, mulberry32, randInt } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'rotation', name: 'Mental Rotation', category: 'Spatial' };
 export const demo = { variant: '3d', params: { trials: 10, target: 8, options: 4 } };
@@ -326,3 +327,35 @@ export function mount(el, ctx) {
     _answer: () => T.options.map((o) => o.same),
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Find which shapes are the reference shape, only turned around.',
+  steps: [
+    'Look at the Reference shape.',
+    'Some options are the same shape, just turned.',
+    'Others are its mirror image. Turning never makes a mirror image match.',
+    'Tap every option that is the same shape, then tap Submit.',
+    ({ params }) => `Get ${Math.min(params.trials || 10, params.target || 8)} of ${params.trials || 10} right to pass.`,
+  ],
+  example: {
+    caption: 'Option 1 is the reference lying on its side: select it. Option 2 is a mirror image: leave it.',
+    render(el) {
+      const draw = (cells, x, y, s, fill) => cells.map(([cx, cy]) => rect(x + cx * s, y + cy * s, s, s, { fill, stroke: C.ink, sw: 1.5 })).join('');
+      const box = (x, label, cells, fill, mark) =>
+        rect(x, 10, 106, 106, { fill: C.paper, stroke: mark === 'ok' ? C.red : C.line, sw: mark === 'ok' ? 3 : 1.5, rx: 4 }) +
+        draw(cells, x + 26, 26, 22, fill) + text(x + 53, 138, label, { size: 13, weight: 700 }) + (mark ? badge(x + 96, 20, mark === 'ok', 11) : '');
+      let s = box(8, 'Reference', [[0, 0], [0, 1], [0, 2], [1, 2]], '#cfc6b2');
+      s += box(138, '1  Same', [[0, 0], [1, 0], [2, 0], [0, 1]], '#cfc6b2', 'ok');
+      s += box(266, '2  Mirror', [[0, 0], [0, 1], [1, 1], [2, 1]], '#cfc6b2', 'no');
+      put(el, svg(380, 148, s, 'A reference L shape, a turned copy marked same, and a mirror image marked mirror'));
+    },
+  },
+  tips: ['Picture turning the option on the table. Never flip it over.', 'The Magnifier tells you about one option.'],
+  controls: { touch: 'Tap options to select them, then Submit.', keys: 'Press 1 to 4 to select options. Enter submits.' },
+  variants: {
+    '3d': {
+      tips: ['The figures are cubes joined face to face. Look at where the arms point.', 'The Magnifier tells you about one option.'],
+    },
+  },
+};

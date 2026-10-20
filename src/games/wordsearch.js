@@ -2,6 +2,7 @@
 import { h } from '../core/ui.js';
 import { shuffle, pick } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'wordsearch', name: 'Word Search', category: 'Words' };
 
@@ -261,3 +262,47 @@ export function mount(el, ctx) {
     },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+const wsExample = {
+  caption: 'Press on C and slide to N. COIN gets a red line and is crossed off the list.',
+  render(el) {
+    const rows = ['KCOIN', 'ATEAP', 'RMLDU', 'SHOEB', 'WIREG'];
+    let s = grid(14, 14, 5, 5, 32, (r, c) => ({ t: rows[r][c], font: 'doc', size: 17 }), { sw: 0.6 });
+    const under = 14 + 32 * 5 + 14;
+    s += `<line x1="${14 + 32 * 1.5}" y1="30" x2="${14 + 32 * 4.5}" y2="30" stroke="${C.red}" stroke-width="20" stroke-linecap="round" opacity=".32"/>`;
+    s += arrow(14 + 32 * 1.5, under, 14 + 32 * 4.5, under, { sw: 2.5, head: 8 }) + text(14 + 32 * 1.5, under + 20, 'press', { size: 11, weight: 700, fill: C.red }) + text(14 + 32 * 4.5, under + 20, 'let go', { size: 11, weight: 700, fill: C.red });
+    s += text(210, 30, 'Find:', { size: 14, weight: 700, anchor: 'start' });
+    s += text(210, 56, 'COIN', { size: 16, anchor: 'start', font: 'doc', fill: C.soft }) + `<line x1="208" y1="51" x2="258" y2="51" stroke="${C.red}" stroke-width="2.5"/>`;
+    s += text(210, 82, 'SHOE', { size: 16, anchor: 'start', font: 'doc' }) + text(210, 108, 'WIRE', { size: 16, anchor: 'start', font: 'doc' });
+    put(el, svg(300, 214, s, 'A letter grid with the word COIN circled'));
+  },
+};
+export const howTo = {
+  goal: 'Find every word on the list, hidden in the letter grid.',
+  steps: [
+    'Pick a word from the list.',
+    'Find its first letter in the grid.',
+    'Press on that letter and slide to the last letter.',
+    'Words go across, down, diagonal, and even backwards.',
+    'Found words get a red line and are crossed off.',
+  ],
+  example: wsExample,
+  controls: { touch: 'Press and slide your finger across the letters.', keys: 'Mouse: click the first letter and drag to the last.' },
+  variants: {
+    secret: {
+      goal: 'Find every word on the list. Then read the hidden message in the letters left over.',
+      steps: [
+        'Find each listed word: press its first letter, slide to its last.',
+        'Words go across, down, diagonal, and even backwards.',
+        'When all are found, the unused letters turn yellow.',
+        'Read the yellow letters left to right, row by row.',
+        'Type that message in the box and tap Check message.',
+      ],
+      tips: ['The Magnifier makes the first letter of a missing word flash.'],
+    },
+    hidden: {
+      goal: 'Find all the hidden words. Only the number of words is shown, not the words.',
+    },
+  },
+};

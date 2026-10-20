@@ -4,14 +4,15 @@
 import { CASE01 } from './case01.js';
 import { SIDE01 } from './side01.js';
 import { CASE02 } from './case02.js';
+import { CASE03 } from './case03.js';
 import { state, caseState } from '../core/state.js';
 
-export const CASES = { case01: CASE01, side01: SIDE01, case02: CASE02 };
-export const CASE_ORDER = ['case01', 'side01', 'case02'];
+export const CASES = { case01: CASE01, side01: SIDE01, case02: CASE02, case03: CASE03 };
+export const CASE_ORDER = ['case01', 'side01', 'case02', 'case03'];
 
 // What the phone says once every written case is closed.
 export const COMING_SOON = {
-  title: 'Case 3',
+  title: 'Case 4',
   teaser: 'A small parcel with a Colombo postmark is waiting with Bala Anne. Inside: one uncut blue sapphire, wrapped in a mamak receipt. The receipt is folded into the shape of a kancil.',
 };
 

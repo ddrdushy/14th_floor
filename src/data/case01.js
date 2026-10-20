@@ -218,8 +218,12 @@ export const CASE01 = {
     {
       id: 'l09', phase: "The doctor's secrets", title: 'The safe',
       game: 'safecracker', variant: 'classic',
-      brief: 'A wall safe behind the framed diploma. Five digits. The lock gives a green light for a right digit in the right place, amber for a right digit in the wrong place. Twelve tries before it locks you out and scrambles.',
-      params: { digits: 5, tries: 12 },
+      brief: 'A wall safe behind the framed diploma. Four digits, no two the same. The lock marks every digit you try: right place, wrong place, or not in the code at all. Eight tries before it jams for a moment.',
+      params: {
+        digits: 4, tries: 8, bonus: 4, repeats: false,
+        clue: 'Goh\'s diary: "The safe remembers Rachel." Tucked into the diploma frame is a photo of Rachel blowing out candles shaped like a 7.',
+        contains: [7],
+      },
       evidence: {
         tag: 9, img: 'ev_safe', hotspot: { x: 0.43, y: 0.62, r: 0.14 },
         title: 'X-ray, ledger, unsent letter',

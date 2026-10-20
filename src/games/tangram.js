@@ -5,6 +5,7 @@
 import { h } from '../core/ui.js';
 import { shuffle, mulberry32 } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'tangram', name: 'Tangram', category: 'Spatial' };
 export const demo = { variant: 'classic', params: { rounds: 3 } };
@@ -382,3 +383,36 @@ export function mount(el, ctx) {
     },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Fill the black shape using all seven coloured pieces.',
+  steps: [
+    'Drag a coloured piece onto the black shape.',
+    'Tap a piece to select it. Then tap Turn left or Turn right.',
+    'Double-tap a piece to turn it too.',
+    'Pieces snap into place. They must not overlap.',
+    ({ params }) => `Cover the whole shape to finish. ${params.rounds || 3} shapes in all.`,
+  ],
+  example: {
+    caption: 'The red triangle is in place. Drag the blue one up, turn it, and it fills the other half of the roof.',
+    render(el) {
+      const u = 32, ox = 24, oy = 14;
+      const P = (pts) => pts.map(([x, y]) => `${(ox + x * u).toFixed(1)},${(oy + y * u).toFixed(1)}`).join(' ');
+      const pairs = (flat) => flat.reduce((a, v, i) => (i % 2 ? (a[a.length - 1].push(v), a) : [...a, [v]]), []);
+      const house = SHAPES[0];
+      let s = house.p.map(([, f]) => `<polygon points="${P(pairs(f))}" fill="${C.ink}" stroke="${C.ink}" stroke-width="1" stroke-linejoin="round"/>`).join('');
+      s += `<polygon points="${P(pairs(house.p[0][1]))}" fill="${COLORS[0]}" stroke="${C.ink}" stroke-width="1.5" stroke-linejoin="round"/>`;
+      s += `<polygon points="${P(pairs(house.p[1][1]))}" fill="none" stroke="${COLORS[1]}" stroke-width="2.5" stroke-dasharray="5 4"/>`;
+      // tray
+      const t = (pts, k, x, y, col, op = 1) => `<polygon points="${pts.map(([a, b]) => `${x + a * k},${y + b * k}`).join(' ')}" fill="${col}" stroke="${C.ink}" stroke-width="1.5" stroke-linejoin="round" opacity="${op}"/>`;
+      s += rect(214, 10, 158, 134, { fill: '#f1ead8', stroke: C.line, sw: 1, rx: 4, dash: '4 3' }) + text(293, 138, 'pieces', { size: 12, fill: C.soft, font: 'doc' });
+      s += t(BASE.L, 30, 236, 22, COLORS[1]);
+      s += t(BASE.M, 26, 304, 84, COLORS[2], 0.55) + t(BASE.S, 26, 236, 92, COLORS[3], 0.55) + t(BASE.Q, 26, 320, 30, COLORS[5], 0.55);
+      s += arrow(250, 40, 116, 46, { bend: -26, sw: 3 });
+      put(el, svg(380, 152, s, 'A house silhouette with one triangle placed and another being dragged in'));
+    },
+  },
+  tips: ['Place the two big triangles first.', 'Only the parallelogram ever needs Flip.'],
+  controls: { touch: 'Drag pieces. Double-tap or use the Turn buttons.', keys: 'Tab to a piece. Arrows move it, Q and E turn it, F flips it.' },
+};

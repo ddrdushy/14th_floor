@@ -2,6 +2,7 @@
 import { h } from '../core/ui.js';
 import { pick, randInt, shuffle, mulberry32 } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'quickmath', name: 'Receipt Check', category: 'Speed' };
 export const demo = { variant: 'receipts', params: { difficulty: 'hard' } };
@@ -290,3 +291,48 @@ export function mount(el, ctx) {
     },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+const qmTarget = (params = {}) => params.target || (LEVELS[params.difficulty || 'hard'] || LEVELS.hard).target;
+const qmTime = (params = {}) => { const s = params.seconds || (LEVELS[params.difficulty || 'hard'] || LEVELS.hard).seconds; return s % 60 ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')} minutes` : `${s / 60} minutes`; };
+function qmReceipt(el, lines, ask, answer, label) {
+  let s = rect(8, 8, 214, 138, { fill: '#fffdf6', stroke: C.line, sw: 1.5 });
+  lines.forEach(([a, b], i) => { s += text(20, 34 + i * 24, a, { size: 13.5, anchor: 'start', font: 'doc' }) + text(212, 34 + i * 24, b, { size: 13.5, anchor: 'end', font: 'doc' }); });
+  s += text(20, 132, ask, { size: 13.5, anchor: 'start', weight: 700 });
+  s += rect(240, 40, 132, 50, { fill: C.paper, stroke: C.ink, sw: 2, rx: 4 }) + text(306, 74, answer, { size: 22, weight: 700, fill: C.blue, font: 'display' }) + badge(368, 42, true, 11);
+  s += arrow(222, 120, 300, 94, { bend: 20, sw: 2.5 });
+  put(el, svg(380, 154, s, label));
+}
+export const howTo = {
+  goal: ({ params }) => `Check the receipts: get ${qmTarget(params)} answers right before the ${qmTime(params)} run out.`,
+  steps: [
+    'Tap Start the clock.',
+    'Read the receipt and the question under it.',
+    'Type the answer in ringgit on the keypad, like 12.40.',
+    'A right answer moves on by itself. A wrong one costs 5 seconds.',
+    'Too hard? Tap Skip. It costs 3 seconds.',
+  ],
+  example: {
+    caption: '2 × RM2.50 = RM5.00. Add RM1.50: the total is RM6.50. Type 6.50.',
+    render: (el) => qmReceipt(el, [['2 x Teh tarik', '@ RM2.50'], ['1 x Roti canai', '@ RM1.50']], 'What should the total be?', 'RM 6.50', 'A receipt with a total of RM 6.50'),
+  },
+  tips: ['Run out of time? Tap Try again. Your best score is kept.'],
+  controls: { touch: 'Tap the keypad. Enter checks your answer.', keys: 'Type numbers. Enter checks. Space skips.' },
+  variants: {
+    currency: {
+      goal: ({ params }) => `Work the money changer counter: get ${qmTarget(params)} answers right before the ${qmTime(params)} run out.`,
+      steps: [
+        'Tap Start the clock.',
+        'Read the question: change, rates, or notes and coins.',
+        'Type the answer on the keypad, like 44 or 12.40.',
+        'A right answer moves on by itself. A wrong one costs 5 seconds.',
+        'Notes: RM100, 50, 20, 10, 5, 1. Coins: 50, 20, 10, 5 sen.',
+      ],
+      example: {
+        caption: '1 USD buys RM4.40, so 10 USD is 10 × 4.40 = RM44. Type 44.',
+        render: (el) => qmReceipt(el, [['1 USD buys', 'RM4.40'], ['Customer brings', '10 USD']], 'Worth how many ringgit?', 'RM 44', 'A money changer board: 10 US dollars is 44 ringgit'),
+      },
+      tips: ['Cash totals round to the nearest 5 sen.'],
+    },
+  },
+};

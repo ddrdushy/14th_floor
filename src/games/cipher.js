@@ -2,6 +2,7 @@
 import { h } from '../core/ui.js';
 import { shuffle } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'cipher', name: 'Cipher', category: 'Code Breaking' };
 
@@ -162,3 +163,41 @@ export function mount(el, ctx) {
     devSolve() { letters.forEach((_, i) => { guess[i] = truth[i]; }); render(); check(); },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+let htClip = 0;
+function htGlyph(shape, mark, x, y) {
+  const id = `ht-ci-${++htClip}`;
+  const m = MARKS[mark].replace(/class="m"/g, `fill="${C.ink}"`).replace(/class="s"/g, `fill="none" stroke="${C.ink}" stroke-width="2.5"`);
+  return `<g transform="translate(${x} ${y})"><defs><clipPath id="${id}"><path d="${SHAPES[shape]}"/></clipPath></defs><g clip-path="url(#${id})">${m}</g><path d="${SHAPES[shape]}" fill="none" stroke="${C.ink}" stroke-width="2"/></g>`;
+}
+export const howTo = {
+  goal: 'Decode a secret message written in tooth symbols.',
+  steps: [
+    'Each tooth symbol always stands for the same letter.',
+    'Tap the box under a symbol and type a letter.',
+    'That letter fills in under every matching symbol.',
+    ({ params }) => `${(params.given || ['E', 'T', 'A']).join(', ')} are filled in already to help you.`,
+    'Guess words from the letters you have, until every box is right.',
+  ],
+  example: {
+    caption: 'Type H under one symbol, and H fills in under every matching symbol.',
+    render(el) {
+      const G = { T: ['incisor', 'top'], H: ['molar', 'dot'], E: ['canine', 'none'], A: ['incisor', 'cross'] };
+      let s = '';
+      const word = (x, letters) => letters.split('').forEach((L, i) => {
+        const gx = x + i * 50;
+        s += htGlyph(...G[L], gx + 3, 8);
+        const isH = L === 'H';
+        s += rect(gx, 62, 46, 34, { fill: isH ? '#f6e3a8' : C.paper, stroke: C.soft, sw: 1.2, rx: 3 });
+        s += text(gx + 23, 87, L, { size: 22, weight: 700, fill: isH ? C.red : C.green, font: 'display' });
+      });
+      word(14, 'THE');
+      word(214, 'HAT');
+      s += arrow(89, 104, 230, 104, { bend: 22, sw: 2.5 });
+      put(el, svg(380, 140, s, 'Tooth symbols for THE and HAT; typing H fills both H boxes'));
+    },
+  },
+  tips: ['E, T, A, O, I and N are the most common letters in English.', 'The list under the message shows how often each symbol appears.'],
+  controls: { touch: 'Tap a box under a symbol, then type a letter.', keys: 'Type letters. Arrow keys move between boxes. Backspace clears.' },
+};

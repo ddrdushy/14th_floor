@@ -2,6 +2,7 @@
 import { h } from '../core/ui.js';
 import { shuffle } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'crossword', name: 'Crossword', category: 'Words' };
 export const demo = { variant: 'classic', params: { size: 13 } };
@@ -415,3 +416,34 @@ export function mount(el, ctx) {
     },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Fill the grid with words that answer the clues.',
+  steps: [
+    'Tap a square. Its clue shows in the bar above the grid.',
+    'Type the answer with the letter keys.',
+    'Tap the same square again to switch between across and down.',
+    'The number in brackets is the word length, like (5).',
+    'Tap Check grid to see which letters are wrong.',
+  ],
+  example: {
+    caption: '(5) means five letters. ALIBI fits 1 Across.',
+    render(el) {
+      let s = rect(8, 8, 364, 38, { fill: '#efe6d0', stroke: C.line, sw: 1, rx: 4 });
+      s += text(18, 32, '1 Across: Claim of being somewhere else (5)', { size: 13.5, anchor: 'start', weight: 600 });
+      s += grid(90, 72, 1, 5, 40, (r, c) => ({ t: 'ALIBI'[c], fill: c === 0 ? C.yellow : '#e9f0f7', size: 22 }), { sw: 1.2 });
+      s += text(94, 84, '1', { size: 10, anchor: 'start', weight: 700 });
+      s += grid(210, 112, 1, 1, 40, () => ({}), { sw: 1.2, outer: 1.2 });
+      s += arrow(110, 48, 110, 70, { sw: 2.5, head: 8 });
+      put(el, svg(380, 160, s, 'The clue bar and the answer ALIBI written across'));
+    },
+  },
+  tips: ['Short words first: their letters help with the long ones.'],
+  controls: { touch: 'Tap squares. Use the letter keys under the grid. Del deletes.', keys: 'Type letters. Arrow keys move. Tab jumps to the next clue.' },
+  variants: {
+    'cryptic-lite': {
+      tips: ['Each clue has a plain meaning at one end, and wordplay (a mixed-up word, a hidden word) in the rest.'],
+    },
+  },
+};

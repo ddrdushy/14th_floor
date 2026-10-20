@@ -6,6 +6,7 @@
 import { h } from '../core/ui.js';
 import { shuffle, pick, randInt } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'footprint', name: 'Shoe Print', category: 'Forensics' };
 export const demo = { variant: 'classic', params: { shoes: 8 } };
@@ -455,3 +456,50 @@ export function mount(el, ctx) {
     _answer: () => ({ idx: answerIdx, size: answerSize, pattern: answerModel.pattern }),
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+const fsTread = (kind, x, y, w, hgt, col) => {
+  let s = '';
+  if (kind === 'chevron') for (let yy = y + 6; yy < y + hgt - 8; yy += 13) s += `<polyline points="${x + 6},${yy + 8} ${x + w / 2},${yy} ${x + w - 6},${yy + 8}" fill="none" stroke="${col}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
+  if (kind === 'circles') for (let yy = y + 10, row = 0; yy < y + hgt - 4; yy += 13, row++) for (let xx = x + 9 + (row % 2) * 7; xx < x + w - 4; xx += 14) s += `<circle cx="${xx}" cy="${yy}" r="4.2" fill="none" stroke="${col}" stroke-width="2.4"/>`;
+  if (kind === 'bars') for (let yy = y + 6; yy < y + hgt - 6; yy += 12) s += `<rect x="${x + 6}" y="${yy}" width="${w - 12}" height="6" fill="${col}"/>`;
+  return s;
+};
+export const howTo = {
+  goal: 'Find the shoe that left the muddy print.',
+  steps: [
+    'Step 1: look at the print. Choose its tread pattern.',
+    'Shoes with other patterns are set aside for you.',
+    'Step 2: tap a shoe to put it on the bench.',
+    'Drag the red print over the sole. Check the cuts and worn spots.',
+    'If everything lines up, tap Declare a match.',
+  ],
+  example: {
+    caption: 'The print shows rows of V shapes, so the tread is Chevrons.',
+    render(el) {
+      let s = rect(8, 8, 84, 132, { fill: '#c9b48e', stroke: '#8a6a44', sw: 1.5, rx: 30 }) + fsTread('chevron', 14, 14, 72, 120, '#5a3d24');
+      s += text(50, 156, 'Print', { size: 13, weight: 700 });
+      [['chevron', 'Chevrons', true], ['circles', 'Rings'], ['bars', 'Bars']].forEach(([k, label, ok], i) => {
+        const x = 118 + i * 88;
+        s += rect(x, 20, 78, 108, { fill: '#efe6d0', stroke: ok ? C.red : C.soft, sw: ok ? 3 : 1.2, rx: 4 }) + rect(x + 8, 28, 62, 72, { fill: '#d9d2c2', stroke: 'none', sw: 0 }) + fsTread(k, x + 8, 28, 62, 72, C.ink);
+        s += text(x + 39, 120, label, { size: 13, weight: 700 });
+        if (ok) s += badge(x + 76, 22, true, 10);
+      });
+      s += arrow(94, 74, 116, 74, { sw: 2.5, head: 7 });
+      put(el, svg(380, 164, s, 'A print with V-shaped tread matched to the Chevrons choice'));
+    },
+  },
+  tips: ['A wrong match crosses that shoe out and counts as a wrong call.', 'The Magnifier rules out one wrong shoe for you.'],
+  controls: { touch: 'Tap to choose. Drag the red print; use the Turn slider.', keys: 'Click the red print, then move it with the arrow keys.' },
+  variants: {
+    size: {
+      steps: [
+        'Step 1: look at the print. Choose its tread pattern.',
+        'Step 2: tap a shoe to put it on the bench.',
+        'Drag the red print over the sole. If it matches, tap Declare a match.',
+        'Step 3: measure the print from the back of the heel to the toe.',
+        'Find that length in the chart and tap the UK size.',
+      ],
+    },
+  },
+};

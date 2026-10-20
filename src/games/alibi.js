@@ -5,6 +5,7 @@
 import { h } from '../core/ui.js';
 import { shuffle, pick, randInt, mulberry32 } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'alibi', name: 'Alibi Check', category: 'Profiling' };
 export const demo = { variant: 'classic', params: { rounds: 3 } };
@@ -292,3 +293,29 @@ export function mount(el, ctx) {
     _answer: () => ({ liar: S.liar, claim: S.lieClaim, doc: S.lieDoc }),
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Find the one statement that cannot be true.',
+  steps: [
+    'Read each statement: where the person says they were, and when.',
+    'Check the evidence: receipts, toll records, CCTV and parking tickets.',
+    'Look for a person shown somewhere else at the same time.',
+    'The driving table shows the fastest time between two places.',
+    'Tap the false claim, then the document, then Flag the contradiction.',
+  ],
+  example: {
+    caption: 'Ali says he was in Bangsar until 11:00. But his card paid in KLCC at 10:30. That claim cannot be true.',
+    render(el) {
+      let s = rect(8, 8, 174, 92, { fill: '#f6e3a8', stroke: C.red, sw: 2.5, rx: 4 });
+      s += text(20, 30, 'Ali', { size: 16, weight: 800, anchor: 'start', font: 'display' }) + text(20, 54, '"From 10:00 to 11:00', { size: 13, anchor: 'start', font: 'doc' }) + text(20, 74, 'I was in Bangsar."', { size: 13, anchor: 'start', font: 'doc' });
+      s += rect(198, 8, 174, 92, { fill: '#fffdf6', stroke: C.red, sw: 2.5, rx: 4 });
+      s += text(210, 28, 'Receipt #3', { size: 11, anchor: 'start', fill: C.soft }) + text(210, 50, 'Kedai Kopi, KLCC', { size: 13, weight: 700, anchor: 'start' }) + text(210, 70, '10:30 PM', { size: 13, anchor: 'start', font: 'doc' }) + text(210, 90, 'Cardholder: Ali', { size: 13, anchor: 'start', font: 'doc' });
+      s += badge(190, 54, false, 14);
+      s += chip(70, 116, 240, 32, 'Bangsar to KLCC: 16 min', { size: 13, fill: '#efe6d0' });
+      put(el, svg(380, 156, s, 'Ali claims Bangsar but his card paid in KLCC at the same time'));
+    },
+  },
+  tips: ['Car plates tell you whose car passed a toll: see the Vehicle register.', 'Nobody can beat the driving table, but anyone can take longer.'],
+  controls: { touch: 'Tap a claim, tap a document, then Flag.', keys: 'Mouse: click a claim, a document, then Flag.' },
+};

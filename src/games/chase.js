@@ -6,6 +6,7 @@
 import { h } from '../core/ui.js';
 import { shuffle, mulberry32 } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import * as HT from '../core/howto-kit.js';
 
 export const meta = { id: 'chase', name: 'Street Chase', category: 'Navigation' };
 export const demo = { variant: 'one-way', params: { rounds: 2 } };
@@ -367,3 +368,34 @@ export function mount(el, ctx) {
     _best: () => best,
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Catch the suspect on his motorbike before you run out of moves.',
+  steps: [
+    'You are the blue dot. He is the red S.',
+    'Tap a dashed circle next to you to walk one block.',
+    'After each of your moves, he rides one block.',
+    'He follows the rules in the box. Use them to guess his move.',
+    'Step onto his junction to catch him.',
+  ],
+  example: {
+    caption: 'Tap a dashed circle to walk there. Then he rides one block, by his rules.',
+    render(el) {
+      const G = 70, X = 50, Y = 26;
+      const px = (c) => X + c * G, py = (r) => Y + r * G;
+      let s = HT.rect(8, 6, 364, 168, { fill: '#e4d8bb', stroke: 'none', sw: 0, rx: 4 });
+      for (let r = 0; r < 3; r++) s += `<line x1="${px(0)}" y1="${py(r)}" x2="${px(4)}" y2="${py(r)}" stroke="#4a443b" stroke-width="16" stroke-linecap="round"/><line x1="${px(0)}" y1="${py(r)}" x2="${px(4)}" y2="${py(r)}" stroke="#f8f2e2" stroke-width="13" stroke-linecap="round"/>`;
+      for (let c = 0; c < 5; c++) s += `<line x1="${px(c)}" y1="${py(0)}" x2="${px(c)}" y2="${py(2)}" stroke="#4a443b" stroke-width="16" stroke-linecap="round"/><line x1="${px(c)}" y1="${py(0)}" x2="${px(c)}" y2="${py(2)}" stroke="#f8f2e2" stroke-width="13" stroke-linecap="round"/>`;
+      // a one-way arrow on one street
+      s += `<g transform="translate(${(px(2) + px(3)) / 2} ${py(1)})"><path d="M-12 0 H7 M2 -5 L9 0 L2 5" fill="none" stroke="${HT.C.ink}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>`;
+      [[1, 2], [0, 1]].forEach(([c, r]) => { s += `<circle cx="${px(c)}" cy="${py(r)}" r="13" fill="#3d6b9a" fill-opacity=".14" stroke="#3d6b9a" stroke-width="2" stroke-dasharray="4 3"/>`; });
+      s += HT.arrow(px(0) + 16, py(2), px(1) - 16, py(2), { sw: 3, head: 8 }) + HT.tap(px(1), py(2));
+      s += `<g transform="translate(${px(3)} ${py(0)})"><circle r="12" fill="${HT.C.red}" stroke="${HT.C.ink}" stroke-width="2"/><path d="M-3 4 L4 11" stroke="none"/><text y="4" x="0" text-anchor="middle" font-size="11" font-weight="700" fill="#fff" font-family="sans-serif">S</text></g>`;
+      s += `<g transform="translate(${px(0)} ${py(2)})"><circle r="13" fill="#2a4a7a" stroke="#fff" stroke-width="2.5"/><text y="4" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" font-family="sans-serif">You</text></g>`;
+      HT.put(el, HT.svg(380, 180, s, 'A street grid: you, the suspect, and the junctions you can step to'));
+    },
+  },
+  tips: ['On foot you can use alleys and ignore arrows and lights. He cannot.', 'Undo takes back a move. Tap your own dot to wait a turn.'],
+  controls: { touch: 'Tap a dashed circle to move. Tap yourself to wait.', keys: 'Click the map, then: arrow keys move, Space waits, U undoes.' },
+};

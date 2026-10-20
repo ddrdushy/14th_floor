@@ -2,6 +2,7 @@
 // Camera cones are hidden until a camera catches you.
 import { h } from '../core/ui.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'maze', name: 'Escape Route', category: 'Navigation' };
 
@@ -193,3 +194,37 @@ export function mount(el, ctx) {
     devSolve() { ctx.onProgress(1); ctx.onSolved(); },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Draw an escape route to the one exit no camera can see.',
+  steps: [
+    'You start on the red square.',
+    'Drag from the red dot, square by square, to draw your path.',
+    'Each camera sees a widening cone in front of it. Walls block it.',
+    'If a camera sees you, its view turns orange and you start again.',
+    'Only one exit is safe. Reach it unseen to finish.',
+  ],
+  example: {
+    caption: 'Walk around the camera\'s view (orange) and reach the green exit.',
+    render(el) {
+      const map = ['#########', '#S.....E#', '#.##..#.#', '#......C#', '#########'];
+      const cone = new Set(['6,3', '5,3', '4,3', '5,2', '4,2', '3,3']);
+      const S = 30, X = 55, Y = 10;
+      let s = grid(X, Y, 5, 9, S, (r, c) => {
+        const ch = map[r][c];
+        if (ch === '#') return { fill: C.ink };
+        if (ch === 'S') return { fill: C.red, t: 'S', color: '#fff', size: 14, font: 'ui' };
+        if (ch === 'E') return { fill: C.green, t: 'E', color: '#fff', size: 14, font: 'ui' };
+        return { fill: cone.has(`${c},${r}`) ? '#f0c88a' : '#d8d0bd' };
+      }, { stroke: '#c4bba5', sw: 1, outer: 0 });
+      const cx = X + 7 * S + S / 2, cy = Y + 3 * S + S / 2;
+      s += `<g transform="translate(${cx} ${cy}) rotate(180)"><rect x="-9" y="-6" width="14" height="12" rx="2" fill="${C.ink}"/><path d="M5 -4 L12 -7 L12 7 L5 4Z" fill="${C.ink}"/><circle cx="-4" cy="0" r="2" fill="#d8323d"/></g>`;
+      const pts = [1, 2, 3, 4, 5, 6, 7].map((c) => `${X + c * S + S / 2},${Y + S + S / 2}`).join(' ');
+      s += `<polyline points="${pts}" fill="none" stroke="${C.red}" stroke-width="7" stroke-linecap="round" opacity=".8"/><circle cx="${X + 6 * S + S / 2}" cy="${Y + S + S / 2}" r="8" fill="${C.red}" stroke="#fff" stroke-width="2"/>`;
+      put(el, svg(380, 170, s, 'A floor plan with a path from the start to the exit that avoids the camera view'));
+    },
+  },
+  tips: ['Drag back over your own path to undo steps.', 'The Magnifier marks one camera\'s view without you being caught.'],
+  controls: { touch: 'Press the red dot and drag, or tap the next square.', keys: 'Mouse: drag from the red dot, or click the next square.' },
+};

@@ -2,6 +2,7 @@
 import { h } from '../core/ui.js';
 import { shuffle, randInt, pick } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'spotdiff', name: 'Spot the Difference', category: 'Observation' };
 
@@ -192,3 +193,33 @@ export function mount(el, ctx) {
     },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: ({ params }) => `Find the ${params.differences || 9} changes between the two photos.`,
+  steps: [
+    'Look at both photos. They are almost the same.',
+    'Find something different: missing, moved, bigger, turned, or another colour.',
+    'Tap it on either photo. A red circle marks it.',
+    'Tap carefully. Wrong taps are counted in your file.',
+    ({ params }) => `Find all ${params.differences || 9} to finish.`,
+  ],
+  example: {
+    caption: 'The lantern is red in one photo and blue in the other. Tap it.',
+    render(el) {
+      const photo = (x, lantern) =>
+        rect(x, 10, 170, 116, { fill: '#1a2430', stroke: '#fff', sw: 5 }) +
+        rect(x + 3, 72, 164, 51, { fill: '#5b6a70', stroke: 'none', sw: 0 }) +
+        rect(x + 3, 68, 164, 5, { fill: '#39444a', stroke: 'none', sw: 0 }) +
+        `<circle cx="${x + 140}" cy="32" r="11" fill="#d8dfe6"/>` +
+        `<line x1="${x + 42}" y1="14" x2="${x + 42}" y2="30" stroke="#888" stroke-width="1.5"/><ellipse cx="${x + 42}" cy="44" rx="10" ry="13" fill="${lantern}"/><rect x="${x + 37}" y="56" width="10" height="4" fill="${C.amber}"/>` +
+        `<ellipse cx="${x + 108}" cy="96" rx="24" ry="6" fill="#6a5038"/><rect x="${x + 105}" y="96" width="6" height="24" fill="#6a5038"/><rect x="${x + 101}" y="84" width="10" height="10" rx="2" fill="#ede6d6"/>`;
+      let s = photo(10, '#c8312c') + photo(200, '#3d6b9a');
+      s += ring(242, 44, 22) + tap(242, 44);
+      s += text(95, 146, 'First photo', { size: 13, fill: C.soft, font: 'doc' }) + text(285, 146, 'Second photo', { size: 13, fill: C.soft, font: 'doc' });
+      put(el, svg(380, 154, s, 'Two photos; the lantern changed colour and is circled'));
+    },
+  },
+  tips: ['Stuck? The Magnifier tells you which part of the photo to look at.'],
+  controls: { touch: 'Tap the difference on either photo.', keys: 'Mouse: click the difference.' },
+};

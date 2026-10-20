@@ -33,7 +33,7 @@ src/
   three/               the 3D office: rain-on-glass shader, KL skyline, case board with red thread
   screens/             title, profile, intro (motion comic), office, map, puzzle, board, deduce, outcome, closed, archive, lab
   games/               one file per mini game + registry.js (registry_b.js, registry_c.js for newer games)
-  data/                story: intro.js (opening cinematic), cases.js (case order, flag rules), case01.js, side01.js, case02.js
+  data/                story: intro.js (opening cinematic), cases.js (case order, flag rules), case01.js, side01.js, case02.js, case03.js
 public/assets/img/     generated art (Google Flow). Missing images fall back to a placeholder panel.
 ```
 
@@ -51,7 +51,7 @@ Return `{ destroy, hint, devSolve }`. Register it in a registry file.
 
 ### Adding a case
 
-Cases are played in the order of `CASE_ORDER` in `src/data/cases.js` (Case 1, the side case, Case 2). When one closes, the office phone rings; answering it plays the next case's `opening` cinematic and opens its map. Copy the shape of `src/data/case02.js`:
+Cases are played in the order of `CASE_ORDER` in `src/data/cases.js` (Case 1, the side case, Case 2, Case 3). When one closes, the office phone rings; answering it plays the next case's `opening` cinematic and opens its map. Copy the shape of `src/data/case02.js`:
 
 - `suspects`, `levels` (each level = one game + the evidence it reveals + image hotspot), `hints`, `label` (optional, e.g. "Side case")
 - `opening`: cinematic panels; the last panel can be `{ title: { kicker: 'Case 2', name: 'Container 47' } }`
@@ -63,7 +63,7 @@ Levels, panels and lines may carry `when: (flags) => boolean`, so earlier choice
 
 ### Images
 
-Image keys live in `src/data/intro.js` (cinematic panels) and in each case file (`opening`, `ending`, `evidence.img`, suspect `img`). Prompts for the side case and Case 2 are in `docs/image_prompts.md`. Save a JPG as `public/assets/img/<key>.jpg`. Evidence photos are 4:3; set `evidence.hotspot` `{x, y, r}` (fractions of the photo) to circle the hidden item.
+Image keys live in `src/data/intro.js` (cinematic panels) and in each case file (`opening`, `ending`, `evidence.img`, suspect `img`). Prompts for the side case, Case 2 and Case 3 are in `docs/image_prompts.md`. Save a JPG as `public/assets/img/<key>.jpg`. Evidence photos are 4:3; set `evidence.hotspot` `{x, y, r}` (fractions of the photo) to circle the hidden item.
 
 #### Video clips
 

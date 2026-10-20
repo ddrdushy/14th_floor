@@ -2,6 +2,7 @@
 import { h } from '../core/ui.js';
 import { shuffle } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'sudoku', name: 'Sudoku', category: 'Numbers' };
 
@@ -234,3 +235,28 @@ export function mount(el, ctx) {
     },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+export const howTo = {
+  goal: 'Fill every empty square with a number from 1 to 9.',
+  steps: [
+    'Tap an empty square. It turns yellow.',
+    'Tap a number below the grid to write it in.',
+    'Each row, column and bold 3×3 box needs 1 to 9, once each.',
+    'A number turns red if it repeats. Change it.',
+    'Fill the whole grid correctly to finish.',
+  ],
+  example: {
+    caption: 'This row already has 1, 2, 3, 5, 6, 7, 8 and 9. The only number missing is 4.',
+    render(el) {
+      const row = [5, 3, 4, 6, 7, 8, 9, 1, 2];
+      let s = grid(10, 12, 1, 9, 40, (r, c) => (c === 2 ? { t: '4', fill: C.yellow, color: C.blue } : { t: String(row[c]), bold: true }));
+      s += `<line x1="130" y1="12" x2="130" y2="52" stroke="${C.ink}" stroke-width="3.5"/><line x1="250" y1="12" x2="250" y2="52" stroke="${C.ink}" stroke-width="3.5"/>`;
+      [3, 4, 5].forEach((n, i) => { s += chip(62 + i * 48, 100, 40, 40, String(n), { size: 20, fill: n === 4 ? C.yellow : C.paper, stroke: n === 4 ? C.ink : C.soft }); });
+      s += arrow(110, 98, 110, 60) + text(250, 126, 'Tap 4', { size: 15, weight: 700, fill: C.red, anchor: 'start' });
+      put(el, svg(380, 150, s, 'A sudoku row with 4 written in the only empty square'));
+    },
+  },
+  tips: ['Not sure yet? Turn on Pencil marks to write small notes in a square.', 'Start with a row, column or box that is almost full.'],
+  controls: { touch: 'Tap a square, then tap a number. Erase clears it.', keys: 'Arrow keys move. Type 1 to 9. P turns pencil marks on. Backspace clears.' },
+};

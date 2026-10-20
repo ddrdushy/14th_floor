@@ -19,6 +19,9 @@ function fresh() {
     cases: {},
     flags: {},
     settings: { sound: true, music: true, musicVolume: 0.6, sfxVolume: 0.8 },
+    // tutorials: game ids whose "How to play" card was dismissed, and the once-only case explainer
+    seenHowTo: {},
+    seenLoop: false,
   };
 }
 
@@ -53,6 +56,8 @@ function load() {
     const parsed = JSON.parse(raw);
     const out = { ...fresh(), ...parsed, settings: { ...fresh().settings, ...(parsed.settings || {}) } };
     out.profile = withProfileDefaults(out.profile);
+    if (!out.seenHowTo || typeof out.seenHowTo !== 'object' || Array.isArray(out.seenHowTo)) out.seenHowTo = {};
+    out.seenLoop = out.seenLoop === true;
     return out;
   } catch {
     return fresh();

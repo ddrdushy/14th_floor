@@ -2,6 +2,7 @@
 import { h } from '../core/ui.js';
 import { shuffle, randInt } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
+import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
 
 export const meta = { id: 'kakuro', name: 'Kakuro', category: 'Numbers' };
 export const demo = { variant: 'classic', params: { difficulty: 'hard' } };
@@ -612,3 +613,59 @@ export function mount(el, ctx) {
     },
   };
 }
+
+// ---------- How to play (see core/howto.js) ----------
+const kkClue = (x, y, s, down, across) =>
+  rect(x, y, s, s, { fill: '#2a2d33', stroke: C.ink, sw: 1.2 }) +
+  `<line x1="${x}" y1="${y}" x2="${x + s}" y2="${y + s}" stroke="#8a8478" stroke-width="1.4"/>` +
+  (down ? text(x + s * 0.3, y + s * 0.86, down, { size: 14, weight: 700, fill: '#f3ecda' }) : '') +
+  (across ? text(x + s * 0.72, y + s * 0.4, across, { size: 14, weight: 700, fill: '#f3ecda' }) : '');
+export const howTo = {
+  goal: 'Fill the white squares with numbers that add up to the clues.',
+  steps: [
+    'A clue on the left is the total of the squares across.',
+    'A clue above a run is the total for the squares down.',
+    'Use 1 to 9. A number never repeats inside one run.',
+    'Tap a square, then tap a number below the grid.',
+    'Numbers turn red if a total or a repeat is wrong.',
+  ],
+  example: {
+    caption: 'The 4 on the left is the total across: 1 + 3 = 4. (2 + 2 is not allowed: no repeats.)',
+    render(el) {
+      const S = 46, X = 20, Y = 8;
+      const v = { '1,1': '1', '1,2': '3', '2,1': '2', '2,2': '1' };
+      let s = kkClue(X, Y, S, '', '') + kkClue(X + S, Y, S, '3', '') + kkClue(X + 2 * S, Y, S, '4', '') + kkClue(X, Y + S, S, '', '4') + kkClue(X, Y + 2 * S, S, '', '3');
+      s += grid(X + S, Y + S, 2, 2, S, (r, c) => ({ t: v[`${r + 1},${c + 1}`], fill: r === 0 ? C.yellow : C.paper, color: C.blue, size: 24 }), { sw: 1.2, outer: 1.2 });
+      s += arrow(X + S * 0.75, Y + S * 1.25, X + S * 1.3, Y + S * 1.5, { sw: 2.5, head: 7 });
+      s += text(200, 72, '1 + 3 = 4', { size: 22, weight: 700, fill: C.red, anchor: 'start', font: 'display' });
+      s += text(200, 98, 'across', { size: 13, fill: C.soft, anchor: 'start' });
+      put(el, svg(380, 150, s, 'A small kakuro: clue 4 across filled with 1 and 3'));
+    },
+  },
+  tips: ['Tap a square: the panel lists every set of numbers that can make its totals.', 'Pencil marks let you write small notes in a square.'],
+  controls: { touch: 'Tap a square, then a number. Erase clears it.', keys: 'Arrow keys move. Type 1 to 9. P turns pencil marks on.' },
+  variants: {
+    killer: {
+      goal: 'Fill every square so each dashed cage adds up to its small number.',
+      steps: [
+        ({ params }) => `Use 1 to ${KILLER_SIZES[params.difficulty || 'hard'] || 6}. No repeats in any row or column.`,
+        'The small number in a dashed cage is its total.',
+        'No number repeats inside a cage.',
+        'Tap a square, then tap a number below the grid.',
+        'Numbers turn red if a total or a repeat is wrong.',
+      ],
+      example: { caption: 'A cage marked 5 with two squares can hold 1 + 4 or 2 + 3.' },
+    },
+    'killer-cage': {
+      goal: 'Fill every square so each dashed cage adds up to its small number.',
+      steps: [
+        ({ params }) => `Use 1 to ${KILLER_SIZES[params.difficulty || 'hard'] || 6}. No repeats in any row or column.`,
+        'The small number in a dashed cage is its total.',
+        'No number repeats inside a cage.',
+        'Tap a square, then tap a number below the grid.',
+        'Numbers turn red if a total or a repeat is wrong.',
+      ],
+      example: { caption: 'A cage marked 5 with two squares can hold 1 + 4 or 2 + 3.' },
+    },
+  },
+};
