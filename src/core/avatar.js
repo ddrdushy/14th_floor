@@ -129,3 +129,84 @@ export function avatarSvg(look = defaultLook(), { bg = '#c9bfa8', lineup = true 
     ${hairFront(hair, hairColor)}${photo}
   </svg>`;
 }
+
+// ---------------------------------------------------------------------------------------------
+// Detective background: the choices on the profile screen beyond photo, name, pronouns and drink.
+// The save stores ids only (see PROFILE_DEFAULTS in state.js); labels live here so other screens can
+// show them, e.g. specialtyOf(state().profile).tag in a header.
+
+export const HOMETOWNS = [
+  { id: 'kl', label: 'Kuala Lumpur', licence: 'Kuala Lumpur' },
+  { id: 'penang', label: 'Penang', licence: 'George Town, Pulau Pinang' },
+  { id: 'ipoh', label: 'Ipoh', licence: 'Ipoh, Perak' },
+  { id: 'jb', label: 'Johor Bahru', licence: 'Johor Bahru, Johor' },
+  { id: 'kb', label: 'Kota Bharu', licence: 'Kota Bharu, Kelantan' },
+  { id: 'kuching', label: 'Kuching', licence: 'Kuching, Sarawak' },
+  { id: 'kk', label: 'Kota Kinabalu', licence: 'Kota Kinabalu, Sabah' },
+  { id: 'melaka', label: 'Melaka', licence: 'Bandar Melaka, Melaka' },
+  { id: 'seremban', label: 'Seremban', licence: 'Seremban, Negeri Sembilan' },
+  { id: 'sg', label: 'Singapore-born', licence: 'Born in Singapore' },
+  { id: 'jaffna', label: 'Jaffna-born', licence: 'Born in Jaffna, Sri Lanka' },
+];
+
+export const LANGUAGES = [
+  { id: 'ms', label: 'Bahasa Melayu', code: 'BM' },
+  { id: 'en', label: 'English', code: 'EN' },
+  { id: 'ta', label: 'Tamil', code: 'TAM' },
+  { id: 'yue', label: 'Cantonese', code: 'CAN' },
+  { id: 'zh', label: 'Mandarin', code: 'MAN' },
+  { id: 'hok', label: 'Hokkien', code: 'HOK' },
+  { id: 'hak', label: 'Hakka', code: 'HAK' },
+  { id: 'iba', label: 'Iban', code: 'IBA' },
+  { id: 'kdz', label: 'Kadazandusun', code: 'KDZ' },
+  { id: 'pa', label: 'Punjabi', code: 'PUN' },
+  { id: 'te', label: 'Telugu', code: 'TEL' },
+];
+
+/** The CID unit you served in before you resigned in 2021. */
+export const UNITS = [
+  { id: 'd9', label: 'D9 Serious Crimes', licence: 'PDRM CID, D9 (Serious Crimes)', code: 'D9' },
+  { id: 'ccid', label: 'Commercial Crime (CCID)', licence: 'PDRM, Commercial Crime (CCID)', code: 'CCID' },
+  { id: 'ncid', label: 'Narcotics (NCID)', licence: 'PDRM, Narcotics (NCID)', code: 'NCID' },
+  { id: 'd10', label: 'Forensics (D10)', licence: 'PDRM CID, Forensics (D10)', code: 'D10' },
+  { id: 'sb', label: 'Special Branch (rumoured)', licence: 'PDRM, [redacted]', code: 'XX', redacted: true },
+];
+
+/** Specialty: flavour only. `tag` is short enough for a header chip; `perk` is one line of character. */
+export const SPECIALTIES = [
+  { id: 'interrogation', label: 'Interrogation', tag: 'Reads people', perk: 'Liars blink first. You are the one who notices.' },
+  { id: 'forensics', label: 'Forensics', tag: 'Trace evidence', perk: 'You see the smudge before you see the fingerprint.' },
+  { id: 'ciphers', label: 'Codes & ciphers', tag: 'Codebreaker', perk: 'Every pattern is a confession waiting to be read.' },
+  { id: 'street', label: 'Street network', tag: 'Knows a guy', perk: 'Mamak boys, Grab uncles, and the jaga at every condo.' },
+  { id: 'numbers', label: 'Numbers', tag: 'Follows the money', perk: "Ledgers don't lie. Accountants do." },
+];
+
+export const RIDES = [
+  { id: 'saga', label: "Proton Saga '98", licence: 'Proton Saga, 1998. Grey. Dented.' },
+  { id: 'kancil', label: 'Perodua Kancil', licence: 'Perodua Kancil. Small, but it gets there.' },
+  { id: 'ex5', label: 'Honda EX5 kapcai', licence: 'Honda EX5 kapcai, 110 cc' },
+  { id: 'grab', label: 'Grab driver uncle', licence: 'Grab. Same uncle, most nights.' },
+  { id: 'lrt', label: 'LRT + kaki', licence: 'LRT, and two good legs' },
+];
+
+/** The thing you always have on you. Daniel's lighter is canon and the default. */
+export const ITEMS = [
+  { id: 'lighter', label: "Daniel's silver lighter" },
+  { id: 'nokia', label: 'Cracked Nokia 3310' },
+  { id: 'thread', label: 'Prayer thread (kaapu)' },
+  { id: 'tasbih', label: 'Tasbih beads' },
+  { id: 'suntzu', label: 'Sun Tzu paperback' },
+  { id: 'pelikan', label: 'Pelikan fountain pen' },
+];
+
+const pick = (list, id) => list.find((x) => x.id === id) || list[0];
+
+export const hometownOf = (profile) => pick(HOMETOWNS, profile?.hometown);
+export const unitOf = (profile) => pick(UNITS, profile?.unit);
+export const specialtyOf = (profile) => pick(SPECIALTIES, profile?.specialty);
+export const rideOf = (profile) => pick(RIDES, profile?.ride);
+export const itemOf = (profile) => pick(ITEMS, profile?.item);
+export function languagesOf(profile) {
+  const ids = Array.isArray(profile?.languages) && profile.languages.length ? profile.languages : ['ms', 'en'];
+  return LANGUAGES.filter((l) => ids.includes(l.id));
+}

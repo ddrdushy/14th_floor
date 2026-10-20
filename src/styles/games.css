@@ -205,3 +205,46 @@
   .lg-rh { font-size: 0.76rem; padding-right: 5px !important; }
   .lg-cat { font-size: 0.95rem; }
 }
+
+/* ---------- phones: fit grids to the sheet instead of scrolling sideways ---------- */
+@media (max-width: 760px) {
+  /* nonogram: the paint surface blocks touch scrolling, so it must fit. Cell size comes from the
+     sheet width (container units) and the column count (counted with :has). */
+  .ng-scroll { container-type: inline-size; overflow-x: visible; }
+  .ng { --ng-cols: 5; --ng-cell: clamp(13px, calc((100cqi - 64px) / var(--ng-cols)), 32px); }
+  .ng:has(> .ng-col:nth-child(7)) { --ng-cols: 6; }
+  .ng:has(> .ng-col:nth-child(8)) { --ng-cols: 7; }
+  .ng:has(> .ng-col:nth-child(9)) { --ng-cols: 8; }
+  .ng:has(> .ng-col:nth-child(10)) { --ng-cols: 9; }
+  .ng:has(> .ng-col:nth-child(11)) { --ng-cols: 10; }
+  .ng:has(> .ng-col:nth-child(12)) { --ng-cols: 11; }
+  .ng:has(> .ng-col:nth-child(13)) { --ng-cols: 12; }
+  .ng:has(> .ng-col:nth-child(14)) { --ng-cols: 13; }
+  .ng:has(> .ng-col:nth-child(15)) { --ng-cols: 14; }
+  .ng:has(> .ng-col:nth-child(16)) { --ng-cols: 15; }
+  .ng:has(> .ng-col:nth-child(17)) { --ng-cols: 16; }
+  .ng:has(> .ng-col:nth-child(18)) { --ng-cols: 17; }
+  .ng:has(> .ng-col:nth-child(19)) { --ng-cols: 18; }
+  .ng:has(> .ng-col:nth-child(20)) { --ng-cols: 19; }
+  .ng:has(> .ng-col:nth-child(21)) { --ng-cols: 20; }
+  .ng:has(> .ng-col:nth-child(22)) { --ng-cols: 21; }
+  .ng:has(> .ng-col:nth-child(23)) { --ng-cols: 22; }
+  .ng:has(> .ng-col:nth-child(24)) { --ng-cols: 23; }
+  .ng:has(> .ng-col:nth-child(25)) { --ng-cols: 24; }
+  .ng:has(> .ng-col:nth-child(26)) { --ng-cols: 25; }
+  .ng-row { gap: 3px; padding-right: 4px; font-size: 0.74rem; }
+  .ng-col { font-size: 0.74rem; }
+  .tl-move .btn { min-height: 44px; min-width: 44px; }
+  .tl-cam { font-size: 0.82rem; }
+  .wl-card .chip { font-size: 0.9rem; }
+  .sdk-pad { max-width: none; gap: 8px; }
+  .sdk-pad .btn { min-height: 48px; }
+  .sc-keys .btn { min-height: 52px; }
+  .lg-clues { font-size: 1rem; }
+  .lg-clues li { padding: 2px 0; }
+}
+@media (max-width: 400px) {
+  .lg-cell { width: 23px; height: 40px; }
+  .lg-vh { width: 23px; }
+  .lg-rh { font-size: 0.72rem; padding-right: 3px !important; }
+}

@@ -264,3 +264,14 @@ img { display: block; max-width: 100%; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ---------- back buttons, hint icon, evidence extras (see core/nav.js, screens/puzzle.js) ---------- */
+.back-btn { padding-left: 0.45em; gap: 0.3em; }
+.back-ico svg { width: 18px; height: 18px; display: block; }
+.back-short { display: none; }
+.hint-ico { display: none; }
+.hint-ico svg { width: 20px; height: 20px; display: block; }
+.ev-toggle { display: none; }
+.spec-tag { display: inline-block; margin: 10px 0 0; padding: 2px 8px; font-family: var(--font-doc); font-size: 0.85rem; color: var(--manila); background: rgba(217, 196, 154, 0.12); border-left: 3px solid var(--thread); }
+.phone-nav { display: none; }
+.pin-grip { display: none; }

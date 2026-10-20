@@ -9,6 +9,8 @@ import { rngFor, mulberry32, hashStr } from '../core/rng.js';
 import { paintInto } from '../core/assets.js';
 import { sfx } from '../core/audio.js';
 import { app } from '../core/app.js';
+import { specialtyOf } from '../core/avatar.js';
+import { backButton, icon } from '../core/nav.js';
 
 function fogLayer(canvas, seedKey, hotspot) {
   const g = canvas.getContext('2d');
@@ -93,11 +95,18 @@ export async function mount(host, { caseId, levelId }) {
   const hotspot = h('div', { class: 'hotspot', style: { left: `${ev.hotspot.x * 100}%`, top: `${ev.hotspot.y * 100}%`, width: `${ev.hotspot.r * 200}%`, aspectRatio: '1' } });
   const photo = h('div', { class: 'photo' }, photoImg, fogCanvas, hotspot, h('div', { class: 'photo-caption' }, `Exhibit ${ev.tag}: pending`));
   const progressBar = h('i', {});
+  let specTag = '';
+  try { specTag = specialtyOf(state().profile)?.tag || ''; } catch { specTag = ''; }
+  // on phones the photo starts as a small strip above the game; tapping it opens it up
+  const evToggle = h('button', { class: 'ev-toggle', type: 'button', 'aria-expanded': 'false', 'aria-label': 'Show the evidence photo larger', onclick: () => setPhotoOpen(!evidenceCol.classList.contains('is-open')) },
+    h('span', { class: 'ev-toggle-hint', 'aria-hidden': 'true' }, 'Tap to enlarge'));
   const evidenceCol = h('aside', { class: 'evidence-col' },
+    evToggle,
     photo,
     h('div', { class: 'evidence-meta' },
       h('h3', {}, level.title),
       h('p', { class: 'doc' }, level.brief),
+      specTag ? h('p', { class: 'spec-tag' }, specTag) : null,
       h('div', { class: 'progress-line', 'aria-hidden': 'true' }, progressBar)));
   paintInto(photoImg, ev.img, `Exhibit ${ev.tag}`, 'night');
 
@@ -110,13 +119,14 @@ export async function mount(host, { caseId, levelId }) {
 
   const timerEl = h('span', { class: 'timer', 'aria-label': 'Time on this puzzle' }, fmtTime(elapsed));
   const hintCount = h('span', { class: 'hint-count' }, String(cs.hints));
-  const hintBtn = h('button', { class: 'btn btn--small', onclick: useHint, 'aria-label': 'Use a magnifying glass hint' }, 'Magnifier ', hintCount);
+  const hintBtn = h('button', { class: 'btn btn--small hint-btn', onclick: useHint, 'aria-label': 'Use a magnifying glass hint' },
+    h('span', { class: 'hint-ico', html: icon('puzzle') }), h('span', { class: 'hint-label' }, 'Magnifier '), hintCount);
   const top = h('header', { class: 'topbar' },
-    h('button', { class: 'btn btn--ghost btn--small', onclick: () => go('map', { caseId }) }, 'Case map'),
+    backButton('Case map', () => go('map', { caseId }), 'Map'),
     h('div', { class: 'topbar-title' }, h('strong', {}, level.title), h('span', {}, `${level.phase}. ${mod.meta.name}.`)),
     timerEl, hintBtn,
-    h('button', { class: 'btn btn--small', onclick: () => go('board', { caseId, back: 'puzzle', levelId }) }, 'Board'),
-    isDev() ? h('button', { class: 'btn btn--small', onclick: () => game.devSolve?.() }, 'Solve (dev)') : null);
+    h('button', { class: 'btn btn--small nav-dup', onclick: () => go('board', { caseId, back: 'puzzle', levelId }) }, 'Board'),
+    isDev() ? h('button', { class: 'btn btn--small dev-btn', onclick: () => game.devSolve?.() }, 'Solve (dev)') : null);
 
   const root = h('section', { class: 'screen puzzle-screen' }, top,
     h('div', { class: 'puzzle-body' }, evidenceCol, h('div', { class: 'game-col' }, sheet)));
@@ -125,6 +135,13 @@ export async function mount(host, { caseId, levelId }) {
   const fog = fogLayer(fogCanvas, `${caseId}${levelId}`, ev.hotspot);
   requestAnimationFrame(() => fog.draw());
   const onResize = () => fog.draw();
+  function setPhotoOpen(open) {
+    evidenceCol.classList.toggle('is-open', open);
+    evToggle.setAttribute('aria-expanded', String(open));
+    evToggle.setAttribute('aria-label', open ? 'Shrink the evidence photo' : 'Show the evidence photo larger');
+    evToggle.firstChild.textContent = open ? 'Tap to shrink' : 'Tap to enlarge';
+    requestAnimationFrame(() => fog.draw());
+  }
   window.addEventListener('resize', onResize);
 
   let lastP = 0;
@@ -191,6 +208,7 @@ export async function mount(host, { caseId, levelId }) {
     await new Promise((r) => setTimeout(r, 250));
     if (destroyed) return;
     sfx.reveal();
+    setPhotoOpen(true);
     photo.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     photoImg.style.filter = 'none';
     await fog.clear(900);

@@ -50,7 +50,7 @@ export function mount(host) {
       `${started || ocs.reopened ? 'Continue' : 'Start'} ${caseLabel(oc)}`));
   });
   buttons.push(
-    h('button', { class: 'btn', onclick: () => go('board', { caseId: mainId, back: 'office' }) }, 'Case board'),
+    h('button', { class: 'btn nav-dup', onclick: () => go('board', { caseId: mainId, back: 'office' }) }, 'Case board'),
     h('button', { class: 'btn', onclick: () => go('archive') }, 'Case archive'),
     h('button', { class: 'btn btn--ghost', onclick: () => go('title') }, 'Title screen'));
   const actions = h('nav', { class: 'hub-actions', 'aria-label': 'Office' }, buttons);

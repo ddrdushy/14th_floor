@@ -1,5 +1,7 @@
 // Opening motion comic, "2:47 AM". Dialogue may be in Malay or Tamil; captions are always English.
 // line: { who, en, orig? }  orig = the line as spoken, shown small above the English subtitle.
+// A panel plays public/assets/video/<img>.mp4 if that clip exists (or <video>.mp4 when `video` is set);
+// otherwise its still. See "Video clips" in README.md.
 
 export const INTRO = [
   {
@@ -81,7 +83,8 @@ export const INTRO = [
     kb: { from: [1.1, 0, 0], to: [1.0, 0, 0] },
   },
   {
-    img: 'intro_09_kancil', mood: 'night', fx: ['rain'],
+    // reuses the kancil still; its own clip (pocketing the kancil) is optional
+    img: 'intro_09_kancil', video: 'intro_11_pocket', mood: 'night', fx: ['rain'],
     lines: [{ who: null, en: 'You slip the paper kancil into your pocket before Farah turns around.' }],
     kb: { from: [1.25, 0, 0], to: [1.3, 0, 0] },
   },

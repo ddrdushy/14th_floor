@@ -2,6 +2,7 @@
 // and answer any further questions the case asks (where someone is hiding, what was taken).
 import { h, modal } from '../core/ui.js';
 import { go } from '../core/router.js';
+import { backButton } from '../core/nav.js';
 import { save } from '../core/state.js';
 import { CASES, getCaseState, activeLevels, judge, caseHeading, resolveCaseId } from '../data/cases.js';
 import { avatarSvg } from '../core/avatar.js';
@@ -86,9 +87,9 @@ export function mount(host, { caseId } = {}) {
 
   const root = h('section', { class: 'screen deduce-screen' },
     h('header', { class: 'topbar' },
-      h('button', { class: 'btn btn--ghost btn--small', onclick: () => go('map', { caseId }) }, 'Case map'),
+      backButton('Case map', () => go('map', { caseId }), 'Map'),
       h('div', { class: 'topbar-title' }, h('strong', {}, 'Deduction room'), h('span', {}, caseHeading(c))),
-      h('button', { class: 'btn btn--small', onclick: () => go('board', { caseId, back: 'map' }) }, 'Case board')),
+      h('button', { class: 'btn btn--small nav-dup', onclick: () => go('board', { caseId, back: 'map' }) }, 'Case board')),
     h('div', { class: 'scroll', style: { flex: 1 } },
       h('div', { class: 'deduce-wrap' },
         h('h1', {}, c.question),

@@ -22,6 +22,27 @@ function fresh() {
   };
 }
 
+// Profile fields added after the first release. Older saves get these defaults when they load, so a
+// profile always has every field. Labels for the ids are in core/avatar.js.
+export const PROFILE_DEFAULTS = {
+  hometown: 'kl',
+  languages: ['ms', 'en'],
+  unit: 'd9', // the CID unit you resigned from (canon: D9)
+  specialty: 'interrogation', // flavour only, never changes puzzles or hints
+  ride: 'saga',
+  item: 'lighter', // Daniel's silver lighter
+  callsign: '',
+};
+
+/** A profile with any missing newer fields filled in (null stays null). */
+export function withProfileDefaults(profile) {
+  if (!profile) return profile;
+  const out = { ...PROFILE_DEFAULTS, ...profile };
+  if (!Array.isArray(out.languages) || !out.languages.length) out.languages = [...PROFILE_DEFAULTS.languages];
+  if (typeof out.callsign !== 'string') out.callsign = '';
+  return out;
+}
+
 let data = load();
 const listeners = new Set();
 
@@ -30,7 +51,9 @@ function load() {
     const raw = localStorage.getItem(KEY);
     if (!raw) return fresh();
     const parsed = JSON.parse(raw);
-    return { ...fresh(), ...parsed, settings: { ...fresh().settings, ...(parsed.settings || {}) } };
+    const out = { ...fresh(), ...parsed, settings: { ...fresh().settings, ...(parsed.settings || {}) } };
+    out.profile = withProfileDefaults(out.profile);
+    return out;
   } catch {
     return fresh();
   }
@@ -54,7 +77,7 @@ export function resetAll() {
 }
 
 export function setProfile(profile) {
-  data.profile = profile;
+  data.profile = withProfileDefaults(profile);
   save();
 }
 

@@ -15,8 +15,13 @@ const VIEWS = {
 export class OfficeScene {
   constructor(canvas) {
     this.canvas = canvas;
-    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+    // phones and small touch screens: cap the pixel ratio lower and skip MSAA. The scene sits behind
+    // blurred, dimmed screens most of the time, so the extra pixels mostly cost battery and frame rate.
+    const small = Math.min(window.screen?.width || innerWidth, window.screen?.height || innerHeight) < 820;
+    const coarse = window.matchMedia?.('(pointer: coarse)').matches;
+    this.lowPower = !!(small && coarse);
+    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: !this.lowPower, powerPreference: 'high-performance' });
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.lowPower ? 1.5 : 1.75));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.35;
@@ -142,7 +147,7 @@ export class OfficeScene {
     this.lamp.position.copy(bulb.position);
     this.lamp.target.position.set(0.35, 0.8, -2.6);
     this.lamp.castShadow = true;
-    this.lamp.shadow.mapSize.set(1024, 1024);
+    this.lamp.shadow.mapSize.set(this.lowPower ? 512 : 1024, this.lowPower ? 512 : 1024);
     s.add(this.lamp, this.lamp.target);
 
     // teh tarik glass, files, phone, Daniel's lighter

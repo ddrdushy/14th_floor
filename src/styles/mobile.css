@@ -1,0 +1,216 @@
+/* Floor 14 — phone layer. Imported last in main.js so it can adjust everything above it.
+   1. touch hygiene (all sizes)   2. tab bar + compact screens on phones (portrait)
+   3. landscape phones (side rail)   4. mini games at phone width */
+
+/* =====================================================================
+   1. Touch hygiene. :where() keeps these at zero specificity, so any
+      game rule (e.g. touch-action: none on a drag surface) still wins.
+   ===================================================================== */
+html { touch-action: manipulation; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+:where(button, .btn, .chip, [role='button'], [role='switch'], .map-node, .pin-card, .dossier, .dq-option, .phone-nav) {
+  touch-action: manipulation; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+}
+:where(.game-sheet svg, .game-sheet canvas, .game-sheet [class$='-grid'], .game-sheet table) { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+:where(input, textarea, select, [contenteditable]) { -webkit-user-select: text; user-select: text; }
+
+@media (pointer: coarse) {
+  .btn--small { min-height: 44px; }
+  .chip { min-height: 44px; }
+  /* the settings switch is 30px tall: grow its hit area, not its look */
+  .set-switch::after { content: ''; position: absolute; inset: -8px -6px; }
+  /* no hover-only affordances: hover lifts would stick after a tap */
+  .map-node:hover { transform: translate(-50%, -50%); }
+  .dossier:hover, .dq-option:hover { transform: none; }
+  /* board: only the grip drags, the card itself scrolls the board */
+  .pin-card { touch-action: pan-x pan-y; cursor: default; }
+  .pin-grip {
+    display: block; position: absolute; top: -2px; right: -2px; width: 44px; height: 44px; touch-action: none; cursor: grab; z-index: 2;
+    background: radial-gradient(circle, rgba(29, 26, 22, 0.55) 1.6px, transparent 2.2px) 13px 12px / 8px 8px;
+    background-repeat: repeat; background-clip: content-box; padding: 10px 9px 10px 11px; box-sizing: border-box;
+    background-color: rgba(246, 241, 228, 0.82); border-radius: 6px;
+  }
+  .pin-grip::after { content: ''; position: absolute; inset: 6px; border: 1px dashed rgba(29, 26, 22, 0.25); border-radius: 4px; }
+  .cork svg.threads path.thread-hit { pointer-events: stroke; }
+  .map-node-label small { font-size: 0.82rem; }
+  .pin-card p { font-size: 0.86rem; }
+}
+
+/* =====================================================================
+   2. Phones (portrait and narrow windows): bottom tab bar and compact screens
+   ===================================================================== */
+:root { --pn-h: 60px; }
+.pn-tab {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  min-width: 0; min-height: 48px; padding: 6px 2px 4px; border: 0; background: transparent; color: var(--mist);
+  font-family: var(--font-ui); font-size: 0.8rem; font-weight: 600; line-height: 1.1; letter-spacing: 0.01em;
+}
+.pn-ico svg { width: 24px; height: 24px; display: block; }
+.pn-label { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pn-tab[aria-current='page'] { color: var(--paper); }
+.pn-tab[aria-current='page']::before { content: ''; position: absolute; top: 0; left: 22%; right: 22%; height: 3px; border-radius: 0 0 3px 3px; background: var(--thread-bright); }
+.pn-tab:active { background: rgba(237, 230, 214, 0.08); }
+.pn-tab:focus-visible { outline-offset: -3px; }
+
+@media (max-width: 760px) {
+  body.nav-on .phone-nav {
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 30;
+    height: calc(var(--pn-h) + env(safe-area-inset-bottom));
+    padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    background: rgba(9, 13, 17, 0.97); border-top: 1px solid rgba(237, 230, 214, 0.14);
+    box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.35);
+  }
+  body.nav-on #screen { bottom: calc(var(--pn-h) + env(safe-area-inset-bottom)); }
+  body.nav-on .gear-btn { display: none; }
+  body.nav-on #toasts { bottom: calc(var(--pn-h) + env(safe-area-inset-bottom) + 12px); }
+  body.nav-on .nav-dup { display: none; }
+
+  /* ---- compact one-row top bar ---- */
+  body.nav-on .topbar {
+    flex-wrap: wrap; gap: 6px 8px; min-height: 60px;
+    padding: max(8px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 8px max(8px, env(safe-area-inset-left));
+  }
+  .topbar-title, .puzzle-screen .topbar-title { min-width: 0; flex: 1 1 0; }
+  .topbar-title strong { font-size: 1.3rem; }
+  .topbar-title span { font-size: 0.86rem; }
+  .topbar .btn--small { min-height: 44px; padding-inline: 0.75em; }
+  .back-btn { flex: none; padding-left: 0.3em; padding-right: 0.6em; }
+  .back-btn.has-short .back-label { display: none; }
+  .back-btn.has-short .back-short { display: inline; }
+  .topbar .timer { flex: none; min-width: 0; font-size: 0.95rem; }
+  .hint-btn { flex: none; padding-inline: 0.6em; gap: 0.35em; }
+  .hint-btn .hint-ico { display: block; }
+  .hint-btn .hint-label { display: none; }
+  .hint-count { min-width: 24px; height: 24px; font-size: 0.82rem; }
+  .dev-btn { order: 10; margin-left: auto; font-size: 0.85rem; padding-inline: 0.6em; }
+
+  /* ---- toasts and dialogs ---- */
+  .toast { font-size: 0.95rem; padding: 12px 14px; }
+  .modal-backdrop { padding: 12px; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  .modal { padding: 20px 18px; max-height: calc(100dvh - 24px); }
+  .modal h2 { font-size: 1.7rem; }
+  .modal .actions .btn { flex: 1 1 auto; }
+  .settings-panel { max-height: calc(100dvh - 24px); padding: 18px 18px 16px; }
+
+  /* ---- office ---- */
+  .hub-card { left: max(12px, env(safe-area-inset-left)); }
+  .hub-actions {
+    left: 12px; right: 12px; bottom: 12px;
+    grid-template-columns: 1fr 1fr; justify-items: stretch; gap: 8px;
+  }
+  .hub-actions .btn { min-width: 0; justify-content: center; text-align: center; min-height: 48px; }
+  .hub-actions .btn--primary { grid-column: 1 / -1; }
+  .hub-actions .btn:first-child { grid-column: 1 / -1; }
+  .hub-actions .btn--ghost { background: rgba(10, 15, 20, 0.55); }
+
+  /* ---- case map ---- */
+  .map-node-label { width: min(170px, 42vw); font-size: 0.88rem; line-height: 1.3; }
+  .map-node-label small { font-size: 0.82rem; }
+  .map-phase { font-size: 0.9rem; }
+  .map-scroll { overscroll-behavior: contain; }
+
+  /* ---- puzzle: game first, photo as a strip that opens on tap ---- */
+  .puzzle-body { display: block; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  .evidence-col {
+    position: relative; display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 12px; align-items: center;
+    padding: 10px 12px; overflow: visible; border-right: 0; border-bottom: 1px solid rgba(237, 230, 214, 0.1);
+    background: rgba(10, 15, 20, 0.55);
+  }
+  .evidence-col .photo { border-width: 3px; border-bottom-width: 3px; transform: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); }
+  .evidence-col .photo-caption { display: none; }
+  .evidence-meta { margin: 0; min-width: 0; }
+  .evidence-meta h3 { display: none; }
+  .evidence-meta .doc { margin: 0; font-size: 0.9rem; line-height: 1.4; color: var(--mist); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .evidence-meta .spec-tag { display: none; }
+  .evidence-meta .progress-line { margin-top: 8px; }
+  .ev-toggle { display: block; position: absolute; inset: 0; z-index: 3; width: 100%; padding: 0; border: 0; background: transparent; color: var(--mist); }
+  .ev-toggle-hint { position: absolute; right: 12px; bottom: 4px; font-size: 0.8rem; opacity: 0.75; }
+  .evidence-col.is-open { grid-template-columns: minmax(0, 1fr); padding: 14px 16px 22px; }
+  .evidence-col.is-open .photo { width: min(100%, 460px); margin: 0 auto; border-width: 6px; border-bottom-width: 26px; transform: rotate(-1deg); }
+  .evidence-col.is-open .photo-caption { display: block; bottom: -22px; font-size: 0.8rem; }
+  .evidence-col.is-open .evidence-meta { margin-top: 18px; }
+  .evidence-col.is-open .evidence-meta h3 { display: block; }
+  .evidence-col.is-open .evidence-meta .doc { display: block; -webkit-line-clamp: unset; }
+  .evidence-col.is-open .spec-tag { display: inline-block; }
+  .evidence-col.is-open .ev-toggle-hint { bottom: 6px; }
+  .game-col { padding: 10px 8px 24px; overflow: visible; display: block; }
+  .game-sheet { padding: 14px 12px; max-width: none; }
+  .game-sheet h2 { font-size: 1.55rem; }
+  .game-brief { margin-bottom: 12px; }
+  .game-rules { font-size: 0.95rem; }
+  .game-toolbar .btn { min-height: 44px; }
+
+  /* ---- case board ---- */
+  .board-area { overscroll-behavior: contain; }
+  .cork { min-width: 100%; min-height: 100%; }
+  .pin-card { width: 150px; padding: 10px 10px 8px; }
+  .pin-card.is-suspect { width: 150px; }
+  .pin-card .portrait { height: 104px; }
+  .pin-card h4 { font-size: 1.1rem; }
+  .pin-card p { font-size: 0.86rem; }
+  .pin-card .btn--small { min-height: 44px; }
+  .board-empty { font-size: 0.95rem; }
+
+  /* ---- deduction ---- */
+  .deduce-wrap { padding: 18px 14px 40px; }
+  .deduce-wrap .lede { font-size: 1rem; margin-bottom: 20px; }
+  .suspect-row { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .dossier .portrait { height: 190px; }
+  .dossier dl { font-size: 0.95rem; }
+  .dossier .role { font-size: 0.95rem; }
+  .dq-grid { grid-template-columns: minmax(0, 1fr); }
+  .dq-note { font-size: 0.92rem; }
+  .deduce-bar { padding: 10px 12px; gap: 8px 12px; }
+  .deduce-bar .doc { flex: 1 1 180px; font-size: 0.92rem; line-height: 1.35; }
+  .deduce-bar .btn { flex: 1 0 auto; }
+
+  /* ---- closed file, archive ---- */
+  .closed-file { margin: 16px 12px 32px; padding: 22px 18px; }
+  .closed-stamp { font-size: 1.6rem; top: 16px; right: 12px; }
+  .archive-list { padding: 16px 12px 40px; }
+  .archive-item { grid-template-columns: minmax(0, 1fr); }
+  .archive-item .btn { width: 100%; }
+
+  /* ---- puzzle lab: games in one sideways row ---- */
+  .lab-chips { flex: none; flex-wrap: nowrap; overflow-x: auto; padding: 10px 12px !important; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .lab-chips::-webkit-scrollbar { display: none; }
+  .lab-chips .chip { flex: none; }
+}
+
+/* =====================================================================
+   3. Landscape phones: the same tabs as a slim rail on the left
+   ===================================================================== */
+@media (min-width: 761px) and (max-height: 500px) and (pointer: coarse) {
+  :root { --rail-w: 76px; }
+  body.nav-on .phone-nav {
+    display: flex; flex-direction: column; justify-content: center; gap: 2px;
+    position: absolute; top: 0; bottom: 0; left: 0; z-index: 30;
+    width: calc(var(--rail-w) + env(safe-area-inset-left));
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) env(safe-area-inset-left);
+    background: rgba(9, 13, 17, 0.97); border-right: 1px solid rgba(237, 230, 214, 0.14);
+  }
+  body.nav-on .pn-tab { flex: 0 1 64px; }
+  body.nav-on .pn-tab[aria-current='page']::before { top: 22%; bottom: 22%; left: 0; right: auto; width: 3px; height: auto; border-radius: 0 3px 3px 0; }
+  body.nav-on #screen { left: calc(var(--rail-w) + env(safe-area-inset-left)); }
+  body.nav-on .gear-btn { display: none; }
+  body.nav-on .nav-dup { display: none; }
+  body.nav-on .topbar { flex-wrap: nowrap; padding: max(6px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 6px 10px; }
+  .topbar-title { min-width: 0; }
+  .topbar-title strong { font-size: 1.2rem; }
+  .hint-btn .hint-ico { display: block; }
+  .hint-btn .hint-label { display: none; }
+  /* puzzle: photo column on the left, the game scrolls on the right */
+  .puzzle-body { grid-template-columns: 200px minmax(0, 1fr); grid-template-rows: none; overflow: hidden; }
+  .evidence-col { display: block; overflow-y: auto; border-right: 1px solid rgba(237, 230, 214, 0.08); border-bottom: 0; padding: 12px; }
+  .evidence-col .photo { border-width: 5px; border-bottom-width: 22px; }
+  .evidence-col .photo-caption { bottom: -20px; font-size: 0.75rem; }
+  .evidence-meta { margin-top: 26px; }
+  .game-col { overflow: auto; padding: 10px; }
+  .hub-actions { bottom: 12px; gap: 6px; }
+  .hub-actions .btn { min-height: 44px; }
+  .board-area { overscroll-behavior: contain; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pn-tab { transition: none; }
+}

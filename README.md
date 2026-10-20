@@ -64,3 +64,14 @@ Levels, panels and lines may carry `when: (flags) => boolean`, so earlier choice
 ### Images
 
 Image keys live in `src/data/intro.js` (cinematic panels) and in each case file (`opening`, `ending`, `evidence.img`, suspect `img`). Prompts for the side case and Case 2 are in `docs/image_prompts.md`. Save a JPG as `public/assets/img/<key>.jpg`. Evidence photos are 4:3; set `evidence.hotspot` `{x, y, r}` (fractions of the photo) to circle the hidden item.
+
+#### Video clips
+
+Any cinematic panel (the intro, a case's `opening` or `ending`) can play a short clip with sound instead of its still. Drop the file in and it is used automatically:
+
+- `public/assets/video/<img key>.mp4`, e.g. `public/assets/video/intro_01_rain.mp4` for the panel with `img: 'intro_01_rain'`.
+- A panel with `video: '<key>'` looks for `public/assets/video/<key>.mp4` instead (used where a still appears twice: `intro_11_pocket`, `c2_intro_05b_breathe`). `video: false` turns clips off for a panel.
+- Format: 16:9, about 8 seconds, H.264 video + AAC audio in MP4 (what Google Flow / Veo exports). Keep each under ~6 MB (`ffmpeg -i in.mp4 -c:v libx264 -crf 24 -preset slow -c:a aac -b:a 128k -movflags +faststart out.mp4`).
+- The still stays as the poster and the fallback: if the clip is missing or cannot play, the panel shows the still with its slow camera move as before. Captions keep their own timing; a short clip holds its last frame, a long one is cut when the panel advances.
+- Clips play at the sound-effects volume (Settings), duck the music, and replace the panel's procedural sound effect and weather overlay. If a phone blocks sound, the clip plays muted with a "Tap for sound" button.
+- The game checks for each clip with one `HEAD` request per session. On a static host, panels without a clip show up as 404 lines in the network log; that is harmless.

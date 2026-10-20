@@ -203,3 +203,11 @@
 @media (max-width: 700px) { .ab-layout { grid-template-columns: 1fr; } .ab-register { columns: 1; } }
 .ab-layout > section { min-width: 0; }
 .ab-claim, .ab-doc { white-space: normal; overflow-wrap: anywhere; }
+
+/* ---------- phones ---------- */
+@media (max-width: 760px) {
+  .ab-tablewrap { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+  .rb-dot { min-width: 40px; min-height: 40px; }
+  .ab-table { font-size: 0.82rem; }
+  .ab-table th, .ab-table td { padding: 6px 7px; }
+}

@@ -29,6 +29,13 @@ export function register(name, loader) {
   screens[name] = loader;
 }
 
+// Listeners told about every screen change (the phone nav bar uses this to follow along).
+const listeners = new Set();
+export function onNavigate(fn) {
+  listeners.add(fn);
+  return () => listeners.delete(fn);
+}
+
 export async function go(name, params = {}) {
   if (busy) {
     // a transition is running: remember the latest request instead of dropping it
@@ -42,6 +49,7 @@ export async function go(name, params = {}) {
     // start the crossfade while the old screen fades out
     if (SCREEN_MUSIC[name]) app.music?.play(SCREEN_MUSIC[name]);
     document.body.dataset.screen = name;
+    listeners.forEach((fn) => { try { fn(name, params); } catch (e) { console.error(e); } });
     const old = root.firstElementChild;
     if (old) {
       await gsap.to(old, { opacity: 0, duration: 0.35, ease: 'power2.in' });

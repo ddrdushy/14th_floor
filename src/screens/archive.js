@@ -1,6 +1,7 @@
 // Case archive: closed files, each with your accusation on record. Reopen one to accuse again.
 import { h, modal } from '../core/ui.js';
 import { go } from '../core/router.js';
+import { backButton } from '../core/nav.js';
 import { state, save } from '../core/state.js';
 import { CASES, CASE_ORDER, caseHeading } from '../data/cases.js';
 import { app } from '../core/app.js';
@@ -27,7 +28,7 @@ export function mount(host) {
   });
   host.append(h('section', { class: 'screen' },
     h('header', { class: 'topbar' },
-      h('button', { class: 'btn btn--ghost btn--small', onclick: () => go('office') }, 'Office'),
+      backButton('Office', () => go('office')),
       h('div', { class: 'topbar-title' }, h('strong', {}, 'Case archive'), h('span', {}, 'Every file you have touched.'))),
     h('div', { class: 'scroll', style: { flex: 1 } }, h('div', { class: 'archive-list' }, items.length ? items : h('p', { class: 'doc' }, 'No files yet.')))));
 

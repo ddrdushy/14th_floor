@@ -123,7 +123,7 @@ export const CASE02 = {
       kb: { from: [1.18, 0, 0], to: [1.04, 0, 0] },
     },
     {
-      img: 'c2_intro_05_panic', mood: 'night', fx: [],
+      img: 'c2_intro_05_panic', video: 'c2_intro_05b_breathe', mood: 'night', fx: [],
       lines: [{ who: null, en: '…Seven. The seventh crane is not moving. You breathe out, and you open the door.' }],
       kb: { from: [1.05, 0, 0], to: [1.0, 0, 0] },
     },

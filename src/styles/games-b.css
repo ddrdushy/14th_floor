@@ -286,3 +286,22 @@
 .rd-note:empty { display: none; }
 .rd-note.is-bad { color: var(--thread); }
 .rd-note.is-good { color: var(--ok); }
+
+/* ---------- phones ---------- */
+@media (max-width: 760px) {
+  .kk-a, .kk-d { font-size: clamp(0.7rem, 2.6vw, 0.9rem); }
+  .kk-pad .btn { min-height: 48px; }
+  .cw-nav { min-width: 44px; }
+  .cw-num { font-size: max(0.56rem, min(1.6vw, 0.62rem)); }
+  .cw-key { min-height: 46px; }
+  .mo-replay { width: 44px; height: 44px; font-size: 0.85rem; }
+  .mo-select { min-height: 44px; }
+  .mo-lab { min-height: 44px; }
+  .iq-opt-n { font-size: 0.8rem; }
+  .rd-kind { font-size: 0.78rem; }
+}
+@media (max-width: 480px) {
+  /* anagram: letter tiles wrap onto two rows at a finger-friendly size; the answer slots stay on one line */
+  .an-tiles { flex-wrap: wrap; gap: 6px; }
+  .an-tile { flex: 0 0 40px; width: 40px; height: 44px; font-size: 1.15rem; }
+}

@@ -3,6 +3,7 @@
 import { gsap } from 'gsap';
 import { h, svgEl, modal } from '../core/ui.js';
 import { go } from '../core/router.js';
+import { backButton } from '../core/nav.js';
 import { CASES, levelStatus, getCaseState, caseHeading, resolveCaseId } from '../data/cases.js';
 import { CATEGORY_OF } from '../games/registry.js';
 import { app } from '../core/app.js';
@@ -74,9 +75,9 @@ export function mount(host, { caseId, fresh = false } = {}) {
   const scroll = h('div', { class: 'map-scroll' }, canvas);
   const root = h('section', { class: 'screen map-screen' },
     h('header', { class: 'topbar' },
-      h('button', { class: 'btn btn--ghost btn--small', onclick: () => go('office') }, 'Office'),
+      backButton('Office', () => go('office')),
       h('div', { class: 'topbar-title' }, h('strong', {}, caseHeading(c)), h('span', {}, `${c.place}. ${solved.length} ${solved.length === 1 ? 'exhibit' : 'exhibits'} found.`)),
-      h('button', { class: 'btn btn--small', onclick: () => go('board', { caseId, back: 'map' }) }, 'Case board')),
+      h('button', { class: 'btn btn--small nav-dup', onclick: () => go('board', { caseId, back: 'map' }) }, 'Case board')),
     scroll);
   host.append(root);
   requestAnimationFrame(() => {
