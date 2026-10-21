@@ -34,7 +34,8 @@ export function mount(host, { caseId } = {}) {
       ringing ? h('p', {}, 'Back in Brickfields, the office phone has started ringing.') : null,
       h('div', { style: { display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '18px' } },
         h('button', { class: 'btn btn--primary', 'data-back': '', onclick: () => go('office') }, 'Back to the office'),
-        h('button', { class: 'btn btn--paper', onclick: () => go('archive') }, 'Case archive'))));
+        h('button', { class: 'btn btn--paper', onclick: () => go('archive') }, 'Case archive'),
+        h('button', { class: 'btn btn--paper', onclick: () => go('leaderboard', { caseId, back: 'closed' }) }, 'Leaderboard'))));
   host.append(root);
   gsap.fromTo(stamp, { opacity: 0, scale: 2.5 }, { opacity: 1, scale: 1, duration: 0.4, delay: 0.6, ease: 'back.out(2)', onStart: () => sfx.stamp() });
   return {};

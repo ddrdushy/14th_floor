@@ -8,6 +8,8 @@ import { CASES, levelStatus, getCaseState, caseHeading, resolveCaseId } from '..
 import { CATEGORY_OF } from '../games/registry.js';
 import { app } from '../core/app.js';
 import { sfx } from '../core/audio.js';
+import { state, save } from '../core/state.js';
+import { openEvidence, evidenceFileButton } from '../core/evidence-viewer.js';
 
 const STEP = 128;
 
@@ -58,7 +60,7 @@ export function mount(host, { caseId, fresh = false } = {}) {
     let btn;
     if (n.kind === 'done') {
       const ev = n.level.evidence;
-      btn = h('button', { class: 'map-node is-done', style: { left, top: `${p.y}px` }, 'aria-label': `Solved: ${n.level.title}. Evidence ${ev.tag}`, onclick: () => replay(n.level) }, String(ev.tag));
+      btn = h('button', { class: 'map-node is-done', style: { left, top: `${p.y}px` }, 'aria-label': `Exhibit ${ev.tag}, solved: ${ev.title}. View the evidence`, onclick: () => replay(n.level) }, String(ev.tag));
       canvas.append(h('div', { class: 'map-node-label', style: { left, top: `${p.y + 38}px` } }, ev.title));
     } else if (n.kind === 'current') {
       btn = h('button', { class: 'map-node is-current', style: { left, top: `${p.y}px` }, 'aria-label': `Next: ${n.level.title}`, onclick: () => open(n.level) }, '?');
@@ -77,9 +79,31 @@ export function mount(host, { caseId, fresh = false } = {}) {
     h('header', { class: 'topbar' },
       backButton('Office', () => go('office')),
       h('div', { class: 'topbar-title' }, h('strong', {}, caseHeading(c)), h('span', {}, `${c.place}. ${solved.length} ${solved.length === 1 ? 'exhibit' : 'exhibits'} found.`)),
+      evidenceFileButton(caseId),
+      h('button', { class: 'btn btn--small map-help-btn', type: 'button', 'aria-label': 'How the map works', title: 'How the map works', onclick: () => (tip.isConnected ? hideTip() : showTip()) }, h('span', { 'aria-hidden': 'true' }, '?')),
       h('button', { class: 'btn btn--small nav-dup', onclick: () => go('board', { caseId, back: 'map' }) }, 'Case board')),
     scroll);
   host.append(root);
+
+  // a small note explaining the map, shown once (state().seenMapHelp) and again from the "?" button
+  const tip = h('aside', { class: 'map-tip', role: 'note', 'aria-label': 'How the map works' },
+    h('button', { class: 'map-tip-x', type: 'button', 'aria-label': 'Close the tip', onclick: () => hideTip() }, h('span', { 'aria-hidden': 'true' }, '×')),
+    h('h3', {}, 'Reading the map'),
+    h('ul', {},
+      h('li', {}, h('span', { class: 'mt-ico mt-line', 'aria-hidden': 'true' }), h('span', {}, h('b', {}, 'The red line '), 'is your trail of leads.')),
+      h('li', {}, h('span', { class: 'mt-ico mt-done', 'aria-hidden': 'true' }, '1'), h('span', {}, h('b', {}, 'Numbered: '), 'solved. Tap one to read its evidence again.')),
+      h('li', {}, h('span', { class: 'mt-ico mt-cur', 'aria-hidden': 'true' }, '?'), h('span', {}, h('b', {}, 'Red ?: '), 'your next lead. Tap it to play.')),
+      h('li', {}, h('span', { class: 'mt-ico mt-fog', 'aria-hidden': 'true' }, '…'), h('span', {}, h('b', {}, 'Dashed circle: '), 'more leads ahead. Nobody tells you how many.'))),
+    h('button', { class: 'btn btn--paper btn--small map-tip-ok', type: 'button', onclick: () => hideTip() }, 'Got it'));
+  // the tip sits just under the top bar: the next lead is scrolled into view lower down
+  function showTip() {
+    root.append(tip);
+    tip.style.top = `${(root.querySelector('.topbar')?.offsetHeight || 64) + 12}px`;
+  }
+  function hideTip() {
+    tip.remove();
+    if (!state().seenMapHelp) { state().seenMapHelp = true; save(); }
+  }
   requestAnimationFrame(() => {
     const focusIdx = nodes.findIndex((n) => n.kind === 'current' || n.kind === 'final');
     const y = pos[focusIdx >= 0 ? focusIdx : nodes.length - 1].y;
@@ -88,25 +112,24 @@ export function mount(host, { caseId, fresh = false } = {}) {
     if (cur) gsap.from(cur, { scale: 0.4, opacity: 0, duration: 0.6, delay: 0.3, ease: 'back.out(2)' });
   });
 
+  const firstTip = !state().seenMapHelp;
   if (fresh && !solved.length) {
     setTimeout(() => modal({
       title: caseHeading(c),
       body: h('div', {}, h('p', { class: 'doc' }, c.brief), h('p', {}, c.mapIntro || 'Every puzzle you solve uncovers one piece of evidence. Nobody will tell you how many pieces there are. When you have enough, you name the killer yourself.')),
       buttons: [{ label: 'Start the investigation', kind: 'primary', value: true }],
-    }), 600);
-  }
+    }).then(() => { if (firstTip && root.isConnected) showTip(); }), 600);
+  } else if (firstTip) showTip();
 
   function open(level) {
     sfx.click();
     go('puzzle', { caseId, levelId: level.id });
   }
 
+  // a solved node: look at its evidence again (photo, full text, when it was found)
   function replay(level) {
-    modal({
-      title: `Exhibit ${level.evidence.tag}: ${level.evidence.title}`,
-      body: h('p', { class: 'doc' }, level.evidence.text),
-      buttons: [{ label: 'Close', value: false }],
-    });
+    sfx.click();
+    openEvidence({ caseId, levelId: level.id });
   }
 
   return {};

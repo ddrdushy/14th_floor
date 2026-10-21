@@ -1,5 +1,7 @@
-// Rain-streaked window glass: drops slide down and refract a blurred KL skyline.
+// Rain-streaked window glass: drops slide down and refract the KL skyline behind them.
+// Traffic crawls along the roads far below, and the mamak's neon sign bleeds up from under the sill.
 import * as THREE from 'three';
+import { CITY_ROADS } from './textures.js';
 
 const vertexShader = /* glsl */ `
   varying vec2 vUv;
@@ -13,6 +15,8 @@ const fragmentShader = /* glsl */ `
   uniform sampler2D uCity;
   uniform float uTime;
   uniform float uFlash;
+  uniform float uNeon;
+  uniform vec3 uRoads;
   varying vec2 vUv;
 
   float h21(vec2 p) {
@@ -47,6 +51,18 @@ const fragmentShader = /* glsl */ `
     return vec3(offs, fogTrail + drop);
   }
 
+  // one lane of cars: short streaks that drift along x, some cells empty
+  vec3 lane(vec2 p, float y, float thick, float dir, float speed, vec3 col, float seed) {
+    float d = abs(p.y - y);
+    float band = smoothstep(thick, 0.0, d);
+    float x = p.x * 26.0 + dir * uTime * speed + seed;
+    float cell = floor(x);
+    float on = step(0.45, h21(vec2(cell, seed)));
+    float f = fract(x);
+    float car = smoothstep(0.0, 0.08, f) * smoothstep(0.32, 0.12, f);
+    return col * band * car * on;
+  }
+
   void main() {
     vec2 uv = vUv;
     float t = uTime * 0.35;
@@ -55,17 +71,47 @@ const fragmentShader = /* glsl */ `
     d += layer(uv * 1.35 + 1.54, t);
     d += layer(uv * 1.57 + 7.54, t);
     float clear = clamp(d.z, 0.0, 1.0);
-    float blur = mix(5.5, 0.6, clear);
-    vec3 col = textureLod(uCity, uv + d.xy * 1.2, blur).rgb;
-    col *= 0.85 + clear * 0.35;
+    vec2 cuv = uv + d.xy * 1.1;
+    // misted glass between the drops, clear inside them
+    float blur = mix(2.2, 0.0, clear);
+    vec3 col = textureLod(uCity, cuv, blur).rgb;
+
+    // traffic far below: tail lights one way, headlights the other
+    vec3 traffic = vec3(0.0);
+    traffic += lane(cuv, uRoads.x + 0.004, 0.004, 1.0, 0.9, vec3(1.0, 0.18, 0.12), 3.0);
+    traffic += lane(cuv, uRoads.x - 0.004, 0.004, -1.0, 1.1, vec3(1.0, 0.85, 0.6), 7.0);
+    traffic += lane(cuv, uRoads.y + 0.005, 0.005, -1.0, 0.7, vec3(1.0, 0.2, 0.15), 11.0);
+    traffic += lane(cuv, uRoads.y - 0.005, 0.005, 1.0, 0.8, vec3(1.0, 0.9, 0.7), 17.0);
+    traffic += lane(cuv, uRoads.z + 0.006, 0.006, 1.0, 0.55, vec3(1.0, 0.85, 0.65), 23.0);
+    traffic += lane(cuv, uRoads.z - 0.006, 0.006, -1.0, 0.6, vec3(1.0, 0.16, 0.12), 29.0);
+    col += traffic * mix(0.55, 1.0, clear);
+
+    // lit windows flicker now and then
+    vec2 cellId = floor(cuv * vec2(220.0, 160.0));
+    float tw = step(0.996, h21(cellId + floor(uTime * 0.25)));
+    col += tw * col * 0.6;
+
+    col *= 0.9 + clear * 0.3;
+    col *= 1.12;
+    // the mamak's neon below the sill, smeared up the wet glass
+    float neon = smoothstep(0.32, 0.0, uv.y) * uNeon;
+    col += neon * mix(vec3(0.05, 0.75, 0.5), vec3(0.9, 0.15, 0.2), smoothstep(0.35, 0.75, uv.x)) * (0.28 + clear * 0.35);
     col += uFlash * vec3(0.55, 0.6, 0.75);
     gl_FragColor = vec4(col, 1.0);
   }
 `;
 
 export function rainWindowMaterial(cityTexture) {
+  const H = 1120;
+  const roads = CITY_ROADS.map((y) => 1 - y / H);
   return new THREE.ShaderMaterial({
-    uniforms: { uCity: { value: cityTexture }, uTime: { value: 0 }, uFlash: { value: 0 } },
+    uniforms: {
+      uCity: { value: cityTexture },
+      uTime: { value: 0 },
+      uFlash: { value: 0 },
+      uNeon: { value: 0.8 },
+      uRoads: { value: new THREE.Vector3(...roads) },
+    },
     vertexShader,
     fragmentShader,
   });

@@ -1,6 +1,6 @@
 // One investigation step: a mini game on the right, a fogged crime-scene photo on the left
 // that clears as you progress. Solving it reveals the hidden item and pins the evidence.
-import { h, toast, modal, fmtTime, isDev } from '../core/ui.js';
+import { h, toast, fmtTime, isDev } from '../core/ui.js';
 import { go } from '../core/router.js';
 import { state, save } from '../core/state.js';
 import { CASES, getCaseState, findLevel, resolveCaseId } from '../data/cases.js';
@@ -11,6 +11,7 @@ import { sfx } from '../core/audio.js';
 import { app } from '../core/app.js';
 import { specialtyOf } from '../core/avatar.js';
 import { backButton, icon } from '../core/nav.js';
+import { openLightbox, openEvidenceFile, evIcon } from '../core/evidence-viewer.js';
 import { resolveHowTo, showGameHowTo, showLoopTutorial, needsLoopTutorial, markLoopSeen, seenHowTo, markHowToSeen, closeHowTo, howToButton, goalLine, isHowToOpen } from '../core/howto.js';
 
 function fogLayer(canvas, seedKey, hotspot) {
@@ -231,29 +232,60 @@ export async function mount(host, { caseId, levelId }) {
     await new Promise((r) => setTimeout(r, 250));
     if (destroyed) return;
     sfx.reveal();
-    setPhotoOpen(true);
-    photo.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    await showReveal();
+  }
+
+  // The reveal: the photo moves to the middle of the screen, large, with the evidence card beside it
+  // (below it on phones). Nothing here moves on by itself: the player reads, then pins the card,
+  // then chooses where to go. The waits below only pace the fog animation.
+  async function showReveal() {
+    const openFull = () => openLightbox(ev);
+    photo.classList.add('is-zoomable');
+    photo.setAttribute('role', 'button');
+    photo.setAttribute('tabindex', '0');
+    photo.setAttribute('aria-label', `Exhibit ${ev.tag}: view the photo full screen`);
+    photo.addEventListener('click', openFull);
+    photo.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openFull(); } });
+    const fullBtn = h('button', { class: 'btn btn--small pzr-full', type: 'button', onclick: openFull, 'aria-label': 'View the photo full screen' },
+      h('span', { class: 'pzr-full-ico', html: evIcon('expand') }), h('span', { class: 'pzr-full-label' }, 'Full screen'));
+    // the ring's shade stays inside the picture while the caption shows on the paper border below it
+    const clip = h('div', { class: 'pzr-clip' });
+    hotspot.before(clip);
+    clip.append(hotspot);
+    const status = h('p', { class: 'pzr-status', 'aria-live': 'polite' }, 'Read it first. Nothing moves until you do.');
+    const pinBtn = h('button', { class: 'btn btn--primary pzr-pin', type: 'button', onclick: pin }, 'Pin it to the board');
+    const actions = h('div', { class: 'pzr-actions' }, pinBtn);
+    const card = h('article', { class: 'evidence-card pzr-card' },
+      h('span', { class: 'tag' }, String(ev.tag)),
+      h('span', { class: 'pzr-stamp', 'aria-hidden': 'true' }, 'Pinned'),
+      h('h3', {}, ev.title),
+      h('p', {}, ev.text),
+      h('p', { class: 'pzr-time' }, `Solved in ${fmtTime(elapsed)}.`));
+    const reveal = h('div', { class: 'pz-reveal' },
+      h('div', { class: 'pzr-photo' }, photo, fullBtn),
+      h('div', { class: 'pzr-side' }, h('p', { class: 'pzr-kicker' }, `Exhibit ${ev.tag} found`), card, status, actions));
+    root.classList.add('is-revealed');
+    root.append(reveal);
+    reveal.scrollTop = 0;
     photoImg.style.filter = 'none';
+    fog.draw();
     await fog.clear(900);
     if (destroyed) return;
     photo.querySelector('.photo-caption').textContent = `Exhibit ${ev.tag}: ${ev.title}`;
     // CSS-driven ring so it shows even if animation frames are slow
     hotspot.classList.add('is-revealed');
-    await new Promise((r) => setTimeout(r, 1100));
-    if (destroyed) return;
-    const card = h('div', { class: 'evidence-card' },
-      h('span', { class: 'tag' }, String(ev.tag)),
-      h('h3', {}, ev.title),
-      h('p', {}, ev.text),
-      h('p', { class: 'muted', style: { marginTop: '10px', fontFamily: 'var(--font-ui)', fontSize: '.85rem', color: 'var(--ink-soft)' } }, `Solved in ${fmtTime(elapsed)}.`));
-    const cont = await modal({
-      title: '',
-      body: card,
-      buttons: [{ label: 'Pin it to the board', kind: 'primary', value: 'map' }],
-      dismissable: false,
-    });
-    sfx.pin();
-    if (cont) go('map', { caseId });
+
+    function pin() {
+      sfx.pin();
+      card.classList.add('is-pinned');
+      status.textContent = 'Pinned to the case board. Take your time.';
+      const nextBtn = h('button', { class: 'btn btn--primary pzr-next', type: 'button', onclick: () => go('map', { caseId }) }, 'Next lead');
+      actions.replaceChildren(
+        nextBtn,
+        h('button', { class: 'btn btn--paper pzr-board', type: 'button', onclick: () => go('board', { caseId, back: 'map' }) }, 'View on board'),
+        h('button', { class: 'btn btn--ghost pzr-file', type: 'button', onclick: () => openEvidenceFile({ caseId }) }, 'Evidence file'));
+      nextBtn.focus({ preventScroll: true });
+    }
   }
 
   return {

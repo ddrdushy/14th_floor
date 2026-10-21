@@ -1,0 +1,87 @@
+/* Floor 14: leaderboard (screens/leaderboard.js) and the leaderboard group in Settings.
+   Imported in main.js before mobile.css. A manila duty roster with folder tabs, on the night desk. */
+
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.lb-screen { background: radial-gradient(circle at 50% -10%, #26333e, #0b1015 72%); }
+.lb-scroll { flex: 1; }
+.lb-wrap { max-width: 760px; margin: 0 auto; padding: clamp(16px, 4vw, 36px) 16px 56px; }
+
+/* ---------- folder tabs ---------- */
+.lb-tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 6px 2px 0; margin: 0 0 -1px; position: relative; z-index: 1; }
+.lb-tabs::-webkit-scrollbar { display: none; }
+.lb-tab {
+  flex: none; min-height: 44px; padding: 8px 16px 6px; border: 0; border-radius: 6px 6px 0 0;
+  background: var(--manila-dark); color: var(--ink); opacity: 0.72;
+  font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: 0.02em; line-height: 1;
+  box-shadow: inset 0 -6px 8px -6px rgba(0, 0, 0, 0.35); transition: opacity 0.15s, transform 0.15s;
+}
+.lb-tab:hover { opacity: 0.9; }
+.lb-tab[aria-selected='true'] { background: var(--manila); opacity: 1; box-shadow: none; transform: translateY(-3px); padding-bottom: 9px; }
+.lb-tab:focus-visible { outline-offset: -3px; }
+
+/* ---------- the roster ---------- */
+.lb-file { position: relative; background: var(--manila); color: var(--ink); padding: clamp(16px, 3.5vw, 30px); box-shadow: var(--shadow-paper); border-radius: 0 var(--r-sm) var(--r-sm) var(--r-sm); }
+.lb-file-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.lb-title { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: clamp(1.9rem, 6vw, 2.8rem); line-height: 0.95; }
+.lb-stamp { flex: none; color: var(--thread); border: 3px solid var(--thread); font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0 8px; transform: rotate(8deg); margin-top: 4px; opacity: 0.85; }
+.lb-rule { margin: 8px 0 16px; font-family: var(--font-doc); font-size: 0.9rem; color: var(--ink-soft); max-width: 60ch; }
+
+.lb-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-variant-numeric: tabular-nums; }
+.lb-table th, .lb-table td { padding: 9px 6px; text-align: left; vertical-align: middle; }
+.lb-table thead th { font-family: var(--font-ui); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); border-bottom: 2px solid var(--ink); padding-top: 0; }
+.lb-table tbody tr { border-bottom: 1px dashed rgba(29, 26, 22, 0.28); }
+.lb-table tbody tr:last-child { border-bottom: 0; }
+.lb-table .lb-rank { width: 46px; text-align: center; }
+.lb-table .lb-ok { width: 72px; text-align: center; }
+.lb-table .lb-num { width: 76px; text-align: right; }
+.lb-table tbody .lb-num { font-family: var(--font-doc); }
+.lb-table .lb-hints { width: 58px; }
+.lb-table tbody .lb-name { font-family: var(--font-doc); font-weight: 400; font-size: 1.02rem; }
+.lb-name-in { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.lb-name-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-rank-n { display: inline-grid; place-items: center; min-width: 30px; height: 30px; font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; }
+.is-top .lb-rank-n { border-radius: 50%; border: 2px solid currentColor; }
+.is-top1 .lb-rank-n { color: var(--thread); border-width: 3px; }
+.lb-mark { font-size: 1.25rem; font-weight: 700; line-height: 1; }
+.lb-mark.is-right { color: var(--ok); }
+.lb-mark.is-wrong { color: var(--thread); opacity: 0.75; }
+.lb-count { font-family: var(--font-doc); color: var(--ink-soft); }
+.lb-count b { font-family: var(--font-display); font-size: 1.25rem; color: var(--ink); }
+
+/* you: the row with the red thread through it */
+.lb-table tr.is-you { background: rgba(179, 32, 42, 0.1); box-shadow: inset 4px 0 0 var(--thread); }
+.lb-you-tag { flex: none; font-family: var(--font-ui); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: var(--thread); color: #fff; padding: 2px 6px; border-radius: 2px; }
+
+.lb-state { padding: 18px 0 8px; font-family: var(--font-doc); }
+.lb-state strong { display: block; font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; line-height: 1.05; margin-bottom: 6px; }
+.lb-state p { margin: 0 0 12px; color: var(--ink-soft); max-width: 52ch; }
+.lb-you { margin-top: 16px; padding-top: 12px; border-top: 1px dashed var(--ink-soft); font-family: var(--font-doc); font-size: 0.95rem; }
+.lb-you:empty { display: none; }
+.lb-you p { margin: 0; }
+.lb-link { border: 0; background: none; padding: 0; color: var(--thread); font: inherit; text-decoration: underline; text-underline-offset: 3px; min-height: 0; }
+.lb-link:hover { color: var(--thread-bright); }
+
+@media (max-width: 520px) {
+  .lb-wrap { padding: 14px 12px 40px; }
+  .lb-tab { padding: 8px 12px 6px; font-size: 1.05rem; }
+  .lb-file { padding: 16px 12px 14px; }
+  .lb-stamp { display: none; }
+  .lb-table th, .lb-table td { padding: 9px 3px; }
+  .lb-table .lb-rank { width: 34px; }
+  .lb-table .lb-ok { width: 46px; }
+  .lb-table .lb-num { width: 56px; }
+  .lb-table tbody .lb-num { font-size: 0.92rem; }
+  .lb-table .lb-hints { width: 42px; }
+  .lb-table thead th { font-size: 0.66rem; letter-spacing: 0.04em; }
+  .lb-table tbody .lb-name { font-size: 0.95rem; }
+  .lb-name-in { gap: 2px 6px; flex-wrap: wrap; }
+  .lb-name-text { white-space: normal; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.25; }
+  .lb-you-tag { font-size: 0.62rem; padding: 1px 5px; }
+  .lb-rank-n { min-width: 26px; height: 26px; font-size: 1.05rem; }
+}
+
+/* ---------- settings: leaderboard group ---------- */
+.set-group--privacy .set-row label { line-height: 1.25; }
+.set-group--privacy .set-switch[disabled] { opacity: 0.4; cursor: not-allowed; }
+.set-privacy { margin: 4px 0 6px; font-size: 0.82rem; }

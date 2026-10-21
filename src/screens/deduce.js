@@ -45,6 +45,27 @@ export function mount(host, { caseId } = {}) {
     count.textContent = `${who}${rest}${chosen.size && missing.length ? ` ${missing[0].q}` : ''}`;
   }
 
+  // what the player tied to each suspect on the case board (their own red thread). Informational only:
+  // it repeats the player's notes back to them and says nothing about who is right.
+  const boardLinks_ = cs.board?.links || [];
+  const clueOf = new Map(evidence.map((l) => [`e:${l.id}`, l]));
+  function boardLinks(s) {
+    const sid = `s:${s.id}`;
+    const tied = [];
+    boardLinks_.forEach(([a, b]) => {
+      const other = a === sid ? b : b === sid ? a : null;
+      const l = other && clueOf.get(other);
+      if (l && !tied.includes(l)) tied.push(l);
+    });
+    tied.sort((x, y) => x.evidence.tag - y.evidence.tag);
+    if (!tied.length) {
+      return h('p', { class: 'dl-links dl-links--none' }, h('b', {}, 'Your board: '), `no clues tied to ${s.name} yet. Tie clues to suspects on the board to build your case.`);
+    }
+    return h('details', { class: 'dl-links' },
+      h('summary', {}, h('b', {}, 'Your board: '), `${tied.length} ${tied.length === 1 ? 'clue' : 'clues'} tied to ${s.name}`),
+      h('ul', {}, tied.map((l) => h('li', {}, h('span', { class: 'dl-tag' }, String(l.evidence.tag)), l.evidence.title))));
+  }
+
   const dossiers = c.suspects.map((s) => {
     const portrait = h('div', { class: 'portrait' });
     hasImage(s.img).then((ok) => { if (ok) portrait.style.backgroundImage = `url(${imgUrl(s.img)})`; else portrait.innerHTML = avatarSvg(s.look); });
@@ -59,7 +80,7 @@ export function mount(host, { caseId } = {}) {
     h('h3', {}, s.name),
     h('p', { class: 'role' }, s.role),
     h('dl', {}, h('dt', {}, 'Known motive'), h('dd', {}, s.motive), h('dt', {}, 'Their story'), h('dd', {}, s.claim)));
-    return b;
+    return h('div', { class: 'dossier-wrap' }, b, boardLinks(s));
   });
 
   // further questions: one choice each, drawn from what the evidence suggests

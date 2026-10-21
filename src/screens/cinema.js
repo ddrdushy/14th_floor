@@ -6,7 +6,9 @@ import { paintInto, imgUrl, hasImage } from '../core/assets.js';
 import { sfx, thunder, startRain, setRain } from '../core/audio.js';
 import { state, onChange } from '../core/state.js';
 import { app } from '../core/app.js';
+import { initVoices, speak, stopVoice, prefetchLines, unlockVoice, pauseVoice } from '../core/voice-player.js';
 import '../styles/cases.css';
+import '../styles/voice.css';
 
 // ---------------------------------------------------------------------------------------------
 // Video clips
@@ -24,6 +26,14 @@ import '../styles/cases.css';
 // unmuted playback on an element that has been started inside a tap, so unlockCinemaVideo() is
 // called from taps (the licence signature, any tap in a cinematic). If the browser still refuses
 // sound, the clip plays muted and a "Tap for sound" chip appears.
+//
+// ---------------------------------------------------------------------------------------------
+// Voices
+//
+// When the server has voices (functions/api/voice, see README "Voices"), each line is spoken
+// (core/voice-player.js). The music and any clip dip while a line is spoken, and the caption stays
+// until the line has finished (a tap still skips at once). The current and next panel's lines are
+// fetched ahead. Without a backend, or after any failure, the captions play exactly as before.
 
 const VIDEO_DIR = 'assets/video/';
 export const videoUrl = (key) => `${VIDEO_DIR}${key}.mp4`;
@@ -33,6 +43,9 @@ const SILENCE = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYA
 const probes = new Map(); // key -> { state: 'pending' | 'yes' | 'maybe' | 'no', promise }
 const slots = [];
 let soundChip = null; // set while a cinematic is showing its chip
+let voiceSpeaking = false; // a line is being spoken: clips play quieter underneath
+const VOICE_DUCK_MUSIC = 0.22;
+const VOICE_DUCK_CLIP = 0.3;
 
 const soundOn = () => state().settings.sound !== false;
 const clipVolume = () => {
@@ -95,7 +108,7 @@ const getSlots = () => {
 };
 
 function applyAudio(v) {
-  v.volume = clipVolume();
+  v.volume = clipVolume() * (voiceSpeaking ? VOICE_DUCK_CLIP : 1);
   if (!soundOn()) v.muted = true;
 }
 
@@ -104,6 +117,7 @@ function applyAudio(v) {
  * mobile Safari lets them play sound later; a clip that was forced to play muted gets its sound back.
  */
 export function unlockCinemaVideo() {
+  unlockVoice();
   for (const v of getSlots()) {
     if (v.dataset.clip) {
       if (v.dataset.want === 'play') {
@@ -111,7 +125,7 @@ export function unlockCinemaVideo() {
           v.muted = false;
           applyAudio(v);
           if (v.paused && !v.ended) v.play().catch(() => {});
-          if (!v.muted) app.music?.duck?.(0.3);
+          if (!v.muted) app.music?.duck?.(voiceSpeaking ? VOICE_DUCK_MUSIC : 0.3);
         }
       } else if (!v.dataset.unlocked) {
         // preloaded but idle: start and stop it inside the tap
@@ -306,7 +320,7 @@ export function playCinematic(host, panels, { titleNode } = {}) {
       const pr = v.play();
       if (!pr || !pr.then) return;
       pr.then(() => {
-        if (token === v._token && !v.muted && v === liveVideo) app.music?.duck?.(0.3);
+        if (token === v._token && !v.muted && v === liveVideo) app.music?.duck?.(voiceSpeaking ? VOICE_DUCK_MUSIC : 0.3);
       }).catch((err) => {
         if (token !== v._token || done) return;
         if (err?.name === 'NotAllowedError' && !v.muted) {
@@ -371,6 +385,7 @@ export function playCinematic(host, panels, { titleNode } = {}) {
       if (!soundOn()) app.music?.unduck?.();
     });
     const onVisibility = () => {
+      pauseVoice(document.hidden);
       if (!liveVideo) return;
       if (document.hidden) liveVideo.pause();
       else if (liveVideo.dataset.want === 'play' && !liveVideo.ended) liveVideo.play().catch(() => {});
@@ -443,15 +458,60 @@ export function playCinematic(host, panels, { titleNode } = {}) {
       gsap.fromTo(el, { filter: 'brightness(2.6)' }, { filter: 'brightness(1)', duration: 0.6 });
     }
 
+    // ---------- voices ----------
+    let lineToken = 0;
+    function voiceDuck(on) {
+      if (voiceSpeaking === on) return;
+      voiceSpeaking = on;
+      caption.classList.toggle('is-voiced', on);
+      const clipAudible = liveVideo && !liveVideo.muted && soundOn();
+      if (on) app.music?.duck?.(VOICE_DUCK_MUSIC, 0.25);
+      else if (clipAudible) app.music?.duck?.(0.3, 0.6);
+      else app.music?.unduck?.(0.9);
+      if (liveVideo) gsap.to(liveVideo, { volume: clipVolume() * (on ? VOICE_DUCK_CLIP : 1), duration: on ? 0.25 : 0.6, overwrite: 'auto' });
+    }
+    function quiet() {
+      lineToken++;
+      stopVoice();
+      voiceDuck(false);
+    }
+    /** Speak the line; while it plays the caption waits for it instead of its reading-time timer. */
+    function speakLine(line, readMs) {
+      const token = ++lineToken;
+      const words = line.en.split(/\s+/).length;
+      const shownAt = performance.now();
+      const h = speak(line, { maxWait: Math.max(1500, readMs - 1200), onBlocked: showChip });
+      if (!h) return;
+      let spoke = false;
+      h.started.then((ok) => {
+        if (!ok || token !== lineToken || done) return;
+        spoke = true;
+        clearTimeout(timer); // hold the caption until the line has been said
+        voiceDuck(true);
+      });
+      h.ended.then((why) => {
+        // not spoken at all (no voice, failed, too slow): the reading-time timer carries on as before
+        if (!spoke || token !== lineToken || done || why === 'stopped') return;
+        voiceDuck(false);
+        // a short spoken line still leaves time to read the English
+        const minRead = Math.max(1400, words * 260 + 500);
+        clearTimeout(timer);
+        timer = setTimeout(() => next(), Math.max(450, minRead - (performance.now() - shownAt)));
+      });
+    }
+
     function showLine(line) {
       caption.innerHTML = '';
+      quiet();
       if (!line) return;
       const s = subtitle(line);
       caption.append(s);
       gsap.from(s, { opacity: 0, y: 8, duration: 0.35 });
       const words = line.en.split(/\s+/).length;
+      const readMs = Math.max(3200, words * 380 + 1200);
       clearTimeout(timer);
-      timer = setTimeout(() => next(), Math.max(3200, words * 380 + 1200));
+      timer = setTimeout(() => next(), readMs);
+      speakLine(line, readMs);
     }
 
     function next() {
@@ -466,8 +526,10 @@ export function playCinematic(host, panels, { titleNode } = {}) {
       p++;
       l = -1;
       if (p >= panels.length) return finish();
+      quiet();
       showPanel(p);
       const np = panels[p];
+      prefetchLines([...(np.lines || []), ...(panels[p + 1]?.lines || [])]);
       if (np.lines?.length) {
         l = 0;
         showLine(np.lines[0]);
@@ -481,6 +543,9 @@ export function playCinematic(host, panels, { titleNode } = {}) {
       if (done) return;
       done = true;
       clearTimeout(timer);
+      lineToken++;
+      stopVoice();
+      voiceSpeaking = false;
       offChange();
       document.removeEventListener('visibilitychange', onVisibility);
       if (liveVideo) gsap.to(liveVideo, { volume: 0, duration: 0.5 });
@@ -494,9 +559,12 @@ export function playCinematic(host, panels, { titleNode } = {}) {
       } });
     }
 
-    // give the first clip lookup a moment, so panel 1 does not start as a still and then switch
+    // give the first clip lookup (and the one-per-session voice check) a moment, so panel 1 does not
+    // start as a still and then switch, or start its first line before the voice is known
     const first = useVideo ? probes.get(clipKey(panels[0])) : null;
-    if (first && first.state === 'pending') Promise.race([first.promise, new Promise((r) => setTimeout(r, 700))]).then(() => { if (!done) next(); });
-    else next();
+    const voices = initVoices().then((ok) => { if (ok && !done) prefetchLines([...(panels[0]?.lines || []), ...(panels[1]?.lines || [])]); });
+    const waits = [voices];
+    if (first && first.state === 'pending') waits.push(first.promise);
+    Promise.race([Promise.all(waits), new Promise((r) => setTimeout(r, 700))]).then(() => { if (!done) next(); });
   });
 }

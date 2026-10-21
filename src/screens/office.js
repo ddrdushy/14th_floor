@@ -1,4 +1,5 @@
-// The hub: your office in 3D. The board, the phone and the lighter are all clickable.
+// The hub: your office in 3D. The board and everything on the desk (phone, lighter, kopi, case file, lamp)
+// are clickable; the scene draws their hover labels (three/OfficeScene.js).
 // When a case closes, the phone rings with the next one.
 import { h, toast, modal } from '../core/ui.js';
 import { go } from '../core/router.js';
@@ -25,8 +26,14 @@ export function mount(host) {
   const { solved } = levelStatus(c, cs);
   const ringing = p.ringing || p.allClosed;
   app.scene.setBoard({
-    suspects: c.suspects.map((sp) => ({ name: sp.name, role: sp.role, mark: cs.board.marks[sp.id] })),
-    evidence: solved.map((l) => ({ tag: l.evidence.tag, title: l.evidence.title, short: l.evidence.short })),
+    suspects: c.suspects.map((sp) => ({ id: sp.id, name: sp.name, role: sp.role, img: sp.img, mark: cs.board.marks[sp.id] })),
+    evidence: solved.map((l) => ({ id: l.id, tag: l.evidence.tag, title: l.evidence.title, short: l.evidence.short, img: l.evidence.img })),
+    order: cs.evidence,
+    links: cs.board.links,
+  });
+  app.scene.setPlayer?.({
+    name: s.profile.name, license: s.profile.license, drink: s.profile.drink,
+    caseLabel: caseLabel(c), caseTitle: c.title, caller: p.next ? 'Unknown number' : 'Bala Anne',
   });
   app.scene.ringPhone(ringing);
   if (ringing) sfx.buzz();
@@ -46,18 +53,27 @@ export function mount(host) {
     const oc = CASES[id];
     const ocs = getCaseState(id);
     const started = Object.keys(ocs.solved).length > 0;
-    buttons.push(h('button', { class: `btn${!ringing && i === 0 ? ' btn--primary' : ''}`, onclick: () => go('map', { caseId: id }) },
+    buttons.push(h('button', { class: `btn hub-go${!ringing && i === 0 ? ' btn--primary' : ''}`, onclick: () => go('map', { caseId: id }) },
       `${started || ocs.reopened ? 'Continue' : 'Start'} ${caseLabel(oc)}`));
   });
   buttons.push(
     h('button', { class: 'btn nav-dup', onclick: () => go('board', { caseId: mainId, back: 'office' }) }, 'Case board'),
     h('button', { class: 'btn', onclick: () => go('archive') }, 'Case archive'),
+    h('button', { class: 'btn', onclick: () => go('leaderboard', { back: 'office' }) }, 'Leaderboard'),
     h('button', { class: 'btn btn--ghost', onclick: () => go('title') }, 'Title screen'));
-  const actions = h('nav', { class: 'hub-actions', 'aria-label': 'Office' }, buttons);
+  // the case file on top of the panel: which case, and how much of it is pinned up so far
+  const found = solved.length;
+  const file = h('div', { class: 'hub-file' },
+    h('span', { class: 'hub-file-label' }, cs.status === 'closed' ? `${caseLabel(c)}, closed` : caseLabel(c)),
+    h('strong', { class: 'hub-file-title' }, c.title),
+    h('span', { class: 'hub-file-count' },
+      h('span', { class: 'hub-pins', 'aria-hidden': 'true' }, Array.from({ length: Math.min(found, 14) }, () => h('i'))),
+      found ? `${found} exhibit${found === 1 ? '' : 's'} found` : 'No exhibits yet'));
+  const actions = h('nav', { class: 'hub-actions hub-panel', 'aria-label': 'Office' }, file, buttons);
 
   const note = h('p', { class: 'hub-note' }, ringing
     ? 'Your phone is buzzing on the desk.'
-    : `Bala Anne left a ${s.profile.drink.toLowerCase()} on your desk. It has gone cold. Tap the board, the phone or the lighter.`);
+    : `Bala Anne left a ${s.profile.drink.toLowerCase()} on your desk. It has gone cold. Click anything on the desk, or the board.`);
 
   host.append(h('section', { class: 'screen hub' }, card, note, actions));
 
@@ -67,7 +83,11 @@ export function mount(host) {
     else if (what === 'lighter') {
       sfx.click();
       toast("Daniel's lighter. Engraved on the base: \"V.R. 1996\". You never asked him who V.R. was.", 5200);
-    }
+    } else if (what === 'folder') go('map', { caseId: mainId });
+    else if (what === 'cup') {
+      sfx.click();
+      toast(`${s.profile.drink}, stone cold. Bala Anne will send up another when you crack something.`, 4200);
+    } else if (what === 'lamp') sfx.click();
   });
 
   async function answerPhone() {

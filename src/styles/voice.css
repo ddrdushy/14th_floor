@@ -1,0 +1,23 @@
+/* Voiced dialogue (screens/cinema.js): a small level meter before the speaker while a line is spoken. */
+.cine-caption.is-voiced .sub::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 0.8em;
+  margin-right: 8px;
+  vertical-align: -0.05em;
+  background:
+    linear-gradient(var(--sodium), var(--sodium)) 0 100% / 3px 40% no-repeat,
+    linear-gradient(var(--sodium), var(--sodium)) 5px 100% / 3px 90% no-repeat,
+    linear-gradient(var(--sodium), var(--sodium)) 10px 100% / 3px 60% no-repeat;
+  opacity: 0.85;
+  animation: voice-meter 0.9s ease-in-out infinite alternate;
+}
+@keyframes voice-meter {
+  0% { background-size: 3px 40%, 3px 90%, 3px 60%; }
+  50% { background-size: 3px 85%, 3px 45%, 3px 95%; }
+  100% { background-size: 3px 55%, 3px 75%, 3px 35%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cine-caption.is-voiced .sub::before { animation: none; }
+}

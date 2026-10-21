@@ -6,7 +6,9 @@
   "description": "Floor 14 - a Malaysian noir detective thriller played through mind puzzles",
   "scripts": {
     "dev": "vite --host",
+    "prebuild": "node scripts/build-voice-manifest.mjs",
     "build": "vite build",
+    "voices:manifest": "node scripts/build-voice-manifest.mjs",
     "preview": "vite preview --host"
   },
   "dependencies": {
@@ -17,6 +19,7 @@
     "three": "^0.186.1"
   },
   "devDependencies": {
-    "vite": "^8.3.4"
+    "vite": "^8.3.4",
+    "wrangler": "^4.151.3"
   }
 }

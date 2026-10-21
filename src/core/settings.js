@@ -26,6 +26,28 @@ function sliderRow(label, id, get, set, onRelease) {
   return h('div', { class: 'set-row set-row--slider' }, h('label', { for: id }, label), input, out);
 }
 
+// Leaderboard and privacy (read by core/telemetry.js through the save):
+//   shareProgress: send anonymous progress (default on)   showOnBoard: show the detective name (default off)
+function leaderboardGroup(s) {
+  const share = toggleRow('Share anonymous progress', 'set-share', () => s.shareProgress !== false, (v) => {
+    s.shareProgress = v;
+    save();
+    name.querySelector('.set-switch').disabled = !v;
+  });
+  const name = toggleRow('Show my detective name on the leaderboard', 'set-board-name', () => s.showOnBoard === true, (v) => {
+    s.showOnBoard = v;
+    save();
+  });
+  name.querySelector('.set-switch').disabled = s.shareProgress === false;
+  return h('section', { class: 'set-group set-group--privacy' },
+    h('h3', {}, 'Leaderboard'),
+    share,
+    name,
+    h('p', { class: 'set-help set-privacy' },
+      'Progress is sent with a random player number, never an account, email or exact location (only your country). ',
+      'Your detective name is only sent if you choose to show it. Turn sharing off and nothing more leaves this device.'));
+}
+
 /** Opens the settings sheet. Resolves when it closes. */
 export function openSettings() {
   if (openPanel) return openPanel;
@@ -71,6 +93,12 @@ export function openSettings() {
           if (v) { unlock(); startRain(0.22); sfx.click(); } else stopRain();
         }),
         sliderRow('Sound effects volume', 'set-sfx-vol', () => s.sfxVolume ?? 0.8, (v) => { s.sfxVolume = v; save(); applySfxVolume(); }, () => sfx.good())),
+      // voiced dialogue in the cinematics (core/voice-player.js); only heard when the server has voices
+      h('section', { class: 'set-group set-group--voices' },
+        h('h3', {}, 'Voices'),
+        toggleRow('Spoken dialogue', 'set-voices', () => s.voices !== false, (v) => { s.voices = v; save(); }),
+        sliderRow('Voice volume', 'set-voice-vol', () => s.voiceVolume ?? 1, (v) => { s.voiceVolume = v; save(); })),
+      leaderboardGroup(s),
       h('section', { class: 'set-group' },
         h('h3', {}, 'Help'),
         h('div', { class: 'set-row set-row--help' },

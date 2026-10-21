@@ -12,6 +12,9 @@ import './styles/games-b.css';
 import './styles/front.css';
 import './styles/cases.css';
 import './styles/howto.css';
+import './styles/evidence.css';
+import './styles/leaderboard.css';
+import './styles/office.css';
 import './styles/mobile.css';
 
 import { register, go } from './core/router.js';
@@ -21,6 +24,7 @@ import { unlock, thunder } from './core/audio.js';
 import { state } from './core/state.js';
 import { openSettings } from './core/settings.js';
 import { initNav } from './core/nav.js';
+import { initTelemetry } from './core/telemetry.js';
 
 register('title', () => import('./screens/title.js'));
 register('profile', () => import('./screens/profile.js'));
@@ -35,6 +39,7 @@ register('closed', () => import('./screens/closed.js'));
 register('archive', () => import('./screens/archive.js'));
 register('opening', () => import('./screens/opening.js'));
 register('lab', () => import('./screens/lab.js'));
+register('leaderboard', () => import('./screens/leaderboard.js'));
 
 app.scene = new OfficeScene(document.getElementById('bg3d'));
 app.scene.onLightning = () => thunder(0.8 + Math.random() * 1.5);
@@ -58,6 +63,9 @@ document.getElementById('app').append(gear);
 
 // phone tab bar and Back gesture (drawn on small touch screens only, see styles/mobile.css)
 initNav();
+
+// anonymous progress for the leaderboard (quiet no-op without the backend; see core/telemetry.js)
+initTelemetry();
 
 // deep links for testing: ?screen=map&case=case01&level=l03
 const q = new URLSearchParams(location.search);

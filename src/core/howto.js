@@ -238,6 +238,14 @@ export function showLoopTutorial({ anchor, hints, next } = {}) {
 }
 
 // ---------------------------------------------------------------------------------------------
+// other screens' explainers (same card, same Back/Esc behaviour)
+
+/** A plain explainer card in the "How to play" style. build: () => nodes for the body. */
+export function showInfoCard({ kicker, title, build, button = 'Got it', anchor }) {
+  return showCard({ kicker, title, build, button, anchor });
+}
+
+// ---------------------------------------------------------------------------------------------
 // small pieces for screens
 
 /** The persistent "?" / "How to play" button for a screen's top bar. */

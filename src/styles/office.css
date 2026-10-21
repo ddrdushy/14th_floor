@@ -1,0 +1,116 @@
+/* Floor 14 — the office hub: the case-file action panel, the story caption, and the labels that
+   float over the 3D desk (drawn by three/OfficeScene.js). Imported before mobile.css, which keeps
+   the final say on phones. */
+
+/* The 3D office is clickable: let pointer events fall through the empty screen layer to the canvas.
+   The hub's own panels opt back in (.hub > * in main.css). */
+body[data-screen='office'] #screen,
+body[data-screen='office'] .screen-host { pointer-events: none; }
+
+/* ---------- action panel: a manila case file over a smoked-glass tray ---------- */
+.hub-panel {
+  display: flex; flex-wrap: wrap; align-content: flex-end; gap: 8px;
+  width: min(352px, calc(100vw - 32px));
+  right: clamp(16px, 2.4vw, 40px); bottom: max(22px, env(safe-area-inset-bottom));
+  padding: 0 14px 14px;
+  background: linear-gradient(180deg, rgba(16, 22, 28, 0.84), rgba(9, 13, 17, 0.92));
+  border: 1px solid rgba(237, 230, 214, 0.12);
+  border-radius: var(--r-md);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+}
+.hub-panel .btn { flex: 1 1 130px; min-width: 0; min-height: 40px; justify-content: center; }
+.hub-panel .btn--primary,
+.hub-panel .hub-go { flex-basis: 100%; }
+.hub-panel .btn--primary { min-height: 50px; font-size: 1.05rem; box-shadow: 0 8px 22px rgba(179, 32, 42, 0.35); }
+.hub-panel .btn--ghost { flex-basis: 100%; min-height: 30px; justify-content: flex-start; padding-inline: 4px; color: var(--mist); font-weight: 600; font-size: 0.9rem; }
+.hub-panel .btn--ghost:hover { color: var(--paper); background: transparent; text-decoration: underline; text-underline-offset: 3px; }
+
+.hub-file {
+  position: relative; flex: 1 1 100%;
+  display: grid; grid-template-columns: 1fr; gap: 2px;
+  margin: 0 -14px 4px; padding: 12px 16px 10px;
+  background:
+    radial-gradient(120% 90% at 20% 0%, rgba(255, 255, 255, 0.16), transparent 60%),
+    linear-gradient(180deg, #dcc89f, #cdb582);
+  color: var(--ink);
+  border-radius: var(--r-md) var(--r-md) 0 0;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
+}
+/* the folder's tab */
+.hub-file::before {
+  content: ''; position: absolute; left: 0; top: -12px; width: 42%; height: 14px;
+  background: #dcc89f; border-radius: var(--r-md) var(--r-md) 0 0;
+}
+.hub-file-label { font-family: var(--font-doc); font-size: 0.88rem; color: var(--ink-soft); line-height: 1.2; }
+.hub-file-title { font-family: var(--font-display); font-weight: 800; font-size: 1.95rem; line-height: 0.95; letter-spacing: 0.005em; }
+.hub-file-count { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-family: var(--font-doc); font-size: 0.9rem; color: var(--ink); }
+.hub-pins { display: inline-flex; gap: 3px; flex-wrap: wrap; max-width: 50%; }
+.hub-pins i { width: 8px; height: 8px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ef5a62, var(--thread) 60%, #6e1016); box-shadow: 0 1px 1px rgba(0, 0, 0, 0.35); }
+.hub-pins:empty { display: none; }
+
+/* ---------- story line: a typed caption box ---------- */
+.hub-note {
+  left: clamp(16px, 2.4vw, 40px); bottom: max(22px, env(safe-area-inset-bottom));
+  max-width: min(400px, 36vw); margin: 0; padding: 12px 16px 12px 14px;
+  font-size: 0.92rem; line-height: 1.55; color: var(--paper);
+  background: rgba(9, 13, 17, 0.72);
+  border-left: 3px solid var(--sodium);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* ---------- labels over the 3D desk ---------- */
+.scene-tags { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.scene-tags[hidden] { display: none; }
+.scene-tag {
+  position: absolute; left: 0; top: 0;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0; border: 0; background: none; color: var(--paper);
+  font-family: var(--font-ui); font-weight: 600; font-size: 0.82rem; line-height: 1.2; white-space: nowrap;
+  translate: -50% -100%;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.18s var(--ease);
+}
+.scene-tag-text {
+  padding: 5px 10px 6px; border-radius: 999px;
+  background: rgba(9, 13, 17, 0.82); border: 1px solid rgba(232, 163, 61, 0.55);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+/* leader line down to the object */
+.scene-tag::after { content: ''; width: 1px; height: 18px; background: linear-gradient(rgba(232, 163, 61, 0.8), rgba(232, 163, 61, 0)); }
+.scene-tag.is-on, .scene-tag:focus-visible { opacity: 1; }
+.scene-tag:focus-visible { outline: none; }
+.scene-tag:focus-visible .scene-tag-text { outline: 2px solid var(--sodium); outline-offset: 2px; }
+.scene-tag.is-off { visibility: hidden; }
+.scene-tag.is-alert .scene-tag-text { border-color: #4fd39a; color: #dffbea; }
+
+/* touch screens: no hover, so every label shows faintly and takes the tap itself */
+.scene-tags.is-touch .scene-tag { opacity: 0.82; pointer-events: auto; font-size: 0.78rem; padding: 6px 4px 0; }
+.scene-tags.is-touch .scene-tag-text { background: rgba(9, 13, 17, 0.66); border-color: rgba(237, 230, 214, 0.28); }
+.scene-tags.is-touch .scene-tag.is-alert { opacity: 1; }
+.scene-tags.is-touch .scene-tag.is-alert .scene-tag-text { border-color: #4fd39a; }
+
+@media (max-width: 860px) {
+  .hub-panel { width: min(340px, calc(100vw - 32px)); }
+}
+
+/* phones (the tab bar is on; mobile.css places the panel full width above it) */
+@media (max-width: 760px) {
+  .hub-actions.hub-panel { width: auto; padding: 0 12px 12px; gap: 8px; }
+  .hub-file { margin: 0 -12px 2px; padding: 9px 14px 8px; grid-template-columns: 1fr auto; align-items: center; column-gap: 12px; row-gap: 0; }
+  .hub-file::before { height: 10px; top: -9px; }
+  .hub-file-label { grid-column: 1; font-size: 0.8rem; }
+  .hub-file-title { grid-column: 1; font-size: 1.45rem; }
+  .hub-file-count { grid-column: 2; grid-row: 1 / span 2; margin: 0; flex-direction: column; align-items: flex-end; gap: 4px; font-size: 0.82rem; text-align: right; }
+  .hub-pins { max-width: 110px; justify-content: flex-end; }
+  .hub-panel .btn:not(.btn--primary):not(.hub-go) { flex: 1 1 96px; padding-inline: 0.5em; font-size: 0.92rem; }
+  .hub-panel .btn--ghost { justify-content: center; color: var(--paper); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-tag { transition: none; }
+}
