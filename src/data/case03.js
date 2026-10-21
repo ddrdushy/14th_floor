@@ -181,7 +181,7 @@ export const CASE03 = {
         messageSpaced: 'ONE PLUG STILL IN',
       },
       evidence: {
-        img: 'ev_c3_socket', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_socket', hotspot: { x: 0.49, y: 0.62, r: 0.13 },
         title: 'One plug still in',
         short: 'Every plug in the workshop hangs loose beside its socket, the way Uncle Lim left them each night. One socket, under the plaster shelf, still holds a melted lump. The burn spreads up the wall from there.',
         text: 'The wax pot, the polishing lathe, the kettle, the radio: every plug in the workshop hangs on its own nail beside its socket, the way Uncle Lim left them every night for forty years. One socket, low on the wall under the plaster shelf, still has something in it, fused to the faceplate: a lump of black plastic the size of a fist. The burn pattern climbs the wall in a V from exactly there.',
@@ -212,7 +212,7 @@ export const CASE03 = {
         ],
       },
       evidence: {
-        img: 'ev_c3_timer', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_timer', hotspot: { x: 0.45, y: 0.48, r: 0.2 },
         title: 'A timer nobody owned',
         short: 'Inside the lump: a plug-in timer with one pin pushed down, 4:00 to 4:15 AM, and a phone charger with its fuse bridged by foil from a cigarette packet. The foil smells of cloves. Uncle Lim owned no timer and never smoked.',
         text: 'Inside the plastic: a cheap 24-hour segment timer, the kind sold for aquarium lights, with a single pin pushed down for 4:00 to 4:15 AM. Plugged into it, a phone charger with its casing split and its fuse bridged with a strip of gold foil, the lining of a cigarette packet. The foil still smells faintly of cloves. Jo, from the doorway: "Ah Kong never owned a timer. He said anything that switches itself on is a thief. And he never smoked one day in his life."',
@@ -224,7 +224,7 @@ export const CASE03 = {
       brief: 'Behind the workshop Uncle Lim kept his archive: a wall of steel pigeonholes, nine across and nine down, holding every plaster jaw he ever cast for Dr. Goh. The soot has blacked out the labels. He numbered them the way he did everything, so that no number repeats in a row, a column or a block. While Jo\'s colleague cleans the photographs, rebuild his numbers.',
       params: { difficulty: 'hard' },
       evidence: {
-        img: 'ev_c3_shelf', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_shelf', hotspot: { x: 0.5, y: 0.42, r: 0.14 },
         title: 'GOH 2021, gone before the smoke',
         short: 'One pigeonhole is empty: GOH 2021. Under the soot, a clean rectangle in the plaster dust: the carton was lifted out before the fire. Lim\'s index card: "PK-0821, duplicate poured, sent to the school in Butterworth."',
         text: 'Eighty pigeonholes still hold their cartons, cooked but whole. One is empty: GOH 2021. Under the soot, the plaster dust on its shelf has a clean rectangle pressed into it, sharp at the edges. The soot settled on bare steel and dust alike, so the carton was gone before the smoke came. Clipped to the shelf, Uncle Lim\'s index card in blue biro: "14 models. PK-0821: duplicate poured, given to the school in Butterworth for teaching. 16.8.21."',
@@ -236,7 +236,7 @@ export const CASE03 = {
       brief: 'The back door of No. 96 opens onto a lane two metres wide, shared with the joss-paper shop on one side and the hotel hoarding on the other. On the step, in a skin of white plaster dust the hoses never reached, one clear print points out into the lane. The tread is common. The size will not be.',
       params: { shoes: 10 },
       evidence: {
-        img: 'ev_c3_bootprint', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_bootprint', hotspot: { x: 0.52, y: 0.55, r: 0.16 },
         title: 'A safety boot, size 8, going out',
         short: 'A black safety boot, UK size 8, with dental stone packed in the tread, stepping out of the workshop. It is the boot issued to the guards on the hotel site next door, and sold on every hardware counter on Lebuh Pantai.',
         text: 'A black steel-toe safety boot, UK size 8, worn at the inner heel. Its grooves are packed with dental stone, the fine white gypsum only Uncle Lim used, so whoever wore it had walked through the workshop, and the print points out into the lane, not in. The model is standard issue for the Kawalan Sentosa guards on the hotel site next door. It is also sold on every hardware counter on Lebuh Pantai, to half the construction workers in George Town.',
@@ -250,7 +250,7 @@ export const CASE03 = {
       brief: 'Cheah Siew Lan has sold joss paper and coffins at No. 94 for thirty-one years, and she does not answer questions. She asks them: the old riddles her father used on coffin buyers, so nobody ever left his shop without laughing once. Answer hers and she will tell you about her night. Whether it is true is another matter.',
       params: { riddles: 4, situations: 2, reveals: 5 },
       evidence: {
-        img: 'ev_c3_jossbin', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_jossbin', hotspot: { x: 0.55, y: 0.6, r: 0.16 },
         title: 'Ash in the back lane',
         short: 'Madam Cheah burned joss paper in an iron bin in the back lane at midnight, three metres from Uncle Lim\'s door. She says she slept from 12:30 and smelled nothing until the sirens. She and Lim fought over the party wall for seven years.',
         text: '"Wa khun liao. Wa boh phinn tioh mih-kiann." I was asleep. I smelled nothing. Madam Cheah burned joss paper for her late husband at midnight, as she does every night, in an iron bin in the back lane three metres from Uncle Lim\'s back door. She says she was in bed by half past twelve and woke to the sirens. She and Lim fought for seven years over the party wall and his gutter: two cases in the Magistrate\'s Court, both lost by her. "If his wiring killed him," she says, "then his wiring killed him."',
@@ -262,7 +262,7 @@ export const CASE03 = {
       brief: 'Kenny Lim meets you at the Lim clan jetty on Weld Quay, where he grew up, because he says he cannot face Lebuh Chulia. He talks for twenty minutes about his uncle and does not once look at you. His car is parked on the quay with the boot open to air it out. Farah, on the phone, says nothing about a warrant, which is how she says yes.',
       params: { scene: 'boot', targets: 13, objects: 74 },
       evidence: {
-        img: 'ev_c3_carboot', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_carboot', hotspot: { x: 0.5, y: 0.58, r: 0.2 },
         title: 'Kenny\'s half',
         short: 'In Kenny\'s boot: an agreement to sell his half of No. 96 to Sinar Heritage for RM 900,000, void unless his uncle\'s half sells too; a moneylender\'s final notice for RM 60,000; his key to No. 96; a black chip with a gold dragon.',
         text: 'Under a gym bag: a provisional agreement, six weeks old, selling Kenny\'s inherited half-share of No. 96 to Sinar Heritage Hotels for RM 900,000, void unless the other half, his uncle\'s, is sold within ninety days. A moneylender\'s final notice from Jelutong for RM 60,000, with a photograph of Kenny\'s own front gate. His key ring, with a back-door key stamped 96. And a black plastic chip with a gold dragon on it and no casino name. Kenny says he was asleep in Jelutong by midnight, and that his key has never left his hands.',
@@ -274,7 +274,7 @@ export const CASE03 = {
       brief: 'One man in George Town still cuts keys for the old shophouse locks: Tan Ah Seng, under the five-foot way on Lebuh Campbell, since 1979. He does not remember customers. He remembers keys, by their cuts, the way other men remember faces, and he keeps a book of every pattern he has ever copied. He will open it for someone who reads patterns the way he does.',
       params: { count: 7, startLevel: 1 },
       evidence: {
-        img: 'ev_c3_keybook', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_keybook', hotspot: { x: 0.35, y: 0.6, r: 0.18 },
         title: 'Two copies, on account',
         short: 'Three weeks ago Ah Seng cut two copies of the No. 96 back-door key on Sinar Heritage\'s account, signed M. Ong. The original was Kenny\'s, lent "for the surveyors" and returned the same day. The copies were not.',
         text: 'Ah Seng\'s book, three weeks back, in pencil: "96 Chulia, back door, old Yale. 2 copies. Sinar Heritage, on account." Signed M. ONG. He remembers the key, not the man who brought it in: gold watch, too much cologne, in a hurry. Kenny lent his key to Sinar "for the surveyors" and had it back the same afternoon. Melissa Ong has told two newspapers that nobody from Sinar has ever had a key to No. 96.',
@@ -286,7 +286,7 @@ export const CASE03 = {
       brief: 'The dragon chip belongs to a room above a joss-stick shop behind the Air Itam market, open from midnight to dawn, where nobody has a name and everybody has a tab. The doorman, Ah Boon, never forgets a face that owes money. He will look at faces for you, fast, once. Then he will forget you too.',
       params: { rounds: 3, studySeconds: [10, 8, 6] },
       evidence: {
-        img: 'ev_c3_den', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_den', hotspot: { x: 0.5, y: 0.55, r: 0.12 },
         title: 'Down RM 3,400 in Air Itam',
         short: 'Ah Boon puts Kenny in the Air Itam den from 2:10 to 5:05 AM, eleven kilometres from Lebuh Chulia, losing RM 3,400. He was not asleep in Jelutong.',
         text: 'Ah Boon picks Kenny every time. In at 2:10, out at 5:05, down RM 3,400 at the baccarat table, and he borrowed his taxi fare home. Air Itam is eleven kilometres from Lebuh Chulia, up the hill. Kenny lied about where he slept. When you tell him what you know he sits down on the kerb with his gold watch in his hand. "Don\'t tell Jo. Anything, but don\'t tell Jo."',
@@ -328,7 +328,7 @@ export const CASE03 = {
         answer: 'H',
       },
       evidence: {
-        img: 'ev_c3_hoardinggate', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_hoardinggate', hotspot: { x: 0.6, y: 0.5, r: 0.18 },
         title: 'Into the hotel site',
         short: 'The only unseen way out of No. 96 ends at the back gate of the Sinar Heritage hoarding. Its padlock has one key, on one ring: the night guard\'s. The night guard is Shahrul Nizam.',
         text: 'The only route no camera sees doubles back through the old lanes and comes out at the back gate of the Sinar Heritage hoarding. The gate is chained on the inside. Its padlock has one key, and the key hangs on one ring: the night guard\'s. The Kawalan Sentosa night guard on the hotel site is Shahrul Nizam, 29. He told Bomba he never left his cabin at the front, and saw nobody in the lane.',
@@ -353,7 +353,7 @@ export const CASE03 = {
         solvedText: 'The night plays in order, and the site\'s own guard is missing from the middle of it.',
       },
       evidence: {
-        img: 'ev_c3_guardtour', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_guardtour', hotspot: { x: 0.5, y: 0.55, r: 0.16 },
         title: 'Forty-six minutes',
         short: 'Shahrul\'s six-minute round took forty-six: back gate 3:05, front gate 3:51. At 1:1x a Sinar Heritage car passed him a paper bag. At 3:53 a motorbike left the site with a carton. Bomba found his cabin empty.',
         text: 'At 1:1x a white Volvo stopped at the hoarding and a woman handed the guard a paper bag through the window. The parking permit on its windscreen is issued to Sinar Heritage\'s project director, Melissa Ong, who says she was asleep by eleven. At 3:05 Shahrul tapped the back gate onto the lane, and did not tap anything else for forty-six minutes; the round takes six. At 3:53 a motorbike left the site with a carton roped behind the rider. When the engines arrived at 4:18 the guard cabin was empty. Shahrul came back at 4:40 and told Bomba he had been patrolling the far side of the site.',
@@ -366,7 +366,7 @@ export const CASE03 = {
       brief: 'Kawalan Sentosa\'s Penang office is two rooms above a car showroom in Bayan Lepas, and its supervisor for the whole island is Rizal Hamdan. He knows you in the doorway and does not stand up. The duty roster is a paper grid of hours summed across and down, and somebody has gone over Thursday night in a different pen. Rebuild the sums, and the roster will tell you what he signed.',
       params: { difficulty: 'hard' },
       evidence: {
-        img: 'ev_c3_roster', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_roster', hotspot: { x: 0.46, y: 0.58, r: 0.2 },
         title: 'Signed off at 2:45',
         short: 'Rizal signed Shahrul off duty "sick" at 2:45 AM, in his own hand, with no relief guard. On paper the site was empty. Rizal: "Puan Melissa called me at 2:40. She said the boy was sick. I let him go."',
         text: 'Thursday, in Rizal\'s handwriting: "S. Nizam, Site 98, off duty sick 0245. Relief: nil." On paper, nobody was guarding the hotel site when No. 96 burned, and nobody would be blamed for it. A sick man, off duty, who tapped the back gate at 3:05. Rizal does not look up from the roster. "Puan Melissa called me at 2:40. She said the boy looked sick, let him go home, the site does not need a guard for two hours." He turns his pen over and over. "I did not ask. I have learned not to ask."',
@@ -392,7 +392,7 @@ export const CASE03 = {
         answer: 'shahrul',
       },
       evidence: {
-        img: 'ev_c3_blister', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_blister', hotspot: { x: 0.38, y: 0.45, r: 0.2 },
         title: 'His thumb, inside the pack',
         short: 'The print inside the timer\'s blister pack is Shahrul Nizam\'s. The receipt: one segment timer, one phone charger, RM 31.80, a hardware shop on Lebuh Pantai, Tuesday 6:12 PM, cash.',
         text: 'The print is Shahrul Nizam\'s, from the inside of the pack, where a thumb goes to push the timer out. The receipt is from a hardware shop on Lebuh Pantai: one 24-hour segment timer, one phone charger, RM 31.80, cash, Tuesday at 6:12 PM, two days before the fire. The shopkeeper remembers a young guard in a Kawalan Sentosa shirt who smelled of clove cigarettes and asked which timer was the most simple.',
@@ -404,7 +404,7 @@ export const CASE03 = {
       brief: 'Madam Cheah cannot sleep, so she folds: paper houses for the dead to live in, paper boats for the crossing, paper shoes so they do not walk barefoot. At night she sits on a stool in her five-foot way with a stack of joss paper and a tin of glue, and she will talk if your hands are busy too. She cuts the shapes. You fit them.',
       params: { rounds: 3, shapes: ['house', 'boat', 'boot'] },
       evidence: {
-        img: 'ev_c3_voicenote', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_voicenote', hotspot: { x: 0.52, y: 0.5, r: 0.17 },
         title: 'Nine minutes',
         short: 'At 3:48 Madam Cheah saw a man in a reflective vest come out of Lim\'s back door with a heavy carton, smelling of cloves. At 4:03 she sent her sister a voice note: "That old man is burning plastic again. Let him." She called no one.',
         text: 'Her sister in Ipoh still has the voice note, 4:03 AM, in Hokkien: "Hit e lau ah pek koh teh sio plastic. Ho i sio." That old man is burning plastic again. Let him burn it. She was awake. At 3:48, from her back window, she had seen a man in a reflective vest come out of Lim\'s back door with a carton he carried like bricks, and smelled clove cigarettes in the lane. She called no one. "Seven years he never said sorry for the wall," she says, folding a paper boat smaller and smaller. "So I said nothing. Nine minutes. I said nothing for nine minutes."',
@@ -427,7 +427,7 @@ export const CASE03 = {
         ],
       },
       evidence: {
-        img: 'ev_c3_survey', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_survey', hotspot: { x: 0.5, y: 0.55, r: 0.2 },
         title: '"Old wiring", sent at 7:12 AM',
         short: 'Sinar\'s survey condemns wiring Uncle Lim had replaced in 2019, photographs the back room of No. 98 instead of No. 96, and was emailed to Bomba and the press by Melissa Ong at 7:12 AM, three hours after the fire.',
         text: 'The survey, dated January, calls the wiring at No. 96 "original 1960s, dangerous, beyond repair". Uncle Lim had the shop rewired in 2019 by a registered wireman on Lebuh Kimberley; the certificate is in Jo\'s drawer. The survey\'s photographs show a back room with the staircase on the wrong side: it is No. 98, next door, which Sinar already owns. And the PDF went to Bomba and to two newspapers from Melissa Ong\'s email at 7:12 AM on Thursday, three hours after the fire, before anyone had been allowed inside.',
@@ -439,7 +439,7 @@ export const CASE03 = {
       brief: 'Also in the project folder: the site\'s petty-cash scans, every voucher Sinar Heritage\'s Penang office has paid since the hoarding went up. Hundreds of them: tolls, teh, padlocks, overtime. Check them the way auditors never bother to, fast, against the clock.',
       params: { difficulty: 'hard' },
       evidence: {
-        img: 'ev_c3_voucher', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_voucher', hotspot: { x: 0.42, y: 0.58, r: 0.17 },
         title: 'RM 8,000 for one night',
         short: 'Voucher 0417: "site security overtime, one night", RM 8,000 cash to S. Nizam, signed M. Ong, the day before the fire. Scanned with it, an email from "Office of the Chairman": "The 2021 box first. Then the building."',
         text: 'Voucher 0417, dated Wednesday: "Site security, overtime, one night." RM 8,000 in cash to S. Nizam, approved and signed M. Ong. A Kawalan Sentosa guard earns RM 1,700 a month. Voucher 0388, three weeks earlier: "Key duplication x2, Lebuh Campbell", RM 24. Scanned on the same page as 0417, as if someone had printed it to show to someone else: an email to Melissa Ong from an address with no name, only "Office of the Chairman". One line. "The 2021 box first. Then the building."',
@@ -454,7 +454,7 @@ export const CASE03 = {
       brief: 'The grey sedan has not been far from you since the bridge. Today it is a boy on a red Honda instead, in a food-delivery jacket with no food, who has been behind you on every street since breakfast. Before you cross to Butterworth you need him off your back. You double back on him in the old town and he runs. He obeys every one-way arrow and every red light. You do not have to.',
       params: { rounds: 2 },
       evidence: {
-        img: 'ev_c3_riderphone', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_riderphone', hotspot: { x: 0.52, y: 0.65, r: 0.14 },
         title: 'Photographs for J',
         short: 'The rider\'s phone: three days of photos of you, sent to a contact saved as "J". J answered once: "Ikut saja. Jangan sentuh." The last photo, taken at seven this morning: a drinks stall at the Butterworth ferry terminal.',
         text: 'His phone holds three days of you: Lebuh Chulia, Ah Seng\'s key stall on Lebuh Campbell, the stairs behind the Air Itam market. Every photo went to a contact saved as "J", and J has answered once: "Ikut saja. Jangan sentuh." Just follow. Do not touch. The last photo was taken at seven this morning, before you had heard her name: a drinks stall at the Butterworth ferry terminal, and an old woman wiping a table.',
@@ -469,7 +469,7 @@ export const CASE03 = {
         given: ['E', 'T', 'O'],
       },
       evidence: {
-        img: 'ev_c3_orderbook', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_orderbook', hotspot: { x: 0.48, y: 0.55, r: 0.2 },
         title: '"Not the same man"',
         short: 'Lim, August 2021: the PK-0821 jaw has a wire behind the lower front teeth, a chipped top front tooth and wisdom teeth just coming in. The record it was matched to, RAJ, DANIEL, born 1983, has none of it. "Not the same man. Doctor says write match."',
         text: 'Decoded, in Uncle Lim\'s careful capitals: "PK-0821. Wire behind lower front teeth. Top front tooth chipped. Young, wisdom teeth just in. Record has none of this. Not the same man. Doctor says write match." Pinned behind the page, a photocopy of the record Goh was given to compare against, typed and headed RAJ, DANIEL, born 1983: two silver fillings at the back, no wire, no chip. Henry Goh signed the match on 24 August 2021. Uncle Lim wrote the truth in a code only two men could read. Now neither of them can.',
@@ -481,7 +481,7 @@ export const CASE03 = {
       brief: 'The dental technology school in Butterworth keeps a glass cabinet of plaster jaws for its students to learn on, each labelled with a donor\'s initials. One is labelled C.K.L. You have the X-ray from Dr. Goh\'s safe in your pocket. A film can be mounted the wrong way round, and a jaw turned is not a jaw reflected. Learn to tell them apart, and the two will meet.',
       params: { trials: 12, target: 10, options: 4 },
       evidence: {
-        img: 'ev_c3_duplicate', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_duplicate', hotspot: { x: 0.5, y: 0.45, r: 0.2 },
         title: 'The jaw on your X-ray',
         short: 'The school\'s duplicate of PK-0821 matches your X-ray tooth for tooth: a wire bonded behind the lower front teeth, a chipped upper left incisor, wisdom teeth half through. The teaching card says "probably foreign worker: no fillings, no dental history."',
         text: 'Turned to face the same way, the plaster jaw and Goh\'s X-ray are one mouth: a fine wire bonded behind the six lower front teeth, the upper left front tooth chipped at its corner, the wisdom teeth half through the gum. Someone in his twenties. No fillings at all. A lecturer\'s card in the cabinet, typed in 2022: "Unidentified adult male, Port Klang. Probably foreign worker: no fillings, no dental history." Under it, in a student\'s pencil, a question mark and one word: "retainer?"',
@@ -493,7 +493,7 @@ export const CASE03 = {
       brief: 'On the noticeboard at the Butterworth ferry terminal, under timetables that have changed three times since, one poster has never been taken down. The monsoons have run its ink. The words are all still there; the letters have only slid. Put them back.',
       params: { difficulty: 'hard' },
       evidence: {
-        img: 'ev_c3_poster', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_poster', hotspot: { x: 0.52, y: 0.4, r: 0.18 },
         title: 'HILANG: Ong Wei Jie',
         short: 'Missing since August 2021: Ong Wei Jie, 26, of Butterworth, ferry engine-room crew, "went to Port Klang for work". In the photo he is laughing, and one upper front tooth is chipped at the corner. "Ask at the drinks stall downstairs."',
         text: 'HILANG. MISSING. 失踪. Ong Wei Jie, 26, of Butterworth. Engine-room crew on the car ferries until the old ferries stopped. "Pergi Port Klang untuk kerja, Ogos 2021." Went to Port Klang for work, August 2021. Last heard from on 12 August. In the photograph he is laughing at whoever holds the camera, and his upper front tooth is chipped at one corner. At the bottom, a phone number and a line in a mother\'s handwriting: "Ask at the drinks stall downstairs." Ong is the commonest name on this side of the water. Jo checks anyway: no relation to Melissa.',
@@ -529,7 +529,7 @@ export const CASE03 = {
         ],
       },
       evidence: {
-        img: 'ev_c3_tin', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_tin', hotspot: { x: 0.45, y: 0.52, r: 0.14 },
         title: 'Two teh, drinks one',
         short: 'Wei Jie had a wire glued behind his bottom teeth at sixteen and chipped his top left front tooth on the ferry in 2019. In August 2021 he went to repair container refrigeration in Port Klang for a Singapore cold-storage company. Every birthday since, a tall polite man leaves a paper kancil in her tin.',
         text: 'Braces at sixteen, then a wire glued behind the bottom teeth: RM 3,800, paid in instalments. A top front tooth chipped on the left, on the ferry deck in 2019, never fixed. In August 2021, a cash job repairing the refrigeration on containers in Port Klang, for a cold-storage company from Singapore. The last call on Thursday, 12 August, at nine. And on his birthday every year since, a paper mousedeer folded from a receipt in her donation tin, left by a tall Indian man, very polite, who orders two teh and drinks one. "Some things," she says, "if you ask, they stop coming."',
@@ -560,7 +560,7 @@ export const CASE03 = {
         ],
       },
       evidence: {
-        img: 'ev_c3_onepage', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_onepage', hotspot: { x: 0.5, y: 0.55, r: 0.2 },
         title: 'Everyone at 3:45 AM',
         short: 'Shahrul: back room of No. 96, with the carton. Kenny: Air Itam, a dragon chip. Madam Cheah: upstairs at No. 94, folding. Melissa: Gurney Drive, a second phone. Jo: Tanjung Tokong, her grandfather\'s reading glasses.',
         text: 'At 3:45 AM: Shahrul Nizam was in the back room of No. 96 with the GOH 2021 carton in his arms. Kenny was in Air Itam with a dragon chip and a debt. Madam Cheah was upstairs at No. 94, awake, folding paper ingots. Melissa Ong was in her condo on Gurney Drive with a second phone that called one number twice that night, at 1:02 and at 4:21. Jo was asleep in Tanjung Tokong, with her grandfather\'s reading glasses on the bedside table. He had left them there on Wednesday. He had meant to come back for them.',
@@ -582,7 +582,7 @@ export const CASE03 = {
         liars: ['melissa', 'shahrul'],
       },
       evidence: {
-        img: 'ev_c3_interviews', hotspot: { x: 0.5, y: 0.55, r: 0.13 },
+        img: 'ev_c3_interviews', hotspot: { x: 0.45, y: 0.45, r: 0.18 },
         title: 'Two liars, and one old lie',
         short: 'Melissa and Shahrul lied. Kenny and Madam Cheah, caught once already, told it straight. Six weeks ago Kenny told Melissa his uncle no longer slept at No. 96.',
         text: 'Melissa Ong and Shahrul Nizam lied in every word. Kenny and Madam Cheah, caught once already, tell it straight this time. And Kenny tells one thing more, to the table and not to you: six weeks ago, to hurry the sale, he told Melissa his uncle had moved in with Jo after his fall and never slept at No. 96 any more. It was true for three weeks. On Wednesday evening Uncle Lim went home.',
