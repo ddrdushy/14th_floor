@@ -1,0 +1,281 @@
+/* Case map (screens/map.js): the investigation pinned over a night street map of the district.
+   Imported after the other screen styles and before mobile.css. */
+.map-screen {
+  --map-bg: #0b1218;
+  --map-street: #16222b;
+  --map-road: #1d2a34;
+  --map-water: #071017;
+  --polaroid: #efe9dc;
+  --tag-yellow: #f2c230;
+  background: var(--map-bg);
+}
+
+/* no frosted glass on this screen: the map is opaque, and backdrop blur under a moving pin
+   repaints the whole page every frame on weak GPUs */
+.map-screen .btn, body[data-screen='map'] .gear-btn { -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+/* top bar: every control at least 44px wide */
+.map-screen .map-help-btn { min-width: 44px; }
+
+/* ---------- body: case file + trail over the city ---------- */
+.map-body { position: relative; flex: 1; min-height: 0; display: flex; }
+.map-city-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; contain: strict; will-change: transform; }
+.map-city-wrap::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 75% 70% at 60% 45%, transparent 40%, rgba(5, 8, 11, 0.78) 100%);
+}
+.map-city { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.mc-streets path { stroke: var(--map-street); stroke-width: 1.4; fill: none; }
+.mc-yard rect { fill: rgba(159, 179, 191, 0.07); }
+.mc-river-bank { stroke: #172631; stroke-width: 40; fill: none; stroke-linecap: round; }
+.mc-river { stroke: var(--map-water); stroke-width: 34; fill: none; stroke-linecap: round; }
+.mc-sea { fill: #050b10; }
+.mc-sea-hatch { fill: url(#mc-hatch); }
+.mc-hatch { stroke: rgba(95, 135, 160, 0.15); stroke-width: 1; }
+.mc-shore { fill: none; stroke: #24394a; stroke-width: 2.5; }
+.mc-island { fill: var(--map-bg); stroke: #1c3040; stroke-width: 2; }
+.mc-road-case { stroke: #060a0d; stroke-width: 13; fill: none; }
+.mc-road { stroke: var(--map-road); stroke-width: 8; fill: none; }
+.mc-road-glow { stroke: rgba(232, 163, 61, 0.2); stroke-width: 1.4; fill: none; }
+.mc-road-name { font-family: var(--font-ui); font-size: 12px; font-weight: 600; letter-spacing: 0.2em; fill: rgba(159, 179, 191, 0.3); }
+.mc-water-name { font-family: var(--font-doc); font-size: 19px; letter-spacing: 0.32em; fill: rgba(110, 150, 175, 0.34); }
+.mc-district {
+  font-family: var(--font-display); font-weight: 800; font-size: 46px; letter-spacing: 0.24em; text-transform: uppercase;
+  fill: rgba(159, 179, 191, 0.085);
+}
+.mc-district.is-home { font-size: 66px; fill: rgba(232, 163, 61, 0.15); }
+.mc-north path { fill: rgba(237, 230, 214, 0.22); }
+.mc-north text { font-family: var(--font-display); font-weight: 800; font-size: 18px; fill: rgba(237, 230, 214, 0.22); }
+
+/* ---------- the trail ---------- */
+.map-trail { position: relative; flex: 1 1 auto; min-width: 0; min-height: 0; }
+.map-scroll { position: absolute; inset: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; outline: none; }
+.map-canvas { position: relative; width: 100%; min-height: 100%; }
+.map-threads { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.map-thread { stroke: var(--thread); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.map-thread-shadow { stroke: rgba(0, 0, 0, 0.55); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; translate: 0 3px; }
+.map-thread-tail { stroke: rgba(216, 50, 61, 0.75); stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 1 9; }
+.map-ties line { stroke: rgba(216, 50, 61, 0.55); stroke-width: 1.6; }
+
+/* every node hangs from its pin at the node's top edge (the pin is the point on the thread) */
+.map-node {
+  position: absolute; display: block; padding: 0; margin: 0; border: 0; background: none; color: inherit; text-align: left;
+  font: inherit; rotate: var(--tilt, 0deg); transform-origin: 50% 0; z-index: 2;
+  transition: rotate 0.2s var(--ease), scale 0.2s var(--ease), opacity 0.2s, filter 0.2s;
+}
+.map-node:focus-visible { outline: none; }
+.map-node:focus-visible :is(.mn-frame, .mn-card) { outline: 3px solid var(--sodium); outline-offset: 3px; }
+.map-pin {
+  position: absolute; left: 50%; top: -14px; margin-left: -14px; width: 28px; height: 28px; border-radius: 50%; z-index: 3;
+  display: grid; place-items: center; color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 1rem; line-height: 1;
+  background: radial-gradient(circle at 35% 30%, #ff7d83, var(--thread) 55%, #5a0b11); box-shadow: 0 3px 6px rgba(0, 0, 0, 0.65);
+}
+
+/* solved: a polaroid of the exhibit, its number on the pin */
+.mn-frame { display: block; width: calc(158px * var(--ms, 1)); padding: 8px 8px 0; background: var(--polaroid); color: var(--ink); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 12px 24px rgba(0, 0, 0, 0.6); }
+.mn-photo { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; background: #222 center / cover no-repeat; }
+/* older photos recede: a dark wash instead of a filter (filters repaint slowly on weak GPUs) */
+.mn-photo::after { content: ''; position: absolute; inset: 0; background: rgba(12, 18, 24, 0); transition: background 0.2s; }
+.map-node.is-old .mn-photo::after { background: rgba(12, 18, 24, 0.38); }
+.mn-photo .ph-art-label { display: none; }
+.mn-cap { display: block; padding: 7px 2px 9px; }
+.mn-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; font-family: var(--font-doc); font-size: calc(0.86rem * (1 + (var(--ms, 1) - 1) * 0.6)); line-height: 1.22; color: var(--ink); }
+.map-node.is-old { scale: 0.94; }
+.map-node.is-old .mn-frame { background: #d9d3c5; }
+@media (hover: hover) {
+  .map-node.is-done:hover { rotate: 0deg; scale: 1.04; z-index: 4; }
+  .map-node.is-done:hover .mn-photo::after { background: rgba(12, 18, 24, 0); }
+  .map-node.is-done:hover .mn-frame { background: var(--polaroid); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 18px 34px rgba(0, 0, 0, 0.7); }
+}
+.map-node.is-done:focus-visible { z-index: 4; }
+.map-node.is-done:focus-visible .mn-photo::after { background: rgba(12, 18, 24, 0); }
+
+/* the next lead: a red-topped card, the only thing on the map that moves */
+.map-node.is-current .map-pin { width: 34px; height: 34px; top: -17px; margin-left: -17px; font-size: 1.25rem; }
+.map-node.is-current .map-pin::after {
+  content: ''; position: absolute; inset: -9px; border-radius: 50%; border: 2px solid var(--thread-bright);
+  animation: map-pulse 1.9s ease-out infinite; will-change: transform, opacity;
+}
+.mn-card { display: block; position: relative; }
+.map-node.is-current .mn-card {
+  width: calc(248px * var(--ms, 1)); padding: 24px 18px 16px; background: var(--paper); color: var(--ink); border-top: 6px solid var(--thread);
+  box-shadow: 0 0 0 1px rgba(216, 50, 61, 0.35), 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 46px rgba(216, 50, 61, 0.22);
+}
+.mn-kicker { display: block; font-family: var(--font-doc); font-size: 0.88rem; color: var(--thread); }
+.mn-lead { display: block; margin: 4px 0 6px; font-family: var(--font-display); font-weight: 800; font-size: calc(1.7rem * var(--ms, 1)); line-height: 1; overflow-wrap: anywhere; }
+.mn-cat { display: block; font-size: 0.88rem; color: var(--ink-soft); }
+.mn-start {
+  display: flex; align-items: center; justify-content: center; min-height: 46px; margin-top: 14px; border-radius: var(--r-sm);
+  background: var(--thread); color: #fff; font-weight: 700; font-size: 1.02rem; letter-spacing: 0.01em; transition: background 0.2s;
+}
+.map-node.is-current:hover .mn-start { background: var(--thread-bright); }
+
+/* the road ahead: dashed, never says how far */
+.map-node.is-fog { cursor: default; }
+.map-node.is-fog .map-pin { background: transparent; border: 2px dashed rgba(237, 230, 214, 0.4); box-shadow: none; }
+.map-node.is-fog .mn-card {
+  width: calc(158px * var(--ms, 1)); min-height: calc(128px * var(--ms, 1)); padding: 14px; display: grid; place-content: center; gap: 2px; text-align: center;
+  border: 2px dashed rgba(237, 230, 214, 0.3); background: rgba(11, 18, 24, 0.6); color: var(--mist); font-family: var(--font-doc); font-size: 0.9rem; line-height: 1.25;
+}
+.mn-dots { font-family: var(--font-display); font-size: 1.8rem; line-height: 0.8; color: rgba(237, 230, 214, 0.45); }
+
+/* every lead followed: the deduction (or the closed file) */
+.map-node.is-final .map-pin { background: radial-gradient(circle at 35% 30%, #4a4a4a, #111 60%); width: 32px; height: 32px; top: -16px; margin-left: -16px; }
+.map-node.is-final .mn-card {
+  width: calc(248px * var(--ms, 1)); padding: 22px 18px 18px; background: var(--ink); color: var(--paper); border: 2px solid var(--thread);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 40px rgba(216, 50, 61, 0.25);
+}
+.map-node.is-final .mn-kicker { color: var(--sodium); }
+.map-node.is-final .mn-lead { color: var(--thread-bright); font-size: calc(2rem * var(--ms, 1)); }
+.map-node.is-final .mn-cat { color: var(--mist); }
+.map-node.is-final.is-closed .mn-card { border-color: var(--manila-dark); box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65); }
+.map-node.is-final.is-closed .mn-lead { color: var(--manila); }
+
+/* chapter names: above the thread, a short tick down to it */
+.map-phase {
+  position: absolute; z-index: 1; display: block; width: max-content; padding: 3px 10px 4px; border-radius: 2px;
+  font-family: var(--font-doc); font-size: 0.9rem; line-height: 1.2; color: var(--manila);
+  background: rgba(9, 14, 19, 0.86); border: 1px solid rgba(217, 196, 154, 0.32);
+}
+.map-phase::after { content: ''; position: absolute; left: 14px; top: 100%; height: 22px; border-left: 1px dashed rgba(217, 196, 154, 0.45); }
+.map-phase.is-rev::after { left: auto; right: 14px; }
+
+/* phones: the thread runs down a spine, the cards sit to its right */
+.map-canvas.is-spine .map-node { rotate: 0deg; transform-origin: 0 50%; }
+.map-canvas.is-spine .map-pin { left: -44px; top: 10px; margin-left: 0; }
+.map-canvas.is-spine .is-current .map-pin { left: -47px; top: 7px; margin-left: 0; }
+.map-canvas.is-spine .is-final .map-pin { left: -46px; top: 8px; margin-left: 0; }
+.map-canvas.is-spine .mn-frame { width: 100%; display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 12px; align-items: center; padding: 6px 10px 6px 6px; }
+.map-canvas.is-spine .mn-cap { padding: 0; }
+.map-canvas.is-spine .mn-title { font-size: 0.95rem; line-height: 1.28; }
+.map-canvas.is-spine .map-node.is-old { scale: 1; }
+.map-canvas.is-spine :is(.is-current, .is-final, .is-fog) .mn-card { width: 100%; }
+.map-canvas.is-spine .is-current .mn-card { padding: 16px 16px 14px; }
+.map-canvas.is-spine .is-fog .mn-card { min-height: 0; display: flex; align-items: center; justify-content: flex-start; gap: 10px; padding: 12px 14px; text-align: left; }
+.map-canvas.is-spine .map-phase { font-size: 0.92rem; }
+.map-canvas.is-spine .map-phase::after { display: none; }
+
+/* ---------- motion: the thread draws in, the pins pop ---------- */
+.map-canvas.is-intro :is(.map-thread, .map-thread-shadow) { stroke-dasharray: var(--len) var(--len); stroke-dashoffset: var(--len); animation: map-draw 1.5s cubic-bezier(0.45, 0.05, 0.3, 1) 0.1s forwards; }
+.map-canvas.is-intro .map-node { animation: map-pop 0.45s var(--ease) backwards; animation-delay: calc(0.2s + var(--i) * 70ms); }
+.map-canvas.is-intro :is(.map-thread-tail, .map-phase, .map-ties) { animation: map-fade 0.6s ease-out 0.9s backwards; }
+@keyframes map-draw { to { stroke-dashoffset: 0; } }
+@keyframes map-pop { from { opacity: 0; scale: 0.7; translate: 0 -12px; } }
+@keyframes map-fade { from { opacity: 0; } }
+@keyframes map-pulse { 0% { transform: scale(0.85); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+
+/* ---------- the case file ---------- */
+.map-file { position: relative; z-index: 3; flex: none; display: flex; flex-direction: column; width: clamp(292px, 23vw, 360px); margin: 18px 0 18px 18px; min-height: 0; }
+.mf-kicker {
+  flex: none; align-self: flex-start; margin: 0; padding: 4px 18px 3px; border-radius: 6px 6px 0 0;
+  background: var(--manila); color: var(--ink); font-family: var(--font-doc); font-size: 0.92rem;
+}
+.mf-sheet {
+  flex: 0 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 16px; padding: 20px 20px 20px;
+  background: var(--manila); color: var(--ink); box-shadow: var(--shadow-paper); border-radius: 0 3px 3px 3px;
+  overflow-y: auto; overscroll-behavior: contain;
+}
+.mf-head { position: relative; padding-right: 64px; }
+.mf-title { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 2.5rem; line-height: 0.95; }
+.mf-stamp {
+  display: inline-block; margin-top: 10px; padding: 0 10px; border: 3px solid var(--thread); color: var(--thread);
+  font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; letter-spacing: 0.08em; rotate: -6deg;
+}
+.mf-toggle {
+  position: absolute; right: -10px; top: -12px; display: inline-flex; align-items: center; gap: 4px; min-height: 44px; min-width: 44px; padding: 0 8px;
+  border: 0; border-radius: var(--r-sm); background: transparent; color: var(--ink-soft); font-size: 0.85rem; font-weight: 600;
+}
+.mf-toggle:hover { background: rgba(29, 26, 22, 0.08); color: var(--ink); }
+.mf-toggle-ico svg { width: 18px; height: 18px; display: block; transition: rotate 0.2s var(--ease); }
+.mf-question { margin: 0; padding-left: 12px; border-left: 4px solid var(--thread); font-family: var(--font-display); font-weight: 700; font-size: 1.45rem; line-height: 1.08; }
+.mf-stats { display: grid; gap: 4px; font-size: 0.92rem; color: var(--ink-soft); }
+.mf-stat { display: flex; align-items: baseline; gap: 0.3em; }
+.mf-stat b { font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; line-height: 1; color: var(--ink); }
+.mf-mag svg { width: 16px; height: 16px; display: block; translate: 0 2px; }
+.mf-sub { margin: 0 0 8px; font-size: 0.85rem; font-weight: 700; color: var(--ink-soft); }
+.mf-suspects ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px; }
+.mf-suspect { display: grid; justify-items: center; gap: 4px; width: 62px; }
+.mf-face {
+  position: relative; display: grid; place-items: center; width: 58px; height: 64px; background: #b9ad92 center 20% / cover no-repeat;
+  border: 3px solid #f4efe3; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+}
+.mf-initials { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; color: var(--ink-soft); }
+.mf-face.has-img .mf-initials { display: none; }
+.mf-sname { font-family: var(--font-doc); font-size: 0.8rem; line-height: 1.1; text-align: center; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mf-more { display: flex; flex-direction: column; gap: 16px; }
+.mf-facts { margin: 0; display: grid; gap: 8px; }
+.mf-facts dt { font-size: 0.8rem; font-weight: 700; color: var(--ink-soft); }
+.mf-facts dd { margin: 0; font-family: var(--font-doc); font-size: 0.92rem; line-height: 1.35; }
+.mf-actions { display: grid; gap: 8px; }
+.mf-actions .btn { width: 100%; min-height: 46px; justify-content: center; }
+.mf-actions .btn--paper { background: #f4efe3; }
+.mf-continue { display: grid; justify-items: start; gap: 0; text-align: left; min-height: 58px !important; padding: 8px 14px; }
+.mf-continue .mf-btn-main { font-size: 1.05rem; }
+.mf-continue .mf-btn-sub { font-family: var(--font-doc); font-weight: 400; font-size: 0.85rem; opacity: 0.9; }
+.mf-final { font-size: 1.1rem; min-height: 54px !important; }
+.mf-final.is-closed { background: var(--ink); border-color: var(--ink); }
+.mf-actions .ev-file-btn .ev-file-label { display: inline; }
+.mf-tab {
+  position: absolute; left: 16px; top: 16px; z-index: 4; display: none; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px 0 10px;
+  border: 0; border-radius: var(--r-sm); background: var(--manila); color: var(--ink); font-weight: 700; box-shadow: var(--shadow-paper);
+}
+.mf-tab-ico svg { width: 20px; height: 20px; display: block; }
+
+/* docked (wide screens) */
+.map-screen.is-docked:not(.file-open) .map-file { display: none; }
+.map-screen.is-docked:not(.file-open) .mf-tab { display: inline-flex; }
+.map-screen.is-docked.file-open .topbar :is(.ev-file-btn, .nav-dup) { display: none; }
+
+/* not docked: a short summary above the trail, "Details" opens the rest */
+.map-screen:not(.is-docked) .map-body { flex-direction: column; }
+.map-screen:not(.is-docked) .map-file { width: auto; margin: 10px 12px 0; max-height: 62%; }
+.map-screen:not(.is-docked) .mf-sheet {
+  position: relative; padding: 10px 12px 12px; gap: 8px 12px; border-radius: 3px;
+  flex-direction: row; flex-wrap: wrap; align-items: center;
+}
+.map-screen:not(.is-docked) .mf-head { position: static; padding: 0; display: contents; }
+.map-screen:not(.is-docked) :is(.mf-kicker, .mf-title) { display: none; }
+.map-screen:not(.is-docked) .mf-stamp { order: 3; margin: 0; font-size: 1rem; padding: 0 8px; border-width: 2px; }
+.map-screen:not(.is-docked) .mf-toggle { position: absolute; right: 4px; top: 4px; }
+.map-screen:not(.is-docked) .mf-question { flex: 1 1 100%; padding-right: 92px; font-size: 1.12rem; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; min-height: 2.2em; }
+.map-screen:not(.is-docked) .mf-stats { flex: 1 1 auto; font-size: 0.86rem; gap: 2px; }
+.map-screen:not(.is-docked) .mf-stat b { font-size: 1.1rem; }
+.map-screen:not(.is-docked) .mf-suspects { flex: none; }
+.map-screen:not(.is-docked) .mf-sub { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.map-screen:not(.is-docked) .mf-suspects ul { gap: 6px; flex-wrap: nowrap; }
+.map-screen:not(.is-docked) .mf-suspect { width: auto; }
+.map-screen:not(.is-docked) .mf-face { width: 36px; height: 40px; border-width: 2px; }
+.map-screen:not(.is-docked) .mf-initials { font-size: 0.95rem; }
+.map-screen:not(.is-docked) .mf-sname { display: none; }
+.map-screen:not(.is-docked) .mf-more { flex: 1 1 100%; gap: 12px; }
+.map-screen:not(.is-docked):not(.file-open) .mf-more { display: none; }
+.map-screen:not(.is-docked) .mf-toggle-ico svg { rotate: -90deg; }
+.map-screen:not(.is-docked).file-open .mf-toggle-ico svg { rotate: 90deg; }
+.map-screen:not(.is-docked).file-open .mf-question { -webkit-line-clamp: unset; }
+.map-screen:not(.is-docked) .mf-actions { grid-template-columns: 1fr 1fr; }
+.map-screen:not(.is-docked) .mf-actions :is(.mf-continue, .mf-final) { grid-column: 1 / -1; }
+.map-screen:not(.is-docked) .mf-facts { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+@media (max-width: 760px) {
+  .map-screen:not(.is-docked) .map-file { margin: 8px 10px 0; }
+  .map-screen:not(.is-docked) .mf-question { font-size: 1.05rem; }
+  .map-screen:not(.is-docked) .mf-facts { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-canvas.is-intro :is(.map-thread, .map-thread-shadow) { stroke-dasharray: none; stroke-dashoffset: 0; animation: none; }
+  .map-canvas.is-intro :is(.map-node, .map-thread-tail, .map-phase, .map-ties) { animation: none; }
+  .map-node.is-current .map-pin::after { animation: none; opacity: 0.6; transform: scale(1.1); }
+  .map-node { transition: none; }
+}
+
+/* the "Reading the map" note (styled in evidence.css): its entrance keeps the centring transform,
+   so it no longer jumps half its width to the right while it fades in */
+.map-screen .map-tip { animation: map-tip-in 0.3s var(--ease); }
+@keyframes map-tip-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px) rotate(1deg); }
+  to { opacity: 1; transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-screen .map-tip { animation: none; }
+}

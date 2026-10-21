@@ -15,6 +15,7 @@ import './styles/howto.css';
 import './styles/evidence.css';
 import './styles/leaderboard.css';
 import './styles/office.css';
+import './styles/map.css';
 import './styles/mobile.css';
 
 import { register, go } from './core/router.js';
