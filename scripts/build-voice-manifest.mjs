@@ -15,7 +15,8 @@ import { dirname, resolve } from 'node:path';
 import { INTRO } from '../src/data/intro.js';
 import { CASES, CASE_ORDER } from '../src/data/cases.js';
 import { VOICE_OVERRIDES, VOICE_CAST } from '../src/data/voice-overrides.js';
-import { NARRATOR, YOU_TOKEN, YOU_SPOKEN, speakerOf, spokenOf, withoutCues, isVoiceable, voiceId, guessLang } from '../src/core/voice.js';
+import { VOICE_DIRECTIONS } from '../src/data/voice-directions.js';
+import { NARRATOR, YOU_TOKEN, YOU_SPOKEN, speakerOf, spokenOf, withoutCues, isVoiceable, voiceId, guessLang, hashText } from '../src/core/voice.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = resolve(root, 'src/data/voice-manifest.json');
@@ -101,6 +102,25 @@ for (const id of CASE_ORDER) {
   if (typeof c.ending === 'function') addEnding(id, c);
 }
 
+// delivery directions (src/data/voice-directions.js): { cue?, say?, speed? } per id
+const cleanDir = (d) => {
+  if (!d || typeof d !== 'object') return null;
+  const out = {};
+  if (typeof d.cue === 'string' && d.cue.trim()) out.cue = d.cue.trim();
+  if (typeof d.say === 'string' && d.say.trim()) out.say = d.say.trim().split(YOU_TOKEN).join(YOU_SPOKEN);
+  if (Number.isFinite(d.speed) && d.speed > 0) out.speed = Math.min(1.6, Math.max(0.6, d.speed));
+  return Object.keys(out).length ? out : null;
+};
+const undirected = [];
+for (const [id, e] of lines) {
+  const dir = cleanDir(VOICE_DIRECTIONS[id]);
+  if (dir) e.dir = dir;
+  else undirected.push(id);
+  // rev changes whenever what the voice is asked to say changes; the game puts it in the audio URL
+  e.rev = hashText(JSON.stringify([e.tts || e.text, e.dir || null]));
+}
+const staleDirections = Object.keys(VOICE_DIRECTIONS).filter((id) => !lines.has(id));
+
 // stable output: in order of first appearance (intro, then each case's opening and ending)
 const ordered = [...lines.entries()];
 const speakers = {};
@@ -136,4 +156,6 @@ if (process.argv.includes('--check')) {
   const bytes = ordered.reduce((n, [, e]) => n + Buffer.byteLength(e.tts || e.text), 0);
   console.log(`voice manifest: ${total} lines, ${speakerOrder.length} speakers, ${bytes} UTF-8 bytes of text${old === json ? ' (unchanged)' : ''}`);
   for (const s of speakerOrder) console.log(`  ${String(speakers[s].lines).padStart(4)}  ${s}  ${Object.entries(speakers[s].langs).map(([l, k]) => `${l}:${k}`).join(' ')}`);
+  if (undirected.length) console.log(`  ${undirected.length} line(s) have no direction in src/data/voice-directions.js (spoken plainly):\n${undirected.map((id) => `    '${id}'  ${lines.get(id).speaker}: ${lines.get(id).text}`).join('\n')}`);
+  if (staleDirections.length) console.log(`  ${staleDirections.length} direction(s) no longer match any line (the line text changed?): ${staleDirections.join(', ')}`);
 }

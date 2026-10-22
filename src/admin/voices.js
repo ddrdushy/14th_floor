@@ -356,30 +356,106 @@ export function mountVoices(el, { api, token } = {}) {
   async function loadLines(s, list) {
     try {
       const r = await req(`/lines?voice=${encodeURIComponent(s.name)}`);
-      list.replaceChildren(...r.lines.map((ln) => {
-        const btn = h('button', { class: 'vx-btn vx-btn--small', type: 'button', disabled: !voiceOf(s.name), onclick: () => play(btn, () => req('/preview', { method: 'POST', raw: true, body: { voice: s.name, id: ln.id } })) }, 'Preview');
-        // "Play in game" fetches the public URL: generates and stores the real line, exactly as a player would
-        const real = h('button', { class: 'vx-btn vx-btn--small', type: 'button', disabled: !voiceOf(s.name), title: 'Generate (if needed), store and play the line players will hear', onclick: () => play(real, async () => {
-          const d = isSlot(s.name) ? `&d=${s.name.split('@')[1]}` : '';
-          const res = await fetch(`./api/voice/${ln.id}?v=${map._version || 0}${d}`);
-          if (!res.ok) { let m = `HTTP ${res.status}`; try { m = (await res.json()).error || m; } catch { /* audio */ } throw new Error(m); }
-          const blob = await res.blob();
-          state.textContent = 'cached';
-          state.className = 'vx-state is-cached';
-          return blob;
-        }) }, 'Store & play');
-        const state = h('span', { class: `vx-state is-${ln.state}` }, ln.state);
-        return h('li', { class: 'vx-line' },
-          h('div', { class: 'vx-line-text' },
-            h('span', { class: 'vx-line-spoken', lang: ln.lang === 'en' ? 'en' : null }, ln.text),
-            ln.text !== ln.en ? h('span', { class: 'vx-line-en' }, ln.en) : null,
-            ln.tts ? h('span', { class: 'vx-line-tts', title: 'Text sent to the voice (src/data/voice-overrides.js)' }, `Voice reads: ${ln.tts}`) : null,
-            h('span', { class: 'vx-muted vx-line-meta' }, `${LANG_LABEL[ln.lang] || ln.lang} · ${ln.where.join(', ')}${ln.speaker !== s.name ? ` · captioned "${ln.speaker}"` : ''} · ${ln.id}`)),
-          h('div', { class: 'vx-line-actions' }, state, btn, real));
-      }));
+      list.replaceChildren(...r.lines.map((ln) => lineItem(s, ln)));
     } catch (err) {
       list.replaceChildren(h('li', { class: 'vx-error' }, `Could not load lines: ${err.message}`));
     }
+  }
+
+  /** "[sobbing] He didn't jump." with the cues set apart from the words. */
+  function cueText(text) {
+    const out = h('span', { class: 'vx-sends' });
+    for (const part of String(text || '').split(/(\[[^\]]*\])/)) {
+      if (!part) continue;
+      out.append(/^\[.*\]$/.test(part) ? h('span', { class: 'vx-cue' }, part) : document.createTextNode(part));
+    }
+    return out;
+  }
+
+  function lineItem(s, ln) {
+    const voiced = !!voiceOf(s.name);
+    const d = isSlot(s.name) ? s.name.split('@')[1] : null;
+    const state = h('span', { class: `vx-state is-${ln.state}` }, ln.state);
+    const btn = h('button', { class: 'vx-btn vx-btn--small', type: 'button', disabled: !voiced, title: 'Hear it with the current voice and direction (not stored for players)', onclick: () => play(btn, () => req('/preview', { method: 'POST', raw: true, body: { voice: s.name, id: ln.id } })) }, 'Preview');
+    // "Store & play" fetches the public URL: generates and stores the real line, exactly as a player would
+    const real = h('button', { class: 'vx-btn vx-btn--small', type: 'button', disabled: !voiced, title: 'Generate (if needed), store and play the line players will hear', onclick: () => play(real, async () => {
+      const res = await fetch(`./api/voice/${ln.id}?v=${map._version || 0}${ln.rev ? `&r=${ln.rev}` : ''}${d ? `&d=${d}` : ''}`);
+      if (!res.ok) { let m = `HTTP ${res.status}`; try { m = (await res.json()).error || m; } catch { /* audio */ } throw new Error(m); }
+      const blob = await res.blob();
+      state.textContent = 'cached';
+      state.className = 'vx-state is-cached';
+      return blob;
+    }) }, 'Store & play');
+    const regen = h('button', { class: 'vx-btn vx-btn--small', type: 'button', disabled: !voiced, title: 'Make a new take of this line for players (costs one generation)', onclick: async () => {
+      regen.disabled = true;
+      regen.textContent = 'Regenerating…';
+      try {
+        const r = await req('/regenerate', { method: 'POST', body: { id: ln.id, voice: s.name } });
+        map._version = r.v;
+        say(r.queued ? `New take queued for all ${r.queued} detectives` : 'New take stored');
+        state.textContent = r.queued ? 'queued' : 'cached';
+        state.className = `vx-state is-${r.queued ? 'stale' : 'cached'}`;
+      } catch (err) { say(err.message, true); }
+      regen.disabled = false;
+      regen.textContent = 'Regenerate line';
+    } }, 'Regenerate line');
+
+    // direction: what the voice is asked to do, editable here (stored in KV, wins over voice-directions.js)
+    const dirBox = h('div', { class: 'vx-dir' });
+    const showDir = () => {
+      dirBox.replaceChildren(...[
+        h('span', { class: 'vx-dir-label' }, ln.custom ? 'Direction (edited here)' : ln.direction ? 'Direction' : 'No direction'),
+        ln.direction?.speed ? h('span', { class: 'vx-chip' }, `speed ×${ln.direction.speed}`) : null,
+        h('div', { class: 'vx-dir-sends', title: 'Exactly what is sent to Fish Audio' }, cueText(ln.sends)),
+        h('button', { class: 'vx-btn vx-btn--small', type: 'button', onclick: editDir }, 'Edit direction')].filter(Boolean));
+    };
+    const editDir = () => {
+      const cur = ln.direction || {};
+      const cue = h('input', { class: 'vx-input', type: 'text', value: cur.cue || '', placeholder: '[sobbing][trembling voice]', 'aria-label': 'Cue before the line' });
+      const sayIn = h('textarea', { class: 'vx-input vx-dir-say', rows: 3, placeholder: `Optional: the whole line with cues inside, e.g. [holding back tears] ${ln.tts || ln.text}`, 'aria-label': 'Whole line with cues' });
+      sayIn.value = cur.say || '';
+      const speed = h('input', { class: 'vx-input vx-dir-speed', type: 'number', min: 0.6, max: 1.6, step: 0.01, value: cur.speed ?? '', placeholder: '1.0', 'aria-label': 'Speed for this line' });
+      const value = () => ({ cue: cue.value, say: sayIn.value, speed: speed.value === '' ? null : Number(speed.value) });
+      const tryBtn = h('button', { class: 'vx-btn vx-btn--small', type: 'button', disabled: !voiced, onclick: () => play(tryBtn, () => req('/preview', { method: 'POST', raw: true, body: { voice: s.name, id: ln.id, direction: value() } })) }, 'Try it');
+      const save = h('button', { class: 'vx-btn vx-btn--small vx-btn--primary', type: 'button', onclick: async () => {
+        try {
+          const r = await req('/directions', { method: 'PUT', body: { id: ln.id, ...value() } });
+          Object.assign(ln, { direction: r.direction, custom: r.custom, sends: r.sends });
+          map._version = r.v;
+          state.textContent = 'stale';
+          state.className = 'vx-state is-stale';
+          say('Direction saved. The line is made again on its next play (or Regenerate line now).');
+          showDir();
+        } catch (err) { say(err.message, true); }
+      } }, 'Save');
+      const reset = ln.custom ? h('button', { class: 'vx-btn vx-btn--small', type: 'button', onclick: async () => {
+        try {
+          const r = await req('/directions', { method: 'PUT', body: { id: ln.id, reset: true } });
+          Object.assign(ln, { direction: r.direction, custom: r.custom, sends: r.sends });
+          map._version = r.v;
+          say('Back to the written direction');
+          showDir();
+        } catch (err) { say(err.message, true); }
+      } }, 'Use the file\'s') : null;
+      dirBox.replaceChildren(...[
+        h('label', { class: 'vx-field' }, h('span', {}, 'Cue before the line'), cue),
+        h('label', { class: 'vx-field' }, h('span', {}, 'Or the whole line with cues ([break], [long-break], [emphasis] before a word)'), sayIn),
+        h('div', { class: 'vx-dir-row' },
+          h('label', { class: 'vx-field vx-field--inline' }, h('span', {}, 'Speed ×'), speed),
+          tryBtn, save, reset,
+          h('button', { class: 'vx-btn vx-btn--small', type: 'button', onclick: showDir }, 'Cancel')),
+        ln.fileDirection ? h('p', { class: 'vx-muted vx-dir-file' }, 'Written: ', cueText(ln.fileDirection.say || `${ln.fileDirection.cue || ''} …`), ln.fileDirection.speed ? ` (×${ln.fileDirection.speed})` : '') : null].filter(Boolean));
+      cue.focus();
+    };
+    showDir();
+
+    return h('li', { class: 'vx-line' },
+      h('div', { class: 'vx-line-text' },
+        h('span', { class: 'vx-line-spoken', lang: ln.lang === 'en' ? 'en' : null }, ln.text),
+        ln.text !== ln.en ? h('span', { class: 'vx-line-en' }, ln.en) : null,
+        h('span', { class: 'vx-muted vx-line-meta' }, `${LANG_LABEL[ln.lang] || ln.lang} · ${ln.where.join(', ')}${ln.speaker !== (s.name.split('@')[0]) ? ` · captioned "${ln.speaker}"` : ''} · ${ln.id}`),
+        dirBox),
+      h('div', { class: 'vx-line-actions' }, state, btn, real, regen));
   }
 
   async function generate(name, btn) {
@@ -418,12 +494,12 @@ export function mountVoices(el, { api, token } = {}) {
   function render() {
     if (destroyed || !info) return;
     const keepScroll = window.scrollY;
-    root.replaceChildren(
+    root.replaceChildren(...[
       header(),
       settingsRow(),
       detectivesSection(),
       h('h3', { class: 'vx-subtitle' }, 'Speakers'),
-      h('section', { class: 'vx-list' }, ...info.speakers.map(speakerCard)));
+      h('section', { class: 'vx-list' }, ...info.speakers.map(speakerCard))].filter(Boolean));
     window.scrollTo(0, keepScroll);
   }
 

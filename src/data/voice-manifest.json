@@ -120,7 +120,12 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "say": "[low, weary, intimate] The monsoon had been falling for three days. [break] [quietly bitter] It never washes anything clean.",
+    "speed": 0.93
+   },
+   "rev": "290n9w8lj8s"
   },
   "2fb683z4q0k": {
    "speaker": "Narrator",
@@ -130,7 +135,12 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "say": "[dry, tired] A one-room agency above a mamak stall. [break] [wry] A fan that stopped turning in July.",
+    "speed": 0.95
+   },
+   "rev": "0633no8rk03"
   },
   "0cshpyppy6w": {
    "speaker": "Narrator",
@@ -140,7 +150,12 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "say": "[soft, aching, nostalgic] And a silver lighter that belonged to the only partner you ever [emphasis] trusted.",
+    "speed": 0.92
+   },
+   "rev": "0e4t9rh0ite"
   },
   "17qubmykpwi": {
    "speaker": "Narrator",
@@ -150,7 +165,12 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "say": "[haunted, almost a whisper] The same dream. [long-break] Always the same dream.",
+    "speed": 0.9
+   },
+   "rev": "29xpnq17q6t"
   },
   "1kma00zy0cp": {
    "speaker": "???",
@@ -160,7 +180,11 @@
    "lang": "ms",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "cue": "[urgent whisper over roaring fire][breathless]"
+   },
+   "rev": "06eeoq3k4wm"
   },
   "2f23yo5u24h": {
    "speaker": "Woman",
@@ -170,7 +194,11 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "cue": "[shaky, breathless, frightened]"
+   },
+   "rev": "2c1g9p55wwf"
   },
   "2g76r5jt85p": {
    "speaker": "You",
@@ -181,7 +209,11 @@
    "where": [
     "intro",
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[wary, low, guarded]"
+   },
+   "rev": "2ccsq4k6qhn"
   },
   "1ylyhf5lx2n": {
    "speaker": "Rachel Goh",
@@ -191,7 +223,12 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "say": "[trembling voice, fighting tears] My father. [break] Tonight at eleven, he said: if anything happens to me, [emphasis] do not trust the police. [break] [whispering] Call this person.",
+    "speed": 0.93
+   },
+   "rev": "168pxt1vrj9"
   },
   "0d63ldpq2wa": {
    "speaker": "Rachel Goh",
@@ -201,7 +238,12 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "say": "[holding back tears] An hour ago he fell from our balcony. [break] [bitter, voice cracking] They're saying he jumped.",
+    "speed": 0.92
+   },
+   "rev": "1uzd9jwdf24"
   },
   "16b3o3lkpw8": {
    "speaker": "Rachel Goh",
@@ -211,7 +253,12 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "cue": "[break][sobbing][trembling voice]",
+    "speed": 0.85
+   },
+   "rev": "0smknw0pltp"
   },
   "03bih9rpz1v": {
    "speaker": "Driver",
@@ -221,7 +268,11 @@
    "lang": "ms",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "cue": "[friendly, chatty, easygoing]"
+   },
+   "rev": "1qyxvghkt8u"
   },
   "1yc7uk6u0zp": {
    "speaker": "Narrator",
@@ -231,7 +282,12 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "cue": "[low, uneasy, thoughtful]",
+    "speed": 0.95
+   },
+   "rev": "1e3z4pb2cng"
   },
   "06nh9lf74vy": {
    "speaker": "Inspector Farah Iskandar",
@@ -241,7 +297,12 @@
    "lang": "ms",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "say": "[cold, surprised] Kau. [break] [quiet contempt] Of all people.",
+    "speed": 0.95
+   },
+   "rev": "2biif2s1zd4"
   },
   "1mnmw3b47k7": {
    "speaker": "Inspector Farah Iskandar",
@@ -251,7 +312,11 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "say": "[clipped, low, commanding] Five minutes. [break] Touch nothing. [break] [hard, quiet warning] And this never happened."
+   },
+   "rev": "105q6ul8x3i"
   },
   "1vy9itrf8ri": {
    "speaker": "Narrator",
@@ -261,7 +326,12 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "cue": "[low, dry, faintly ironic]",
+    "speed": 0.95
+   },
+   "rev": "1ufusgv1j3z"
   },
   "0vrzsx8tpas": {
    "speaker": "Narrator",
@@ -271,7 +341,12 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, ominous]",
+    "speed": 0.9
+   },
+   "rev": "0qdd72yuowi"
   },
   "10y8vibtpyq": {
    "speaker": "Narrator",
@@ -281,7 +356,12 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "cue": "[hushed, intimate]",
+    "speed": 0.9
+   },
+   "rev": "10cgiyuurdd"
   },
   "1n1jerb9zjp": {
    "speaker": "Daniel Raj",
@@ -291,7 +371,11 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "cue": "[warm, playful, smiling]"
+   },
+   "rev": "1m205iyszr2"
   },
   "11tgsidlpc7": {
    "speaker": "Daniel Raj",
@@ -301,7 +385,11 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "cue": "[chuckling, warm, teasing]"
+   },
+   "rev": "1giz1o94w0g"
   },
   "0rhkqbw547o": {
    "speaker": "Narrator",
@@ -311,7 +399,12 @@
    "lang": "en",
    "where": [
     "intro"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, conspiratorial]",
+    "speed": 0.95
+   },
+   "rev": "27rw19ac43d"
   },
   "1vl6rpkjwqe": {
    "speaker": "Rachel Goh",
@@ -321,7 +414,12 @@
    "lang": "en",
    "where": [
     "case01:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[subdued, unconvinced] The police say it is over. [break] [sighing] I want to believe them.",
+    "speed": 0.92
+   },
+   "rev": "0uimwjjj1cj"
   },
   "14hfikysqvr": {
    "speaker": "Rachel Goh",
@@ -332,7 +430,12 @@
    "tts": "My father trusted you, Detective. I still do not know why.",
    "where": [
     "case01:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[soft, sincere, puzzled] My father trusted you, Detective. [break] I still do not know why.",
+    "speed": 0.93
+   },
+   "rev": "17mu5cogxjj"
   },
   "2d0581bfed0": {
    "speaker": "Narrator",
@@ -342,7 +445,12 @@
    "lang": "en",
    "where": [
     "case01:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[low, slow, ominous] One thing nobody asked about: the X-ray from the safe. [break] PK-0821.",
+    "speed": 0.93
+   },
+   "rev": "16zj56xh1ro"
   },
   "0karv1h7hcq": {
    "speaker": "Narrator",
@@ -352,7 +460,12 @@
    "lang": "en",
    "where": [
     "case01:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[quiet, heavy] Port Klang. [break] August 2021. [break] [haunted] The month of the fire.",
+    "speed": 0.9
+   },
+   "rev": "1ar33covoc2"
   },
   "0b1xvyecc2x": {
    "speaker": "Narrator",
@@ -362,7 +475,12 @@
    "lang": "en",
    "where": [
     "case01:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[weary, hollow]",
+    "speed": 0.9
+   },
+   "rev": "15hvxaxhnsf"
   },
   "29pb273oztq": {
    "speaker": "Narrator",
@@ -372,7 +490,11 @@
    "lang": "en",
    "where": [
     "case01:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[clipped, formal, detached]"
+   },
+   "rev": "05544h1mgan"
   },
   "1y0nvdqmuex": {
    "speaker": "Narrator",
@@ -382,7 +504,11 @@
    "lang": "en",
    "where": [
     "case01:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[clipped, formal] Rizal Hamdan is charged. He breaks within an hour: [desperate, pleading] \"They paid me five thousand to delete seventeen minutes. I never touched the doctor.\""
+   },
+   "rev": "1u3x0tynwf0"
   },
   "2fz6gwwgmfc": {
    "speaker": "Narrator",
@@ -392,7 +518,11 @@
    "lang": "en",
    "where": [
     "case01:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[clipped, formal] Jason Ooi is charged with murder. He says nothing at all. [break] [low, uneasy] On his way to the van, he smiles at you like he knows something you don't."
+   },
+   "rev": "1wifj5ellyb"
   },
   "0fsqo5uomqi": {
    "speaker": "Rachel Goh",
@@ -402,7 +532,12 @@
    "lang": "en",
    "where": [
     "case01:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[relieved, voice breaking] They are saying it was murder now. Not a jump. [break] [crying softly, grateful] Thank you.",
+    "speed": 0.9
+   },
+   "rev": "18hj7djwy0o"
   },
   "2c51jprm6n1": {
    "speaker": "Bala Anne",
@@ -413,7 +548,11 @@
    "tts": "தம்பி! அந்த டுரியனை மேல கொண்டு போகக் கூடாது!",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[shouting, scolding, warm uncle]"
+   },
+   "rev": "15qcyx9b7ut"
   },
   "0pgqs3ks3z7": {
    "speaker": "Narrator",
@@ -423,7 +562,11 @@
    "lang": "en",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[dry, amused]"
+   },
+   "rev": "06tyz86mvc8"
   },
   "0yxkzpmcwfg": {
    "speaker": "Ken Lim",
@@ -434,7 +577,11 @@
    "tts": "阿Hock叔係我叔父啊。幫我一次。我求你。",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[desperate, pleading, voice tight]"
+   },
+   "rev": "0vjaw39he93"
   },
   "0clsf5h1bae": {
    "speaker": "Narrator",
@@ -444,7 +591,11 @@
    "lang": "en",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[warm, nostalgic, savouring]"
+   },
+   "rev": "0mp9cv8u94e"
   },
   "1u25kwnocft": {
    "speaker": "Narrator",
@@ -454,7 +605,12 @@
    "lang": "en",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, ominous]",
+    "speed": 0.93
+   },
+   "rev": "1e4bq9utijt"
   },
   "1b4i5ypd4ee": {
    "speaker": "Lau Kim Hock",
@@ -465,7 +621,12 @@
    "tts": "嗰杯kopi……好苦。好苦。",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[weak, groggy, slurred]",
+    "speed": 0.85
+   },
+   "rev": "0x1n8z4tdnf"
   },
   "0h7k9691tca": {
    "speaker": "Narrator",
@@ -475,7 +636,11 @@
    "lang": "en",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[flat, grim]"
+   },
+   "rev": "0vwvcvwnvjj"
   },
   "05z3rjeq1ta": {
    "speaker": "Ken Lim",
@@ -485,7 +650,11 @@
    "lang": "en",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[angry, distraught] Forty-one thousand six hundred. [break] The whole season. [break] [voice cracking] Auntie's knee operation is in that tin."
+   },
+   "rev": "21i831dsewl"
   },
   "0ei3zr3pk0t": {
    "speaker": "Narrator",
@@ -495,7 +664,11 @@
    "lang": "en",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[measured, observant] A red Khong Guan biscuit tin, lid off, licked clean. [break] [intrigued, quieter] Except for one thing at the bottom."
+   },
+   "rev": "21tef61o6br"
   },
   "2203eyh9ucu": {
    "speaker": "Narrator",
@@ -505,7 +678,12 @@
    "lang": "en",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[hushed] A stall receipt, folded small and neat. [break] Into a boat.",
+    "speed": 0.92
+   },
+   "rev": "1j54aiej9ul"
   },
   "0u31pafkjfs": {
    "speaker": "Narrator",
@@ -515,7 +693,12 @@
    "lang": "en",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[uneasy, quiet] Not a kancil. [break] A boat. [break] [self-deceiving] You tell yourself that is different, and you put it in your pocket.",
+    "speed": 0.92
+   },
+   "rev": "2az16wiwv3n"
   },
   "13uddvmdtrh": {
    "speaker": "Inspector Farah Iskandar",
@@ -525,7 +708,11 @@
    "lang": "ms",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[dry, defensive, a little embarrassed]"
+   },
+   "rev": "12nl64j81wx"
   },
   "247lgadin5w": {
    "speaker": "Inspector Farah Iskandar",
@@ -535,7 +722,11 @@
    "lang": "en",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[relaxed, wry] Best D24 in PJ, this row. [break] PJ police will file it and forget it. I will eat and not interfere. [break] [teasing] Probably."
+   },
+   "rev": "06goadxk6va"
   },
   "0k6a1wzbug0": {
    "speaker": "Narrator",
@@ -545,7 +736,11 @@
    "lang": "en",
    "where": [
     "side01:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[low, suspicious]"
+   },
+   "rev": "1toohn6i5sz"
   },
   "213547vg1v4": {
    "speaker": "Lau Kim Hock",
@@ -556,7 +751,12 @@
    "tts": "啲錢返嚟就得啦。",
    "where": [
     "side01:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[tired, resigned, gentle]",
+    "speed": 0.9
+   },
+   "rev": "22853dq35r0"
   },
   "19as28toltm": {
    "speaker": "Ken Lim",
@@ -566,7 +766,11 @@
    "lang": "en",
    "where": [
     "side01:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[warm, amused, exasperated]"
+   },
+   "rev": "1yrd4buf3yy"
   },
   "24t019qp96a": {
    "speaker": "Ken Lim",
@@ -576,7 +780,11 @@
    "lang": "en",
    "where": [
     "side01:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[casual, too casual] By the way. [break] [carefully light] You been back to Port Klang lately? [break] Just asking."
+   },
+   "rev": "1flog86l742"
   },
   "1n5nnqgb1d4": {
    "speaker": "Narrator",
@@ -586,7 +794,11 @@
    "lang": "en",
    "where": [
     "side01:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[flat, quiet]"
+   },
+   "rev": "0dl8azgbxr6"
   },
   "1fq4n6hd32g": {
    "speaker": "Narrator",
@@ -596,7 +808,11 @@
    "lang": "en",
    "where": [
     "side01:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[low, uneasy, suspicious]"
+   },
+   "rev": "1jxynse0puo"
   },
   "26hf7enxwkb": {
    "speaker": "Narrator",
@@ -606,7 +822,12 @@
    "lang": "en",
    "where": [
     "side01:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[low, weary] The paper boat sits in your drawer beside the paper kancil. [break] [quiet, self-deceiving] A boat is not a kancil. [break] You tell yourself that twice.",
+    "speed": 0.92
+   },
+   "rev": "20d05o78y80"
   },
   "1yvjtlhz1g7": {
    "speaker": "Narrator",
@@ -616,7 +837,11 @@
    "lang": "en",
    "where": [
     "side01:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[clipped, formal, sober]"
+   },
+   "rev": "1ev0fiizayk"
   },
   "2erxgaoz7mv": {
    "speaker": "Narrator",
@@ -626,7 +851,11 @@
    "lang": "en",
    "where": [
     "side01:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[clipped, formal, faint regret]"
+   },
+   "rev": "19xnl2r3kwa"
   },
   "1b667etk8wh": {
    "speaker": "Narrator",
@@ -636,7 +865,11 @@
    "lang": "en",
    "where": [
     "side01:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[clipped, formal] Bobby Tan is charged with theft and with poisoning. [break] [softer, sorrowful] He tells PJ police the pills were for his mother, and the money was for his mother, and he never meant Ah Hock to fall."
+   },
+   "rev": "19imxz7ucmq"
   },
   "1xtvh90lzj3": {
    "speaker": "Lau Kim Hock",
@@ -647,7 +880,12 @@
    "tts": "好心嘅細路。我冇怪佢。",
    "where": [
     "side01:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[gentle, forgiving, sad]",
+    "speed": 0.88
+   },
+   "rev": "1nml1ufqafu"
   },
   "2cb1bj1es6k": {
    "speaker": "Narrator",
@@ -657,7 +895,11 @@
    "lang": "en",
    "where": [
     "side01:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, wistful]"
+   },
+   "rev": "0iqu29g59i6"
   },
   "23k272woa5t": {
    "speaker": "Woman",
@@ -667,7 +909,12 @@
    "lang": "ms",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[exhausted, frightened, holding back tears]",
+    "speed": 0.92
+   },
+   "rev": "27562io987c"
   },
   "0ppb90faoy3": {
    "speaker": "You",
@@ -677,7 +924,11 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[tired, reluctant]"
+   },
+   "rev": "1i07894kj86"
   },
   "23yaopyd0j5": {
    "speaker": "Woman",
@@ -687,7 +938,12 @@
    "lang": "ms",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[bitter, hurt] Polis kata dia lari ikut perempuan lain. [break] [fierce, close to tears] Azman takkan tinggalkan anak dia.",
+    "speed": 0.95
+   },
+   "rev": "1vg4ojqjxqs"
   },
   "1174wk1lw3t": {
    "speaker": "Woman",
@@ -697,7 +953,11 @@
    "lang": "ms",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, hesitant, exhausted]"
+   },
+   "rev": "210fqzbvbf2"
   },
   "19rq77trs92": {
    "speaker": "Bala Anne",
@@ -708,7 +968,11 @@
    "tts": "போர்ட் கிள்ளான்-ஆ? நீங்க அங்க போக வேண்டாம், தம்பி.",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[alarmed, stern, protective]"
+   },
+   "rev": "2df9gq8s4vx"
   },
   "09rzv2j0rya": {
    "speaker": "You",
@@ -718,7 +982,11 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[dismissive, tired]"
+   },
+   "rev": "1b7b2rw85ta"
   },
   "1s2kkom0liv": {
    "speaker": "Bala Anne",
@@ -729,7 +997,11 @@
    "tts": "அந்த ஊர்ல எல்லாமே missing தான்.",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[dark, knowing, low]"
+   },
+   "rev": "22njg1zmaa1"
   },
   "25c4od7gokk": {
    "speaker": "Narrator",
@@ -739,7 +1011,11 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[flat, detached, like a newsreader]"
+   },
+   "rev": "0vuku2tv2dk"
   },
   "23frxq46zlj": {
    "speaker": "Bala Anne",
@@ -749,7 +1025,11 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[gossiping, sly, warm] Your friend Ken's uncle got his money back, but that Bobby boy is riding a new motorbike now. [break] [teasing] Funny, no?"
+   },
+   "rev": "0rpaun2o7c7"
   },
   "00ig1dvv2x5": {
    "speaker": "Bala Anne",
@@ -759,7 +1039,11 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[gossiping, half-teasing, half-serious]"
+   },
+   "rev": "05w83sx02et"
   },
   "2dmw5p1jtof": {
    "speaker": "Narrator",
@@ -769,7 +1053,12 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[low, tense] Forty kilometres to the sea. [break] [haunted] You have not driven them since August 2021.",
+    "speed": 0.92
+   },
+   "rev": "0wpb8cwwejp"
   },
   "0q67lm1zdza": {
    "speaker": "Narrator",
@@ -779,7 +1068,11 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[tense, watchful]"
+   },
+   "rev": "2dtjomu0j1b"
   },
   "1fqctyuow2c": {
    "speaker": "Narrator",
@@ -789,7 +1082,12 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[uneasy, slow, menacing]",
+    "speed": 0.92
+   },
+   "rev": "20mer5wt5yx"
   },
   "25mk9dysarj": {
    "speaker": "Narrator",
@@ -799,7 +1097,12 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[low, tightening] The gate barrier is striped red and white. [break] [haunted] So was the tape around Warehouse 6.",
+    "speed": 0.92
+   },
+   "rev": "130q87755ko"
   },
   "0n3eviy89mh": {
    "speaker": "Narrator",
@@ -809,7 +1112,12 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[tight, panicked, breathless]",
+    "speed": 0.9
+   },
+   "rev": "11yt2ll1gej"
   },
   "0id02un2bob": {
    "speaker": "Narrator",
@@ -819,7 +1127,12 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[panting, choked, panicking]",
+    "speed": 0.9
+   },
+   "rev": "03xdwux6lg3"
   },
   "1kdzjv99k71": {
    "speaker": "Narrator",
@@ -829,7 +1142,12 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[breathless, forcing calm] Breathe. [break] Count the cranes. [break] One. [break] Two. [break] Three…",
+    "speed": 0.82
+   },
+   "rev": "03baudzcyk2"
   },
   "1pr79ntb776": {
    "speaker": "Daniel Raj",
@@ -839,7 +1157,12 @@
    "lang": "ms",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[very calm, low, close whisper]",
+    "speed": 0.9
+   },
+   "rev": "1zo8wtmhghu"
   },
   "12fbcdlla7k": {
    "speaker": "Narrator",
@@ -849,7 +1172,12 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[haunted, quiet] The roof of Bay 3 coming down. [break] Daniel's voice, very calm. [long-break] [hollow] Then nothing at all for eleven days.",
+    "speed": 0.88
+   },
+   "rev": "1db8kc40ecc"
   },
   "0ii6xi5no6w": {
    "speaker": "Narrator",
@@ -859,7 +1187,12 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[exhaling, steadier] …Seven. [break] The seventh crane is not moving. [sighing] You breathe out, and you open the door.",
+    "speed": 0.92
+   },
+   "rev": "1mm700dylvy"
   },
   "1fzeg728fyf": {
    "speaker": "Salmah",
@@ -869,7 +1202,12 @@
    "lang": "ms",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[relieved, exhausted, near tears]",
+    "speed": 0.92
+   },
+   "rev": "1bi69k9whck"
   },
   "0t0xtkk30w5": {
    "speaker": "Salmah",
@@ -879,7 +1217,12 @@
    "lang": "ms",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[exhausted, holding back tears] Dia operator Crane 7. Isnin malam dia masuk kerja. [break] [voice breaking] Sampai sekarang tak keluar.",
+    "speed": 0.9
+   },
+   "rev": "1miv8qmh127"
   },
   "1rx5iyid7ic": {
    "speaker": "Narrator",
@@ -889,7 +1232,11 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[soft, tender, observant]"
+   },
+   "rev": "0a8stzi6z05"
   },
   "0wzqajxbfb2": {
    "speaker": "Inspector Farah Iskandar",
@@ -899,7 +1246,11 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[cool, dry, warning]"
+   },
+   "rev": "0rmxjdcrxdf"
   },
   "19308ft7q7b": {
    "speaker": "Inspector Farah Iskandar",
@@ -909,7 +1260,11 @@
    "lang": "ms",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[bitter, flat, quoting the paperwork]"
+   },
+   "rev": "0ej13jzdi29"
   },
   "2efge9qggrm": {
    "speaker": "Inspector Farah Iskandar",
@@ -919,7 +1274,11 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[low] One more thing. [break] [pointed] Rizal Hamdan left Mont Kiara last month. New uniform, new company. [dry, sardonic] Somewhere with a sea view."
+   },
+   "rev": "0rg1gt9ikoj"
   },
   "0dzua7qprkc": {
    "speaker": "Inspector Farah Iskandar",
@@ -929,7 +1288,11 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[curt, but not unkind]"
+   },
+   "rev": "22t05r177fb"
   },
   "1td4lvqga9r": {
    "speaker": "Narrator",
@@ -939,7 +1302,11 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[measured, factual, building tension]"
+   },
+   "rev": "1uym05ev4mu"
   },
   "00d34jaxydx": {
    "speaker": "Narrator",
@@ -949,7 +1316,12 @@
    "lang": "en",
    "where": [
     "case02:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, bitter, final]",
+    "speed": 0.92
+   },
+   "rev": "1wx5cdfeu4v"
   },
   "19777b3pfi6": {
    "speaker": "Narrator",
@@ -959,7 +1331,12 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[hushed, grave]",
+    "speed": 0.9
+   },
+   "rev": "27tfyen6654"
   },
   "11h4mcbhk4v": {
    "speaker": "Inspector Farah Iskandar",
@@ -969,7 +1346,11 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[flat, bitter, contained anger]"
+   },
+   "rev": "143fma4x55c"
   },
   "0y0k2a9teqn": {
    "speaker": "Inspector Farah Iskandar",
@@ -979,7 +1360,12 @@
    "lang": "ms",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, defeated, bitter]",
+    "speed": 0.9
+   },
+   "rev": "24g9ho981dt"
   },
   "1h8foxk1svq": {
    "speaker": "Salmah",
@@ -989,7 +1375,12 @@
    "lang": "ms",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[sobbing quietly, grief-stricken]",
+    "speed": 0.85
+   },
+   "rev": "25vpgbcyacs"
   },
   "2fs5zd529jx": {
    "speaker": "Narrator",
@@ -999,7 +1390,12 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, heavy, guilty]",
+    "speed": 0.9
+   },
+   "rev": "0ulftxbo1sm"
   },
   "0l2nsg8cs7s": {
    "speaker": "Narrator",
@@ -1009,7 +1405,11 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[flat, grim]"
+   },
+   "rev": "1bpwtolggj2"
   },
   "1icuhpgre4u": {
    "speaker": "Narrator",
@@ -1019,7 +1419,11 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[dry, bitter]"
+   },
+   "rev": "15bjc8svxsi"
   },
   "1u4ogrf9dja": {
    "speaker": "Narrator",
@@ -1029,7 +1433,11 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[dry, sardonic]"
+   },
+   "rev": "166sn58tzdq"
   },
   "12vofuaciyl": {
    "speaker": "Narrator",
@@ -1039,7 +1447,12 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[low, quiet] Bay 3 has a new roof and new paint. [break] [heavy] The floor under the paint is still black.",
+    "speed": 0.92
+   },
+   "rev": "16so2efs7sj"
   },
   "1qjoo41u05b": {
    "speaker": "Inspector Farah Iskandar",
@@ -1049,7 +1462,11 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[low, serious, careful]"
+   },
+   "rev": "154b489iukm"
   },
   "0nsl44xhkcg": {
    "speaker": "Narrator",
@@ -1059,7 +1476,12 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[low, slow, tense] A man in a dark jacket, lighting a cigarette. [break] The flame comes from a [emphasis] silver flip-top lighter.",
+    "speed": 0.92
+   },
+   "rev": "1oas05iaxpf"
   },
   "0oyc3qtv9nc": {
    "speaker": "Narrator",
@@ -1069,7 +1491,12 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[hushed] Your hand goes to your pocket. [break] Daniel's lighter is still there. [long-break] [shaken, whispering] Of course it is.",
+    "speed": 0.9
+   },
+   "rev": "2ao3lz6ps3m"
   },
   "1ib45o1c9u6": {
    "speaker": "Narrator",
@@ -1079,7 +1506,11 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, hopeful, gentle]"
+   },
+   "rev": "25bv4xdtu1n"
   },
   "26u8q9qb4q6": {
    "speaker": "Azman Yusof",
@@ -1089,7 +1520,12 @@
    "lang": "ms",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[exhausted, shaken, whispering]",
+    "speed": 0.9
+   },
+   "rev": "1timx1xdzgj"
   },
   "184qo9v5wen": {
    "speaker": "Narrator",
@@ -1099,7 +1535,11 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[tender, moved]"
+   },
+   "rev": "08n08uqeg1t"
   },
   "1axl81w579g": {
    "speaker": "Salmah",
@@ -1109,7 +1549,12 @@
    "lang": "ms",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[crying, overwhelmed with gratitude]",
+    "speed": 0.88
+   },
+   "rev": "0u9xnkuhh1l"
   },
   "1j3qlgiahkn": {
    "speaker": "Narrator",
@@ -1119,7 +1564,11 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[steady, quietly triumphant] On Azman's phone: forty-one photographs of the inside of Container 47. Farah finds the van in a Shah Alam cold store by noon. [break] Twenty-three people. [break] [moved] All of them [emphasis] alive."
+   },
+   "rev": "0buwtuakkcf"
   },
   "0rh3xwgg8g8": {
    "speaker": "Narrator",
@@ -1129,7 +1578,11 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[clipped, formal, wry]"
+   },
+   "rev": "1zwfmdxulk3"
   },
   "0zjt1ap7ejh": {
    "speaker": "Narrator",
@@ -1139,7 +1592,11 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[clipped, formal, sober]"
+   },
+   "rev": "1v2prrmaxva"
   },
   "1bsetz92i90": {
    "speaker": "Narrator",
@@ -1149,7 +1606,11 @@
    "lang": "en",
    "where": [
     "case02:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[clipped, formal] Faizal Ahmad is charged. He says nothing in the van. [break] [softer, sorrowful] At the station he asks only whether anyone has told his sister."
+   },
+   "rev": "1my817he4jy"
   },
   "0k82icn9ohu": {
    "speaker": "Woman",
@@ -1159,7 +1620,12 @@
    "lang": "zh-hokkien",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[crying, numb with shock]",
+    "speed": 0.88
+   },
+   "rev": "22limo0mijn"
   },
   "1r8692v4cqq": {
    "speaker": "Woman",
@@ -1169,7 +1635,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[sniffing, composing herself] Sorry. [break] I am Jo. Jo Lim. Rachel Goh gave me your number. [shaky] My grandfather made Dr. Goh's dentures for thirty years."
+   },
+   "rev": "09x8entep50"
   },
   "0warahb9qxt": {
    "speaker": "Jo Lim",
@@ -1179,7 +1649,12 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[numb, flat, in shock]",
+    "speed": 0.93
+   },
+   "rev": "0onlxpphixe"
   },
   "1xup23tq0c2": {
    "speaker": "Jo Lim",
@@ -1189,7 +1664,12 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[insistent, grieving] He unplugged everything every night. [emphasis] Every night. The kettle, the radio, the lathe. [break] [fond, voice breaking] He said electricity is a thief that comes in while you sleep.",
+    "speed": 0.92
+   },
+   "rev": "2d4keuh05fk"
   },
   "2fxda4g571i": {
    "speaker": "You",
@@ -1199,7 +1679,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[gentle, careful]"
+   },
+   "rev": "0w5krl02djc"
   },
   "0sdby4haas3": {
    "speaker": "Jo Lim",
@@ -1209,7 +1693,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, puzzled, earnest]"
+   },
+   "rev": "18tqa2s7emt"
   },
   "1eduldua9zv": {
    "speaker": "Narrator",
@@ -1219,7 +1707,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[low, measured]"
+   },
+   "rev": "1z78p127m9r"
   },
   "1am8g58vvf6": {
    "speaker": "Narrator",
@@ -1229,7 +1721,12 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[low, slow, growing dread] A dentist read that X-ray, and a technician in Penang cast his models. [break] One of them fell from Floor 14. [break] The other died in the smoke above his own workshop.",
+    "speed": 0.92
+   },
+   "rev": "0jtik22ze13"
   },
   "0cod0nvm3u6": {
    "speaker": "Narrator",
@@ -1239,7 +1736,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, resolute]"
+   },
+   "rev": "27wjotmtu30"
   },
   "1vhqnbcpeke": {
    "speaker": "Bala Anne",
@@ -1250,7 +1751,11 @@
    "tts": "பினாங்-ஆ? அங்க மழை இங்க விட மோசம்.",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[grumbling, worried]"
+   },
+   "rev": "056twsdks7n"
   },
   "13ssxe8co7l": {
    "speaker": "Bala Anne",
@@ -1261,7 +1766,11 @@
    "tts": "சாப்பிட்டு போங்க.",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[warm, gentle, insistent]"
+   },
+   "rev": "2g67i49nlep"
   },
   "0pbivtwarc2": {
    "speaker": "Narrator",
@@ -1271,7 +1780,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[warm, quietly moved]"
+   },
+   "rev": "047n3f1r5s7"
   },
   "1povkqqdo9j": {
    "speaker": "Narrator",
@@ -1281,7 +1794,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[flat, detached, like a newsreader]"
+   },
+   "rev": "01skbqmuyyh"
   },
   "0rn0n88vvuk": {
    "speaker": "Bala Anne",
@@ -1291,7 +1808,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[conspiratorial, low, uneasy]"
+   },
+   "rev": "1xbq2e11n2p"
   },
   "2a7qvwx1r5j": {
    "speaker": "Narrator",
@@ -1301,7 +1822,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, guilty]"
+   },
+   "rev": "1rot6o8174w"
   },
   "1zq6x182dmq": {
    "speaker": "Narrator",
@@ -1311,7 +1836,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[weary, atmospheric]"
+   },
+   "rev": "1q4ply2m74h"
   },
   "0sdnd42fj3s": {
    "speaker": "Narrator",
@@ -1321,7 +1850,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[tense, watchful, low]"
+   },
+   "rev": "1ppx41p0glv"
   },
   "1ubwnvagtuh": {
    "speaker": "Narrator",
@@ -1331,7 +1864,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[atmospheric, quietly admiring]"
+   },
+   "rev": "0mk0oba36xm"
   },
   "08esqun2yf3": {
    "speaker": "Narrator",
@@ -1341,7 +1878,12 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[grim, sensory, slow]",
+    "speed": 0.93
+   },
+   "rev": "217w5sfc5w9"
   },
   "0evmz4rjt1g": {
    "speaker": "Narrator",
@@ -1351,7 +1893,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[observant, measured] On one side, the joss-paper and coffin shop at No. 94, shutters half down. On the other, a hoarding printed with a hotel that does not exist yet. [break] [dry] The Chulia. A [emphasis] Sinar Heritage Hotel."
+   },
+   "rev": "0x23mjndpi3"
   },
   "0asxk4bwku5": {
    "speaker": "Narrator",
@@ -1361,7 +1907,12 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[cold realization] Sinar. [break] [quiet] You read it twice.",
+    "speed": 0.9
+   },
+   "rev": "1j3d9ap26kc"
   },
   "226syswxvku": {
    "speaker": "Jo Lim",
@@ -1371,7 +1922,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[tired, sad, matter-of-fact]"
+   },
+   "rev": "25ryr0jlidu"
   },
   "0omrp6kp70w": {
    "speaker": "Jo Lim",
@@ -1381,7 +1936,12 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[quiet, raw] You are one day late. [break] [tired, honest] I am not saying it to be cruel. I am just saying it.",
+    "speed": 0.93
+   },
+   "rev": "1xei4qenhnb"
   },
   "0sj7fhd1oqh": {
    "speaker": "Narrator",
@@ -1391,7 +1951,12 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[tender, sorrowful, hushed]",
+    "speed": 0.9
+   },
+   "rev": "1afyqdkz0en"
   },
   "1ofrw4y6bx5": {
    "speaker": "Inspector Farah Iskandar",
@@ -1401,7 +1966,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[dry, sardonic]"
+   },
+   "rev": "22ygb2sc94u"
   },
   "0dd9ek5np0t": {
    "speaker": "Inspector Farah Iskandar",
@@ -1411,7 +1980,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[warmer] Azman sends his salam. [break] [businesslike] He gave me his photos from the port. One is a reefer van backing into Bay 3, with a small sunburst on the door. [pointed] Sinar Cold Chain. I am sending it to you."
+   },
+   "rev": "1qsv5nbwsom"
   },
   "1r4j05wjzso": {
    "speaker": "Inspector Farah Iskandar",
@@ -1421,7 +1994,11 @@
    "lang": "ms",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[firm, protective, serious]"
+   },
+   "rev": "0mhmnjkldgv"
   },
   "15pdnww3owt": {
    "speaker": "Inspector Farah Iskandar",
@@ -1431,7 +2008,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "say": "[sardonic] Something you will enjoy. [break] Kawalan Sentosa has a new regional supervisor in Penang. Rizal Hamdan. [cold, contemptuous] He has done well for a man who deleted seventeen minutes."
+   },
+   "rev": "0g9mey1leg1"
   },
   "08jlreshhli": {
    "speaker": "Inspector Farah Iskandar",
@@ -1441,7 +2022,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[curt, dry]"
+   },
+   "rev": "26n0efubqmf"
   },
   "0rmg9mhztdm": {
    "speaker": "Narrator",
@@ -1451,7 +2036,11 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[low, alert, uneasy]"
+   },
+   "rev": "0r9p8fx80v9"
   },
   "0b64zahfxy3": {
    "speaker": "Narrator",
@@ -1461,7 +2050,12 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[hushed, ominous]",
+    "speed": 0.92
+   },
+   "rev": "14p6bgocslf"
   },
   "14q37exkrwk": {
    "speaker": "Narrator",
@@ -1471,7 +2065,12 @@
    "lang": "en",
    "where": [
     "case03:opening"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, troubled]",
+    "speed": 0.9
+   },
+   "rev": "1bf9r9cku0p"
   },
   "0yvs59po1yr": {
    "speaker": "Narrator",
@@ -1481,7 +2080,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[measured, quietly satisfied]"
+   },
+   "rev": "1nsaco8hs24"
   },
   "1old4iluomg": {
    "speaker": "Jo Lim",
@@ -1491,7 +2094,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[hollow, tired, sad]",
+    "speed": 0.92
+   },
+   "rev": "0rk6robkjiq"
   },
   "16gs2i2moyw": {
    "speaker": "Narrator",
@@ -1501,7 +2109,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[dry, bitter]"
+   },
+   "rev": "28q23n1p7fx"
   },
   "19eotryz7t9": {
    "speaker": "Narrator",
@@ -1511,7 +2123,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, regretful]"
+   },
+   "rev": "2bac0r85pxq"
   },
   "0n8dwutj2mn": {
    "speaker": "Narrator",
@@ -1521,7 +2137,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[measured, ominous]"
+   },
+   "rev": "0qtdu5l5b8g"
   },
   "0jodjd1rmug": {
    "speaker": "Narrator",
@@ -1531,7 +2151,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[quietly satisfied, dry]"
+   },
+   "rev": "0brh97v3s0l"
   },
   "25bqq6gcp4g": {
    "speaker": "Narrator",
@@ -1541,7 +2165,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[low, ominous] In the project folder, one more scan Jo had not opened: a customs clearance for The Chulia's imported \"fittings\", forty crates, stamped in Sandakan. [break] Officer: [emphasis] N. Salleh."
+   },
+   "rev": "1xq3axqfb3a"
   },
   "0yw86nkg6f5": {
    "speaker": "Narrator",
@@ -1551,7 +2179,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[flat, resigned]"
+   },
+   "rev": "23xntvt10xo"
   },
   "20phnshot2w": {
    "speaker": "Narrator",
@@ -1561,7 +2193,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[bitter, resigned]"
+   },
+   "rev": "1l2wr59xhfb"
   },
   "0k8hop2p7qm": {
    "speaker": "Narrator",
@@ -1571,7 +2207,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[dry, bitter]"
+   },
+   "rev": "07ebkmxyy20"
   },
   "06tfzpe927h": {
    "speaker": "Narrator",
@@ -1581,7 +2221,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[heavy, resigned]",
+    "speed": 0.92
+   },
+   "rev": "2dj2ebw3oz6"
   },
   "02vw4bhleyy": {
    "speaker": "Narrator",
@@ -1591,7 +2236,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[flat, weary]"
+   },
+   "rev": "01e4iw39iv2"
   },
   "1fen05gipth": {
    "speaker": "Narrator",
@@ -1601,7 +2250,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[tender, melancholy]",
+    "speed": 0.9
+   },
+   "rev": "0pj4qdr6q65"
   },
   "0riujtri0y5": {
    "speaker": "Narrator",
@@ -1611,7 +2265,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[quiet, melancholy]",
+    "speed": 0.9
+   },
+   "rev": "22hvvv3ao6s"
   },
   "29titt60elr": {
    "speaker": "Narrator",
@@ -1621,7 +2280,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[tense, hushed]",
+    "speed": 0.9
+   },
+   "rev": "0sfrnh07wtd"
   },
   "1vx1orhiwmi": {
    "speaker": "Narrator",
@@ -1631,7 +2295,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[slow, chilling realization]",
+    "speed": 0.9
+   },
+   "rev": "05q900cqmqf"
   },
   "10br8z1us3j": {
    "speaker": "Narrator",
@@ -1641,7 +2310,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[long-break][whispering, ominous]",
+    "speed": 0.85
+   },
+   "rev": "07aozpxdudd"
   },
   "251qhjrmb3l": {
    "speaker": "Narrator",
@@ -1651,7 +2325,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[measured, quietly vindicated]"
+   },
+   "rev": "1hdkbp7x469"
   },
   "1cmpxo0uo2c": {
    "speaker": "Narrator",
@@ -1661,7 +2339,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[hushed, grieving, intimate]",
+    "speed": 0.88
+   },
+   "rev": "1nodnv127tg"
   },
   "06vsunld5iu": {
    "speaker": "Narrator",
@@ -1671,7 +2354,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[gentle, hopeful, moved]",
+    "speed": 0.92
+   },
+   "rev": "0gzt3wdsbpc"
   },
   "1g17eameapu": {
    "speaker": "Madam Ong",
@@ -1681,7 +2369,12 @@
    "lang": "zh-hokkien",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[crying softly, relieved]",
+    "speed": 0.85
+   },
+   "rev": "18nb5owin84"
   },
   "1km6iscup45": {
    "speaker": "Narrator",
@@ -1691,7 +2384,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[tender, moved, quiet]",
+    "speed": 0.88
+   },
+   "rev": "1oyl16npr6g"
   },
   "1ijw5ukx2a1": {
    "speaker": "Narrator",
@@ -1701,7 +2399,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[low, unsettled, quiet]",
+    "speed": 0.9
+   },
+   "rev": "1pivm8klllx"
   },
   "16zlxoz3s3a": {
    "speaker": "Narrator",
@@ -1711,7 +2414,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[dry, bitter]"
+   },
+   "rev": "2d1p9sh8lh2"
   },
   "290pem94hq8": {
    "speaker": "Narrator",
@@ -1721,7 +2428,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[uneasy, quiet]"
+   },
+   "rev": "1n7888dpz7r"
   },
   "2b88is0jnlf": {
    "speaker": "Narrator",
@@ -1731,7 +2442,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[flat, final]",
+    "speed": 0.9
+   },
+   "rev": "13gqm5ah12o"
   },
   "0a2exp2tkaw": {
    "speaker": "Narrator",
@@ -1741,7 +2457,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[clipped, formal]"
+   },
+   "rev": "2d4rpxyml8n"
   },
   "0sxmedultyn": {
    "speaker": "Jo Lim",
@@ -1751,7 +2471,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[numb, bitter] They took Kenny. [break] [wistful, voice breaking] He used to carry me on his shoulders down Lebuh Chulia at Chap Goh Meh. [break] [exhausted] I keep waiting to feel something more than tired.",
+    "speed": 0.9
+   },
+   "rev": "1b5d35c0f6j"
   },
   "01zstlbjyoq": {
    "speaker": "Narrator",
@@ -1761,7 +2486,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[clipped, formal] Cheah Siew Lan is charged with arson. [break] [melancholy] She closes No. 94 for the first time in thirty-one years. Her paper houses sit unsold in the window, fading in the sun."
+   },
+   "rev": "0dsess0za9m"
   },
   "2523x2mh7ph": {
    "speaker": "Jo Lim",
@@ -1771,7 +2500,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[fond, faintly amused] Auntie Cheah gave Ah Kong a discount on a coffin in 2015, as a joke, when he turned sixty-five. They laughed for a week. [break] [sad, quiet] That was before the wall."
+   },
+   "rev": "0tkbjlzf6xr"
   },
   "1f122kgwk9u": {
    "speaker": "Narrator",
@@ -1781,7 +2514,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[clipped, formal, sardonic]"
+   },
+   "rev": "0cuem65gem6"
   },
   "1a6r1y4rj08": {
    "speaker": "Narrator",
@@ -1791,7 +2528,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[clipped, formal] Shahrul Nizam is charged with arson and culpable homicide. [softer, troubled] In the van he asks, in the soft Malay of Kedah, whether the old man suffered. [whispering] \"Orang tua tu tak patut ada kat situ.\" [break] The old man was not supposed to be there."
+   },
+   "rev": "1o7jg53svk7"
   },
   "0yvud35lzkv": {
    "speaker": "Narrator",
@@ -1801,7 +2542,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[low, revealing, measured]"
+   },
+   "rev": "0ur1zaa15wm"
   },
   "21ezqsvf9j8": {
    "speaker": "Narrator",
@@ -1811,7 +2556,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[low, ominous]"
+   },
+   "rev": "14hl14a809t"
   },
   "1rxwwq57e4z": {
    "speaker": "Narrator",
@@ -1821,7 +2570,11 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "cue": "[warm, quietly moved]"
+   },
+   "rev": "2djwxiekeki"
   },
   "0ce9qsy1x2h": {
    "speaker": "Jo Lim",
@@ -1831,7 +2584,12 @@
    "lang": "en",
    "where": [
     "case03:ending"
-   ]
+   ],
+   "dir": {
+    "say": "[tearful, grateful] He unplugged everything. [break] Every night. [break] [quiet pride] Now somebody has written it down.",
+    "speed": 0.9
+   },
+   "rev": "1qy1inu8phi"
   }
  }
 }

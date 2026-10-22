@@ -6,16 +6,19 @@
 //   GET  /api/admin/voices/map             the voice map
 //   PUT  /api/admin/voices/map             replace the voice map (see README "Voices" for the shape)
 //   GET  /api/admin/voices/search?q=&lang=&page=&size=&sort=&self=   Fish Audio voice models
-//   POST /api/admin/voices/preview         { voice, id? | text?, reference_id?, model?, speed? } -> audio/mpeg (kept a day)
+//   POST /api/admin/voices/preview         { voice, id? | text?, reference_id?, model?, speed?, direction? } -> audio/mpeg (kept a day)
 //   POST /api/admin/voices/purge           { voice } | { all: true }   delete stored audio; the next play regenerates
 //   POST /api/admin/voices/generate        { voice?, max? }  generate missing lines in the background
 //   GET  /api/admin/voices/job             the last generation run
+//   PUT  /api/admin/voices/directions      { id, cue?, say?, speed? } | { id, reset: true }   a line's delivery (overrides the file)
+//   POST /api/admin/voices/regenerate      { id, voice? }   a new take of one line (voice = "You@det_0N" for a player slot)
 //
 // "voice" is a cast name from the manifest ("Narrator", "Rachel Goh", "You", ...) or a player slot "You@det_01".."You@det_08".
 import { json, fail, readJson, requireAdmin, sameOrigin } from '../../_lib.js';
 import {
   MANIFEST, MODELS, KEYS, RESERVED, ID_RE, PLAYER, DETECTIVES, configured, getMap, putMap, resolveVoice, ttsParams, fishTTS,
   fishSearch, lineAudio, linesFor, listKeys, audioPrefix, voiceNames, FishError, splitSlot, slotName, currentKey,
+  getDirections, putDirections, directionOf, composeText,
 } from '../../voice/_shared.js';
 import { hashText } from '../../../../src/core/voice.js';
 
@@ -45,6 +48,9 @@ export async function onRequest(ctx) {
       case 'POST purge': return await purge(env, request);
       case 'POST generate': return await generate(ctx);
       case 'GET job': return json({ ok: true, job: (await env.VOICE.get(KEYS.job, { type: 'json' })) || null });
+      case 'GET directions': return json({ ok: true, directions: await getDirections(env, { fresh: true }) });
+      case 'PUT directions': return saveDirection(env, request);
+      case 'POST regenerate': return regenerate(ctx);
       default: return fail(404, 'not_found');
     }
   } catch (err) {
@@ -89,12 +95,13 @@ async function overview(env) {
 
 async function cacheCounts(env) {
   const map = await getMap(env, { fresh: true });
+  const dirs = await getDirections(env, { fresh: true });
   const out = {};
   for (const name of voiceNames()) {
     const all = await listKeys(env, audioPrefix(name));
     const dets = name === PLAYER ? [null, ...DETECTIVES.map((x) => x.id)] : [null];
     for (const d of dets) {
-      const current = new Set(linesFor(name).map(([id]) => currentKey(env, map, id, d)).filter(Boolean));
+      const current = new Set(linesFor(name).map(([id]) => currentKey(env, map, id, d, dirs)).filter(Boolean));
       const mine = name === PLAYER ? keysOf(all, d) : all;
       out[d ? slotName(d) : name] = { stored: mine.length, current: mine.filter((k) => current.has(k.name)).length, total: MANIFEST.speakers[name].lines };
     }
@@ -106,6 +113,7 @@ async function lines(env, name) {
   const t = target(name);
   if (!t) return fail(404, 'unknown_voice');
   const map = await getMap(env, { fresh: true });
+  const dirs = await getDirections(env, { fresh: true });
   const all = await listKeys(env, audioPrefix(t.voice));
   const mine = t.voice === PLAYER ? keysOf(all, t.d) : all;
   const stored = new Set(mine.map((k) => k.name));
@@ -114,8 +122,13 @@ async function lines(env, name) {
     ok: true,
     voice: name,
     lines: linesFor(t.voice).map(([id, e]) => {
-      const key = currentKey(env, map, id, t.d);
-      return { id, speaker: e.speaker, text: e.text, en: e.en, tts: e.tts || null, lang: e.lang, where: e.where, state: key && stored.has(key) ? 'cached' : storedIds.has(id) ? 'stale' : 'missing' };
+      const key = currentKey(env, map, id, t.d, dirs);
+      const dir = directionOf(e, id, dirs);
+      return {
+        id, rev: e.rev || null, speaker: e.speaker, text: e.text, en: e.en, tts: e.tts || null, lang: e.lang, where: e.where,
+        direction: dir.dir, fileDirection: e.dir || null, custom: dir.custom, take: dir.take, sends: composeText(e, dir.dir),
+        state: key && stored.has(key) ? 'cached' : storedIds.has(id) ? 'stale' : 'missing',
+      };
     }),
   });
 }
@@ -178,7 +191,7 @@ async function preview(env, request) {
   if (!configured(env)) return fail(503, 'not_configured', { message: 'FISH_API_KEY is not set' });
   const body = await readJson(request, 8192);
   if (body.error) return fail(body.status, body.error);
-  const { voice: name, id, text, reference_id, model, speed } = body.data || {};
+  const { voice: name, id, text, reference_id, model, speed, direction } = body.data || {};
   const t = target(name);
   if (!t) return fail(404, 'unknown_voice');
   if (reference_id != null && (typeof reference_id !== 'string' || !REF_RE.test(reference_id))) return fail(400, 'bad_reference_id');
@@ -194,7 +207,9 @@ async function preview(env, request) {
   const map = await getMap(env, { fresh: true });
   const voice = reference_id ? { ...(map[name] || {}), reference_id, off: false } : resolveVoice(map, t.voice, t.d);
   if (!voice || !voice.reference_id) return fail(400, 'no_voice', { message: 'Pick a voice first' });
-  const p = ttsParams(env, map, entry, voice, { model, speed, reference_id, d: t.d });
+  const dirs = await getDirections(env, { fresh: true });
+  const dirOverride = direction !== undefined ? cleanDirection(direction) : undefined; // try an edit before saving it
+  const p = ttsParams(env, map, entry, voice, { model, speed, reference_id, d: t.d, id: id || null, dirs, ...(dirOverride !== undefined ? { dir: dirOverride } : {}) });
   const key = `preview:${hashText(JSON.stringify([p.variant, p.reference_id]))}`;
   let audio = await env.VOICE.get(key, { type: 'arrayBuffer' });
   if (!audio) {
@@ -246,6 +261,7 @@ async function generate(ctx) {
   if (running && running.running && Date.now() - running.startedAt < 60_000) return json({ ok: true, busy: true, job: running });
 
   const map = await getMap(env, { fresh: true });
+  const dirs = await getDirections(env, { fresh: true });
   // players always send their portrait, so the player's lines are made once per detective
   const plan = t ? [t] : voiceNames().map((v) => ({ voice: v, d: null }));
   const jobs = [];
@@ -254,7 +270,7 @@ async function generate(ctx) {
     const stored = new Set((await listKeys(env, audioPrefix(p.voice))).map((k) => k.name));
     for (const d of dets) {
       for (const [id] of linesFor(p.voice)) {
-        const key = currentKey(env, map, id, d);
+        const key = currentKey(env, map, id, d, dirs);
         if (key && !stored.has(key)) jobs.push({ id, d });
       }
     }
@@ -271,7 +287,7 @@ async function generate(ctx) {
         while (queue.length && Date.now() - t0 < BATCH_BUDGET_MS) {
           const { id, d } = queue.shift();
           try {
-            await lineAudio(env, id, map, { d });
+            await lineAudio(env, id, map, { d, dirs });
             job.done++;
           } catch (err) {
             job.failed++;
@@ -288,4 +304,70 @@ async function generate(ctx) {
     })().catch((err) => console.error('voice generate', err)));
   }
   return json({ ok: true, job, remaining: Math.max(0, jobs.length - batch.length) });
+}
+
+/** A direction from the admin: { cue?, say?, speed? } with limits, or null for "spoken plainly". */
+function cleanDirection(d) {
+  if (!d || typeof d !== 'object') return null;
+  const out = {};
+  if (typeof d.cue === 'string' && d.cue.trim()) out.cue = d.cue.trim().slice(0, 300);
+  if (typeof d.say === 'string' && d.say.trim()) out.say = d.say.trim().slice(0, 1500);
+  if (d.speed != null && d.speed !== '' && Number.isFinite(Number(d.speed))) out.speed = Math.min(1.6, Math.max(0.6, Number(d.speed)));
+  return Object.keys(out).length ? out : null;
+}
+
+async function bumpMapVersion(env) {
+  const map = { ...(await getMap(env, { fresh: true })) };
+  map._version = (Number(map._version) || 0) + 1;
+  await putMap(env, map);
+  return map._version;
+}
+
+async function saveDirection(env, request) {
+  const body = await readJson(request, 8192);
+  if (body.error) return fail(body.status, body.error);
+  const { id, reset } = body.data || {};
+  if (!ID_RE.test(String(id || '')) || !MANIFEST.lines[id]) return fail(404, 'unknown_line');
+  const dirs = { ...(await getDirections(env, { fresh: true })) };
+  const prev = dirs[id] || {};
+  if (reset === true) {
+    if (prev.take) dirs[id] = { take: prev.take }; else delete dirs[id];
+  } else {
+    dirs[id] = { ...prev, dir: cleanDirection(body.data), at: Date.now() }; // dir null = spoken plainly
+  }
+  await putDirections(env, dirs);
+  const v = await bumpMapVersion(env); // players fetch the new URL
+  const e = MANIFEST.lines[id];
+  const dir = directionOf(e, id, dirs);
+  return json({ ok: true, id, direction: dir.dir, custom: dir.custom, sends: composeText(e, dir.dir), v });
+}
+
+async function regenerate(ctx) {
+  const { env, request } = ctx;
+  if (!configured(env)) return fail(503, 'not_configured', { message: 'FISH_API_KEY is not set' });
+  const body = await readJson(request, 4096);
+  if (body.error) return fail(body.status, body.error);
+  const { id, voice: name } = body.data || {};
+  if (!ID_RE.test(String(id || '')) || !MANIFEST.lines[id]) return fail(404, 'unknown_line');
+  const e = MANIFEST.lines[id];
+  const t = name ? target(name) : { voice: e.voice, d: null };
+  if (!t || t.voice !== e.voice) return fail(400, 'wrong_voice');
+  // a new take: the line's take counter is part of its cache key, so nothing old can be served
+  const dirs = { ...(await getDirections(env, { fresh: true })) };
+  dirs[id] = { ...(dirs[id] || {}), take: (Number(dirs[id]?.take) || 0) + 1 };
+  await putDirections(env, dirs);
+  const v = await bumpMapVersion(env);
+  const map = await getMap(env, { fresh: true });
+  // old takes of this line are deleted (players have the new ?v= URL already)
+  const old = (await listKeys(env, audioPrefix(e.voice))).filter((k) => k.name.split(':')[2] === id);
+  const keep = new Set(DETECTIVES.map((x) => currentKey(env, map, id, x.id, dirs)).concat(currentKey(env, map, id, null, dirs)));
+  await Promise.all(old.filter((k) => !keep.has(k.name)).map((k) => env.VOICE.delete(k.name)));
+  // generate now for the slot asked for (the player's lines: every portrait, in the background)
+  if (e.voice === PLAYER && !t.d) {
+    ctx.waitUntil(Promise.all(DETECTIVES.map((x) => lineAudio(env, id, map, { d: x.id, dirs }).catch(() => null))));
+    return json({ ok: true, id, v, queued: DETECTIVES.length });
+  }
+  const out = await lineAudio(env, id, map, { d: t.d, dirs });
+  if (out.unvoiced) return json({ ok: true, id, v, unvoiced: true });
+  return json({ ok: true, id, v, variant: out.variant, bytes: out.audio.byteLength });
 }

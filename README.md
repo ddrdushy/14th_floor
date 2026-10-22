@@ -154,6 +154,23 @@ Open `/admin.html`, sign in, and choose **Voices**. Every speaker in the cinemat
 
 Some caption speakers are one character under another name: "Woman" on the phone is Rachel (intro), Salmah (Case 2) and Jo (Case 3), and "???" in the intro dream is Daniel. That mapping is `VOICE_CAST` in `src/data/voice-overrides.js`, so each person has one voice everywhere.
 
+### Acting: per-line directions
+
+Fish Audio S2 models act from bracket cues in the text (`[sobbing]`, `[whispering]`, `[cold, quiet contempt]`, `[break]`, `[long-break]`, `[emphasis]` before a word; natural language, best at the start of a sentence, at most 3 ideas each; see docs.fish.audio/developer-guide/core-features/emotions). Every voiced line has a direction in `src/data/voice-directions.js`, keyed by line id, with the caption as a comment above it:
+
+```js
+// Rachel Goh: He didn't jump.
+'16b3o3lkpw8': { cue: '[break][sobbing][trembling voice]', speed: 0.85 },
+// Inspector Farah Iskandar: Kau. Of all people.  /  You. Of all people.
+'06nh9lf74vy': { say: '[cold, surprised] Kau. [break] [quiet contempt] Of all people.', speed: 0.95 },
+```
+
+`cue` goes in front of the line; `say` is the whole line with cues inside (same words; `{you}` for the player's name); `speed` multiplies the speaker's speed. Brackets in the case files' own text are still stripped from what the voice reads; directions are added only to the text sent to Fish, never to captions. The build bakes them into the manifest (`entry.dir`, plus `entry.rev`, which the game sends as `&r=`), and `npm run voices:manifest` lists lines without a direction and directions whose line no longer exists.
+
+In /admin > Voices > a speaker > Lines, each line shows exactly what is sent to Fish. **Edit direction** changes it live (stored in KV `voices:directions`, which wins over the file; **Try it** previews before saving, **Use the file's** removes the override), and **Regenerate line** makes a new take for players. A changed direction is part of the line's cache key, so it is generated again on its next play; players' browsers get the new URL too.
+
+Console equivalents (see "Admin API"): `A('/directions', { method: 'PUT', body: JSON.stringify({ id, cue, say, speed }) })`, `{ id, reset: true }` to go back to the file, `A('/regenerate', { method: 'POST', body: JSON.stringify({ id, voice }) })`, and `A('/directions')` to list overrides.
+
 ### The player's own voice
 
 Lines spoken by `You` (the player's detective) are voiced to match the portrait the player chose (`profile.portrait`, `det_01`..`det_08` in `src/core/avatar.js`). In /admin > Voices, **Your detective** lists the eight portraits (Detective 1 Indian man 50s, 2 Malay woman in a tudung 30s, 3 Chinese man 30s, 4 Indian woman 30s, 5 Malay man 50s, 6 Chinese woman 30s, 7 Malay/Eurasian man 30s, 8 Malay/Sabahan woman 40s), each with the same search / sample / assign / preview / silent controls. They are stored as map keys `You@det_01`..`You@det_08`; a portrait without its own voice uses `You`, then the fallback voice. The game adds `&d=det_0N` to the audio URL for `You` lines only (every other line has one shared URL), and `d` is part of the cache variant, so two detectives never share audio. Lines where another character says the player's name (`{you}`) belong to that character's voice, not the detective's.
@@ -201,4 +218,4 @@ with any small HTTP server on port 8789 that answers `POST /v1/tts` with an MP3 
 
 ### Files
 
-`src/core/voice.js` (ids, shared), `src/core/voice-player.js` (playback), `src/screens/cinema.js` (timing, ducking, prefetch), `src/data/voice-overrides.js`, `src/data/voice-manifest.json` (generated), `scripts/build-voice-manifest.mjs`, `functions/api/voice/` (`status.js`, `[id].js`, `_shared.js`), `functions/api/admin/voices/[[path]].js`, `src/admin/voices.js` + `voices.css` (mounted by `src/admin/admin.js` as `mountVoices(el, { api, h, token })`), `public/api/voice/status` (static-host fallback).
+`src/core/voice.js` (ids, shared), `src/core/voice-player.js` (playback), `src/screens/cinema.js` (timing, ducking, prefetch), `src/data/voice-overrides.js`, `src/data/voice-directions.js` (acting), `src/data/voice-manifest.json` (generated), `scripts/build-voice-manifest.mjs`, `functions/api/voice/` (`status.js`, `[id].js`, `_shared.js`), `functions/api/admin/voices/[[path]].js`, `src/admin/voices.js` + `voices.css` (mounted by `src/admin/admin.js` as `mountVoices(el, { api, h, token })`), `public/api/voice/status` (static-host fallback).

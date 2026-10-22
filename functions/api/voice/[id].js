@@ -5,7 +5,7 @@
 // arbitrary text. The first request for a line generates it with Fish Audio and stores it in KV;
 // every later request (any player) is served from KV or the edge cache.
 import { json, fail, overLimit, clientIp, sameOrigin } from '../_lib.js';
-import { MANIFEST, ID_RE, configured, getMap, lineAudio, audioHeaders, FishError, detFor } from './_shared.js';
+import { MANIFEST, ID_RE, configured, getMap, getDirections, lineAudio, audioHeaders, FishError, detFor } from './_shared.js';
 
 const LIMIT_REQUESTS = 300; // per IP per minute, cached or not
 const LIMIT_GENERATE = 30; // per IP per minute, lines not yet in KV
@@ -25,7 +25,10 @@ export async function onRequestGet(ctx) {
     const rawD = url.searchParams.get('d');
     if (rawD != null && rawD !== '' && !/^det_0[1-8]$/.test(rawD)) return fail(400, 'bad_detective');
     const d = detFor(MANIFEST.lines[id].voice, rawD); // other speakers ignore d (one shared cache entry)
-    const cacheKey = new Request(`${url.origin}${url.pathname}?v=${v}${d ? `&d=${d}` : ''}`, { method: 'GET' });
+    // rev (from the manifest, not the client) changes when a line's text or file direction changes on deploy;
+    // the game sends it as &r= so browsers fetch a new URL too
+    const rev = MANIFEST.lines[id].rev || '';
+    const cacheKey = new Request(`${url.origin}${url.pathname}?v=${v}&r=${rev}${d ? `&d=${d}` : ''}`, { method: 'GET' });
     const cache = typeof caches !== 'undefined' ? caches.default : null;
     if (cache && v) {
       const hit = await cache.match(cacheKey).catch(() => null);
@@ -37,12 +40,16 @@ export async function onRequestGet(ctx) {
     }
 
     let map = await getMap(env);
-    if (v > (Number(map._version) || 0)) map = await getMap(env, { fresh: true }); // the edge copy is older than the player's
-    let out = await lineAudio(env, id, map, { generate: false, d });
+    let dirs = await getDirections(env);
+    if (v > (Number(map._version) || 0)) { // the edge copy is older than the player's
+      map = await getMap(env, { fresh: true });
+      dirs = await getDirections(env, { fresh: true });
+    }
+    let out = await lineAudio(env, id, map, { generate: false, d, dirs });
     if (out.unvoiced) return fail(404, 'unvoiced');
     if (out.missing) {
       if (overLimit(`voice-gen:${ip}`, LIMIT_GENERATE)) return fail(429, 'slow_down');
-      const job = lineAudio(env, id, map, { d });
+      const job = lineAudio(env, id, map, { d, dirs });
       ctx.waitUntil(job.catch(() => {})); // finish and store even if the player has moved on
       out = await job;
     }

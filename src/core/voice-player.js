@@ -102,9 +102,12 @@ export function voiceIdFor(line) {
   }
   return null;
 }
+// v: the voice map version (changes when voices or live directions change); r: the line's revision in this
+// build (changes when its text or written direction changes); d: the player's portrait, player lines only
 const lineUrl = (key) => {
   const [id, d] = key.split('@');
-  return `api/voice/${id}?v=${version}${d ? `&d=${d}` : ''}`;
+  const r = lines?.[id]?.rev;
+  return `api/voice/${id}?v=${version}${r ? `&r=${r}` : ''}${d ? `&d=${d}` : ''}`;
 };
 
 function remember(id, entry) {

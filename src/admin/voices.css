@@ -133,3 +133,14 @@
 .vx-dets-head .vx-lede { margin-top: 2px; }
 .vx-who { display: flex; gap: 12px; align-items: flex-start; min-width: 0; }
 .vx-portrait { width: 56px; height: 70px; flex: none; border-radius: 8px; object-fit: cover; object-position: center 20%; background: var(--vx-bg-2); border: 1px solid var(--vx-border); }
+
+/* per-line direction */
+.vx-dir { display: grid; gap: 6px; margin-top: 6px; padding: 8px 10px; border-radius: 8px; border: 1px dashed var(--vx-border-strong); background: var(--vx-bg); }
+.vx-dir-label { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--vx-muted); }
+.vx-dir-sends { font-size: 0.88rem; line-height: 1.45; overflow-wrap: anywhere; }
+.vx-cue { color: var(--vx-accent-text); font-family: var(--font-mono, monospace); font-size: 0.8rem; }
+.vx-dir .vx-btn, .vx-dir .vx-chip { justify-self: start; }
+.vx-dir-say { width: 100%; resize: vertical; font-family: var(--font-mono, monospace); font-size: 0.82rem; }
+.vx-dir-speed { width: 80px; }
+.vx-dir-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.vx-dir-file { margin: 0; font-size: 0.8rem; }

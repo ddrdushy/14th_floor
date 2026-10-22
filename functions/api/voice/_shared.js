@@ -14,14 +14,16 @@
 //                                      so reassigning a voice or editing a line never serves stale audio
 //   preview:<hash>                     admin previews, expire after a day
 //   voices:job                         status of the last pre-generation run
+//   voices:directions                  {"<id>": {dir?: {cue?, say?, speed?}, take?}}: per-line delivery edited in /admin,
+//                                      taking precedence over src/data/voice-directions.js (baked into the manifest as entry.dir)
 import manifest from '../../../src/data/voice-manifest.json';
-import { hashText, speakerSlug, PLAYER, DETECTIVES, DET_RE } from '../../../src/core/voice.js';
+import { hashText, speakerSlug, PLAYER, DETECTIVES, DET_RE, YOU_TOKEN, YOU_SPOKEN } from '../../../src/core/voice.js';
 
 export const MANIFEST = manifest;
 export const FISH_BASE = 'https://api.fish.audio';
 export const MODELS = ['s2.1-pro', 's2.1-pro-free', 's2-pro', 's1', 'drama-3'];
 export const DEFAULT_MODEL = 's2.1-pro';
-export const KEYS = { map: 'voices:map', job: 'voices:job' };
+export const KEYS = { map: 'voices:map', job: 'voices:job', directions: 'voices:directions' };
 export const ID_RE = /^[0-9a-z]{11}$/;
 export const RESERVED = new Set(['_default', '_settings', '_version']);
 export { PLAYER, DETECTIVES, DET_RE };
@@ -62,6 +64,40 @@ export async function getMap(env, { fresh = false } = {}) {
   if (!map || typeof map !== 'object' || Array.isArray(map)) map = {};
   mapCache = { at: Date.now(), map };
   return map;
+}
+
+let dirCache = { at: 0, dirs: null };
+/** Per-line direction overrides from /admin (KV voices:directions). Same caching as the map. */
+export async function getDirections(env, { fresh = false } = {}) {
+  if (!fresh && dirCache.dirs && Date.now() - dirCache.at < 10_000) return dirCache.dirs;
+  let dirs = null;
+  try {
+    dirs = await env.VOICE.get(KEYS.directions, fresh ? { type: 'json' } : { type: 'json', cacheTtl: 60 });
+  } catch {
+    dirs = null;
+  }
+  if (!dirs || typeof dirs !== 'object' || Array.isArray(dirs)) dirs = {};
+  dirCache = { at: Date.now(), dirs };
+  return dirs;
+}
+export async function putDirections(env, dirs) {
+  await env.VOICE.put(KEYS.directions, JSON.stringify(dirs));
+  dirCache = { at: Date.now(), dirs };
+}
+
+/** The direction a line is performed with: the /admin override if there is one, else the file's. */
+export function directionOf(entry, id, dirs) {
+  const o = dirs && id ? dirs[id] : null;
+  return { dir: o && o.dir !== undefined ? o.dir : entry?.dir || null, custom: !!(o && o.dir !== undefined), take: Number(o?.take) || 0 };
+}
+
+/** The text sent to Fish: the line (cues stripped) with its direction's cues, or the direction's own `say`. */
+export function composeText(entry, dir) {
+  const base = entry.tts || entry.text;
+  if (!dir) return base;
+  if (typeof dir.say === 'string' && dir.say.trim()) return dir.say.trim().split(YOU_TOKEN).join(YOU_SPOKEN);
+  if (typeof dir.cue === 'string' && dir.cue.trim()) return `${dir.cue.trim()} ${base}`;
+  return base;
 }
 
 export async function putMap(env, map) {
@@ -108,15 +144,18 @@ const clamp = (n, lo, hi, d) => (Number.isFinite(Number(n)) ? Math.min(hi, Math.
 /** Everything that decides how a line sounds, and the variant hash of it. */
 export function ttsParams(env, map, entry, voice, overrides = {}) {
   const s = map._settings || {};
+  // direction: an explicit one (an unsaved edit being previewed), else the line's (KV override, else file)
+  const lineDir = directionOf(entry, overrides.id, overrides.dirs);
+  const dir = overrides.dir !== undefined ? overrides.dir : lineDir.dir;
   const model = MODELS.includes(overrides.model) ? overrides.model
     : MODELS.includes(voice.model) ? voice.model
     : MODELS.includes(s.model) ? s.model
     : MODELS.includes(env.FISH_MODEL) ? env.FISH_MODEL : DEFAULT_MODEL;
   const p = {
-    text: String(overrides.text || entry.tts || entry.text).slice(0, 2000),
+    text: String(overrides.text || composeText(entry, dir)).slice(0, 2000),
     reference_id: overrides.reference_id || voice.reference_id,
     model,
-    speed: clamp(overrides.speed ?? voice.speed, 0.5, 2, 1),
+    speed: clamp((Number(overrides.speed ?? voice.speed) || 1) * (overrides.text ? 1 : Number(dir?.speed) || 1), 0.5, 2, 1),
     volume: clamp(voice.volume, -20, 20, 0),
     temperature: clamp(s.temperature, 0, 1, 0.7),
     top_p: clamp(s.top_p, 0, 1, 0.7),
@@ -125,9 +164,12 @@ export function ttsParams(env, map, entry, voice, overrides = {}) {
     language: entry.lang === 'en' ? 'en' : null, // other lines mix languages: let Fish detect per chunk
     take: Number(voice.take) || 0, // bumped by "Regenerate" in /admin: a new take gets a new key
     d: overrides.d || null, // the player's portrait (player lines only): detectives never share audio
+    lineTake: lineDir.take, // bumped by "Regenerate line" in /admin
   };
+  // the text includes the direction's cues, so a new direction is a new variant (and a new recording)
   const parts = [p.text, p.reference_id, p.model, p.speed, p.volume, p.temperature, p.top_p, p.mp3_bitrate, p.latency, p.take];
   if (p.d) parts.push(p.d);
+  if (p.lineTake) parts.push(`t${p.lineTake}`);
   p.variant = hashText(JSON.stringify(parts));
   return p;
 }
@@ -212,13 +254,13 @@ const inflight = new Map(); // KV key -> Promise<ArrayBuffer>, so two players as
  * Cached audio for a manifest line, generating (and storing) it when missing.
  * Returns { audio, variant, cached } or { unvoiced: true }.
  */
-export async function lineAudio(env, id, map, { generate = true, d = null } = {}) {
+export async function lineAudio(env, id, map, { generate = true, d = null, dirs = null } = {}) {
   const entry = MANIFEST.lines[id];
   if (!entry) return { unknown: true };
   const det = detFor(entry.voice, d);
   const voice = resolveVoice(map, entry.voice, det);
   if (!voice) return { unvoiced: true };
-  const p = ttsParams(env, map, entry, voice, { d: det });
+  const p = ttsParams(env, map, entry, voice, { d: det, id, dirs: dirs || (await getDirections(env)) });
   const key = audioKey(entry.voice, id, p.variant);
   const hit = await env.VOICE.get(key, { type: 'arrayBuffer', cacheTtl: 86400 });
   if (hit) return { audio: hit, variant: p.variant, cached: true };
@@ -238,12 +280,12 @@ export async function lineAudio(env, id, map, { generate = true, d = null } = {}
 }
 
 /** The KV key a line would be stored under right now (null when it has no voice). */
-export function currentKey(env, map, id, d = null) {
+export function currentKey(env, map, id, d = null, dirs = null) {
   const entry = MANIFEST.lines[id];
   if (!entry) return null;
   const det = detFor(entry.voice, d);
   const voice = resolveVoice(map, entry.voice, det);
-  return voice ? audioKey(entry.voice, id, ttsParams(env, map, entry, voice, { d: det }).variant) : null;
+  return voice ? audioKey(entry.voice, id, ttsParams(env, map, entry, voice, { d: det, id, dirs }).variant) : null;
 }
 
 /** All KV keys under a prefix (paged). */
