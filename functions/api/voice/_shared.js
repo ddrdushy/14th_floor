@@ -15,7 +15,7 @@
 //   preview:<hash>                     admin previews, expire after a day
 //   voices:job                         status of the last pre-generation run
 import manifest from '../../../src/data/voice-manifest.json';
-import { hashText, speakerSlug } from '../../../src/core/voice.js';
+import { hashText, speakerSlug, PLAYER, DETECTIVES, DET_RE } from '../../../src/core/voice.js';
 
 export const MANIFEST = manifest;
 export const FISH_BASE = 'https://api.fish.audio';
@@ -24,6 +24,19 @@ export const DEFAULT_MODEL = 's2.1-pro';
 export const KEYS = { map: 'voices:map', job: 'voices:job' };
 export const ID_RE = /^[0-9a-z]{11}$/;
 export const RESERVED = new Set(['_default', '_settings', '_version']);
+export { PLAYER, DETECTIVES, DET_RE };
+
+// The player's own lines ("You") can have one voice per detective portrait: map keys "You@det_01".."You@det_08",
+// falling back to "You" (then _default). Every other speaker has one voice whatever portrait was chosen.
+export const slotName = (d) => `${PLAYER}@${d}`;
+const SLOT_RE = new RegExp(`^${PLAYER}@(det_0[1-8])$`);
+/** "You@det_03" -> { voice: "You", d: "det_03" }; anything else -> { voice: name, d: null }. */
+export function splitSlot(name) {
+  const m = SLOT_RE.exec(String(name || ''));
+  return m ? { voice: PLAYER, d: m[1] } : { voice: name, d: null };
+}
+/** The portrait id that matters for this cast name: only the player's lines use one. */
+export const detFor = (voice, d) => (voice === PLAYER && typeof d === 'string' && DET_RE.test(d) ? d : null);
 
 export const audioPrefix = (voice) => `audio:${speakerSlug(voice)}:`;
 export const audioKey = (voice, id, variant) => `${audioPrefix(voice)}${id}:${variant}`;
@@ -64,8 +77,17 @@ export async function bumpVersion(env) {
   return map._version;
 }
 
-/** The voice entry used for a cast name, or null when that voice is unassigned or switched off. */
-export function resolveVoice(map, voice) {
+/**
+ * The voice entry used for a cast name, or null when that voice is unassigned or switched off.
+ * d (a portrait id) only matters for the player: "You@<d>" first, then "You", then _default.
+ */
+export function resolveVoice(map, voice, d = null) {
+  const det = detFor(voice, d);
+  if (det) {
+    const slot = map[slotName(det)];
+    if (slot && slot.off) return null;
+    if (slot && slot.reference_id) return { ...slot, slot: det };
+  }
   const own = map[voice];
   if (own && own.off) return null;
   if (own && own.reference_id) return own;
@@ -74,9 +96,11 @@ export function resolveVoice(map, voice) {
   return null;
 }
 
-/** Which voices will speak right now. */
+/** Which voices will speak right now: cast names, plus "You@det_0N" for each portrait whose player voice speaks. */
 export function voicedNames(map) {
-  return voiceNames().filter((v) => resolveVoice(map, v));
+  const out = voiceNames().filter((v) => resolveVoice(map, v));
+  if (voiceNames().includes(PLAYER)) for (const det of DETECTIVES) if (resolveVoice(map, PLAYER, det.id)) out.push(slotName(det.id));
+  return out;
 }
 
 const clamp = (n, lo, hi, d) => (Number.isFinite(Number(n)) ? Math.min(hi, Math.max(lo, Number(n))) : d);
@@ -100,8 +124,11 @@ export function ttsParams(env, map, entry, voice, overrides = {}) {
     latency: ['low', 'normal', 'balanced'].includes(s.latency) ? s.latency : 'normal',
     language: entry.lang === 'en' ? 'en' : null, // other lines mix languages: let Fish detect per chunk
     take: Number(voice.take) || 0, // bumped by "Regenerate" in /admin: a new take gets a new key
+    d: overrides.d || null, // the player's portrait (player lines only): detectives never share audio
   };
-  p.variant = hashText(JSON.stringify([p.text, p.reference_id, p.model, p.speed, p.volume, p.temperature, p.top_p, p.mp3_bitrate, p.latency, p.take]));
+  const parts = [p.text, p.reference_id, p.model, p.speed, p.volume, p.temperature, p.top_p, p.mp3_bitrate, p.latency, p.take];
+  if (p.d) parts.push(p.d);
+  p.variant = hashText(JSON.stringify(parts));
   return p;
 }
 
@@ -185,12 +212,13 @@ const inflight = new Map(); // KV key -> Promise<ArrayBuffer>, so two players as
  * Cached audio for a manifest line, generating (and storing) it when missing.
  * Returns { audio, variant, cached } or { unvoiced: true }.
  */
-export async function lineAudio(env, id, map, { generate = true } = {}) {
+export async function lineAudio(env, id, map, { generate = true, d = null } = {}) {
   const entry = MANIFEST.lines[id];
   if (!entry) return { unknown: true };
-  const voice = resolveVoice(map, entry.voice);
+  const det = detFor(entry.voice, d);
+  const voice = resolveVoice(map, entry.voice, det);
   if (!voice) return { unvoiced: true };
-  const p = ttsParams(env, map, entry, voice);
+  const p = ttsParams(env, map, entry, voice, { d: det });
   const key = audioKey(entry.voice, id, p.variant);
   const hit = await env.VOICE.get(key, { type: 'arrayBuffer', cacheTtl: 86400 });
   if (hit) return { audio: hit, variant: p.variant, cached: true };
@@ -200,13 +228,22 @@ export async function lineAudio(env, id, map, { generate = true } = {}) {
     job = (async () => {
       const audio = await fishTTS(env, p);
       await env.VOICE.put(key, audio, {
-        metadata: { id, voice: entry.voice, ref: p.reference_id, model: p.model, bytes: audio.byteLength, at: Date.now() },
+        metadata: { id, voice: entry.voice, d: det, ref: p.reference_id, model: p.model, bytes: audio.byteLength, at: Date.now() },
       });
       return audio;
     })().finally(() => inflight.delete(key));
     inflight.set(key, job);
   }
   return { audio: await job, variant: p.variant, cached: false };
+}
+
+/** The KV key a line would be stored under right now (null when it has no voice). */
+export function currentKey(env, map, id, d = null) {
+  const entry = MANIFEST.lines[id];
+  if (!entry) return null;
+  const det = detFor(entry.voice, d);
+  const voice = resolveVoice(map, entry.voice, det);
+  return voice ? audioKey(entry.voice, id, ttsParams(env, map, entry, voice, { d: det }).variant) : null;
 }
 
 /** All KV keys under a prefix (paged). */

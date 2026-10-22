@@ -193,12 +193,33 @@ export function mountVoices(el, { api, token } = {}) {
       h('span', { class: 'vx-voice-text' }, h('strong', {}, v.title || 'Fish voice'), h('code', {}, v.reference_id)));
   }
 
+  const isSlot = (name) => /@det_0[1-8]$/.test(name);
+  const nameOf = (s) => (s.title ? `${s.title} (${s.sub})` : s.name);
+  /** The voice a cast name (or detective slot "You@det_0N") speaks with right now. */
   const voiceOf = (name) => {
     const own = map[name];
     if (own?.off) return null;
     if (own?.reference_id) return own;
+    if (isSlot(name)) {
+      const base = voiceOf(name.split('@')[0]);
+      return base ? { ...base, inherited: true } : null;
+    }
     return map._default?.reference_id ? { ...map._default, fallback: true } : null;
   };
+
+  /** "Your detective": one slot per portrait for the player's own lines, above the speaker list. */
+  function detectivesSection() {
+    const dets = info.detectives || [];
+    const you = info.speakers.find((x) => x.name === info.player);
+    if (!dets.length || !you) return null;
+    return h('section', { class: 'vx-dets' },
+      h('div', { class: 'vx-dets-head' },
+        h('h3', { class: 'vx-subtitle' }, 'Your detective'),
+        h('p', { class: 'vx-lede' }, `The player's own lines ("${info.player}", ${you.lines} lines) are spoken in the voice of the portrait they picked. A portrait without its own voice uses the "${info.player}" voice in the list below; "Silent" mutes just that portrait.`)),
+      h('div', { class: 'vx-list' }, ...dets.map((d, i) => speakerCard({
+        ...you, name: d.slot, title: `Detective ${i + 1}`, sub: d.label, img: `./${d.img}`, shownAs: [],
+      }))));
+  }
 
   function speakerCard(s) {
     const own = map[s.name] || {};
@@ -206,15 +227,18 @@ export function mountVoices(el, { api, token } = {}) {
     const counts = cache[s.name];
     const isOpen = open.has(s.name);
     const body = h('div', { class: 'vx-body' });
-    const card = h('article', { class: `vx-card${isOpen ? ' is-open' : ''}${v ? '' : ' is-silent'}` },
+    const card = h('article', { class: `vx-card${isOpen ? ' is-open' : ''}${v ? '' : ' is-silent'}${s.img ? ' vx-card--det' : ''}` },
       h('div', { class: 'vx-row' },
         h('div', { class: 'vx-who' },
-          h('h3', {}, s.name),
+          s.img ? h('img', { src: s.img, alt: '', class: 'vx-portrait', loading: 'lazy', onerror: hideBroken }) : null,
+          h('div', {},
+          h('h3', {}, s.title || (s.name === info.player && info.detectives?.length ? `${s.name} (any detective without its own voice)` : s.name)),
+          s.sub ? h('p', { class: 'vx-muted' }, s.sub) : null,
           s.shownAs?.length ? h('p', { class: 'vx-muted' }, `Also captioned as ${s.shownAs.map((x) => `"${x}"`).join(', ')}`) : null,
-          h('div', { class: 'vx-chips' }, h('span', { class: 'vx-chip vx-chip--count' }, `${s.lines} line${s.lines === 1 ? '' : 's'}`), ...langChips(s.langs))),
+          h('div', { class: 'vx-chips' }, h('span', { class: 'vx-chip vx-chip--count' }, `${s.lines} line${s.lines === 1 ? '' : 's'}`), ...langChips(s.langs)))),
         h('div', { class: 'vx-assigned' },
           own.off ? h('span', { class: 'vx-muted' }, 'Silent (switched off)')
-            : v ? h('div', {}, voiceBadge(v), v.fallback ? h('span', { class: 'vx-muted' }, ' (fallback voice)') : null)
+            : v ? h('div', {}, voiceBadge(v), v.inherited ? h('span', { class: 'vx-muted' }, ` (uses the "${info.player}" voice)`) : v.fallback ? h('span', { class: 'vx-muted' }, ' (fallback voice)') : null)
             : h('span', { class: 'vx-muted' }, 'No voice yet'),
           counts ? h('span', { class: 'vx-muted vx-counts' }, `${counts.current} of ${counts.total} lines stored`) : null),
         h('button', { class: 'vx-btn', type: 'button', 'aria-expanded': String(isOpen), onclick: () => { if (open.has(s.name)) open.delete(s.name); else open.add(s.name); render(); } }, isOpen ? 'Close' : 'Cast & lines')),
@@ -236,25 +260,25 @@ export function mountVoices(el, { api, token } = {}) {
     speed.addEventListener('change', async () => {
       const next = { ...map, [s.name]: { ...(map[s.name] || {}), speed: Number(speed.value) } };
       if (Number(speed.value) === 1) delete next[s.name].speed;
-      try { await saveMap(next, `${s.name}: speed saved`); refreshCache(); } catch (err) { say(err.message, true); }
+      try { await saveMap(next, `${nameOf(s)}: speed saved`); refreshCache(); } catch (err) { say(err.message, true); }
     });
     const model = h('select', { class: 'vx-input', 'aria-label': 'Model for this speaker', onchange: async () => {
       const next = { ...map, [s.name]: { ...(map[s.name] || {}) } };
       if (model.value) next[s.name].model = model.value; else delete next[s.name].model;
-      try { await saveMap(next, `${s.name}: model saved`); refreshCache(); } catch (err) { say(err.message, true); }
+      try { await saveMap(next, `${nameOf(s)}: model saved`); refreshCache(); } catch (err) { say(err.message, true); }
     } }, h('option', { value: '' }, 'Model: as default'), ...info.models.map((m) => h('option', { value: m, selected: own.model === m }, m)));
     const silent = h('input', { type: 'checkbox', checked: !!own.off, onchange: async () => {
       const next = { ...map, [s.name]: { ...(map[s.name] || {}) } };
       if (silent.checked) next[s.name].off = true; else delete next[s.name].off;
-      try { await saveMap(next, silent.checked ? `${s.name} is silent` : `${s.name} speaks again`); render(); } catch (err) { say(err.message, true); }
+      try { await saveMap(next, silent.checked ? `${nameOf(s)} is silent` : `${nameOf(s)} speaks again`); render(); } catch (err) { say(err.message, true); }
     } });
     const genBtn = h('button', { class: 'vx-btn', type: 'button', disabled: !v, onclick: () => generate(s.name, genBtn) }, 'Generate missing lines');
     const regenBtn = h('button', { class: 'vx-btn vx-btn--danger', type: 'button', disabled: !v, onclick: async () => {
-      if (!confirm(`Delete every stored line for ${s.name}? The next play (or "Generate") makes a new take and costs credits again.`)) return;
+      if (!confirm(`Delete every stored line for ${nameOf(s)}? The next play (or "Generate") makes a new take and costs credits again.`)) return;
       try {
         const r = await req('/purge', { method: 'POST', body: { voice: s.name } });
         await reload();
-        say(`${s.name}: ${r.deleted} stored line${r.deleted === 1 ? '' : 's'} deleted`);
+        say(`${nameOf(s)}: ${r.deleted} stored line${r.deleted === 1 ? '' : 's'} deleted`);
       } catch (err) { say(err.message, true); }
     } }, 'Regenerate (purge)');
     body.append(h('div', { class: 'vx-tools' },
@@ -313,7 +337,7 @@ export function mountVoices(el, { api, token } = {}) {
       const keep = {};
       for (const k of ['speed', 'model', 'take']) if (own[k] != null) keep[k] = own[k];
       try {
-        await saveMap({ ...map, [s.name]: { ...keep, ...pick } }, `${m.title} now voices ${s.name}`);
+        await saveMap({ ...map, [s.name]: { ...keep, ...pick } }, `${m.title} now voices ${nameOf(s)}`);
         await reload();
       } catch (err) { say(err.message, true); }
     } }, isCurrent ? 'Assigned' : 'Assign');
@@ -336,7 +360,8 @@ export function mountVoices(el, { api, token } = {}) {
         const btn = h('button', { class: 'vx-btn vx-btn--small', type: 'button', disabled: !voiceOf(s.name), onclick: () => play(btn, () => req('/preview', { method: 'POST', raw: true, body: { voice: s.name, id: ln.id } })) }, 'Preview');
         // "Play in game" fetches the public URL: generates and stores the real line, exactly as a player would
         const real = h('button', { class: 'vx-btn vx-btn--small', type: 'button', disabled: !voiceOf(s.name), title: 'Generate (if needed), store and play the line players will hear', onclick: () => play(real, async () => {
-          const res = await fetch(`./api/voice/${ln.id}?v=${map._version || 0}`);
+          const d = isSlot(s.name) ? `&d=${s.name.split('@')[1]}` : '';
+          const res = await fetch(`./api/voice/${ln.id}?v=${map._version || 0}${d}`);
           if (!res.ok) { let m = `HTTP ${res.status}`; try { m = (await res.json()).error || m; } catch { /* audio */ } throw new Error(m); }
           const blob = await res.blob();
           state.textContent = 'cached';
@@ -396,6 +421,8 @@ export function mountVoices(el, { api, token } = {}) {
     root.replaceChildren(
       header(),
       settingsRow(),
+      detectivesSection(),
+      h('h3', { class: 'vx-subtitle' }, 'Speakers'),
       h('section', { class: 'vx-list' }, ...info.speakers.map(speakerCard)));
     window.scrollTo(0, keepScroll);
   }

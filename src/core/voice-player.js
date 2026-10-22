@@ -5,7 +5,7 @@
 // One <audio> element is reused for every line. Mobile browsers only let an element play sound if it
 // was started inside a tap, so unlockVoice() is called from taps (see unlockCinemaVideo in cinema.js).
 import { state, onChange } from './state.js';
-import { lineIdCandidates, isVoiceable } from './voice.js';
+import { lineIdCandidates, isVoiceable, PLAYER, portraitOf } from './voice.js';
 
 const STATUS_URL = 'api/voice/status';
 const SILENCE = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAAAA';
@@ -84,15 +84,28 @@ export function initVoices() {
   return ready;
 }
 
-/** The manifest id this line plays, or null when it has no voice right now. */
+/**
+ * What this line plays: its manifest id, or "<id>@det_0N" for the player's own lines ("You"), which
+ * are voiced to match the chosen detective portrait. null when it has no voice right now.
+ * Every other speaker's URL is the same for all players, so their audio is shared in every cache.
+ */
 export function voiceIdFor(line) {
   if (off || !lines || !line || !voicesOn() || !isVoiceable(line)) return null;
-  for (const id of lineIdCandidates(line, { you: state().profile?.name })) {
+  const profile = state().profile;
+  for (const id of lineIdCandidates(line, { you: profile?.name })) {
     const e = lines[id];
-    if (e) return voiced.has(e.voice) && !failed.has(id) ? id : null;
+    if (!e) continue;
+    const d = e.voice === PLAYER ? portraitOf(profile) : null;
+    const key = d ? `${id}@${d}` : id;
+    const speaks = d ? voiced.has(`${PLAYER}@${d}`) : voiced.has(e.voice);
+    return speaks && !failed.has(key) ? key : null;
   }
   return null;
 }
+const lineUrl = (key) => {
+  const [id, d] = key.split('@');
+  return `api/voice/${id}?v=${version}${d ? `&d=${d}` : ''}`;
+};
 
 function remember(id, entry) {
   cache.set(id, entry);
@@ -117,7 +130,7 @@ function load(id) {
     const ctl = typeof AbortController === 'function' ? new AbortController() : null;
     const t = ctl ? setTimeout(() => ctl.abort(), FETCH_TIMEOUT) : null;
     try {
-      const res = await fetch(`api/voice/${id}?v=${version}`, ctl ? { signal: ctl.signal } : {});
+      const res = await fetch(lineUrl(id), ctl ? { signal: ctl.signal } : {});
       if (!res.ok) {
         if (res.status === 503 || res.status === 403 || res.status === 401) giveUp();
         else if (res.status !== 429) failed.add(id); // 404 unvoiced/unknown, 502 generation failed

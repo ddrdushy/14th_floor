@@ -150,9 +150,31 @@ Redeploy after adding them. `FISH_API_BASE` is for local tests only (points the 
 
 ### Casting voices in /admin
 
-Open `/admin.html`, sign in, and choose **Voices**. Every speaker in the cinematics is listed with its languages and line count (Narrator, Inspector Farah Iskandar, Jo Lim, Bala Anne, Rachel Goh, Salmah, ...). For each one: **Cast & lines** → search Fish Audio's public voice library (or your own voices with "My voices"), play a voice's sample, **Hear a line** to hear one of that speaker's real lines in it, then **Assign**. Speed and model can be set per speaker; **Silent** keeps a speaker unvoiced (e.g. `You`, the player). A fallback voice can cover every unassigned speaker; without one, unassigned speakers stay silent. **Generate missing lines** (per speaker, or for everyone at the top) fills the cache in the background, 30 lines per round; **Regenerate (purge)** deletes a speaker's stored lines so the next play makes a new take.
+Open `/admin.html`, sign in, and choose **Voices**. Every speaker in the cinematics is listed with its languages and line count (Narrator, Inspector Farah Iskandar, Jo Lim, Bala Anne, Rachel Goh, Salmah, ...). For each one: **Cast & lines** → search Fish Audio's public voice library (or your own voices with "My voices"), play a voice's sample, **Hear a line** to hear one of that speaker's real lines in it, then **Assign**. Speed and model can be set per speaker; **Silent** keeps a speaker unvoiced. A fallback voice can cover every unassigned speaker; without one, unassigned speakers stay silent. **Generate missing lines** (per speaker, or for everyone at the top) fills the cache in the background, 30 lines per round; **Regenerate (purge)** deletes a speaker's stored lines so the next play makes a new take.
 
 Some caption speakers are one character under another name: "Woman" on the phone is Rachel (intro), Salmah (Case 2) and Jo (Case 3), and "???" in the intro dream is Daniel. That mapping is `VOICE_CAST` in `src/data/voice-overrides.js`, so each person has one voice everywhere.
+
+### The player's own voice
+
+Lines spoken by `You` (the player's detective) are voiced to match the portrait the player chose (`profile.portrait`, `det_01`..`det_08` in `src/core/avatar.js`). In /admin > Voices, **Your detective** lists the eight portraits (Detective 1 Indian man 50s, 2 Malay woman in a tudung 30s, 3 Chinese man 30s, 4 Indian woman 30s, 5 Malay man 50s, 6 Chinese woman 30s, 7 Malay/Eurasian man 30s, 8 Malay/Sabahan woman 40s), each with the same search / sample / assign / preview / silent controls. They are stored as map keys `You@det_01`..`You@det_08`; a portrait without its own voice uses `You`, then the fallback voice. The game adds `&d=det_0N` to the audio URL for `You` lines only (every other line has one shared URL), and `d` is part of the cache variant, so two detectives never share audio. Lines where another character says the player's name (`{you}`) belong to that character's voice, not the detective's.
+
+### Admin API (from the browser console on /admin.html)
+
+The admin page keeps the password in `sessionStorage['floor14.admin.token']`, sent as `Authorization: Bearer <password>`.
+
+```js
+const T = sessionStorage.getItem('floor14.admin.token');
+const A = (path, opts = {}) => fetch(`/api/admin/voices${path}`, { ...opts, headers: { authorization: `Bearer ${T}`, 'content-type': 'application/json', ...(opts.headers || {}) } }).then((r) => r.json());
+await A('');                                                     // speakers, detectives, map, config
+await A('/search?q=malaysian%20woman&lang=ms&sort=score&page=1&size=20'); // Fish voices: items[].id is a reference_id
+const { map } = await A('/map');                                 // current map
+map['You@det_02'] = { reference_id: '<fish model id>', title: 'Nur', speed: 1 };
+map['Narrator'] = { reference_id: '<fish model id>', title: 'Narrator' };
+await A('/map', { method: 'PUT', body: JSON.stringify({ map }) }); // replaces the whole map; returns { ok, map, dropped? }
+await A('/generate', { method: 'POST', body: JSON.stringify({ voice: 'You@det_02' }) }); // or {} for everyone
+```
+
+`search` params: `q` (title words), `lang` (e.g. `en`, `ms`, `ta`, `zh`), `sort` (`score` | `task_count` | `created_at`), `page`, `size` (1-50), `self=1` (your own Fish voices). The PUT body is `{ "map": { ... } }` (a bare map also works). Keys: any speaker name from the manifest, `You@det_01`..`You@det_08`, `_default` (fallback voice) and `_settings` (`{ model, temperature, top_p, mp3_bitrate, latency }`). Each voice entry: `{ reference_id, speed? (0.5-2), volume? (dB), model?, off? (true = silent), title?, cover?, languages? }`. Unknown keys are dropped (listed in `dropped`); `_version` and `take` are managed by the server.
 
 ### How lines are made and cached
 
@@ -165,7 +187,7 @@ Some caption speakers are one character under another name: "Woman" on the phone
 
 ### Costs
 
-Fish bills by UTF-8 bytes of text: $15 per million bytes on `s2.1-pro` / `s2-pro` (`s2.1-pro-free` is $0 for testing). All 171 lines in the manifest are about 15 KB of text, so voicing the whole game once costs roughly **$0.25** per full set of voices. Each unique line is generated once and then served from KV; players replaying never cost anything. You pay again only when you reassign a voice, change its speed/model, purge, or edit a line. Tamil and Chinese text costs 3 bytes per character. KV on the free plan allows 1,000 writes a day (one per generated line) and 100,000 reads.
+Fish bills by UTF-8 bytes of text: $15 per million bytes on `s2.1-pro` / `s2-pro` (`s2.1-pro-free` is $0 for testing). All 171 lines in the manifest are about 15 KB of text, so voicing the whole game once costs roughly **$0.25** per full set of voices. The player's 4 `You` lines are generated once per detective portrait (8 x 130 bytes, a fraction of a cent). Each unique line is generated once and then served from KV; players replaying never cost anything. You pay again only when you reassign a voice, change its speed/model, purge, or edit a line. Tamil and Chinese text costs 3 bytes per character. KV on the free plan allows 1,000 writes a day (one per generated line) and 100,000 reads.
 
 ### Testing locally without a Fish key
 

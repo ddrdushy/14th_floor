@@ -1,9 +1,11 @@
-// GET /api/voice/<id>?v=<map version>: the MP3 for one manifest line.
+// GET /api/voice/<id>?v=<map version>[&d=det_0N]: the MP3 for one manifest line.
+// d (strictly det_01..det_08) is the player's detective portrait; it is used only for lines spoken by
+// "You" (voice map key "You@det_0N", falling back to "You") and ignored for every other speaker.
 // Only ids in src/data/voice-manifest.json are accepted, so nobody can make this server say
 // arbitrary text. The first request for a line generates it with Fish Audio and stores it in KV;
 // every later request (any player) is served from KV or the edge cache.
 import { json, fail, overLimit, clientIp, sameOrigin } from '../_lib.js';
-import { MANIFEST, ID_RE, configured, getMap, lineAudio, audioHeaders, FishError } from './_shared.js';
+import { MANIFEST, ID_RE, configured, getMap, lineAudio, audioHeaders, FishError, detFor } from './_shared.js';
 
 const LIMIT_REQUESTS = 300; // per IP per minute, cached or not
 const LIMIT_GENERATE = 30; // per IP per minute, lines not yet in KV
@@ -20,7 +22,10 @@ export async function onRequestGet(ctx) {
 
     const url = new URL(request.url);
     const v = Number(url.searchParams.get('v')) || 0;
-    const cacheKey = new Request(`${url.origin}${url.pathname}?v=${v}`, { method: 'GET' });
+    const rawD = url.searchParams.get('d');
+    if (rawD != null && rawD !== '' && !/^det_0[1-8]$/.test(rawD)) return fail(400, 'bad_detective');
+    const d = detFor(MANIFEST.lines[id].voice, rawD); // other speakers ignore d (one shared cache entry)
+    const cacheKey = new Request(`${url.origin}${url.pathname}?v=${v}${d ? `&d=${d}` : ''}`, { method: 'GET' });
     const cache = typeof caches !== 'undefined' ? caches.default : null;
     if (cache && v) {
       const hit = await cache.match(cacheKey).catch(() => null);
@@ -33,15 +38,15 @@ export async function onRequestGet(ctx) {
 
     let map = await getMap(env);
     if (v > (Number(map._version) || 0)) map = await getMap(env, { fresh: true }); // the edge copy is older than the player's
-    let out = await lineAudio(env, id, map, { generate: false });
+    let out = await lineAudio(env, id, map, { generate: false, d });
     if (out.unvoiced) return fail(404, 'unvoiced');
     if (out.missing) {
       if (overLimit(`voice-gen:${ip}`, LIMIT_GENERATE)) return fail(429, 'slow_down');
-      const job = lineAudio(env, id, map);
+      const job = lineAudio(env, id, map, { d });
       ctx.waitUntil(job.catch(() => {})); // finish and store even if the player has moved on
       out = await job;
     }
-    const etag = `"${id}-${out.variant}"`;
+    const etag = `"${id}-${out.variant}"`; // the variant already includes d for player lines
     const res = new Response(out.audio, { headers: { ...audioHeaders(etag, !!v), 'x-voice-cache': out.cached ? 'hit' : 'miss' } });
     if (cache && v) ctx.waitUntil(cache.put(cacheKey, res.clone()).catch(() => {}));
     return notModified(request, res) || res;

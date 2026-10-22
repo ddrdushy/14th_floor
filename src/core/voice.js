@@ -93,3 +93,24 @@ export function guessLang(line) {
 }
 
 export const LANG_LABELS = { en: 'English', ms: 'Malay', ta: 'Tamil', yue: 'Cantonese', 'zh-hokkien': 'Penang Hokkien', zh: 'Chinese' };
+
+// ---------- the player's voice ----------
+// "You" lines are spoken by the player's detective, so they can have a voice per portrait
+// (src/core/avatar.js PORTRAITS; the profile stores the choice as profile.portrait).
+export const PLAYER = 'You';
+export const DET_RE = /^det_0[1-8]$/;
+export const DETECTIVES = [
+  { id: 'det_01', label: 'Indian man, 50s' },
+  { id: 'det_02', label: 'Malay woman in a tudung, 30s' },
+  { id: 'det_03', label: 'Chinese man, 30s' },
+  { id: 'det_04', label: 'Indian woman, 30s' },
+  { id: 'det_05', label: 'Malay man, 50s' },
+  { id: 'det_06', label: 'Chinese woman, 30s' },
+  { id: 'det_07', label: 'Malay / Eurasian man, 30s' },
+  { id: 'det_08', label: 'Malay / Sabahan woman, 40s' },
+];
+/** The portrait id of a profile, or null. */
+export function portraitOf(profile) {
+  const d = profile?.portrait || profile?.look?.portrait;
+  return typeof d === 'string' && DET_RE.test(d) ? d : null;
+}

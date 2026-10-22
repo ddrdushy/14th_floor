@@ -126,3 +126,10 @@
   :root:not([data-theme='light']) .vx-pill.is-warn, :root:not([data-theme='light']) .vx-state.is-stale { color: #f0b860; }
 }
 :root[data-theme='dark'] .vx-pill.is-warn, :root[data-theme='dark'] .vx-state.is-stale { color: #f0b860; }
+
+/* "Your detective": one slot per player portrait */
+.vx-subtitle { margin: 6px 0 0; font-family: var(--font-display, 'Arial Narrow', sans-serif); font-weight: 800; font-size: 1.35rem; letter-spacing: 0.02em; }
+.vx-dets { display: grid; gap: 10px; }
+.vx-dets-head .vx-lede { margin-top: 2px; }
+.vx-who { display: flex; gap: 12px; align-items: flex-start; min-width: 0; }
+.vx-portrait { width: 56px; height: 70px; flex: none; border-radius: 8px; object-fit: cover; object-position: center 20%; background: var(--vx-bg-2); border: 1px solid var(--vx-border); }
