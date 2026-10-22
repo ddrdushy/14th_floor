@@ -35,15 +35,15 @@ export async function onRequest(ctx) {
     const route = `${request.method} ${path}`;
     switch (route) {
       case 'GET ':
-      case 'GET speakers': return overview(env);
-      case 'GET cache': return cacheCounts(env);
-      case 'GET lines': return lines(env, new URL(request.url).searchParams.get('voice'));
+      case 'GET speakers': return await overview(env);
+      case 'GET cache': return await cacheCounts(env);
+      case 'GET lines': return await lines(env, new URL(request.url).searchParams.get('voice'));
       case 'GET map': return json({ ok: true, map: await getMap(env, { fresh: true }) });
-      case 'PUT map': return saveMap(env, request);
-      case 'GET search': return search(env, new URL(request.url).searchParams);
-      case 'POST preview': return preview(env, request);
-      case 'POST purge': return purge(env, request);
-      case 'POST generate': return generate(ctx);
+      case 'PUT map': return await saveMap(env, request);
+      case 'GET search': return await search(env, new URL(request.url).searchParams);
+      case 'POST preview': return await preview(env, request);
+      case 'POST purge': return await purge(env, request);
+      case 'POST generate': return await generate(ctx);
       case 'GET job': return json({ ok: true, job: (await env.VOICE.get(KEYS.job, { type: 'json' })) || null });
       default: return fail(404, 'not_found');
     }
