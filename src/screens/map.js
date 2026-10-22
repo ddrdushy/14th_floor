@@ -13,7 +13,7 @@
 import { h, svgEl, modal } from '../core/ui.js';
 import { go } from '../core/router.js';
 import { backButton, icon } from '../core/nav.js';
-import { CASES, levelStatus, getCaseState, caseHeading, caseLabel, resolveCaseId } from '../data/cases.js';
+import { CASES, levelStatus, getCaseState, caseHeading, caseLabel, resolveCaseId, suspectBoard } from '../data/cases.js';
 import { CATEGORY_OF } from '../games/registry.js';
 import { app } from '../core/app.js';
 import { sfx } from '../core/audio.js';
@@ -112,6 +112,8 @@ export function mount(host, { caseId, fresh = false } = {}) {
   let open_ = docked.matches ? pref !== 'closed' : false;
 
   const hintsLeft = cs.hints ?? 0;
+  const sus = suspectBoard(c, cs);
+  const pinnedIds = new Set(sus.pinned.map((x) => x.id));
   const stat = (n, one, many) => `${n} ${n === 1 ? one : many}`;
   const actions = [];
   if (current) {
@@ -142,12 +144,18 @@ export function mount(host, { caseId, fresh = false } = {}) {
       h('span', { class: 'mf-stat', title: 'Magnifiers left for this case' }, h('span', { class: 'mf-mag', 'aria-hidden': 'true', html: icon('puzzle') }),
         h('b', {}, String(hintsLeft)), cs.hintsMax ? ` of ${cs.hintsMax} magnifiers left` : ` ${hintsLeft === 1 ? 'magnifier' : 'magnifiers'} left`)),
     (c.suspects || []).length ? h('div', { class: 'mf-suspects' },
-      h('h3', { class: 'mf-sub' }, 'Suspects'),
-      h('ul', {}, c.suspects.map((s) => {
+      h('h3', { class: 'mf-sub' }, 'Persons of interest'),
+      // only the people your clues have named so far; the "?" slot never says how many are left
+      h('ul', {}, sus.revealed.map((s) => {
+        const waiting = !pinnedIds.has(s.id);
         const face = h('span', { class: 'mf-face', 'aria-hidden': 'true' }, h('span', { class: 'mf-initials' }, initials(s.name)));
         hasImage(s.img).then((ok) => { if (ok) { face.style.backgroundImage = `url(${imgUrl(s.img)})`; face.classList.add('has-img'); } });
-        return h('li', { class: 'mf-suspect', title: `${s.name}, ${s.role}` }, face, h('span', { class: 'mf-sname' }, shortName(s.name)), h('span', { class: 'sr-only' }, `, ${s.role}`));
-      }))) : null,
+        return h('li', { class: `mf-suspect${waiting ? ' is-waiting' : ''}`, title: waiting ? `${s.name}, ${s.role}. Not pinned yet: pin them on the case board.` : `${s.name}, ${s.role}` },
+          face, h('span', { class: 'mf-sname' }, shortName(s.name)), h('span', { class: 'sr-only' }, `, ${s.role}${waiting ? '. Not pinned to the board yet' : ''}`));
+      }), sus.hidden ? h('li', { class: 'mf-suspect is-unknown', title: sus.revealed.length ? 'More to find. Keep following the clues.' : 'Nobody yet. The clues will name them.' },
+        h('span', { class: 'mf-face', 'aria-hidden': 'true' }, h('span', { class: 'mf-initials' }, '?')),
+        h('span', { class: 'mf-sname' }, sus.revealed.length ? 'More to find' : 'None yet'),
+        h('span', { class: 'sr-only' }, sus.revealed.length ? '. More persons of interest to find.' : '. No persons of interest yet. The clues will name them.')) : null)) : null,
     h('div', { class: 'mf-more', id: 'map-file-more' },
       h('dl', { class: 'mf-facts' },
         h('div', {}, h('dt', {}, 'Victim'), h('dd', {}, c.victim || '')),
@@ -196,7 +204,8 @@ export function mount(host, { caseId, fresh = false } = {}) {
       h('li', {}, h('span', { class: 'mt-ico mt-line', 'aria-hidden': 'true' }), h('span', {}, h('b', {}, 'The red thread '), 'is your trail of leads.')),
       h('li', {}, h('span', { class: 'mt-ico mt-done', 'aria-hidden': 'true' }, '1'), h('span', {}, h('b', {}, 'Pinned photos: '), 'solved. Tap one to read its evidence again.')),
       h('li', {}, h('span', { class: 'mt-ico mt-cur', 'aria-hidden': 'true' }, '?'), h('span', {}, h('b', {}, 'Red card: '), 'your next lead. Tap Start to play.')),
-      h('li', {}, h('span', { class: 'mt-ico mt-fog', 'aria-hidden': 'true' }, '…'), h('span', {}, h('b', {}, 'Dashed card: '), 'more leads ahead. Nobody tells you how many.'))),
+      h('li', {}, h('span', { class: 'mt-ico mt-fog', 'aria-hidden': 'true' }, '…'), h('span', {}, h('b', {}, 'Dashed card: '), 'more leads ahead. Nobody tells you how many.')),
+      h('li', {}, h('span', { class: 'mt-ico mt-poi', 'aria-hidden': 'true' }, '?'), h('span', {}, h('b', {}, 'Persons of interest '), 'appear in the case file as your clues name them. You pin them to the board yourself.'))),
     h('button', { class: 'btn btn--paper btn--small map-tip-ok', type: 'button', onclick: () => hideTip() }, 'Got it'));
   // the tip sits just under the top bar: the next lead is scrolled into view lower down
   function showTip() {

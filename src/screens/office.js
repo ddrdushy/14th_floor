@@ -4,7 +4,7 @@
 import { h, toast, modal } from '../core/ui.js';
 import { go } from '../core/router.js';
 import { state, rank } from '../core/state.js';
-import { CASES, COMING_SOON, levelStatus, getCaseState, progress, caseLabel } from '../data/cases.js';
+import { CASES, COMING_SOON, levelStatus, getCaseState, progress, caseLabel, suspectBoard } from '../data/cases.js';
 import { avatarSvg } from '../core/avatar.js';
 import { sfx, startRain } from '../core/audio.js';
 import { app } from '../core/app.js';
@@ -25,11 +25,14 @@ export function mount(host) {
   const cs = getCaseState(mainId);
   const { solved } = levelStatus(c, cs);
   const ringing = p.ringing || p.allClosed;
+  // the wall shows what the case board shows: only the persons of interest you have pinned
+  const pinned = suspectBoard(c, cs).pinned;
+  const onWall = new Set([...pinned.map((sp) => `s:${sp.id}`), ...solved.map((l) => `e:${l.id}`)]);
   app.scene.setBoard({
-    suspects: c.suspects.map((sp) => ({ id: sp.id, name: sp.name, role: sp.role, img: sp.img, mark: cs.board.marks[sp.id] })),
+    suspects: pinned.map((sp) => ({ id: sp.id, name: sp.name, role: sp.role, img: sp.img, mark: cs.board.marks[sp.id] })),
     evidence: solved.map((l) => ({ id: l.id, tag: l.evidence.tag, title: l.evidence.title, short: l.evidence.short, img: l.evidence.img })),
     order: cs.evidence,
-    links: cs.board.links,
+    links: (cs.board.links || []).filter(([a, b]) => onWall.has(a) && onWall.has(b)),
   });
   app.scene.setPlayer?.({
     name: s.profile.name, license: s.profile.license, drink: s.profile.drink,

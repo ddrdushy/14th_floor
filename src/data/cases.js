@@ -65,6 +65,66 @@ export function levelStatus(c, cs) {
   return { levels, solved, current, allSolved: !current };
 }
 
+// ------------------------------------------------------------------------------------------------
+// Persons of interest. A suspect stays off the map, the board and the office wall until the level
+// named in their `revealedBy` is solved. Then they wait in the board's tray until the player pins
+// them (cs.pinnedSuspects, in the order pinned). A closed case, or a case whose deduction room has
+// opened (cs.allSuspectsRevealed), shows everyone. A suspect without `revealedBy` is known from the start.
+
+/** The suspects whose first exhibit is this level. */
+export const suspectsRevealedBy = (c, levelId) => (c.suspects || []).filter((s) => s.revealedBy === levelId);
+
+/** Suspects the player knows about, in case order. */
+export function revealedSuspects(c, cs) {
+  const all = c.suspects || [];
+  if (!cs) return [];
+  if (cs.status === 'closed' || cs.allSuspectsRevealed) return all.slice();
+  const pinned = new Set(cs.pinnedSuspects || []);
+  return all.filter((s) => !s.revealedBy || cs.solved?.[s.revealedBy] || pinned.has(s.id));
+}
+
+/**
+ * The ids pinned to the board. Saves from before persons of interest have no list: a suspect they
+ * already know counts as pinned when the board holds anything of theirs (a position, a stamp, a
+ * thread), and waits in the tray otherwise. The answer is stored, so it is worked out once.
+ */
+export function pinnedSuspectIds(c, cs) {
+  if (!cs) return [];
+  if (!Array.isArray(cs.pinnedSuspects)) {
+    const b = cs.board || {};
+    const onBoard = (id) => !!(b.positions?.[`s:${id}`] || b.marks?.[id] || (b.links || []).some((lk) => lk.includes(`s:${id}`)));
+    cs.pinnedSuspects = [];
+    cs.pinnedSuspects = revealedSuspects(c, cs).filter((s) => onBoard(s.id)).map((s) => s.id);
+  }
+  const known = new Set(revealedSuspects(c, cs).map((s) => s.id));
+  return cs.pinnedSuspects.filter((id) => known.has(id));
+}
+
+/** Pinned suspects (case order) and the revealed ones still waiting in the tray. */
+export function suspectBoard(c, cs) {
+  const pinned = new Set(pinnedSuspectIds(c, cs));
+  const revealed = revealedSuspects(c, cs);
+  return {
+    revealed,
+    pinned: revealed.filter((s) => pinned.has(s.id)),
+    tray: revealed.filter((s) => !pinned.has(s.id)),
+    hidden: (c.suspects || []).length - revealed.length,
+  };
+}
+
+/** Pin a revealed suspect to the board. The caller saves. */
+export function pinSuspect(c, cs, id) {
+  pinnedSuspectIds(c, cs);
+  if (!cs.pinnedSuspects.includes(id)) cs.pinnedSuspects.push(id);
+}
+
+/** The deduction room needs everyone: older saves, or a deep link, may not have met them all yet. */
+export function revealAllSuspects(c, cs) {
+  pinnedSuspectIds(c, cs); // settle the old-save pins before everyone becomes known
+  if (revealedSuspects(c, cs).length < (c.suspects || []).length) { cs.allSuspectsRevealed = true; return true; }
+  return false;
+}
+
 /** Drop panels and lines whose `when` does not hold for these flags. */
 export function filterPanels(panels, flags = state().flags) {
   return panels

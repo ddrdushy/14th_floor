@@ -43,21 +43,29 @@ export const CASE02 = {
     ],
   },
 
+  // revealedBy: the level whose exhibit first makes this person a person of interest (see suspectsRevealedBy
+  // in cases.js). Until it is solved they are not on the map, the board or the office wall.
   suspects: [
     {
       id: 'tony', name: 'Tony Kwan', role: 'Shift supervisor, 46', img: 'sus_tony',
+      revealedBy: 'c2_02',
+      revealLine: "The gate guard picks the same face every time: the shift supervisor, at the wheel of a reefer van at 3:10 AM.",
       look: { skin: '#f1d2b6', hair: 'short', hairColor: '#9a9a9a', coat: 'leather', eyewear: 'square', mark: 'none' },
       motive: 'None known. Twenty-two years at the terminal, two weeks from a promotion.',
       claim: 'Says Azman abandoned Crane 7 in the middle of a lift, and that the crane log and the camera both failed the same night.',
     },
     {
       id: 'norhayati', name: 'Norhayati Salleh', role: 'Customs officer, 39', img: 'sus_norhayati',
+      revealedBy: 'c2_07',
+      revealLine: "Two officers on the terminal roster wear a size 5 boot. One of them was in Kota Bharu.",
       look: { skin: '#d9a77f', hair: 'tudung', hairColor: '#151210', coat: 'blazer', eyewear: 'none', mark: 'none' },
       motive: 'None known. Twelve years with the Royal Customs, a spotless file.',
       claim: 'Says her shift ended at midnight, she cleared her last box by the book and was home in Klang by half past twelve.',
     },
     {
       id: 'faizal', name: 'Faizal Ahmad', role: 'Lorry driver, 33. Salmah\'s brother', img: 'sus_faizal',
+      revealedBy: 'c2_01',
+      revealLine: "Salmah mentions her brother once, and quickly: Faizal came on Monday for money, and Azman sent him away.",
       look: { skin: '#b97f55', hair: 'short', hairColor: '#151210', coat: 'batik', eyewear: 'none', mark: 'stubble' },
       motive: 'Owes RM 8,000 to a loan shark. Azman refused to lend it on Monday night, and Faizal walked out shouting.',
       claim: 'Says he was hauling vegetables to Chow Kit when Azman vanished, and has been looking for him ever since.',

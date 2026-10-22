@@ -1,11 +1,13 @@
 // The case board: drag cards around, run your own red thread between them, stamp suspects.
+// Suspects are not on it from the start: each one waits in the "Persons of interest" tray from the
+// moment a clue names them, until the player pins them (tap Pin, or drag them onto the cork).
 import { h, svgEl, toast } from '../core/ui.js';
 import { go } from '../core/router.js';
 import { backButton } from '../core/nav.js';
 import { save, state } from '../core/state.js';
 import { openEvidence, evidenceFileButton } from '../core/evidence-viewer.js';
 import { showInfoCard } from '../core/howto.js';
-import { CASES, getCaseState, activeLevels, resolveCaseId } from '../data/cases.js';
+import { CASES, getCaseState, activeLevels, resolveCaseId, suspectBoard, pinSuspect } from '../data/cases.js';
 import { avatarSvg } from '../core/avatar.js';
 import { hasImage, imgUrl } from '../core/assets.js';
 import { sfx } from '../core/audio.js';
@@ -53,7 +55,10 @@ export function mount(host, { caseId, back = 'map', levelId } = {}) {
   const coarse = window.matchMedia?.('(pointer: coarse)').matches;
   const posOf = (id) => board.positions[id] || defaults[id];
 
-  c.suspects.forEach((s) => {
+  let sb = suspectBoard(c, cs);
+  let fresh = null; // the card just pinned from the tray, picked out once it is placed
+
+  function addSuspect(s) {
     const id = `s:${s.id}`;
     const portrait = h('div', { class: 'portrait' });
     hasImage(s.img).then((ok) => { if (ok) portrait.style.backgroundImage = `url(${imgUrl(s.img)})`; else portrait.innerHTML = avatarSvg(s.look); });
@@ -65,8 +70,8 @@ export function mount(host, { caseId, back = 'map', levelId } = {}) {
       h('button', { class: 'btn btn--paper btn--small', style: { marginTop: '6px', width: '100%' }, onclick: (e) => { e.stopPropagation(); cycleMark(s.id, stamp); } }, 'Stamp'));
     renderMark(s.id, stamp);
     addCard(id, card);
-  });
-  evidence.forEach((l) => {
+  }
+  function addExhibit(l) {
     const id = `e:${l.id}`;
     const card = h('div', { class: 'pin-card', 'data-id': id },
       h('span', { class: 'pin-grip', 'aria-hidden': 'true' }),
@@ -76,8 +81,18 @@ export function mount(host, { caseId, back = 'map', levelId } = {}) {
       h('button', { class: 'pin-view', type: 'button', onclick: (e) => { e.stopPropagation(); if (!linkMode) view(l.id); else pick(id); } }, 'Read exhibit'));
     // tap the card (not a drag) to read the exhibit again
     addCard(id, card, () => view(l.id));
-  });
-  if (!evidence.length) cork.append(h('p', { class: 'doc board-empty', style: { position: 'absolute', left: '40px', top: '340px', color: 'var(--paper)', background: 'rgba(0,0,0,.4)', padding: '8px 12px' } }, 'No evidence yet. Every puzzle you solve pins a new exhibit here.'));
+  }
+  // every card, suspects first; run again when a person of interest is pinned
+  function buildCards() {
+    cards.forEach((el) => el.remove());
+    cards.clear();
+    if (picked) picked = null;
+    cork.querySelector('.board-empty')?.remove();
+    sb.pinned.forEach(addSuspect);
+    evidence.forEach(addExhibit);
+    if (!evidence.length) cork.append(h('p', { class: 'doc board-empty', style: { position: 'absolute', left: '40px', top: '340px', color: 'var(--paper)', background: 'rgba(0,0,0,.4)', padding: '8px 12px' } }, 'No evidence yet. Every puzzle you solve pins a new exhibit here.'));
+  }
+  buildCards();
 
   function view(levelId) {
     sfx.click?.();
@@ -224,6 +239,93 @@ export function mount(host, { caseId, back = 'map', levelId } = {}) {
     renderMark(sid, stamp);
   }
 
+  // ---------------------------------------------------------------------------------------------
+  // persons of interest: revealed by a clue, not pinned yet. Tap Pin, or drag one onto the cork.
+  const tray = h('section', { class: 'poi-tray', 'aria-label': 'Persons of interest, not pinned yet' });
+  function renderTray() {
+    tray.replaceChildren();
+    tray.hidden = !sb.tray.length;
+    if (!sb.tray.length) return;
+    tray.append(
+      h('p', { class: 'pt-head' }, h('b', {}, 'Persons of interest'), h('span', {}, coarse ? 'Tap Pin, or drag one onto the board.' : 'Pin them, or drag one onto the board.')),
+      h('ul', { class: 'pt-list' }, sb.tray.map(trayItem)));
+  }
+  function trayItem(s) {
+    const face = h('span', { class: 'pt-face', 'aria-hidden': 'true' });
+    hasImage(s.img).then((ok) => { if (ok) face.style.backgroundImage = `url(${imgUrl(s.img)})`; else face.innerHTML = avatarSvg(s.look); });
+    const li = h('li', { class: 'pt-item', title: s.revealLine || `${s.name}, ${s.role}` },
+      face,
+      h('span', { class: 'pt-text' }, h('strong', {}, s.name), h('span', {}, s.role)),
+      h('button', { class: 'btn btn--primary btn--small pt-pin', type: 'button', 'aria-label': `Pin ${s.name} to the board`, onclick: () => pinFromTray(s) }, 'Pin'));
+    let drag = null;
+    li.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('button') || (e.pointerType === 'mouse' && e.button !== 0)) return;
+      e.preventDefault();
+      drag = { sx: e.clientX, sy: e.clientY, moved: false, ghost: null };
+      li.setPointerCapture(e.pointerId);
+    });
+    li.addEventListener('pointermove', (e) => {
+      if (!drag) return;
+      if (!drag.moved && Math.abs(e.clientX - drag.sx) + Math.abs(e.clientY - drag.sy) < 6) return;
+      if (!drag.moved) {
+        drag.moved = true;
+        drag.ghost = h('div', { class: 'pt-ghost', 'aria-hidden': 'true' }, face.cloneNode(true), h('strong', {}, s.name));
+        document.body.append(drag.ghost);
+        li.classList.add('is-dragging');
+      }
+      drag.ghost.style.left = `${e.clientX}px`;
+      drag.ghost.style.top = `${e.clientY}px`;
+      area.classList.toggle('is-drop', overArea(e));
+    });
+    const end = (e, drop) => {
+      if (!drag) return;
+      const d = drag;
+      drag = null;
+      d.ghost?.remove();
+      li.classList.remove('is-dragging');
+      area.classList.remove('is-drop');
+      if (drop && d.moved && overArea(e)) {
+        const r = cork.getBoundingClientRect();
+        const w = narrow ? 150 : 170;
+        pinFromTray(s, { x: Math.max(0, Math.round(e.clientX - r.left - w / 2)), y: Math.max(0, Math.round(e.clientY - r.top - 24)) });
+      }
+    };
+    li.addEventListener('pointerup', (e) => end(e, true));
+    li.addEventListener('pointercancel', (e) => end(e, false));
+    return li;
+  }
+  function overArea(e) {
+    const r = area.getBoundingClientRect();
+    return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+  }
+  function pinFromTray(s, pos) {
+    pinSuspect(c, cs, s.id);
+    if (pos) board.positions[`s:${s.id}`] = pos;
+    save();
+    sfx.pin();
+    sb = suspectBoard(c, cs);
+    fresh = `s:${s.id}`;
+    buildCards();
+    renderTray();
+    toast(`${s.name} is pinned to the board.`);
+    requestAnimationFrame(() => { flowNarrow(); fitCork(); drawThreads(); showFresh(); });
+  }
+  // scroll the newly pinned card into view and give it a moment of attention
+  function showFresh() {
+    const el = fresh && cards.get(fresh);
+    fresh = null;
+    if (!el) return;
+    el.classList.add('is-new');
+    setTimeout(() => el.classList.remove('is-new'), 1600);
+    const pad = 24;
+    const left = el.offsetLeft - pad, top = el.offsetTop - pad;
+    if (left < area.scrollLeft || el.offsetLeft + el.offsetWidth + pad > area.scrollLeft + area.clientWidth
+      || top < area.scrollTop || el.offsetTop + el.offsetHeight + pad > area.scrollTop + area.clientHeight) {
+      area.scrollTo({ left: Math.max(0, left), top: Math.max(0, top), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    }
+  }
+  renderTray();
+
   const linkBtn = h('button', { class: 'btn btn--small', 'aria-pressed': 'false', onclick: () => {
     linkMode = !linkMode;
     linkBtn.setAttribute('aria-pressed', String(linkMode));
@@ -234,6 +336,7 @@ export function mount(host, { caseId, back = 'map', levelId } = {}) {
   // back to a puzzle you already solved goes to the map instead of replaying it
   if (back === 'puzzle' && levelId && cs.solved[levelId]) back = 'map';
   const backTo = () => (back === 'puzzle' ? go('puzzle', { caseId, levelId }) : back === 'office' ? go('office') : go('map', { caseId }));
+  const area = h('div', { class: 'board-area' }, cork);
   const root = h('section', { class: 'screen board-screen' },
     h('header', { class: 'topbar' },
       backButton(back === 'puzzle' ? 'Back to the puzzle' : back === 'office' ? 'Office' : 'Case map', backTo, back === 'puzzle' ? 'Puzzle' : back === 'office' ? 'Office' : 'Map'),
@@ -245,7 +348,8 @@ export function mount(host, { caseId, back = 'map', levelId } = {}) {
     h('div', { class: 'board-legend', 'aria-label': 'Thread colours' },
       h('span', { class: 'bl-item' }, h('i', { class: 'bl-swatch bl-auto', 'aria-hidden': 'true' }), 'Dark dashed: the trail you found'),
       h('span', { class: 'bl-item' }, h('i', { class: 'bl-swatch bl-mine', 'aria-hidden': 'true' }), 'Bright red: your links')),
-    h('div', { class: 'board-area' }, cork));
+    tray,
+    area);
   host.append(root);
 
   // the board explained, once (state().seenBoardHelp), and again from the "?" button
@@ -259,8 +363,8 @@ export function mount(host, { caseId, back = 'map', levelId } = {}) {
         h('div', { class: 'bh-art', html: BOARD_ART }),
         h('ol', { class: 'ht-steps' },
           step(1, 'The dark dashed thread is automatic.', 'It joins your clues in the order you found them.'),
-          step(2, 'The bright red thread is yours.', 'It is your theory. Tap "Red thread", then tap two cards, for example a clue and a suspect, to tie them together.'),
-          step(3, 'Changed your mind?', 'Tap a bright thread to remove it.'),
+          step(2, 'The bright red thread is yours.', 'It is your theory. Tap "Red thread", then tap two cards, for example a clue and a suspect, to tie them together. Tap a bright thread to remove it.'),
+          step(3, 'Nobody starts on the board.', 'Persons of interest turn up as your clues name them. They wait in the tray above the board until you pin them yourself: tap Pin, or drag one onto the cork.'),
           step(4, 'Arrange the board.', coarse ? 'Drag a card by its dotted grip. Stamp a suspect as Suspect, Cleared or Unsure.' : 'Drag cards around. Stamp a suspect as Suspect, Cleared or Unsure.'),
           step(5, 'Read a clue again.', 'Tap a clue card to see its photo and full text.')),
         h('p', { class: 'ht-note' }, 'What your links are for: in the deduction room, each suspect shows the clues you tied to them. They are your notes, not the answer.'),

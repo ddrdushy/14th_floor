@@ -97,6 +97,8 @@ export function caseState(caseId) {
       accusation: null,
       reopened: 0,
       board: { positions: {}, links: [], marks: {} },
+      // persons of interest the player has pinned to the board (see suspectBoard in data/cases.js)
+      pinnedSuspects: [],
       openedAt: Date.now(),
     };
   }

@@ -3,13 +3,13 @@
 import { h, toast, fmtTime, isDev } from '../core/ui.js';
 import { go } from '../core/router.js';
 import { state, save } from '../core/state.js';
-import { CASES, getCaseState, findLevel, resolveCaseId } from '../data/cases.js';
+import { CASES, getCaseState, findLevel, resolveCaseId, suspectsRevealedBy, pinnedSuspectIds, pinSuspect } from '../data/cases.js';
 import { GAMES, CATEGORY_OF } from '../games/registry.js';
 import { rngFor, mulberry32, hashStr } from '../core/rng.js';
-import { paintInto } from '../core/assets.js';
+import { paintInto, hasImage, imgUrl } from '../core/assets.js';
 import { sfx } from '../core/audio.js';
 import { app } from '../core/app.js';
-import { specialtyOf } from '../core/avatar.js';
+import { specialtyOf, avatarSvg } from '../core/avatar.js';
 import { backButton, icon } from '../core/nav.js';
 import { openLightbox, openEvidenceFile, evIcon } from '../core/evidence-viewer.js';
 import { resolveHowTo, showGameHowTo, showLoopTutorial, needsLoopTutorial, markLoopSeen, seenHowTo, markHowToSeen, closeHowTo, howToButton, goalLine, isHowToOpen } from '../core/howto.js';
@@ -275,10 +275,53 @@ export async function mount(host, { caseId, levelId }) {
     // CSS-driven ring so it shows even if animation frames are slow
     hotspot.classList.add('is-revealed');
 
+    // anyone this exhibit makes a person of interest, one at a time, after the exhibit is pinned
+    const known = new Set(pinnedSuspectIds(c, cs));
+    const newcomers = suspectsRevealedBy(c, levelId).filter((s) => !known.has(s.id));
+
     function pin() {
       sfx.pin();
       card.classList.add('is-pinned');
       status.textContent = 'Pinned to the case board. Take your time.';
+      nextPerson();
+    }
+
+    function nextPerson() {
+      const s = newcomers.shift();
+      if (!s) { showNext(); return; }
+      const face = h('div', { class: 'poi-photo' });
+      hasImage(s.img).then((ok) => { if (ok) face.style.backgroundImage = `url(${imgUrl(s.img)})`; else face.innerHTML = avatarSvg(s.look); });
+      const poi = h('article', { class: 'poi-card', 'aria-label': `New person of interest: ${s.name}` },
+        h('span', { class: 'pzr-stamp poi-stamp', 'aria-hidden': 'true' }, 'Pinned'),
+        face,
+        h('div', { class: 'poi-text' },
+          h('p', { class: 'poi-kicker' }, 'New person of interest'),
+          h('h3', {}, s.name),
+          h('p', { class: 'poi-role' }, s.role),
+          s.revealLine ? h('p', { class: 'poi-line' }, s.revealLine) : null));
+      status.before(poi);
+      status.textContent = 'Someone new in the file.';
+      const pinPerson = h('button', { class: 'btn btn--primary pzr-pin poi-pin', type: 'button', onclick: () => {
+        pinSuspect(c, cs, s.id);
+        save();
+        sfx.pin();
+        poi.classList.add('is-pinned');
+        status.textContent = `${s.name} is on the case board.`;
+        nextPerson();
+      } }, `Pin ${s.name} to the board`);
+      const later = h('button', { class: 'btn btn--ghost poi-later', type: 'button', onclick: () => {
+        poi.classList.add('is-later');
+        status.textContent = `${s.name} waits in the tray on the case board. Pin them when you are ready.`;
+        nextPerson();
+      } }, 'Later');
+      actions.replaceChildren(pinPerson, later);
+      requestAnimationFrame(() => {
+        poi.scrollIntoView?.({ block: window.innerWidth <= 760 ? 'start' : 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        pinPerson.focus({ preventScroll: true });
+      });
+    }
+
+    function showNext() {
       const nextBtn = h('button', { class: 'btn btn--primary pzr-next', type: 'button', onclick: () => go('map', { caseId }) }, 'Next lead');
       actions.replaceChildren(
         nextBtn,

@@ -202,6 +202,11 @@
 .mf-initials { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; color: var(--ink-soft); }
 .mf-face.has-img .mf-initials { display: none; }
 .mf-sname { font-family: var(--font-doc); font-size: 0.8rem; line-height: 1.1; text-align: center; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* persons of interest: known but not pinned yet, and the slot for the ones still to find */
+.mf-suspect.is-waiting .mf-face { border-style: dashed; border-color: var(--manila-dark); opacity: 0.72; }
+.mf-suspect.is-unknown .mf-face { background: rgba(29, 26, 22, 0.1); border: 3px dashed rgba(74, 68, 59, 0.55); box-shadow: none; }
+.mf-suspect.is-unknown .mf-initials { color: var(--ink-soft); opacity: 0.8; }
+.mf-suspect.is-unknown .mf-sname { white-space: normal; color: var(--ink-soft); }
 .mf-more { display: flex; flex-direction: column; gap: 16px; }
 .mf-facts { margin: 0; display: grid; gap: 8px; }
 .mf-facts dt { font-size: 0.8rem; font-weight: 700; color: var(--ink-soft); }
@@ -245,6 +250,7 @@
 .map-screen:not(.is-docked) .mf-suspects ul { gap: 6px; flex-wrap: nowrap; }
 .map-screen:not(.is-docked) .mf-suspect { width: auto; }
 .map-screen:not(.is-docked) .mf-face { width: 36px; height: 40px; border-width: 2px; }
+.map-screen:not(.is-docked) .mf-suspect.is-unknown .mf-face { border-width: 2px; }
 .map-screen:not(.is-docked) .mf-initials { font-size: 0.95rem; }
 .map-screen:not(.is-docked) .mf-sname { display: none; }
 .map-screen:not(.is-docked) .mf-more { flex: 1 1 100%; gap: 12px; }

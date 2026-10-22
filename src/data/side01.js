@@ -25,21 +25,29 @@ export const SIDE01 = {
     confirmButton: 'Hand them over',
   },
 
+  // revealedBy: the level whose exhibit first makes this person a person of interest (see suspectsRevealedBy
+  // in cases.js). Until it is solved they are not on the map, the board or the office wall.
   suspects: [
     {
       id: 'ahlan', name: 'Wong Siew Lan', role: 'Stall cashier, 34. Ah Hock\'s niece', img: 'sus_ahlan',
+      revealedBy: 'sd03',
+      revealLine: "Three weeks of short counts, all in her handwriting. She is the one who counts the tin.",
       look: { skin: '#f1d2b6', hair: 'long', hairColor: '#3b2a1f', coat: 'batik', eyewear: 'round', mark: 'none' },
       motive: 'Owes RM 22,000 to an online betting site. Counts the money every night.',
       claim: 'Says she counted RM 41,600 at 11 PM, went home at 11:30 and never touched a sen.',
     },
     {
       id: 'ravi', name: 'Ravi Chandran', role: 'Rival durian seller, 41', img: 'sus_ravi',
+      revealedBy: 'sd02',
+      revealLine: "Ah Hock wrote his name in pencil the night it happened. Ravi says the corner is his, again.",
       look: { skin: '#8d5a3a', hair: 'short', hairColor: '#151210', coat: 'leather', eyewear: 'none', mark: 'moustache' },
       motive: 'Wants Ah Hock\'s corner pitch. Shouted at him at 10 PM in front of customers.',
       claim: 'Says he was at his scale the whole night and his own camera will prove it.',
     },
     {
       id: 'bobby', name: 'Bobby Tan', role: 'Stall helper, 23', img: 'sus_bobby',
+      revealedBy: 'sd04',
+      revealLine: "Ah Hock's helpers wear green. The one on shift that night says he never left the front table.",
       look: { skin: '#f1d2b6', hair: 'side-part', hairColor: '#c9a24a', coat: 'leather', eyewear: 'none', mark: 'none' },
       motive: 'None known. Ah Hock calls him the son he never had.',
       claim: 'Says he was opening durians at the front table until 1 AM, when he found Ah Hock asleep in his chair.',

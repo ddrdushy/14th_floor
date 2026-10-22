@@ -54,27 +54,37 @@ export const CASE03 = {
     ],
   },
 
+  // revealedBy: the level whose exhibit first makes this person a person of interest (see suspectsRevealedBy
+  // in cases.js). Until it is solved they are not on the map, the board or the office wall.
   suspects: [
     {
       id: 'kenny', name: 'Kenny Lim', role: 'Uncle Lim\'s nephew, 45', img: 'sus_kenny',
+      revealedBy: 'c3_06',
+      revealLine: "He has signed away his half of No. 96. The deal dies unless his uncle's half sells too.",
       look: { skin: '#f1d2b6', hair: 'side-part', hairColor: '#3b2a1f', coat: 'batik', eyewear: 'none', mark: 'none' },
       motive: 'Owes RM 60,000 to a moneylender in Jelutong. Signed to sell his half of No. 96 to Sinar Heritage; the deal needed his uncle\'s half too.',
       claim: 'Says he was asleep at home in Jelutong from midnight, and that his key to No. 96 has never left his hands.',
     },
     {
       id: 'cheah', name: 'Cheah Siew Lan', role: 'Joss paper and coffins, No. 94. 58', img: 'sus_cheah',
+      revealedBy: 'c3_05',
+      revealLine: "She burned paper three metres from Lim's back door at midnight. She lost two court cases to him.",
       look: { skin: '#f1d2b6', hair: 'short', hairColor: '#9a9a9a', coat: 'batik', eyewear: 'round', mark: 'none' },
       motive: 'Seven years of quarrelling with Lim over the party wall and his gutter. Two court cases, both lost.',
       claim: 'Says she burned joss paper at midnight, slept from half past twelve and smelled nothing until the sirens.',
     },
     {
       id: 'melissa', name: 'Melissa Ong', role: 'Project director, Sinar Heritage Hotels. 41', img: 'sus_melissa',
+      revealedBy: 'c3_07',
+      revealLine: "M. Ong signed for two copies of the back-door key. Melissa Ong has told the papers nobody at Sinar ever had one.",
       look: { skin: '#f1d2b6', hair: 'bun', hairColor: '#151210', coat: 'blazer', eyewear: 'none', mark: 'none' },
       motive: 'Her hotel needs the whole row. No. 96 was the only owner on it who would not sell.',
       claim: 'Says she was asleep in her Gurney Drive condo by eleven, and that nobody from Sinar has ever had a key to No. 96.',
     },
     {
       id: 'shahrul', name: 'Shahrul Nizam', role: 'Night guard, Kawalan Sentosa. 29', img: 'sus_shahrul',
+      revealedBy: 'c3_04',
+      revealLine: "The boot is the one issued to the guards on the hotel site next door. Its night guard says he never left his cabin.",
       look: { skin: '#b97f55', hair: 'short', hairColor: '#151210', coat: 'leather', eyewear: 'none', mark: 'stubble' },
       motive: 'None known. RM 1,700 a month. A daughter born in June.',
       claim: 'Says he never left the guard cabin on the hotel site next door between midnight and dawn, and saw nobody in the lane.',

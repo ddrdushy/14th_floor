@@ -4,7 +4,7 @@ import { h, modal } from '../core/ui.js';
 import { go } from '../core/router.js';
 import { backButton } from '../core/nav.js';
 import { save } from '../core/state.js';
-import { CASES, getCaseState, activeLevels, judge, caseHeading, resolveCaseId } from '../data/cases.js';
+import { CASES, getCaseState, activeLevels, judge, caseHeading, resolveCaseId, revealAllSuspects } from '../data/cases.js';
 import { avatarSvg } from '../core/avatar.js';
 import { hasImage, imgUrl } from '../core/assets.js';
 import { sfx } from '../core/audio.js';
@@ -28,6 +28,9 @@ export function mount(host, { caseId } = {}) {
   const chosen = new Set();
   const answers = {};
   const evidence = activeLevels(c, cs).filter((l) => cs.solved[l.id]);
+  // everyone stands in this room. Normally the clues have named them all by now; an older save or a
+  // deep link may not have, so the rest become known here (and wait in the board's tray, unpinned).
+  if (revealAllSuspects(c, cs)) save();
   app.music?.play?.('deduction');
 
   const charge = h('button', { class: 'btn btn--primary', disabled: true, onclick: confirm }, D.button || 'Make the arrests');

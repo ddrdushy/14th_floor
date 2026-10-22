@@ -20,21 +20,29 @@ export const CASE01 = {
     confirm: 'Farah will charge {names}. Once the file is closed, the city moves on.',
   },
 
+  // revealedBy: the level whose exhibit first makes this person a person of interest (see suspectsRevealedBy
+  // in cases.js). Until it is solved they are not on the map, the board or the office wall.
   suspects: [
     {
       id: 'shanti', name: 'Dr. Shanti Menon', role: 'Clinic partner, 44', img: 'sus_shanti',
+      revealedBy: 'l04',
+      revealLine: "She told the police she never went near the balcony. The door handle remembers her.",
       look: { skin: '#8d5a3a', hair: 'bun', hairColor: '#151210', coat: 'blazer', eyewear: 'square', mark: 'none' },
       motive: 'Goh had found money missing from the clinic accounts.',
       claim: 'Visited at 9 PM to talk about the clinic. Says she left by 9:40.',
     },
     {
       id: 'rizal', name: 'Rizal Hamdan', role: 'Night security guard, 31', img: 'sus_rizal',
+      revealedBy: 'l06',
+      revealLine: "A young guard with a torch knocked at midnight to ask what the neighbour had heard. That night the guard was Rizal Hamdan.",
       look: { skin: '#b97f55', hair: 'short', hairColor: '#151210', coat: 'leather', eyewear: 'none', mark: 'moustache' },
       motive: 'None known. Earns RM 1,900 a month.',
       claim: 'Says he never left the guardhouse between 11 PM and midnight.',
     },
     {
       id: 'jason', name: 'Jason Ooi', role: 'Property agent, 36', img: 'sus_jason',
+      revealedBy: 'l07',
+      revealLine: "At 11:40 he was in the empty unit next door with a clipboard. He says he never met Dr. Goh.",
       look: { skin: '#f1d2b6', hair: 'side-part', hairColor: '#151210', coat: 'blazer', eyewear: 'none', mark: 'none' },
       motive: 'None known. Says he had never met Dr. Goh.',
       claim: 'Was showing Unit 15-2 to a buyer who never arrived. Says he left at 11:30.',

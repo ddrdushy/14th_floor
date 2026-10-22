@@ -54,6 +54,7 @@ Return `{ destroy, hint, devSolve }`. Register it in a registry file.
 Cases are played in the order of `CASE_ORDER` in `src/data/cases.js` (Case 1, the side case, Case 2, Case 3). When one closes, the office phone rings; answering it plays the next case's `opening` cinematic and opens its map. Copy the shape of `src/data/case02.js`:
 
 - `suspects`, `levels` (each level = one game + the evidence it reveals + image hotspot), `hints`, `label` (optional, e.g. "Side case")
+- each suspect has `revealedBy: '<level id>'`, the level whose exhibit first makes them a person of interest, and an optional one-line `revealLine`. Nobody is on the map, the board or the office wall before that level is solved; then a "New person of interest" card offers to pin them, and anyone not pinned waits in the board's tray. Spread them over the first half of the case, never all on level 1, and never on a flag-conditional level. Pins are saved in `cases[id].pinnedSuspects`.
 - `opening`: cinematic panels; the last panel can be `{ title: { kicker: 'Case 2', name: 'Container 47' } }`
 - `deduction`: copy for the deduction room, plus optional extra `questions` (e.g. "Where is Azman hiding?") with options
 - `flagNames` + `flags({ charged, answers })`: the hidden story flags this case sets
