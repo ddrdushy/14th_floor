@@ -500,6 +500,11 @@ const PLACES = [
     districts: ['George Town', 'Lebuh Chulia', 'Lebuh Armenian', 'Pengkalan Weld', 'Jelutong', 'Air Itam', 'Lebuh Campbell', 'Pulau Tikus'],
     roads: ['Lebuh Chulia', 'Jalan Penang', 'Lebuh Pantai', 'Jalan Masjid Kapitan Keling'], waterName: 'Selat Utara',
   },
+  {
+    match: /colombo|sri lanka/i, grid: [36, 50], angle: -12, water: 'coast-left', yards: true,
+    districts: ['Pettah', 'Fort', 'Kotahena', 'Slave Island', 'Kollupitiya', 'Bloemendhal', 'Port City', 'Mount Lavinia', 'Wellawatte', 'Borella'],
+    roads: ['Galle Road', 'Sea Street', 'Main Street', 'Sir James Peiris Mawatha', 'Baseline Road'], waterName: 'Indian Ocean',
+  },
 ];
 
 function cityMap(c) {

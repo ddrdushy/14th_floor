@@ -16,6 +16,17 @@ export const VOICE_OVERRIDES = {
   'Penang-aa? Anga mazhai inga vida mosam.': { say: 'பினாங்-ஆ? அங்க மழை இங்க விட மோசம்.' },
   'Saapittu poonga.': { say: 'சாப்பிட்டு போங்க.' },
   'Thambi! Andha durian-a mela kondu poga koodaadhu!': { say: 'தம்பி! அந்த டுரியனை மேல கொண்டு போகக் கூடாது!' },
+  'Thambi, unakku oru parcel vandhirukku. Colombo-la irundhu.': { say: 'தம்பி, உனக்கு ஒரு பார்சல் வந்திருக்கு. கொழும்புல இருந்து.', lang: 'ta' },
+
+  // Sri Lankan Tamil (Tharshini Yogeswaran, Case 4)
+  'Appa poyittaar.': { say: 'அப்பா போயிட்டார்.', lang: 'ta' },
+
+  // Sinhala (Case 4: the tuk-tuk driver, Inspector Ruwan Herath)
+  'Malli, koheda yanne?': { say: 'මල්ලි, කොහෙද යන්නේ?', lang: 'si' },
+  'Hari. Api balamu.': { say: 'හරි. අපි බලමු.', lang: 'si' },
+
+  // Sri Lankan Malay (Uncle Saldin, Case 4): Latin script, only the label
+  'Orang Malaysia tu datang lagi semalam. Dua teh. Minum satu.': { lang: 'ms' },
 
   // Cantonese (Ken Lim, Lau Kim Hock)
   'Ah Hock Suk hai ngo suk fu ah. Bong ngo yat ci. Ngo kau neih.': { say: '阿Hock叔係我叔父啊。幫我一次。我求你。' },
@@ -32,5 +43,6 @@ export const VOICE_CAST = {
   'intro|Woman': 'Rachel Goh',
   'case02:opening|Woman': 'Salmah',
   'case03:opening|Woman': 'Jo Lim',
+  'case04:opening|Woman': 'Tharshini Yogeswaran',
   '???': 'Daniel Raj',
 };

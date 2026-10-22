@@ -1,0 +1,85 @@
+/* Fuse box: a dark distribution board on the paper sheet. ON breakers glow sodium amber. */
+.fb-clue { position: relative; margin: 0 0 12px; padding: 10px 12px 10px 30px; background: #f6e7b8; font-family: var(--font-doc); font-size: 0.95rem; line-height: 1.45; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18); transform: rotate(-0.4deg); max-width: 60ch; }
+.fb-clue-pin { position: absolute; left: 10px; top: 13px; width: 10px; height: 10px; border-radius: 50%; background: var(--thread); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); }
+
+.fb-legend { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; font-size: 0.9rem; color: var(--ink-soft); }
+.fb-glyph { flex: none; }
+.fb-glyph rect { fill: #d8cfb9; }
+.fb-glyph rect.is-on { fill: var(--sodium); }
+.fb-glyph rect.is-me { fill: var(--thread); }
+
+.fb-box {
+  --fb-gap: 6px;
+  position: relative; width: 100%; max-width: min(440px, calc(var(--n, 4) * 74px + 80px)); margin: 0 auto; padding: 14px 16px 12px;
+  background:
+    radial-gradient(circle at 10px 10px, #8d979d 2px, #3b4449 3px, transparent 4px),
+    radial-gradient(circle at calc(100% - 10px) 10px, #8d979d 2px, #3b4449 3px, transparent 4px),
+    radial-gradient(circle at 10px calc(100% - 10px), #8d979d 2px, #3b4449 3px, transparent 4px),
+    radial-gradient(circle at calc(100% - 10px) calc(100% - 10px), #8d979d 2px, #3b4449 3px, transparent 4px),
+    linear-gradient(160deg, #3d464c, #20272c);
+  border-radius: 10px; box-shadow: inset 0 0 0 4px #556066, 0 10px 24px rgba(0, 0, 0, 0.35); color: var(--paper);
+}
+.fb-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 4px 10px; }
+.fb-plate { font-family: var(--font-doc); font-size: 0.78rem; letter-spacing: 0.08em; color: #1d1a16; background: #c9c1aa; padding: 2px 8px; border-radius: 2px; box-shadow: inset 0 0 0 1px #8f8670; }
+.fb-count { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; letter-spacing: 0.03em; color: var(--sodium); }
+.fb-count.is-over { color: #ff8d8d; }
+
+/* the lamp strip: one bulb per floor (row), top floor first */
+.fb-floors { list-style: none; margin: 0 0 12px; padding: 8px 10px; display: flex; justify-content: space-around; gap: 6px; background: #0b0f12; border-radius: 6px; box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6); }
+.fb-lamp { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 0; }
+.fb-bulb { width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #4a4f52, #1e2225 70%); border: 1px solid #3a4248; transition: background 0.25s, box-shadow 0.25s; }
+.fb-fl { font-family: var(--font-doc); font-size: 0.72rem; color: rgba(237, 230, 214, 0.45); }
+.fb-lamp.is-lit .fb-bulb { background: radial-gradient(circle at 35% 30%, #fff6d8, #f2c230 45%, #c97a12 80%); border-color: #f6cf8c; box-shadow: 0 0 12px 3px rgba(242, 194, 48, 0.55); }
+.fb-lamp.is-lit .fb-fl { color: var(--sodium); }
+
+/* the breakers */
+.fb-grid { display: grid; gap: var(--fb-gap); }
+.fb-row { display: grid; grid-template-columns: 22px repeat(var(--n, 4), minmax(0, 1fr)); gap: var(--fb-gap); align-items: center; }
+.fb-tag { font-family: var(--font-doc); font-size: 0.75rem; color: rgba(237, 230, 214, 0.45); text-align: center; transition: color 0.25s; }
+.fb-row.is-lit .fb-tag { color: var(--sodium); }
+.fb-brk {
+  position: relative; display: grid; place-items: center; min-height: 48px; aspect-ratio: 1; width: 100%; padding: 0; margin: 0;
+  border: 2px solid #3a444b; border-radius: 6px; background: linear-gradient(180deg, #1b2226, #101518); color: inherit;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.4); transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
+}
+.fb-slot { position: relative; width: 34%; height: 70%; border-radius: 4px; background: #05080a; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.9); }
+.fb-lever {
+  position: absolute; left: -12%; right: -12%; top: 52%; height: 44%; border-radius: 3px;
+  background: linear-gradient(180deg, #7c858b, #4c555b); box-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
+  transition: top 0.12s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.fb-brk.is-on { border-color: #f6cf8c; background: radial-gradient(circle at 50% 40%, #f8c56a, #e8a33d 55%, #b26f17); box-shadow: 0 0 14px rgba(232, 163, 61, 0.55), inset 0 -3px 0 rgba(120, 70, 10, 0.45); }
+.fb-brk.is-on .fb-slot { background: #6b3f08; }
+.fb-brk.is-on .fb-lever { top: 4%; background: linear-gradient(180deg, #fffaf0, #e6d8b8); }
+.fb-brk:active .fb-lever { filter: brightness(0.9); }
+.fb-brk:focus-visible { outline: 3px solid #fff3d6; outline-offset: 2px; z-index: 1; }
+/* which breakers this one will switch (mouse hover or keyboard focus) */
+.fb-brk.is-reach::after { content: ''; position: absolute; inset: -5px; border: 2px dashed rgba(159, 179, 191, 0.85); border-radius: 8px; pointer-events: none; }
+/* hint: a red ring that pulses */
+.fb-brk.is-hint::before { content: ''; position: absolute; inset: -6px; border: 4px solid var(--thread-bright); border-radius: 9px; pointer-events: none; animation: fb-pulse 0.9s ease-in-out infinite alternate; }
+@keyframes fb-pulse { from { transform: scale(0.94); opacity: 0.55; } to { transform: scale(1.04); opacity: 1; } }
+
+.fb-tools { display: flex; justify-content: center; gap: 10px; margin-top: 12px; }
+.fb-tool { min-width: 96px; color: var(--paper); }
+
+/* solved: the floors light up one after another */
+.fb-box.is-solved { box-shadow: inset 0 0 0 4px #556066, 0 0 0 3px rgba(232, 163, 61, 0.35), 0 10px 30px rgba(232, 163, 61, 0.25); }
+.fb-box.is-solved .fb-bulb { animation: fb-flash 0.5s calc(var(--i, 0) * 0.09s) ease-out 2; }
+.fb-box.is-solved .fb-brk { pointer-events: none; }
+@keyframes fb-flash { 0% { transform: scale(1); } 40% { transform: scale(1.35); box-shadow: 0 0 22px 8px rgba(242, 194, 48, 0.75); } 100% { transform: scale(1); } }
+
+@media (max-width: 420px) {
+  .fb-box { --fb-gap: 4px; padding: 12px 10px 10px; }
+  .fb-row { grid-template-columns: 18px repeat(var(--n, 4), minmax(0, 1fr)); }
+  .fb-tag { font-size: 0.68rem; }
+  .fb-bulb { width: 15px; height: 15px; }
+}
+@media (pointer: coarse) {
+  .fb-brk { min-height: 52px; }
+  .fb-tool { min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fb-brk.is-hint::before { animation: none; opacity: 1; transform: none; border-width: 4px; }
+  .fb-lever, .fb-brk, .fb-bulb { transition: none; }
+  .fb-box.is-solved .fb-bulb { animation: none; }
+}

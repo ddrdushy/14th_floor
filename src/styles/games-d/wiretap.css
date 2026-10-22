@@ -1,0 +1,99 @@
+/* Wire Tap: a telephone exchange distribution box. Prefix: wt- */
+.wt-clue { position: relative; margin: 0 0 12px; padding: 10px 12px 10px 30px; background: #f6e7b8; font-family: var(--font-doc); font-size: 0.95rem; line-height: 1.45; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18); transform: rotate(-0.4deg); max-width: 60ch; }
+.wt-clue-pin { position: absolute; left: 10px; top: 13px; width: 10px; height: 10px; border-radius: 50%; background: var(--thread); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); }
+
+.wt-box, .wt-howto {
+  --wt-live: #f4b544;
+  --wt-dead: #7d725f;
+  --wt-case: #0d1114;
+  --wt-tile: #2b343a;
+}
+.wt-box {
+  position: relative; width: min(100%, calc(var(--wt-n, 5) * 66px + 24px)); margin: 0 auto;
+  padding: 8px 10px 10px; border-radius: 10px;
+  background: linear-gradient(160deg, #46525a, #222a2f 70%);
+  box-shadow: inset 0 0 0 3px #59656c, inset 0 0 0 5px #1b2125, 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+.wt-plate { display: flex; justify-content: space-between; gap: 8px; margin: 0 2px 6px; font-family: var(--font-display); font-weight: 700; font-size: 0.74rem; letter-spacing: 0.14em; color: #b9c3c8; opacity: 0.8; }
+.wt-grid { display: grid; gap: 3px; padding: 4px; background: #12171a; border-radius: 6px; touch-action: manipulation; }
+.wt-row { display: grid; grid-template-columns: repeat(var(--wt-n, 5), minmax(0, 1fr)); gap: 3px; }
+.wt-tile {
+  position: relative; aspect-ratio: 1; min-width: 0; min-height: 36px; padding: 0; border: 0; border-radius: 5px; overflow: hidden;
+  background: radial-gradient(circle at 30% 25%, #36414a, var(--wt-tile) 70%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 -2px 0 rgba(0, 0, 0, 0.35);
+  cursor: pointer; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+}
+.wt-tile:focus-visible { outline: 3px solid var(--sodium); outline-offset: -3px; z-index: 1; }
+.wt-wire, .wt-top { position: absolute; inset: 0; pointer-events: none; }
+.wt-wire { transition: transform 0.16s var(--ease); }
+.wt-wire svg, .wt-top svg { width: 100%; height: 100%; display: block; }
+.wt-case { fill: none; stroke: var(--wt-case); stroke-width: 19; stroke-linecap: butt; }
+.wt-core { fill: none; stroke: var(--wt-dead); stroke-width: 9; stroke-linecap: butt; transition: stroke 0.2s; }
+.wt-knot { fill: var(--wt-dead); stroke: var(--wt-case); stroke-width: 4; transition: fill 0.2s; }
+.wt-cap { fill: #1a2024; stroke: var(--wt-dead); stroke-width: 5; }
+.wt-tile.is-lit .wt-core, .wt-ex.is-lit .wt-core { stroke: var(--wt-live); }
+.wt-tile.is-lit .wt-knot, .wt-ex.is-lit .wt-knot { fill: var(--wt-live); }
+.wt-tile.is-lit .wt-cap, .wt-ex.is-lit .wt-cap { stroke: var(--wt-live); fill: #3a2c12; }
+.wt-tile.is-lit .wt-wire { filter: drop-shadow(0 0 3px rgba(244, 181, 68, 0.55)); }
+.wt-spark { display: none; fill: #fff6c8; stroke: #ff8a1f; stroke-width: 1.6; }
+.wt-spark.is-on { display: inline; animation: wt-spark 0.5s steps(2) infinite; transform-box: fill-box; }
+@keyframes wt-spark { 50% { opacity: 0.35; } }
+
+.wt-tap rect { fill: #b08a3c; stroke: #3b2c10; stroke-width: 3; }
+.wt-tap circle { fill: #e6c879; stroke: #3b2c10; stroke-width: 1.5; }
+.wt-tap path { stroke: #3b2c10; stroke-width: 4; stroke-linecap: round; }
+.wt-phone circle { fill: #1a1f23; stroke: var(--wt-dead); stroke-width: 3; }
+.wt-phone rect { fill: #8a8070; }
+.wt-phone .wt-handle { fill: none; stroke: #8a8070; stroke-width: 8; stroke-linecap: round; }
+.wt-tile.is-lit .wt-phone circle { stroke: var(--wt-live); }
+.wt-tile.is-lit .wt-phone rect, .wt-ex.is-lit .wt-phone rect { fill: var(--wt-live); }
+.wt-tile.is-lit .wt-phone .wt-handle { stroke: var(--wt-live); }
+.wt-tile.is-lit .wt-phone { animation: wt-ring 1.6s ease-in-out infinite; transform-origin: 50px 50px; }
+@keyframes wt-ring { 0%, 70%, 100% { transform: rotate(0); } 74% { transform: rotate(-9deg); } 78% { transform: rotate(9deg); } 82% { transform: rotate(-7deg); } 86% { transform: rotate(5deg); } }
+
+/* pins: a red pushpin head in the corner; hint pins are brass */
+.wt-pin { position: absolute; top: 4px; right: 4px; width: 9px; height: 9px; border-radius: 50%; background: var(--thread-bright); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6), inset -1px -1px 0 rgba(0, 0, 0, 0.3); display: none; }
+.wt-tile.is-pinned { box-shadow: inset 0 0 0 2px rgba(216, 50, 61, 0.55), inset 0 -2px 0 rgba(0, 0, 0, 0.35); }
+.wt-tile.is-pinned .wt-pin { display: block; }
+.wt-tile.is-hinted { box-shadow: inset 0 0 0 2px rgba(232, 163, 61, 0.7); }
+.wt-tile.is-hinted .wt-pin { background: var(--sodium); }
+.wt-grid.is-marking .wt-tile { cursor: cell; }
+.wt-grid.is-marking { box-shadow: 0 0 0 2px var(--thread); }
+.wt-tile.is-nudge { animation: wt-nudge 0.32s; }
+@keyframes wt-nudge { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+
+.wt-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 12px auto 0; max-width: calc(var(--wt-n, 5) * 66px + 24px); }
+.wt-mark { min-height: 44px; gap: 8px; color: var(--ink); }
+.wt-mark-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--ink-soft); background: transparent; }
+.wt-mark.is-on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.wt-mark.is-on .wt-mark-dot { background: var(--thread-bright); border-color: var(--thread-bright); }
+.wt-counts { display: flex; gap: 14px; font-family: var(--font-doc); font-size: 0.92rem; color: var(--ink-soft); }
+.wt-count.is-zero { color: var(--ok); }
+.wt-status { text-align: center; }
+
+/* solved: a pulse of current sweeps the box */
+.wt-box.is-solved { box-shadow: inset 0 0 0 3px #59656c, inset 0 0 0 5px #1b2125, 0 0 0 3px rgba(244, 181, 68, 0.6), 0 10px 30px rgba(244, 181, 68, 0.3); transition: box-shadow 0.4s; }
+.wt-grid.is-solved .wt-tile { cursor: default; animation: wt-flash 0.7s ease-out both; }
+.wt-grid.is-solved .wt-row:nth-child(2) .wt-tile { animation-delay: 0.05s; }
+.wt-grid.is-solved .wt-row:nth-child(3) .wt-tile { animation-delay: 0.1s; }
+.wt-grid.is-solved .wt-row:nth-child(4) .wt-tile { animation-delay: 0.15s; }
+.wt-grid.is-solved .wt-row:nth-child(5) .wt-tile { animation-delay: 0.2s; }
+.wt-grid.is-solved .wt-row:nth-child(6) .wt-tile { animation-delay: 0.25s; }
+.wt-grid.is-solved .wt-row:nth-child(7) .wt-tile { animation-delay: 0.3s; }
+.wt-grid.is-solved .wt-row:nth-child(8) .wt-tile { animation-delay: 0.35s; }
+@keyframes wt-flash { 0% { background: var(--wt-tile); } 35% { background: #6a5426; } 100% { background: radial-gradient(circle at 30% 25%, #36414a, var(--wt-tile) 70%); } }
+
+.wt-howto { display: flex; justify-content: center; }
+.wt-howto .wt-spark.is-on { animation: none; }
+
+@media (max-width: 420px) {
+  /* use the sheet's side padding too, so an 8 x 8 box keeps 40px tiles on a 360px phone */
+  .wt-box { width: calc(100% + 20px); margin: 0 -10px; padding: 4px 3px 4px; border-radius: 8px; }
+  .wt-grid, .wt-row { gap: 1px; }
+  .wt-grid { padding: 2px; }
+  .wt-plate { font-size: 0.66rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wt-wire, .wt-core, .wt-knot { transition: none; }
+  .wt-spark.is-on, .wt-tile.is-lit .wt-phone, .wt-tile.is-nudge, .wt-grid.is-solved .wt-tile { animation: none; }
+}

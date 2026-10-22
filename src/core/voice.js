@@ -92,7 +92,7 @@ export function guessLang(line) {
   return bestScore >= 0.25 ? best : 'en';
 }
 
-export const LANG_LABELS = { en: 'English', ms: 'Malay', ta: 'Tamil', yue: 'Cantonese', 'zh-hokkien': 'Penang Hokkien', zh: 'Chinese' };
+export const LANG_LABELS = { en: 'English', ms: 'Malay', ta: 'Tamil', yue: 'Cantonese', 'zh-hokkien': 'Penang Hokkien', zh: 'Chinese', si: 'Sinhala' };
 
 // ---------- the player's voice ----------
 // "You" lines are spoken by the player's detective, so they can have a voice per portrait

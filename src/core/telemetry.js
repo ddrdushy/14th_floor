@@ -76,6 +76,7 @@ const RULES = {
   side01: (f) => !f.BOBBY_FREE && !f.AHLAN_WRONGED && !f.RAVI_WRONGED,
   case02: (f) => !f.TONY_FREE && !f.NORHAYATI_FREE && !f.FAIZAL_WRONGED && !!f.AZMAN_ALIVE,
   case03: (f) => !f.MELISSA_FREE && !f.SHAHRUL_FREE && !f.KENNY_WRONGED && !f.CHEAH_WRONGED && !!f.BODY_NAMED,
+  case04: (f) => !f.SHEHANI_FREE && !f.KASUN_FREE && !f.MOHAN_WRONGED && !f.RAJAN_HUNTED && !!f.BOOK_FOUND,
 };
 export function verdictCorrect(caseId, charged = [], answers = {}) {
   const c = CASES[caseId];

@@ -1,0 +1,77 @@
+/* Searchlight (Akari): a dark warehouse yard, crates as walls, warm sodium beams. Prefix: sl- */
+.sl-clue { position: relative; margin: 0 0 12px; padding: 10px 12px 10px 30px; background: #f6e7b8; font-family: var(--font-doc); font-size: 0.95rem; line-height: 1.45; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18); transform: rotate(-0.4deg); max-width: 60ch; }
+.sl-clue-pin { position: absolute; left: 10px; top: 13px; width: 10px; height: 10px; border-radius: 50%; background: var(--thread); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); }
+
+.sl-yard { --sl-n: 7; display: flex; justify-content: center; padding: 10px; background: #161c20; border-radius: var(--r-sm); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(0, 0, 0, 0.55); }
+.sl-grid {
+  display: grid; grid-template-columns: repeat(var(--sl-n), minmax(0, 1fr)); gap: 2px;
+  width: min(100%, calc(var(--sl-n) * 58px)); padding: 2px; background: #0c1013; border: 2px solid #0c1013;
+  touch-action: manipulation; user-select: none; -webkit-user-select: none;
+}
+.sl-row { display: contents; }
+
+.sl-cell, .sl-crate { position: relative; aspect-ratio: 1; min-width: 0; padding: 0; border: 0; border-radius: 1px; display: grid; place-items: center; overflow: hidden; }
+.sl-cell { background: #262e33; background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1.4px); background-size: 7px 7px; cursor: pointer; color: inherit; transition: background-color 0.18s; }
+.sl-cell:focus-visible, .sl-crate:focus-visible { outline: 3px solid var(--sodium); outline-offset: -3px; z-index: 2; }
+@media (hover: hover) { .sl-cell:hover { box-shadow: inset 0 0 0 2px rgba(232, 163, 61, 0.55); } }
+
+/* beams: a horizontal bar when the row is lit, a vertical bar when the column is lit */
+.sl-cell.is-lr, .sl-cell.is-lc { background-color: #5c4c2c; }
+.sl-beam { position: absolute; inset: 0; pointer-events: none; }
+.sl-beam::before, .sl-beam::after { content: ''; position: absolute; opacity: 0; transition: opacity 0.18s; }
+.sl-beam::before { left: 0; right: 0; top: 22%; bottom: 22%; background: linear-gradient(180deg, transparent, rgba(255, 214, 128, 0.55) 35%, rgba(255, 226, 150, 0.7) 50%, rgba(255, 214, 128, 0.55) 65%, transparent); }
+.sl-beam::after { top: 0; bottom: 0; left: 22%; right: 22%; background: linear-gradient(90deg, transparent, rgba(255, 214, 128, 0.55) 35%, rgba(255, 226, 150, 0.7) 50%, rgba(255, 214, 128, 0.55) 65%, transparent); }
+.sl-cell.is-lr .sl-beam::before, .sl-cell.is-lc .sl-beam::after { opacity: 1; }
+.sl-cell.is-hot { background-color: #5a2a26; }
+.sl-cell.is-hot .sl-beam::before, .sl-cell.is-hot .sl-beam::after { filter: hue-rotate(-40deg) saturate(1.6); }
+
+/* the lamp */
+.sl-mark { position: relative; z-index: 1; width: 70%; height: 70%; display: none; }
+.sl-mark svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.sl-mark circle { fill: #fff4cf; stroke: #1d1a16; stroke-width: 1.4; }
+.sl-mark .sl-rays path { stroke: #ffd65a; stroke-width: 2.4; stroke-linecap: round; fill: none; }
+.sl-cell.is-light { background-color: #8a6a2c; background-image: radial-gradient(circle, rgba(255, 236, 170, 0.95) 0 24%, rgba(242, 194, 48, 0.45) 48%, transparent 72%); }
+.sl-cell.is-light .sl-mark { display: block; animation: sl-pop 0.22s var(--ease); }
+.sl-cell.is-clash { background-color: #7a1f22; background-image: radial-gradient(circle, rgba(255, 140, 130, 0.8) 0 22%, rgba(216, 50, 61, 0.5) 50%, transparent 72%); }
+.sl-cell.is-clash .sl-mark circle { fill: #d8323d; stroke: #2a0b0c; }
+.sl-cell.is-clash .sl-mark .sl-rays path { stroke: #ff8a80; }
+
+/* the "no light here" dot */
+.sl-cell.is-dot::after { content: ''; position: relative; z-index: 1; width: 18%; height: 18%; border-radius: 50%; background: #9fb3bf; box-shadow: 0 0 0 2px rgba(12, 16, 19, 0.6); }
+.sl-cell.is-lr.is-dot::after, .sl-cell.is-lc.is-dot::after { background: #2b2418; box-shadow: 0 0 0 2px rgba(255, 236, 170, 0.5); }
+
+/* given by a hint: a small red tack in the corner */
+.sl-cell.is-given::before { content: ''; position: absolute; top: 4px; left: 4px; z-index: 2; width: 7px; height: 7px; border-radius: 50%; background: var(--thread); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); }
+.sl-cell.is-flash { animation: sl-flash 1.1s ease-out; }
+
+/* crates */
+.sl-crate {
+  background-color: #5b4a36;
+  background-image: linear-gradient(135deg, transparent 46%, rgba(0, 0, 0, 0.22) 46% 54%, transparent 54%), linear-gradient(45deg, transparent 46%, rgba(0, 0, 0, 0.16) 46% 54%, transparent 54%);
+  box-shadow: inset 0 0 0 2px #3e3125, inset 0 0 0 4px rgba(255, 255, 255, 0.06);
+}
+.sl-crate b { position: relative; font-family: var(--font-display); font-weight: 800; font-size: clamp(1rem, calc(52vw / var(--sl-n)), 1.9rem); line-height: 1; color: #f3ead6; text-shadow: 0 1px 0 #000; padding: 0 0.15em; background: rgba(29, 26, 22, 0.55); border-radius: 2px; transition: opacity 0.2s, color 0.2s; }
+.sl-crate.is-ok b { opacity: 0.42; }
+.sl-crate.is-over { box-shadow: inset 0 0 0 3px var(--thread-bright); }
+.sl-crate.is-over b { color: #ff8a80; }
+
+.sl-bar { justify-content: space-between; }
+.sl-count { margin: 0; font-family: var(--font-doc); font-size: 0.95rem; color: var(--ink-soft); }
+
+/* solved: a sweep of light across the yard */
+.sl-grid.is-done .sl-cell { cursor: default; animation: sl-sweep 0.9s ease-out both; }
+.sl-grid.is-done .sl-cell.is-light .sl-mark { animation: none; }
+
+@keyframes sl-pop { from { transform: scale(0.4); opacity: 0.2; } to { transform: scale(1); opacity: 1; } }
+@keyframes sl-flash { 0%, 60% { box-shadow: inset 0 0 0 4px var(--thread-bright); } 100% { box-shadow: inset 0 0 0 0 transparent; } }
+@keyframes sl-sweep { 0% { filter: brightness(1); } 40% { filter: brightness(1.7) saturate(1.2); } 100% { filter: brightness(1.08); } }
+
+@media (max-width: 760px) {
+  .sl-yard { padding: 6px; margin: 0 -4px; }
+  .sl-grid { gap: 1px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sl-cell, .sl-beam::before, .sl-beam::after, .sl-crate b { transition: none; }
+  .sl-cell.is-light .sl-mark, .sl-cell.is-flash, .sl-grid.is-done .sl-cell { animation: none; }
+  .sl-cell.is-flash { box-shadow: inset 0 0 0 4px var(--thread-bright); }
+}

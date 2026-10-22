@@ -1,0 +1,77 @@
+/* Laser Grid: a warehouse floor with a security laser. Prefix: lz- */
+.lz-clue { position: relative; margin: 0 0 12px; padding: 10px 12px 10px 30px; background: #f6e7b8; font-family: var(--font-doc); font-size: 0.95rem; line-height: 1.45; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18); transform: rotate(-0.4deg); max-width: 60ch; }
+.lz-clue-pin { position: absolute; left: 10px; top: 13px; width: 10px; height: 10px; border-radius: 50%; background: var(--thread); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); }
+
+.lz-board { position: relative; width: min(100%, 480px); aspect-ratio: 1; margin: 0 auto; border-radius: 6px; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35); }
+.lz-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.lz-wall { fill: #33393e; stroke: #1b1f22; stroke-width: 0.6; }
+.lz-floor { fill: #8f8b80; stroke: #1b1f22; stroke-width: 0.5; }
+.lz-seam { stroke: #6c6960; stroke-width: 0.25; }
+
+.lz-crate rect { fill: #9a6a35; stroke: #4b3015; stroke-width: 0.45; }
+.lz-crate path { fill: none; stroke: #5b3a19; stroke-width: 0.45; }
+.lz-relay path { fill: rgba(150, 200, 230, 0.35); stroke: #2a4a8a; stroke-width: 0.45; transition: fill 0.2s; }
+.lz-relay circle { fill: #2a4a8a; }
+.lz-relay.is-lit path { fill: #ffd2c8; stroke: #ff3b3b; }
+.lz-relay.is-lit circle { fill: #ff3b3b; }
+
+.lz-mirror-back { stroke: #1d1a16; stroke-width: 2.1; stroke-linecap: round; }
+.lz-mirror-glass { stroke: #e8f1f6; stroke-width: 1.1; stroke-linecap: round; }
+.lz-mirror.is-fixed .lz-mirror-back { stroke: #23272a; stroke-width: 2.4; }
+.lz-mirror.is-fixed .lz-mirror-glass { stroke: #a9b4ba; }
+.lz-bolt { fill: #e8a33d; }
+.lz-mirror.is-mine { animation: lz-drop 0.18s var(--ease); transform-box: fill-box; transform-origin: center; }
+.lz-mirror.is-locked .lz-mirror-back { stroke: #8a5d13; }
+@keyframes lz-drop { from { transform: scale(0.6); opacity: 0.4; } }
+
+.lz-emitter rect { fill: #b3202a; stroke: #1d1a16; stroke-width: 0.5; }
+.lz-emitter circle { fill: #ffd2c8; }
+.lz-sensor-ring { fill: #22282c; stroke: #6c6960; stroke-width: 0.6; }
+.lz-sensor-eye { fill: #5b1d22; transition: fill 0.2s; }
+.lz-sensor.is-near .lz-sensor-eye { fill: #e8a33d; }
+.lz-sensor.is-hit .lz-sensor-ring { stroke: #7fd197; }
+.lz-sensor.is-hit .lz-sensor-eye { fill: #7fd197; }
+
+.lz-beam polyline { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.lz-glow { stroke: rgba(255, 59, 59, 0.35); stroke-width: 2.2; }
+.lz-core { stroke: #ff4a3d; stroke-width: 0.7; }
+.lz-flow { stroke: #ffe1d9; stroke-width: 0.35; stroke-dasharray: 1.2 3.2; animation: lz-flow 0.6s linear infinite; }
+@keyframes lz-flow { to { stroke-dashoffset: -4.4; } }
+.lz-burn { fill: #fff3c4; stroke: #ff6a1f; stroke-width: 0.3; animation: lz-burn 0.4s steps(2) infinite; }
+@keyframes lz-burn { 50% { opacity: 0.4; } }
+
+/* tap targets over the drawing */
+.lz-cells { position: absolute; display: grid; grid-template-rows: repeat(var(--lz-n, 6), minmax(0, 1fr)); touch-action: manipulation; }
+.lz-row { display: grid; grid-template-columns: repeat(var(--lz-n, 6), minmax(0, 1fr)); }
+.lz-cell { padding: 0; border: 0; background: transparent; cursor: pointer; border-radius: 2px; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.lz-cell.is-fixed { cursor: not-allowed; }
+.lz-cell:focus-visible { outline: 3px solid var(--sodium); outline-offset: -3px; }
+.lz-cell.is-nudge { animation: lz-nudge 0.4s; }
+@keyframes lz-nudge { 30% { background: rgba(179, 32, 42, 0.35); } }
+
+.lz-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 12px auto 0; max-width: 480px; }
+.lz-tray { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-family: var(--font-doc); font-size: 0.92rem; color: var(--ink-soft); }
+.lz-tray-label { font-family: var(--font-display); font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
+.lz-token { width: 22px; height: 22px; border-radius: 3px; background: #c9d4da linear-gradient(135deg, transparent 44%, #1d1a16 44%, #1d1a16 56%, transparent 56%); box-shadow: inset 0 0 0 1.5px #1d1a16; }
+.lz-token.is-used { opacity: 0.22; }
+.lz-tray-n { margin-left: 4px; }
+.lz-clear { min-height: 44px; color: var(--ink); }
+.lz-status { text-align: center; }
+
+.lz-board.is-solved { box-shadow: 0 0 0 3px rgba(127, 209, 151, 0.7), 0 10px 30px rgba(127, 209, 151, 0.3); transition: box-shadow 0.4s; }
+.lz-board.is-solved .lz-core { stroke: #ff8a7a; stroke-width: 1; }
+.lz-board.is-solved .lz-sensor { animation: lz-pulse 0.5s ease-out 2; transform-box: fill-box; transform-origin: center; }
+.lz-board.is-solved .lz-cell { cursor: default; }
+@keyframes lz-pulse { 50% { transform: scale(1.5); } }
+
+.lz-howto { display: flex; justify-content: center; }
+
+@media (max-width: 420px) {
+  /* use the sheet's side padding too, so cells stay big enough to tap */
+  .lz-board { width: calc(100% + 20px); margin: 0 -10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lz-flow, .lz-burn, .lz-mirror.is-mine, .lz-board.is-solved .lz-sensor, .lz-cell.is-nudge { animation: none; }
+  .lz-flow { display: none; }
+}

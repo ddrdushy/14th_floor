@@ -5,15 +5,16 @@ import { CASE01 } from './case01.js';
 import { SIDE01 } from './side01.js';
 import { CASE02 } from './case02.js';
 import { CASE03 } from './case03.js';
+import { CASE04 } from './case04.js';
 import { state, caseState } from '../core/state.js';
 
-export const CASES = { case01: CASE01, side01: SIDE01, case02: CASE02, case03: CASE03 };
-export const CASE_ORDER = ['case01', 'side01', 'case02', 'case03'];
+export const CASES = { case01: CASE01, side01: SIDE01, case02: CASE02, case03: CASE03, case04: CASE04 };
+export const CASE_ORDER = ['case01', 'side01', 'case02', 'case03', 'case04'];
 
 // What the phone says once every written case is closed.
 export const COMING_SOON = {
-  title: 'Case 4',
-  teaser: 'A small parcel with a Colombo postmark is waiting with Bala Anne. Inside: one uncut blue sapphire, wrapped in a mamak receipt. The receipt is folded into the shape of a kancil.',
+  title: 'Case 5',
+  teaser: 'Menara Sinar, Jalan Ampang. The lifts go from 13 to 15. On Monday morning a director of Sinar Holdings is found on the pavement under a window of the floor that is not there. In his fist: a paper kancil, folded from a Colombo tuk-tuk receipt.',
 };
 
 /** Short label for a case: "Case 2" or "Side case". */

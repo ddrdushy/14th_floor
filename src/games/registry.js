@@ -1,5 +1,6 @@
 import { GAMES_B, CATEGORY_B } from './registry_b.js';
 import { GAMES_C, CATEGORY_C } from './registry_c.js';
+import { GAMES_D, CATEGORY_D } from './registry_d.js';
 
 // All mini games, loaded on demand. Each module exports { meta, mount(el, ctx) }.
 export const GAMES = {
@@ -18,6 +19,7 @@ export const GAMES = {
   maze: () => import('./maze.js'),
   ...GAMES_B,
   ...GAMES_C,
+  ...GAMES_D,
 };
 
 export const CATEGORY_OF = {
@@ -26,4 +28,5 @@ export const CATEGORY_OF = {
   nonogram: 'Logic', whoslying: 'Profiling', maze: 'Navigation',
   ...CATEGORY_B,
   ...CATEGORY_C,
+  ...CATEGORY_D,
 };

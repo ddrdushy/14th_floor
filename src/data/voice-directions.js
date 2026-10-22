@@ -374,4 +374,146 @@ export const VOICE_DIRECTIONS = {
   '1rxwwq57e4z': { cue: '[warm, quietly moved]' },
   // Jo Lim: He unplugged everything. Every night. Now somebody has written it down.
   '0ce9qsy1x2h': { say: '[tearful, grateful] He unplugged everything. [break] Every night. [break] [quiet pride] Now somebody has written it down.', speed: 0.9 },
+
+  // ---------------- case04 ----------------
+  // Bala Anne: Thambi, unakku oru parcel vandhirukku. Colombo-la irundhu.  /  Boy, a parcel came for you. From Colombo.
+  '2bx4lr1vlfs': { say: '[warm, curious, a little wary] தம்பி, உனக்கு ஒரு பார்சல் வந்திருக்கு. [break] கொழும்புல இருந்து.' },
+  // Bala Anne: No name on the back. I kept it under the till for three days. It felt too small to be anything good.
+  '17uhvs750dr': { say: '[gruff, uneasy] No name on the back. I kept it under the till for three days. [break] [low, superstitious] It felt too small to be anything good.' },
+  // Narrator: On the television over the counter, the verdict in Dr. Shanti Menon's trial is due on Friday. Bala Anne turns the sound down without being asked.
+  '0fwru3dkjvl': { cue: '[flat, quiet, guilty]' },
+  // Bala Anne: That durian man Ravi came again. He asked if you were well. I told him you are never well.
+  '0ms9k4bvsoe': { say: '[conspiratorial, low] That durian man Ravi came again. He asked if you were well. [break] [dry, affectionate] I told him you are never well.' },
+  // Narrator: A message from Jo Lim, the first since Penang: Kenny's trial is set for March. Nothing else.
+  '0fvkmh9tcvo': { cue: '[quiet, heavy, guilty]', speed: 0.93 },
+  // Narrator: Inside, in a fold of white gem paper: one uncut blue sapphire, the size of a fingertip. Rough and cloudy, and blue all the way down.
+  '0yk4xbsrrzb': { say: '[hushed, intimate] Inside, in a fold of white gem paper: one uncut blue sapphire, the size of a fingertip. [break] [quietly awed] Rough and cloudy, and blue all the way down.', speed: 0.93 },
+  // Narrator: Around it, a mamak receipt folded into a kancil. You know the paper before you open it. Restoran Bala, Brickfields. Two teh tarik, table 6, by the stairs. August 2021, the week before the fire.
+  '06v16eoop8u': { say: '[low, slow, recognition dawning] Around it, a mamak receipt folded into a kancil. You know the paper before you open it. [break] Restoran Bala, Brickfields. Two teh tarik, table 6, by the stairs. [long-break] [aching, quiet] August 2021, the week before the fire.', speed: 0.9 },
+  // Narrator: On the gem paper, a rubber stamp in Tamil and English. Yogeswaran Gem House, 112 Sea Street, Colombo 11. A telephone number.
+  '0ln7zxqzyy9': { cue: '[measured, observant]' },
+  // Woman (voiced as Tharshini Yogeswaran): Appa poyittaar.  /  My father is gone.
+  '1v7zl4gbe4p': { say: '[crying, numb with shock] அப்பா போயிட்டார்.', speed: 0.85 },
+  // Woman (voiced as Tharshini Yogeswaran): Sorry. You are calling from Malaysia? I am Tharshini. Yogeswaran is my father. Was my father.
+  '17vqjunn7gl': { say: '[sniffing, composing herself] Sorry. You are calling from Malaysia? [break] I am Tharshini. Yogeswaran is my father. [long-break] [voice breaking] Was my father.', speed: 0.92 },
+  // Tharshini Yogeswaran: They found him in Beira Lake this morning. The police say he drank arrack and fell in.
+  '28s1ypf664u': { cue: '[numb, flat, holding back tears]', speed: 0.93 },
+  // Tharshini Yogeswaran: Appa did not drink. And he could not swim, so he never went near the water after dark. Never.
+  '09rnjql0t52': { say: '[insistent, grieving] Appa did not drink. [break] And he could not swim, so he never went near the water after dark. [emphasis] Never.', speed: 0.92 },
+  // You: Did he ever talk about a Malaysian?
+  '0yu16qrd0r3': { cue: '[gentle, careful, low]' },
+  // Tharshini Yogeswaran: Last week. He said a Malaysian had come to help him undo what he had done. He said it like a prayer.
+  '2apuzr12q97': { say: '[quiet, remembering] Last week. He said a Malaysian had come to help him undo what he had done. [break] [soft, wondering, sad] He said it like a prayer.', speed: 0.92 },
+  // Narrator: The monsoon got to Colombo before you did. It comes off the Indian Ocean in sheets, and the tuk-tuk takes it side-on.
+  '0kujysicy9b': { cue: '[weary, atmospheric, low]' },
+  // Narrator: At Katunayake, among the drivers holding names at arrivals, one card says only J. The man holding it is looking at you. When you look back, he folds it in half and walks away.
+  '0l79iniz39w': { say: '[tense, watchful, low] At Katunayake, among the drivers holding names at arrivals, one card says only J. [break] The man holding it is looking at you. [break] [cold, uneasy] When you look back, he folds it in half and walks away.' },
+  // Tuk-tuk driver: Malli, koheda yanne?  /  Where to, little brother?
+  '16d6modvv85': { say: '[cheerful, shouting over the rain] මල්ලි, කොහෙද යන්නේ?' },
+  // You: Sea Street. Pettah.
+  '0o43fp410oj': { cue: '[tired, curt]' },
+  // Tuk-tuk driver: Sea Street! Gold street. Rain is no problem, sir. In Colombo the rain is free.
+  '13ro368dar3': { say: '[delighted, chatty] Sea Street! Gold street. [break] [laughing] Rain is no problem, sir. In Colombo the rain is free.', speed: 1.05 },
+  // Narrator: Sea Street smells of jasmine, diesel and hot oil. Every shopfront is a lit glass counter full of gold, and every shopkeeper is watching the one in the middle, where the shutter is half down and a white cloth is tied over the door.
+  '24jg9wvc15e': { cue: '[sensory, slow, observant]', speed: 0.95 },
+  // Narrator: Round the corner a kottu stall chops roti on the griddle, two steel blades going like a train over points. It does not stop for the rain. It does not stop for anything.
+  '0ub50sw57pl': { say: '[atmospheric, quietly admiring] Round the corner a kottu stall chops roti on the griddle, two steel blades going like a train over points. [break] [dry] It does not stop for the rain. [low] It does not stop for anything.' },
+  // Tharshini Yogeswaran: He sat at that bench for thirty-eight years. He could tell you where a stone was born just by holding it to the window.
+  '16gvy624jws': { say: '[fond, grieving] He sat at that bench for thirty-eight years. [break] [proud, voice catching] He could tell you where a stone was born just by holding it to the window.', speed: 0.93 },
+  // Tharshini Yogeswaran: Six years ago he started coming home late, and quiet. Last month he started sleeping again. Then this.
+  '229a7wq1kt3': { say: '[quiet, troubled] Six years ago he started coming home late, and quiet. [break] [softer] Last month he started sleeping again. [long-break] [bitter, breaking] Then this.', speed: 0.92 },
+  // Narrator: His loupe hangs on a cord around her neck. She has not taken it off since the morning they found him.
+  '113orfib4g5': { cue: '[tender, sorrowful, hushed]', speed: 0.9 },
+  // Inspector Ruwan Herath: Inspector Iskandar telephoned me. She said you would come whether I liked it or not.
+  '1oa3ut5cqsj': { cue: '[dry, polite, faintly amused]' },
+  // Inspector Ruwan Herath: The file at Slave Island station says an old man drank and slipped. I have asked for it. They were surprised anybody wanted it.
+  '0wwm9fg7jin': { say: '[measured, weary] The file at Slave Island station says an old man drank and slipped. [break] I have asked for it. [dry, sardonic] They were surprised anybody wanted it.' },
+  // Inspector Ruwan Herath: She also asked me to check one name. A Malaysian, Tony Kwan, came on a work visa in the spring. Sinar Cold Chain Lanka. He runs their reefer depot at Bloemendhal, by the port.
+  '1376a3chgqf': { say: '[businesslike, lower] She also asked me to check one name. A Malaysian, Tony Kwan, came on a work visa in the spring. [break] [pointed] Sinar Cold Chain Lanka. He runs their reefer depot at Bloemendhal, by the port.' },
+  // Inspector Ruwan Herath: And she sent a photograph from a crane driver in Port Klang. A reefer unit going into Bay 3 in 2021, serial RU-11. She thinks I will find it here.
+  '1khbpvojr6f': { say: '[thoughtful, measured] And she sent a photograph from a crane driver in Port Klang. A reefer unit going into Bay 3 in 2021, serial R U eleven. [break] [quiet, grim] She thinks I will find it here.' },
+  // Inspector Ruwan Herath: Hari. Api balamu.  /  All right. Let us see.
+  '2dj552y0dh6': { say: '[calm, resolved, quiet] හරි. [break] අපි බලමු.', speed: 0.95 },
+
+  // ---------------- case04:ending ----------------
+  // Narrator: Slave Island station amends its file on the morning of the cremation. Not misadventure. Drowning, by another hand.
+  '2dqj1hxolu9': { say: '[measured, sober] Slave Island station amends its file on the morning of the cremation. [break] Not misadventure. [quiet, grave] Drowning, by another hand.', speed: 0.95 },
+  // Tharshini Yogeswaran: They say it is finished. Appa would have held it to the light a little longer.
+  '0qdy1y9x5tj': { say: '[hollow, tired] They say it is finished. [break] [sad, wistful] Appa would have held it to the light a little longer.', speed: 0.9 },
+  // Narrator: Mohan's half of 112 Sea Street goes to his lender, and his lender sells it to Sinar Gems Lanka before the month is out.
+  '0e5pymow31p': { cue: '[dry, bitter]' },
+  // Narrator: Shehani Gunasekera flies to Singapore on Saturday "for a conference". The Port City showroom does not open again. Within a week a new name is painted on the director's door: Melissa Ong.
+  '1jhubayqfby': { say: '[dry, sardonic] Shehani Gunasekera flies to Singapore on Saturday "for a conference". The Port City showroom does not open again. [break] [low, ominous] Within a week a new name is painted on the director\'s door: [emphasis] Melissa Ong.' },
+  // Narrator: Shehani Gunasekera flies to Singapore on Saturday "for a conference". The Port City showroom does not open again.
+  '1nskh21cnzv': { cue: '[dry, bitter, resigned]' },
+  // Narrator: Kasun Ranaweera signs on as a reefer technician aboard a Sinar Cold Chain feeder ship. Its next port of call is Port Klang.
+  '0jqj73dt4g3': { say: '[flat, bitter] Kasun Ranaweera signs on as a reefer technician aboard a Sinar Cold Chain feeder ship. [break] [low, ominous] Its next port of call is Port Klang.' },
+  // Narrator: Tony Kwan is not at the depot on Friday. His desk is clear, and his second phone has gone with him.
+  '0zk3fpsbeix': { cue: '[dry, wry, unsurprised]' },
+  // Narrator: CID open the safe at 112 Sea Street with Mohan's key. It holds the shop's gold, a bundle of school reports with Tharshini's name on them, and nothing else.
+  '197mj5qrcwi': { say: '[flat, matter-of-fact] CID open the safe at 112 Sea Street with Mohan\'s key. [break] [softer, rueful] It holds the shop\'s gold, a bundle of school reports with Tharshini\'s name on them, and nothing else.' },
+  // Narrator: On Friday evening Herath reads the mortuary's effects list again, and finds the line everybody skipped. One pink ticket, no. 0414. Found in left sock.
+  '1oaxw6c11j9': { say: '[low, slow realization] On Friday evening Herath reads the mortuary\'s effects list again, and finds the line everybody skipped. [break] One pink ticket, number oh four one four. [quiet] Found in left sock.', speed: 0.93 },
+  // Narrator: The cloakroom clerk remembers 0414. It was collected on Thursday morning by a man in a work polo with a little sun on the pocket. He had the ticket. He paid for the three days.
+  '0tn22nd496m': { say: '[low, bitter] The cloakroom clerk remembers oh four one four. It was collected on Thursday morning by a man in a work polo with a little sun on the pocket. [break] [cold] He had the ticket. He paid for the three days.' },
+  // Narrator: On your last evening you go back to Malay Street to pay Uncle Saldin for the tea.
+  '15xye15jh8k': { cue: '[quiet, warm, a little tired]' },
+  // Uncle Saldin: Orang Malaysia tu datang lagi semalam. Dua teh. Minum satu.  /  Your Malaysian came again last night. Two teh. He drank one.
+  '10pkowwp20j': { say: '[warm, old man, knowing] Orang Malaysia tu datang lagi semalam. [break] Dua teh. [break] Minum satu.', speed: 0.9 },
+  // Narrator: He left a message, Saldin says. Galle Face Green, the bench by the old cannon, at sunset.
+  '04nfz7og0rv': { cue: '[hushed, expectant]' },
+  // Narrator: You wait until the kites come down. Nobody comes. On the bench, under a cup of tea gone cold, a paper kancil folded from a kottu receipt.
+  '0dibfkfzdy0': { say: '[quiet, melancholy] You wait until the kites come down. [break] Nobody comes. [long-break] [tender, aching] On the bench, under a cup of tea gone cold, a paper kancil folded from a kottu receipt.', speed: 0.9 },
+  // Narrator: At midnight your phone rings. A Colombo number you have never seen.
+  '1j6ugwtcst6': { cue: '[tense, hushed]', speed: 0.93 },
+  // ??? (voiced as Daniel Raj): Machan.
+  '05ig8ri9b2g': { say: '[long-break][low, warm, tired, close to the phone] Machan.', speed: 0.85 },
+  // Narrator: One word. Behind it, the sea, and somewhere the clatter of kottu blades.
+  '168za7mmba9': { cue: '[shaken, hushed, slow]', speed: 0.9 },
+  // ??? (voiced as Daniel Raj): Not yet. Go home. Look at the lifts.
+  '1q5y7fg18k5': { say: '[quiet, urgent, gentle] Not yet. [break] Go home. [break] [low, meaningful] Look at the lifts.', speed: 0.9 },
+  // Narrator: The line goes dead. Your hand has gone to the lighter in your pocket, and stays there.
+  '01863adldlw': { cue: '[quiet, unsteady, moved]', speed: 0.88 },
+  // Narrator: Before you board, Herath sends one more photograph: the top of the Port City email, the strip the shredder chewed. Sender: Office of the Chairman. Level 14, Menara Sinar, Kuala Lumpur.
+  '10f9q2gq0uh': { say: '[low, measured, growing dread] Before you board, Herath sends one more photograph: the top of the Port City email, the strip the shredder chewed. [break] Sender: Office of the Chairman. [long-break] [cold, quiet] Level fourteen, Menara Sinar, Kuala Lumpur.', speed: 0.92 },
+  // Narrator: The lifts in Menara Sinar go from 13 to 15.
+  '1p2iahm8vvh': { say: '[long-break][whispering, ominous] The lifts in Menara Sinar go from thirteen to fifteen.', speed: 0.85 },
+  // Narrator: Ticket 0414 is still in the cloakroom ledger. One parcel, newspaper and string, left on Tuesday at 9:31 PM, three days paid in advance.
+  '0p9jxq5tamp': { say: '[measured, rising hope] Ticket oh four one four is still in the cloakroom ledger. [break] One parcel, newspaper and string, left on Tuesday at nine thirty-one, three days paid in advance.' },
+  // Inspector Ruwan Herath: Ninety rupees a day, and nobody looks inside. Every crook in Colombo knows it. So did one honest man.
+  '205ms43wn1d': { say: '[dry, wry] Ninety rupees a day, and nobody looks inside. Every crook in Colombo knows it. [break] [softer, respectful] So did one honest man.' },
+  // Narrator: Inside, Yogi's carbon book. Sixty-one certificates in six years, and beside every one, in his small careful Tamil, what the stone was really worth.
+  '0hx0h5u71bw': { cue: '[hushed, reverent, measured]', speed: 0.93 },
+  // Narrator: On the last page, in English, dated Tuesday: "Every valuation above was made on the instruction of S. Gunasekera, for the Office of the Chairman. I am sorry. P. Yogeswaran."
+  '0wyrjka34bu': { say: '[slow, grave] On the last page, in English, dated Tuesday: [break] "Every valuation above was made on the instruction of S. Gunasekera, for the Office of the Chairman. [long-break] [quiet, sorrowful] I am sorry. P. Yogeswaran."', speed: 0.9 },
+  // Narrator: Clipped inside the back cover, a Malaysian customs release for three reefer units, Port Klang to Colombo, 2022. Officer: N. SALLEH.
+  '1vjwagggndq': { say: '[low, ominous] Clipped inside the back cover, a Malaysian customs release for three reefer units, Port Klang to Colombo, 2022. [break] Officer: [emphasis] N. Salleh.' },
+  // Narrator: CID take Uncle Saldin's counter apart board by board while he watches from the doorway with his hands behind his back. There is nothing under it but fifty years of dust.
+  '05p4bmruwlb': { say: '[flat, regretful] CID take Uncle Saldin\'s counter apart board by board while he watches from the doorway with his hands behind his back. [break] [quiet, ashamed] There is nothing under it but fifty years of dust.' },
+  // Narrator: Navy divers spend two days in Beira Lake. They bring up a bicycle, a temple bell and a great deal of mud.
+  '09ob7hpihs9': { say: '[flat, weary] Navy divers spend two days in Beira Lake. [break] [dry, bitter] They bring up a bicycle, a temple bell and a great deal of mud.' },
+  // Narrator: Nobody goes looking for the book.
+  '0cx5lb8eage': { cue: '[flat, final]', speed: 0.9 },
+  // Narrator: Shehani Gunasekera is arrested at the Port City showroom at six in the morning, still in the grey dress from the charity dinner. Sinar Gems Lanka's lawyers arrive before the police jeep has left the car park.
+  '0hb70tnyrzw': { say: '[clipped, formal] Shehani Gunasekera is arrested at the Port City showroom at six in the morning, still in the grey dress from the charity dinner. [break] [sardonic] Sinar Gems Lanka\'s lawyers arrive before the police jeep has left the car park.' },
+  // Narrator: Mohan Yogeswaran is charged with his brother's murder. He tells the magistrate he was in Mount Lavinia, selling his brother's stones behind his back. The Bangkok buyer has already flown home.
+  '0pa3bmapsf4': { say: '[clipped, formal] Mohan Yogeswaran is charged with his brother\'s murder. [break] [softer, uneasy] He tells the magistrate he was in Mount Lavinia, selling his brother\'s stones behind his back. [flat] The Bangkok buyer has already flown home.' },
+  // Tharshini Yogeswaran: They took Chithappa. He sold Appa's stones and lied to me, and now he is in Welikada for the one thing he did not do. I do not know which part to be angry about.
+  '0d1rm9whwbz': { say: '[numb, bitter] They took Chithappa. [break] He sold Appa\'s stones and lied to me, and now he is in Welikada for the one thing he did not do. [break] [exhausted, confused] I do not know which part to be angry about.', speed: 0.9 },
+  // Narrator: A warrant goes out for a Malaysian national, K. Rajan. The passport number on the lodge register was issued in Kuala Lumpur in 2019, to a man who died in August 2021.
+  '0lk9ybdlyur': { say: '[clipped, formal] A warrant goes out for a Malaysian national, K. Rajan. [break] [low, unsettled] The passport number on the lodge register was issued in Kuala Lumpur in 2019, [long-break] to a man who died in August 2021.', speed: 0.92 },
+  // Tharshini Yogeswaran: They say it was the Malaysian. Appa trusted him. Appa trusted him more than he trusted himself.
+  '1899tpwly4h': { say: '[hurt, confused] They say it was the Malaysian. [break] Appa trusted him. [quiet, bitter] Appa trusted him more than he trusted himself.', speed: 0.92 },
+  // Narrator: CID break the door of Room 14 at seven. The bed is made. The bin is empty. The window is open onto the harbour.
+  '0ywfuwxoab0': { say: '[tense, clipped] CID break the door of Room 14 at seven. [break] The bed is made. The bin is empty. [quiet, hollow] The window is open onto the harbour.', speed: 0.95 },
+  // Narrator: On the pillow, a paper kancil, folded from a Sri Lankan Airlines boarding pass. Colombo to Kuala Lumpur. The name has been torn off.
+  '07lc9amtu99': { say: '[hushed, aching] On the pillow, a paper kancil, folded from a Sri Lankan Airlines boarding pass. [break] Colombo to Kuala Lumpur. [long-break] [quiet] The name has been torn off.', speed: 0.9 },
+  // Narrator: Herath puts it in an evidence bag and hands it to you without a word, as if it were yours.
+  '1ehcqftv1d8': { cue: '[quiet, heavy, intimate]', speed: 0.9 },
+  // Narrator: At midnight your phone rings. A Colombo number. Nobody speaks. Waves, and one long breath, and then the line goes dead.
+  '08n0jdyboob': { say: '[tense, hushed] At midnight your phone rings. A Colombo number. [break] Nobody speaks. [long-break] [whispering] Waves, and one long breath, and then the line goes dead.', speed: 0.88 },
+  // Narrator: Kasun Ranaweera is arrested at the Bloemendhal depot gate, his forearms still scored pink. In the jeep he asks only one thing: whether the old man had children.
+  '012woax46tf': { say: '[clipped, formal] Kasun Ranaweera is arrested at the Bloemendhal depot gate, his forearms still scored pink. [break] [softer, troubled] In the jeep he asks only one thing: whether the old man had children.' },
+  // Tharshini Yogeswaran: Appa used to say a stone tells the truth to anybody who holds it to the light long enough. You held it long enough.
+  '05r2p0i6eth': { say: '[tearful, grateful] Appa used to say a stone tells the truth to anybody who holds it to the light long enough. [break] [quiet, warm] You held it long enough.', speed: 0.9 },
 };

@@ -1,0 +1,73 @@
+/* Shredded Note (shredder.js). Strips of a typed note on a dark desk. Prefix: shr- */
+
+.shr-clue { position: relative; margin: 0 0 12px; padding: 10px 12px 10px 30px; background: #f6e7b8; font-family: var(--font-doc); font-size: 0.95rem; line-height: 1.45; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18); transform: rotate(-0.4deg); max-width: 60ch; }
+.shr-clue-pin { position: absolute; left: 10px; top: 13px; width: 10px; height: 10px; border-radius: 50%; background: var(--thread); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); }
+
+.shr-desk {
+  position: relative; padding: 12px; border-radius: 8px; overflow: hidden;
+  background:
+    repeating-linear-gradient(92deg, rgba(255, 255, 255, 0.018) 0 2px, transparent 2px 9px),
+    linear-gradient(160deg, #3a322b, #1e1a16);
+  box-shadow: inset 0 0 0 3px #4a4037, inset 0 0 40px rgba(0, 0, 0, 0.45), 0 8px 20px rgba(0, 0, 0, 0.28);
+}
+.shr-bed { position: relative; margin: 0 auto; max-width: 100%; }
+
+.shr-strip {
+  position: absolute; left: 0; top: 0; cursor: grab; outline: none;
+  touch-action: pan-y; -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  transition: transform 0.28s var(--ease), box-shadow 0.2s;
+  will-change: transform;
+}
+.shr-strip canvas { display: block; transition: transform 0.32s var(--ease); pointer-events: none; }
+.shr-strip.is-flipped canvas { transform: rotate(180deg); }
+.shr-strip.is-sel, .shr-strip.is-held { z-index: 4; box-shadow: 0 0 0 2px var(--sodium), 0 14px 20px rgba(0, 0, 0, 0.55); }
+.shr-strip.is-held { box-shadow: 0 0 0 3px var(--sodium), 0 16px 24px rgba(0, 0, 0, 0.6); }
+.shr-strip.is-drag { z-index: 6; cursor: grabbing; transition: box-shadow 0.2s; box-shadow: 0 0 0 2px var(--sodium), 0 18px 26px rgba(0, 0, 0, 0.6); }
+.shr-strip:focus-visible { z-index: 5; box-shadow: 0 0 0 3px var(--sodium), 0 0 0 5px rgba(0, 0, 0, 0.6), 0 8px 14px rgba(0, 0, 0, 0.5); }
+.shr-strip.is-pinned { cursor: default; }
+.shr-strip.is-pinned::before {
+  content: ''; position: absolute; top: 5px; left: 50%; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; z-index: 1;
+  background: radial-gradient(circle at 35% 35%, #f06a6f, var(--thread) 60%); box-shadow: 0 2px 2px rgba(0, 0, 0, 0.45);
+}
+/* "fits" seam: two small green ticks where the strip meets its true right neighbour */
+.shr-strip.is-fitR::after {
+  content: ''; position: absolute; right: -1.5px; top: -8px; bottom: -8px; width: 3px; border-radius: 2px; pointer-events: none; z-index: 2;
+  background: linear-gradient(#5fc283 0 6px, transparent 6px calc(100% - 6px), #5fc283 calc(100% - 6px));
+  animation: shr-fit 0.5s var(--ease);
+}
+@keyframes shr-fit { from { opacity: 0; transform: scaleY(1.25); } }
+.shr-strip.is-hinted { animation: shr-hint 0.9s 2; }
+@keyframes shr-hint { 50% { box-shadow: 0 0 0 3px var(--thread-bright), 0 8px 18px rgba(0, 0, 0, 0.5); } }
+
+/* solved: the gaps close, then the cuts disappear into one sheet */
+.shr-whole { position: absolute; left: 0; top: 0; opacity: 0; pointer-events: none; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55); transition: opacity 0.4s; }
+.shr-bed.is-solved .shr-strip { cursor: default; transition: transform 0.6s var(--ease), box-shadow 0.4s; }
+.shr-bed.is-sealed .shr-whole { opacity: 1; }
+.shr-bed.is-sealed .shr-strip { box-shadow: none; }
+.shr-bed.is-sealed .shr-strip canvas { animation: shr-ink 0.9s ease-out; }
+@keyframes shr-ink { 0% { filter: brightness(1.12); } 100% { filter: none; } }
+.shr-bed.is-instant .shr-strip, .shr-bed.is-instant .shr-strip canvas { transition: none !important; }
+
+.shr-tools { justify-content: space-between; }
+.shr-count { font-size: 0.92rem; color: var(--ink-soft); }
+.shr-turn[disabled] { opacity: 0.45; }
+
+.shr-transcript { margin-top: 14px; padding: 12px 16px; background: #fbf7ec; border: 1px solid #c4bba5; border-left: 4px solid var(--ok); animation: shr-in 0.4s var(--ease); }
+.shr-transcript[hidden] { display: none; }
+.shr-tr-h { margin: 0 0 6px; font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; letter-spacing: 0.02em; }
+.shr-tr-title { margin: 0 0 4px; font-family: var(--font-display); font-weight: 700; text-transform: uppercase; color: var(--ink-soft); }
+.shr-tr-body, .shr-tr-sign { margin: 0; font-family: var(--font-doc); font-size: 1rem; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+.shr-tr-sign { margin-top: 6px; }
+@keyframes shr-in { from { opacity: 0; transform: translateY(6px); } }
+
+@media (max-width: 760px) {
+  .shr-desk { padding: 8px 6px; border-radius: 6px; }
+  .shr-count { font-size: 0.88rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shr-strip, .shr-strip canvas, .shr-bed.is-solved .shr-strip, .shr-whole { transition: none !important; }
+  .shr-strip.is-fitR::after, .shr-strip.is-hinted, .shr-bed.is-sealed .shr-strip canvas, .shr-transcript { animation: none !important; }
+}
+.shr-bed.is-solved .shr-strip.is-pinned::before { opacity: 0; transition: opacity 0.4s; }
