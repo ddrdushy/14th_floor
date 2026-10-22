@@ -5,6 +5,7 @@
 // One <audio> element is reused for every line. Mobile browsers only let an element play sound if it
 // was started inside a tap, so unlockVoice() is called from taps (see unlockCinemaVideo in cinema.js).
 import { state, onChange } from './state.js';
+import { duckAmbient } from './audio.js';
 import { lineIdCandidates, isVoiceable, PLAYER, portraitOf } from './voice.js';
 
 const STATUS_URL = 'api/voice/status';
@@ -194,7 +195,7 @@ export function speak(line, { maxWait = 2500, onBlocked } = {}) {
   let finish, start;
   const ended = new Promise((r) => (finish = r));
   const started = new Promise((r) => (start = r));
-  const me = { id, finish: (why) => { start(false); finish(why); } };
+  const me = { id, finish: (why) => { duckAmbient(false); start(false); finish(why); } };
   current = me;
   const giveUpAt = setTimeout(() => { if (current === me && !me.playing) { current = null; me.finish('stopped'); } }, maxWait);
   const lineId = pending
@@ -204,14 +205,14 @@ export function speak(line, { maxWait = 2500, onBlocked } = {}) {
     if (current !== me) return;
     if (!url) { clearTimeout(giveUpAt); current = null; me.finish('error'); return; }
     const a = audioEl();
-    a.onended = () => { if (current === me) { current = null; finish('ended'); } };
+    a.onended = () => { if (current === me) { current = null; duckAmbient(false); finish('ended'); } };
     a.onerror = () => { if (current === me) { current = null; me.finish('error'); } };
     a.muted = false;
     a.volume = voiceVolume();
     a.src = url;
     try { a.currentTime = 0; } catch { /* not seekable yet */ }
     const p = a.play();
-    const ok = () => { if (current !== me) { a.pause(); return; } clearTimeout(giveUpAt); me.playing = true; start(true); };
+    const ok = () => { if (current !== me) { a.pause(); return; } clearTimeout(giveUpAt); me.playing = true; duckAmbient(true); start(true); };
     if (p && p.then) {
       p.then(ok).catch((err) => {
         if (current !== me) return;

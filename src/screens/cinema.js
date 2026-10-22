@@ -3,7 +3,7 @@
 import { gsap } from 'gsap';
 import { h } from '../core/ui.js';
 import { paintInto, imgUrl, hasImage } from '../core/assets.js';
-import { sfx, thunder, startRain, setRain } from '../core/audio.js';
+import { sfx, thunder, startRain, setRain, hushThunder } from '../core/audio.js';
 import { state, onChange } from '../core/state.js';
 import { app } from '../core/app.js';
 import { initVoices, speak, stopVoice, prefetchLines, unlockVoice, pauseVoice } from '../core/voice-player.js';
@@ -442,6 +442,7 @@ export function playCinematic(host, panels, { titleNode } = {}) {
       current = el;
       if (fx.includes('shake')) gsap.fromTo(img, { x: -6 }, { x: 6, duration: 0.07, repeat: 14, yoyo: true, ease: 'none' });
       if (fx.includes('buzz')) gsap.fromTo(img, { x: -2 }, { x: 2, duration: 0.04, repeat: 20, yoyo: true, ease: 'none', delay: 0.3 });
+      hushThunder(hasClip);
       if (hasClip) {
         setRain(0.04); // the clip has its own weather
       } else {
@@ -542,6 +543,7 @@ export function playCinematic(host, panels, { titleNode } = {}) {
     function finish() {
       if (done) return;
       done = true;
+      hushThunder(false);
       clearTimeout(timer);
       lineToken++;
       stopVoice();

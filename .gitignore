@@ -1,6 +1,4 @@
 node_modules
 dist
 .DS_Store
-*.m4a
 .wrangler
-.dev.vars

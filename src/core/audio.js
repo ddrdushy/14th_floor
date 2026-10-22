@@ -9,6 +9,16 @@ let noiseBuf = null;
 let gestured = false; // browsers only allow audio after a user gesture
 let pendingRain = null; // rain asked for before the first gesture
 
+// Weather sits under everything else: callers pass a "scene" level, this keeps it a quiet bed.
+const RAIN_SCALE = 0.4;
+const DUCK = 0.35; // rain while someone is speaking
+const THUNDER_GAP = 14; // seconds between the end of one roll and the start of the next
+let rainLevel = 0; // the caller's level, before scale and duck
+let ducked = false;
+let hush = false; // a video clip with its own sound is playing
+let thunderFreeAt = 0; // ctx time when the last roll has died away
+const rainTarget = () => rainLevel * RAIN_SCALE * (ducked ? DUCK : 1);
+
 function ensure() {
   if (ctx) return ctx;
   if (!gestured) return null;
@@ -65,8 +75,9 @@ function noise() {
 export function startRain(level = 0.22) {
   if (enabled() && !gestured) { pendingRain = level; return; }
   if (!enabled() || !ensure()) return;
+  rainLevel = level;
   if (rainNodes) {
-    rainNodes.gain.gain.setTargetAtTime(level, ctx.currentTime, 0.8);
+    rainNodes.gain.gain.setTargetAtTime(rainTarget(), ctx.currentTime, 0.8);
     return;
   }
   const src = noise();
@@ -89,13 +100,23 @@ export function startRain(level = 0.22) {
   src2.connect(lp2).connect(g2).connect(gain);
   src.start();
   src2.start();
-  gain.gain.setTargetAtTime(level, ctx.currentTime, 1.2);
+  gain.gain.setTargetAtTime(rainTarget(), ctx.currentTime, 1.2);
   rainNodes = { src, src2, gain };
 }
 
 export function setRain(level) {
   if (!rainNodes || !ctx) return startRain(level);
-  rainNodes.gain.gain.setTargetAtTime(level, ctx.currentTime, 0.6);
+  rainLevel = level;
+  rainNodes.gain.gain.setTargetAtTime(rainTarget(), ctx.currentTime, 0.6);
+}
+
+/** No thunder while a clip with its own soundtrack plays. */
+export function hushThunder(on) { hush = !!on; }
+
+/** Lower the weather while a voice line plays (and skip thunder), raise it again after. */
+export function duckAmbient(on) {
+  ducked = !!on;
+  if (rainNodes && ctx) rainNodes.gain.gain.setTargetAtTime(rainTarget(), ctx.currentTime, ducked ? 0.25 : 1.2);
 }
 
 export function stopRain() {
@@ -107,8 +128,11 @@ export function stopRain() {
 }
 
 export function thunder(delay = 0.6) {
-  if (!enabled() || !ensure()) return;
+  if (!enabled() || !ensure() || ducked || hush) return;
   const t = ctx.currentTime + delay;
+  // one roll at a time: lightning in the office, the title and the cinematics all ask for thunder
+  if (t < thunderFreeAt) return;
+  thunderFreeAt = t + 4 + THUNDER_GAP;
   const src = noise();
   const lp = ctx.createBiquadFilter();
   lp.type = 'lowpass';
@@ -116,8 +140,8 @@ export function thunder(delay = 0.6) {
   lp.frequency.exponentialRampToValueAtTime(60, t + 3.5);
   const g = ctx.createGain();
   g.gain.setValueAtTime(0.0001, t);
-  g.gain.exponentialRampToValueAtTime(0.9, t + 0.12);
-  g.gain.exponentialRampToValueAtTime(0.25, t + 0.9);
+  g.gain.exponentialRampToValueAtTime(0.3, t + 0.15);
+  g.gain.exponentialRampToValueAtTime(0.08, t + 0.9);
   g.gain.exponentialRampToValueAtTime(0.0001, t + 4);
   src.connect(lp).connect(g).connect(master);
   src.start(t);
