@@ -86,7 +86,8 @@ export const onRequestPost = handler(async ({ request, env }) => {
        last_seen = excluded.last_seen,
        platform = COALESCE(excluded.platform, players.platform),
        country = COALESCE(excluded.country, players.country),
-       dev = MAX(players.dev, excluded.dev),
+       -- the latest session decides: someone who tried ?dev once and then plays normally counts again
+       dev = CASE WHEN excluded.sessions > 0 THEN excluded.dev ELSE players.dev END,
        sessions = players.sessions + excluded.sessions,
        rl_count = CASE WHEN players.rl_window = excluded.rl_window THEN players.rl_count + 1 ELSE 1 END,
        rl_window = excluded.rl_window
