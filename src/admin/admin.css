@@ -235,3 +235,9 @@ a.a-btn { color: inherit; text-decoration: none; }
   .timeline li .ev-what { grid-column: 1 / -1; }
   .toolbar .a-input { max-width: none; flex: 1 1 100%; }
 }
+
+/* player page: online case file */
+.pd-save { margin-top: 16px; }
+.pd-save h3 { margin: 0 0 6px; }
+.pd-pin { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 8px 0 4px; }
+.pd-pin-input { width: 8ch; font: inherit; font-size: 1.1rem; letter-spacing: 0.2em; padding: 8px 10px; border: 1px solid currentColor; border-radius: 6px; background: transparent; color: inherit; }

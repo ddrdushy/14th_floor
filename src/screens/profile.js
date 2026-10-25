@@ -6,7 +6,7 @@
 // screens get the two-column desk with the licence pinned on the right.
 import { gsap } from 'gsap';
 import { h, modal } from '../core/ui.js';
-import { checkName, adopt, summaryOf } from '../core/cloud.js';
+import { checkName, loadTaken, summaryOf, promptPin } from '../core/cloud.js';
 import { go } from '../core/router.js';
 import { setProfile, state, withProfileDefaults, PROFILE_DEFAULTS } from '../core/state.js';
 import {
@@ -557,11 +557,11 @@ export function mount(host) {
       if (r && r.taken) {
         const v = await modal({
           title: 'That name is already on file',
-          body: h('div', {}, h('p', {}, `A detective called "${r.taken.name || wanted}" already has a case file: ${summaryOf(r.taken.save)}.`),
-            h('p', {}, 'If that is you from another device, load it. Otherwise pick a different name (add a surname or an initial).')),
-          buttons: [{ label: 'Choose another name', value: 'rename' }, { label: 'That is me: load it', kind: 'primary', value: 'load' }],
+          body: h('div', {}, h('p', {}, `A detective called "${r.taken.name || wanted}" already has a case file: ${summaryOf(r.taken.brief)}.`),
+            h('p', {}, 'If that is you from another device, open it with your PIN. Otherwise pick a different name (add a surname or an initial).')),
+          buttons: [{ label: 'Choose another name', value: 'rename' }, { label: 'That is me: open it', kind: 'primary', value: 'load' }],
         });
-        if (v === 'load') { adopt(r.taken); return; }
+        if (v === 'load' && (await loadTaken(r.taken))) return;
         signing = false;
         submit.disabled = false;
         nextBtn.disabled = false;
@@ -571,6 +571,8 @@ export function mount(host) {
         setTimeout(() => nameInput.focus({ preventScroll: true }), 50);
         return;
       }
+      // a brand-new case file: lock it with a PIN before the licence is stamped
+      if (r === 'free' && !editing) await promptPin({ required: true });
     }
     const pr = current();
     // save first: the ceremony below is only for show

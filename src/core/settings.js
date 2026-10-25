@@ -39,13 +39,15 @@ function leaderboardGroup(s) {
     save();
   });
   name.querySelector('.set-switch').disabled = s.shareProgress === false;
+  const pinBtn = h('button', { class: 'btn btn--small set-pin', onclick: () => import('./cloud.js').then((m) => m.promptPin({ change: true })) }, 'Change my PIN');
   return h('section', { class: 'set-group set-group--privacy' },
     h('h3', {}, 'Leaderboard'),
     share,
     name,
+    state().profile ? h('div', { class: 'set-row' }, h('span', {}, 'Case file PIN (to continue on another device)'), pinBtn) : null,
     h('p', { class: 'set-help set-privacy' },
       'Progress is sent with a random player number and your detective name, never an account, email or exact location (only your country). ',
-      'Your game is saved online under your detective name, so you can continue on another device by typing that name on the title screen. Anyone who types the same name can load it. ',
+      'Your game is saved online under your detective name and locked with your 4-digit PIN: type both on the title screen of another device to continue there. ',
       'Other players only see your name if you choose to show it on the leaderboard. Turn sharing off and nothing more leaves this device.'));
 }
 

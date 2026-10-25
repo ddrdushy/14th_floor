@@ -103,7 +103,7 @@ export function mount(host) {
   } else {
     items.push(item('New game', 'Open your agency in Brickfields', () => go('profile')));
   }
-  items.push(item('Continue on this device', 'Played elsewhere? Load your game by detective name', () => openCloudLoad()));
+  items.push(item('Continue on this device', 'Played elsewhere? Load your game with your name and PIN', () => openCloudLoad()));
   items.push(item('Leaderboard', null, () => go('leaderboard', { back: 'title' })));
   items.push(item('Settings', null, () => openSettings()));
   items.push(item('Credits', null, showCredits));

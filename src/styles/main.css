@@ -272,3 +272,4 @@ img { display: block; max-width: 100%; }
 .cloud-compare dt { font-weight: 700; }
 .cloud-compare dd { margin: 0; }
 .cloud-warn { color: var(--thread); font-weight: 600; }
+.cloud-load .cloud-pin { width: 9ch; font-size: 1.6rem; letter-spacing: 0.35em; text-align: center; }

@@ -2,7 +2,7 @@
 // (created on first use, no SQL console steps), admin auth, and the per-case verdict rules.
 // This file exports no onRequest handler, so Pages does not turn it into a route.
 
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 // Cases in play order. Mirrors CASE_ORDER in src/data/cases.js; a case missing here still works,
 // it is just treated as "after" the known ones when working out how far a player has got.
@@ -192,7 +192,11 @@ const SCHEMA = [
     player_id TEXT NOT NULL,
     data TEXT NOT NULL,
     score INTEGER NOT NULL DEFAULT 0,
-    updated_at INTEGER NOT NULL
+    updated_at INTEGER NOT NULL,
+    pin_salt TEXT,
+    pin_hash TEXT,
+    pin_fails INTEGER NOT NULL DEFAULT 0,
+    locked_until INTEGER NOT NULL DEFAULT 0
   )`,
   `CREATE INDEX IF NOT EXISTS saves_player ON saves (player_id)`,
 ];
@@ -201,6 +205,10 @@ const SCHEMA = [
 // so a database that already has the column (a fresh one, created from SCHEMA) is fine.
 const ALTERS = [
   [2, `ALTER TABLE players ADD COLUMN profile_name TEXT`],
+  [3, `ALTER TABLE saves ADD COLUMN pin_salt TEXT`],
+  [3, `ALTER TABLE saves ADD COLUMN pin_hash TEXT`],
+  [3, `ALTER TABLE saves ADD COLUMN pin_fails INTEGER NOT NULL DEFAULT 0`],
+  [3, `ALTER TABLE saves ADD COLUMN locked_until INTEGER NOT NULL DEFAULT 0`],
 ];
 
 let migrated = null; // one schema pass per isolate

@@ -534,6 +534,7 @@ async function showPlayer(id) {
           h('div', {}, h('dt', {}, 'Puzzles solved'), h('dd', {}, fmtN(d.solves.length))),
           h('div', {}, h('dt', {}, 'Country'), h('dd', {}, p.country || '–')),
           h('div', {}, h('dt', {}, 'Platform'), h('dd', {}, p.platform || '–')))),
+      caseFileCard(p, d.save),
       h('div', { class: 'adm-h' }, h('h2', {}, 'Cases')),
       cases.length ? h('div', { class: 'pd-cases' }, cases) : h('p', { class: 'note' }, 'No case opened yet.'),
       h('div', { class: 'adm-h' }, h('h2', {}, 'Timeline'), h('p', {}, d.events.length >= 300 ? 'Latest 300 events' : `${d.events.length} events, newest first`)),
@@ -544,6 +545,29 @@ async function showPlayer(id) {
   } catch (err) {
     if (err.status !== 401) ui.players.replaceChildren(h('p', {}, h('a', { href: '#players', class: 'a-btn a-btn--ghost' }, '← All players')), h('div', { class: 'err-box', role: 'alert' }, err.status === 404 ? 'No player with that id.' : explain(err)));
   }
+}
+
+/** The player's online case file (cloud save): when it was saved, its PIN, and a way to set a new PIN. */
+function caseFileCard(p, sv) {
+  if (!sv) return h('div', { class: 'card pd-save' }, h('h3', {}, 'Online case file'), h('p', { class: 'muted' }, 'None yet. It appears once the player has a detective name and plays with "Share progress" on.'));
+  const locked = sv.locked_until > Date.now();
+  const input = h('input', { type: 'text', inputmode: 'numeric', maxlength: 4, pattern: '[0-9]{4}', placeholder: '4 digits', 'aria-label': 'New PIN', class: 'pd-pin-input' });
+  const msg = h('p', { class: 'muted', role: 'status' });
+  const btn = h('button', { class: 'a-btn', onclick: async () => {
+    const pin = input.value.trim();
+    if (!/^\d{4}$/.test(pin)) { msg.textContent = 'Type exactly 4 digits.'; return; }
+    btn.disabled = true;
+    try {
+      await api('/admin/save-pin', { method: 'POST', body: JSON.stringify({ player_id: p.id, pin }) });
+      msg.textContent = `PIN set. Tell ${sv.name} the new PIN: ${pin}.`;
+      input.value = '';
+    } catch (err) { msg.textContent = explain(err); } finally { btn.disabled = false; }
+  } }, 'Set new PIN');
+  return h('div', { class: 'card pd-save' },
+    h('h3', {}, 'Online case file'),
+    h('p', {}, `Saved as "${sv.name}" · ${ago(sv.updated_at)} · `, sv.has_pin ? (locked ? h('b', {}, 'PIN locked after wrong tries') : 'PIN set') : h('b', {}, 'no PIN yet (cannot be loaded on another device)'), sv.pin_fails && !locked ? ` · ${sv.pin_fails} wrong ${sv.pin_fails === 1 ? 'try' : 'tries'}` : ''),
+    h('div', { class: 'pd-pin' }, input, btn),
+    msg);
 }
 
 // ---------- voices (mounted from ./voices.js when that module exists) ----------
