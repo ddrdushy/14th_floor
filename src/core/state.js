@@ -76,6 +76,16 @@ export function save() {
 export const state = () => data;
 export const onChange = (fn) => (listeners.add(fn), () => listeners.delete(fn));
 
+/** Replace the whole save (a cloud save loaded on this device). Keeps this device's own settings. */
+export function replaceSave(next) {
+  const keep = data.settings;
+  const out = { ...fresh(), ...next, settings: { ...fresh().settings, ...(next.settings || {}), ...keep } };
+  out.profile = withProfileDefaults(out.profile);
+  if (!out.seenHowTo || typeof out.seenHowTo !== 'object' || Array.isArray(out.seenHowTo)) out.seenHowTo = {};
+  data = out;
+  try { localStorage.setItem(KEY, JSON.stringify(data)); } catch { /* session only */ }
+}
+
 export function resetAll() {
   data = fresh();
   save();

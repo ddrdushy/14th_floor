@@ -2,7 +2,7 @@
 // (created on first use, no SQL console steps), admin auth, and the per-case verdict rules.
 // This file exports no onRequest handler, so Pages does not turn it into a route.
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 // Cases in play order. Mirrors CASE_ORDER in src/data/cases.js; a case missing here still works,
 // it is just treated as "after" the known ones when working out how far a player has got.
@@ -135,6 +135,7 @@ const SCHEMA = [
     created_at INTEGER NOT NULL,
     last_seen INTEGER NOT NULL,
     detective_name TEXT,
+    profile_name TEXT,
     show_on_board INTEGER NOT NULL DEFAULT 0,
     platform TEXT,
     country TEXT,
@@ -184,6 +185,22 @@ const SCHEMA = [
     PRIMARY KEY (player_id, case_id, level_id)
   )`,
   `CREATE INDEX IF NOT EXISTS solves_level ON solves (case_id, level_id)`,
+  // cloud saves: one per detective name, so a player can carry on on another device by typing it
+  `CREATE TABLE IF NOT EXISTS saves (
+    name_key TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    player_id TEXT NOT NULL,
+    data TEXT NOT NULL,
+    score INTEGER NOT NULL DEFAULT 0,
+    updated_at INTEGER NOT NULL
+  )`,
+  `CREATE INDEX IF NOT EXISTS saves_player ON saves (player_id)`,
+];
+
+// Columns added after a table first shipped: [version, sql]. "duplicate column" errors are ignored,
+// so a database that already has the column (a fresh one, created from SCHEMA) is fine.
+const ALTERS = [
+  [2, `ALTER TABLE players ADD COLUMN profile_name TEXT`],
 ];
 
 let migrated = null; // one schema pass per isolate
@@ -193,7 +210,11 @@ export function migrate(db) {
       const row = await db.prepare(`SELECT v FROM meta WHERE k = 'schema'`).first().catch(() => null);
       if (row && Number(row.v) >= SCHEMA_VERSION) return;
       await db.batch(SCHEMA.map((sql) => db.prepare(sql)));
-      // future schema changes: add ALTER TABLE steps here, guarded by the stored version
+      const from = Number(row?.v) || 0;
+      for (const [v, sql] of ALTERS) {
+        if (from >= v) continue;
+        try { await db.prepare(sql).run(); } catch (err) { if (!/duplicate column/i.test(String(err?.message || err))) throw err; }
+      }
       await db.prepare(`INSERT INTO meta (k, v) VALUES ('schema', ?1) ON CONFLICT(k) DO UPDATE SET v = excluded.v`).bind(String(SCHEMA_VERSION)).run();
     })().catch((err) => {
       migrated = null; // try again on the next request
@@ -277,6 +298,12 @@ export const adminHandler = (fn) => handler(async (ctx) => (await requireAdmin(c
 
 /** Escape a user string for use inside a LIKE pattern (with ESCAPE '\'). */
 export const likeEscape = (s) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
+
+/** The key a cloud save is filed under: the cleaned name, lower case. */
+export const nameKey = (v) => {
+  const n = cleanName(v);
+  return n && n.length >= 2 ? n.toLowerCase() : null;
+};
 
 /** Clean a detective name for public display: printable, single-spaced, short. */
 export function cleanName(v) {

@@ -59,6 +59,22 @@ export const sharing = () => settings().shareProgress !== false;
 export const showingName = () => settings().showOnBoard === true;
 const isDevSession = () => { try { return new URLSearchParams(location.search).has('dev'); } catch { return false; } };
 
+/**
+ * Take over another device's player id and mark everything in `saveData` as already reported
+ * (used when a cloud save is loaded on this device, just before the page reloads).
+ */
+export function adoptPlayer(id, saveData) {
+  const reported = {};
+  for (const [caseId, cs] of Object.entries(saveData?.cases || {})) {
+    if (!cs || typeof cs !== 'object') continue;
+    const levels = {};
+    for (const lid of Object.keys(cs.solved || {})) levels[lid] = 1;
+    reported[caseId] = { open: 1, levels, ...(cs.status === 'closed' && cs.closedAt ? { closedAt: cs.closedAt } : {}) };
+  }
+  store = { playerId: id, reported, queue: [], profileKey: null };
+  persist();
+}
+
 /** The anonymous player id (created on first use, kept across "New game"). */
 export function playerId() {
   const s = state();
@@ -132,12 +148,13 @@ function diff() {
       r.closedAt = cs.closedAt;
     }
   }
-  // the name is only ever sent when the player chose to show it
+  // `name` goes on the public leaderboard only when the player chose to show it; `profile` (the same
+  // name) is private: the owner's dashboard and the cloud save
   if (s.profile) {
     const show = showingName() && !!s.profile.name;
-    const key = show ? `1:${s.profile.name}` : '0';
+    const key = `p:${show ? 1 : 0}:${s.profile.name || ''}`;
     if (store.profileKey !== key) {
-      enqueue('profile_set', { data: { show, name: show ? s.profile.name : null } });
+      enqueue('profile_set', { data: { show, name: show ? s.profile.name : null, profile: s.profile.name || null } });
       store.profileKey = key;
     }
   }

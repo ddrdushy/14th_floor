@@ -264,3 +264,11 @@ img { display: block; max-width: 100%; }
 .spec-tag { display: inline-block; margin: 10px 0 0; padding: 2px 8px; font-family: var(--font-doc); font-size: 0.85rem; color: var(--manila); background: rgba(217, 196, 154, 0.12); border-left: 3px solid var(--thread); }
 .phone-nav { display: none; }
 .pin-grip { display: none; }
+
+/* cloud save dialogs (core/cloud.js) */
+.cloud-load .text-input { margin: 4px 0 12px; color: var(--ink); background: #fff; border-color: var(--ink-soft); font-size: max(16px, 1.15rem); }
+.cloud-note { font-size: 0.9rem; color: var(--ink-soft); }
+.cloud-compare { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin: 8px 0 0; }
+.cloud-compare dt { font-weight: 700; }
+.cloud-compare dd { margin: 0; }
+.cloud-warn { color: var(--thread); font-weight: 600; }

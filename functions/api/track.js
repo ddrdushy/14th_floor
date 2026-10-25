@@ -44,7 +44,8 @@ function cleanEvent(e, now) {
     }
     case 'profile_set': {
       const show = raw.show === true;
-      data = { show, name: show ? cleanName(raw.name) : null };
+      // `profile` is the detective's own name, kept private (owner dashboard, cloud save); `name` is public
+      data = { show, name: show ? cleanName(raw.name) : null, profile: cleanName(raw.profile) };
       break;
     }
     default:
@@ -124,8 +125,8 @@ export const onRequestPost = handler(async ({ request, env }) => {
       for (const [lid, x] of Object.entries(e.data.levels)) solve(e.caseId, lid, x.time, x.hints, e.at);
       closes.push(e);
     } else if (e.type === 'profile_set') {
-      stmts.push(db.prepare(`UPDATE players SET detective_name = ?2, show_on_board = ?3 WHERE id = ?1`)
-        .bind(playerId, e.data.show ? e.data.name : null, e.data.show && e.data.name ? 1 : 0));
+      stmts.push(db.prepare(`UPDATE players SET detective_name = ?2, show_on_board = ?3, profile_name = COALESCE(?4, profile_name) WHERE id = ?1`)
+        .bind(playerId, e.data.show ? e.data.name : null, e.data.show && e.data.name ? 1 : 0, e.data.profile));
     }
   }
   // case totals come from the per-puzzle rows

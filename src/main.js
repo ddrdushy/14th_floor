@@ -26,6 +26,7 @@ import { state } from './core/state.js';
 import { openSettings } from './core/settings.js';
 import { initNav } from './core/nav.js';
 import { initTelemetry } from './core/telemetry.js';
+import { initCloud } from './core/cloud.js';
 
 register('title', () => import('./screens/title.js'));
 register('profile', () => import('./screens/profile.js'));
@@ -67,6 +68,7 @@ initNav();
 
 // anonymous progress for the leaderboard (quiet no-op without the backend; see core/telemetry.js)
 initTelemetry();
+initCloud();
 
 // deep links for testing: ?screen=map&case=case01&level=l03
 const q = new URLSearchParams(location.search);

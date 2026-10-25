@@ -27,9 +27,9 @@ function sliderRow(label, id, get, set, onRelease) {
 }
 
 // Leaderboard and privacy (read by core/telemetry.js through the save):
-//   shareProgress: send anonymous progress (default on)   showOnBoard: show the detective name (default off)
+//   shareProgress: send progress + cloud save (default on)   showOnBoard: show the detective name (default off)
 function leaderboardGroup(s) {
-  const share = toggleRow('Share anonymous progress', 'set-share', () => s.shareProgress !== false, (v) => {
+  const share = toggleRow('Share progress and save my game online', 'set-share', () => s.shareProgress !== false, (v) => {
     s.shareProgress = v;
     save();
     name.querySelector('.set-switch').disabled = !v;
@@ -44,8 +44,9 @@ function leaderboardGroup(s) {
     share,
     name,
     h('p', { class: 'set-help set-privacy' },
-      'Progress is sent with a random player number, never an account, email or exact location (only your country). ',
-      'Your detective name is only sent if you choose to show it. Turn sharing off and nothing more leaves this device.'));
+      'Progress is sent with a random player number and your detective name, never an account, email or exact location (only your country). ',
+      'Your game is saved online under your detective name, so you can continue on another device by typing that name on the title screen. Anyone who types the same name can load it. ',
+      'Other players only see your name if you choose to show it on the leaderboard. Turn sharing off and nothing more leaves this device.'));
 }
 
 /** Opens the settings sheet. Resolves when it closes. */

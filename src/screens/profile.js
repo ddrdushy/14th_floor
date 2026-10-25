@@ -5,7 +5,8 @@
 // Phones get a four-step flow (photo, details, record, sign) under a sticky licence chip; wider
 // screens get the two-column desk with the licence pinned on the right.
 import { gsap } from 'gsap';
-import { h } from '../core/ui.js';
+import { h, modal } from '../core/ui.js';
+import { checkName, adopt, summaryOf } from '../core/cloud.js';
 import { go } from '../core/router.js';
 import { setProfile, state, withProfileDefaults, PROFILE_DEFAULTS } from '../core/state.js';
 import {
@@ -549,6 +550,28 @@ export function mount(host) {
     signing = true;
     submit.disabled = true;
     nextBtn.disabled = true;
+    // the detective name is the key to the online case file: it must be free, or already this player's
+    const wanted = p.name.trim();
+    if (!editing || wanted.toLowerCase() !== String(existing?.name || '').trim().toLowerCase()) {
+      const r = await checkName(wanted);
+      if (r && r.taken) {
+        const v = await modal({
+          title: 'That name is already on file',
+          body: h('div', {}, h('p', {}, `A detective called "${r.taken.name || wanted}" already has a case file: ${summaryOf(r.taken.save)}.`),
+            h('p', {}, 'If that is you from another device, load it. Otherwise pick a different name (add a surname or an initial).')),
+          buttons: [{ label: 'Choose another name', value: 'rename' }, { label: 'That is me: load it', kind: 'primary', value: 'load' }],
+        });
+        if (v === 'load') { adopt(r.taken); return; }
+        signing = false;
+        submit.disabled = false;
+        nextBtn.disabled = false;
+        goStep(2);
+        nameHint.textContent = `"${wanted}" is taken. Add a surname or an initial.`;
+        nameHint.classList.add('is-warn');
+        setTimeout(() => nameInput.focus({ preventScroll: true }), 50);
+        return;
+      }
+    }
     const pr = current();
     // save first: the ceremony below is only for show
     setProfile({

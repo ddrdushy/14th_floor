@@ -10,6 +10,7 @@ import { app } from '../core/app.js';
 import { hasImage, imgUrl } from '../core/assets.js';
 import { openSettings } from '../core/settings.js';
 import { playerPortraitSvg } from '../core/avatar.js';
+import { openCloudLoad } from '../core/cloud.js';
 
 const KEY_ART = 'title_keyart';
 let gatePassed = false; // once per page load
@@ -102,6 +103,7 @@ export function mount(host) {
   } else {
     items.push(item('New game', 'Open your agency in Brickfields', () => go('profile')));
   }
+  items.push(item('Continue on this device', 'Played elsewhere? Load your game by detective name', () => openCloudLoad()));
   items.push(item('Leaderboard', null, () => go('leaderboard', { back: 'title' })));
   items.push(item('Settings', null, () => openSettings()));
   items.push(item('Credits', null, showCredits));

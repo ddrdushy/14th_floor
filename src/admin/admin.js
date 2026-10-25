@@ -447,7 +447,7 @@ function showPlayers() {
     timer = setTimeout(() => { playersState.q = search.value.trim(); playersState.offset = 0; load(); }, 300);
   });
   ui.players.replaceChildren(h('div', { class: 'players-list' },
-    h('div', { class: 'adm-h' }, h('h2', {}, 'Players'), h('p', {}, 'Most recently seen first. Names show only for players who chose to appear on the leaderboard.')),
+    h('div', { class: 'adm-h' }, h('h2', {}, 'Players'), h('p', {}, 'Most recently seen first. Detective names as players typed them; "board" means the name is also shown on the public leaderboard, "cloud" that the game is saved online.')),
     h('div', { class: 'toolbar' }, search, count),
     h('div', { class: 'card' }, body)));
 
@@ -462,7 +462,7 @@ function showPlayers() {
       if (!d.players.length) { body.replaceChildren(h('p', { class: 'chart-empty' }, playersState.q ? 'Nobody matches.' : 'No players yet.')); return; }
       const rows = d.players.map((p) => {
         const tr = h('tr', { class: 'is-click', tabindex: 0, onclick: () => { location.hash = `#player/${p.id}`; }, onkeydown: (e) => { if (e.key === 'Enter') location.hash = `#player/${p.id}`; } },
-          h('th', { scope: 'row' }, h('div', { class: 'who' }, h('b', {}, p.name || 'Anonymous'), h('span', { class: 'mono' }, p.id.slice(0, 8)))),
+          h('th', { scope: 'row' }, h('div', { class: 'who' }, h('b', {}, p.name || 'No name yet'), h('span', { class: 'mono' }, p.id.slice(0, 8)))),
           h('td', {}, stageLabel(p)),
           h('td', { class: 'r' }, fmtN(p.closed_cases)),
           h('td', { class: 'r' }, fmtN(p.solves)),
@@ -470,7 +470,7 @@ function showPlayers() {
           h('td', { class: 'hide-sm' }, p.platform || '–'),
           h('td', { class: 'hide-sm' }, dateTime(p.created_at)),
           h('td', {}, ago(p.last_seen)),
-          h('td', {}, h('span', { class: 'tags' }, p.dev ? h('span', { class: 'pill pill--plain' }, 'dev') : null, p.shown ? h('span', { class: 'pill pill--good' }, 'board') : null)));
+          h('td', {}, h('span', { class: 'tags' }, p.dev ? h('span', { class: 'pill pill--plain' }, 'dev') : null, p.cloud ? h('span', { class: 'pill pill--plain' }, 'cloud') : null, p.shown ? h('span', { class: 'pill pill--good' }, 'board') : null)));
         return tr;
       });
       const prev = h('button', { class: 'a-btn', type: 'button', disabled: playersState.offset === 0, onclick: () => { playersState.offset = Math.max(0, playersState.offset - playersState.limit); load(); } }, '← Newer');
