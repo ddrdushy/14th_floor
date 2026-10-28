@@ -10,7 +10,7 @@
 // The prompt is built only from the case file on the server (./_cases.js), never from client text other
 // than the question and the short history, so the endpoint cannot be used as a general chatbot.
 import { handler, json, fail, readJson, methodNotAllowed, UUID_RE, clientIp, overLimit } from '../_lib.js';
-import { aiReady, chat, parseJsonReply, ttsReady, signLine } from './_engine.js';
+import { aiReady, chat, parseJsonReply, ttsReady, signLine, logAi, screenInput, DEFAULT_MODEL } from './_engine.js';
 import { aiLevel } from './_cases.js';
 
 const MAX_Q = 240;
@@ -53,7 +53,8 @@ function fallback(p, lie, topic, confront) {
   return { reply: `${s.name} shrugs. "Ask me something I can actually answer."`, claims: [] };
 }
 
-export const onRequestPost = handler(async ({ request, env }) => {
+export const onRequestPost = handler(async (ctx) => {
+  const { request, env } = ctx;
   const ip = clientIp(request);
   if (overLimit(`ai-ip:${ip}`, 40)) return fail(429, 'rate_limited');
   const body = await readJson(request, 16 * 1024);
@@ -98,19 +99,36 @@ export const onRequestPost = handler(async ({ request, env }) => {
       : question });
   }
 
+  const kind = confront ? 'confront' : topicItem ? 'topic' : 'ask';
+  const log = { player_id: b.player_id, case_id: b.case_id, level_id: b.level_id, kind, input: confront ? `${confront.claim.id} + ${confront.ev.id}` : question, model: env.AI_MODEL || DEFAULT_MODEL };
+  const t0 = Date.now();
   try {
-    const text = await chat(env, messages, { json: true, maxTokens: 260, temperature: 0.75 });
+    // typed questions are screened (Jev) while the model answers; a blocked one never reaches the player
+    const [text, screen] = await Promise.all([
+      chat(env, messages, { json: true, maxTokens: 260, temperature: 0.75 }),
+      kind === 'ask' ? screenInput(env, question, `${p.suspect?.name}, ${p.suspect?.role}. ${p.setting || ''}`) : { block: false },
+    ]);
+    if (screen.block) {
+      const s = p.suspect || {};
+      const reply = screen.kind === 'abuse'
+        ? `${s.name} leans back and folds their arms. "I am not answering that. Ask me properly, or let me go home."`
+        : `${s.name} looks at you as if you have lost your mind. "Detective, I have no idea what you are talking about."`;
+      logAi(ctx, { ...log, output: reply, ms: Date.now() - t0, flag: `blocked:${screen.kind}:${(screen.p || 0).toFixed(2)}` });
+      return json({ ok: true, ai: true, reply, claims: [], blocked: true });
+    }
     const d = parseJsonReply(text);
     let reply = clip(d?.reply ?? (d ? '' : text), 500).replace(/^"|"$/g, '');
     let claims = Array.isArray(d?.claims) ? [...new Set(d.claims.filter((c) => allowed.has(c)))] : [];
     if (confront) claims = [];
     else if (topicItem && allowed.has(topicItem.id) && !claims.includes(topicItem.id)) claims.push(topicItem.id);
     if (!reply) return json({ ok: true, ai: false, ...fallback(p, lie, topic, confront) });
+    logAi(ctx, { ...log, output: { reply, claims }, ms: Date.now() - t0, flag: confront ? (confront.right ? 'broken' : 'wrong_card') : null });
     // a signature lets the game ask /api/ai/speak for this exact line in the suspect's voice
     const sig = ttsReady(env) ? await signLine(env, `${b.case_id}|${b.level_id}`, reply) : null;
     return json({ ok: true, ai: true, reply, claims, ...(sig ? { sig } : {}), ...(confront ? { right: confront.right } : {}) });
   } catch (err) {
     console.error('floor14 ai error', err?.status, err?.message);
+    logAi(ctx, { ...log, ok: false, output: String(err?.message || err), ms: Date.now() - t0 });
     return json({ ok: true, ai: false, ...fallback(p, lie, topic, confront), ...(confront ? { right: confront.right } : {}) });
   }
 });

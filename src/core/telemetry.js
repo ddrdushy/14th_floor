@@ -14,6 +14,7 @@
 //   longer has (after "New game") is forgotten, so it is reported again when it happens again.
 import { state, save, onChange } from './state.js';
 import { CASES } from '../data/cases.js';
+import { isDev } from './ui.js';
 
 const STORE = 'floor14.telemetry.v1';
 const API = './api';
@@ -57,7 +58,7 @@ const uuid = () => {
 const settings = () => state().settings || {};
 export const sharing = () => settings().shareProgress !== false;
 export const showingName = () => settings().showOnBoard === true;
-const isDevSession = () => { try { return new URLSearchParams(location.search).has('dev'); } catch { return false; } };
+const isDevSession = () => { try { return isDev(); } catch { return false; } };
 
 /**
  * Take over another device's player id and mark everything in `saveData` as already reported

@@ -68,4 +68,11 @@ export const fmtTime = (sec) => {
 
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-export const isDev = () => new URLSearchParams(location.search).has('dev');
+/** Is this a local machine? Dev tools (?dev, the lab's Solve/Hint) only ever work here, never on the live site. */
+export const isLocal = () => {
+  try {
+    const h = location.hostname;
+    return import.meta.env?.DEV === true || h === 'localhost' || h === '127.0.0.1' || h === '[::1]' || h.endsWith('.local') || h.endsWith('.localhost');
+  } catch { return false; }
+};
+export const isDev = () => isLocal() && new URLSearchParams(location.search).has('dev');

@@ -10,6 +10,7 @@ export const GAMES_D = {
   dialtone: () => import('./dialtone.js'),
   fusebox: () => import('./fusebox.js'),
   interrogation: () => import('./interrogation.js'),
+  theory: () => import('./theory.js'),
 };
 export const CATEGORY_D = {
   wiretap: 'Wiring',
@@ -21,4 +22,5 @@ export const CATEGORY_D = {
   dialtone: 'Listening',
   fusebox: 'Logic',
   interrogation: 'Interrogation',
+  theory: 'Deduction',
 };

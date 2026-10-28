@@ -678,6 +678,29 @@ export const CASE05 = {
       },
     },
     {
+      id: 'c5_th', phase: 'Bukit Aman', title: 'For the prosecutor',
+      game: 'theory', variant: 'classic',
+      brief: 'Deputy Public Prosecutor Hamidah Yusof gives you one sheet of paper and twenty minutes before Vivian Chua\'s lawyer lands. "Not the evidence, detective. The story. Who did what, and why. If you cannot tell it, I cannot charge it."',
+      params: {
+        prompt: 'Write the Sunday night at Menara Sinar for the prosecutor: who sent Dato\' Rashid out of the building, who gave the order, why he had to die, and how the kancil got into his hand.',
+        context: 'Dato\' Rashid Osman, Group Finance Director of Sinar Holdings, fell from the hidden Level 14 of Menara Sinar at 11:47 PM on Sunday. He had agreed to take K. Rajan (Daniel Raj) up to Level 14 that night. Vivian Chua, Secretary to the Chairman, sent a printed order ("The director first. Then the kancil.") from home at 21:40; Zulkifli "Zul" Hamid, Head of Security, collected it, met Rashid on 14, pushed him out of the window-cleaning cradle door, and at 1:20 AM "found" the body and closed the dead fingers over a dry paper kancil to blame the kancil man.',
+        points: [
+          { id: 'push', label: 'Who sent him out of the building', criterion: 'Zulkifli Hamid (Zul, Head of Security) pushed or threw Rashid out of the Level 14 window / cradle door. It must not say someone else pushed him.', keywords: [['zul', 'zulkifli', 'head of security'], ['push', 'shove', 'threw', 'throw', 'out of the', 'cradle']], hint: 'Whose skin was under Rashid\'s nails, and who signed out the cradle key at 23:35?' },
+          { id: 'order', label: 'Who gave the order', criterion: 'Vivian Chua (the Chairman\'s secretary / the Office of the Chairman) ordered or arranged the killing, for example by sending the printed order "The director first. Then the kancil."', keywords: [['vivian', 'chua', 'secretary', 'office of the chairman'], ['order', 'sent', 'printed', 'told', 'paid', 'arranged']], hint: 'The printer log: user VCHUA, 21:40, from outside the building.' },
+          { id: 'why', label: 'Why Rashid had to die', criterion: 'Rashid was killed because he was going to take K. Rajan / Daniel Raj up to Level 14 (to expose the hidden floor), or because he was going to talk.', keywords: [['rajan', 'daniel', 'kancil man', 'talk', 'expose', 'tell'], ['14', 'fourteen', 'floor', 'up', 'police', 'everything']], hint: 'Who was waiting on the stairs between 13 and 14, and what had Rashid promised him?' },
+          { id: 'kancil', label: 'How the kancil got into his hand', criterion: 'The paper kancil was put into Rashid\'s hand after he was dead (it was dry after the rain), by Zul when he "found" the body, to frame the kancil man.', keywords: [['kancil'], ['dry', 'after', 'planted', 'put', 'placed', 'pressed', 'closed']], hint: 'It rained until 1:10. The paper in his fist was dry.' },
+        ],
+        need: 3,
+        clue: 'Hamidah taps the sheet. "Three things I can prove in court. Four if you want me to enjoy it."',
+      },
+      evidence: {
+        img: 'ev_c5_report', hotspot: { x: 0.67, y: 0.37, r: 0.1 },
+        title: 'One sheet of paper',
+        short: 'The prosecutor reads your report twice, signs the charge sheet against Zulkifli Hamid for murder, and leaves the second name blank. "Bring me Vivian Chua\'s own words, and I will fill it in."',
+        text: 'Deputy Public Prosecutor Hamidah Yusof reads your report twice with a pencil she never uses. Then she signs a charge sheet: Zulkifli bin Hamid, Section 302, murder. Under it, a second line, "and abetment by", and nothing after it. "The printer log is a machine," she says. "Machines do not go to prison. Bring me Vivian Chua\'s own words, in a room, on tape, and I will write her name on this line myself." She slides the sheet back to you. Your handwriting, her signature, one empty line.',
+      },
+    },
+    {
       id: 'c5_22', phase: 'Bukit Aman', title: 'The Chairman\'s secretary',
       game: 'interrogation', variant: 'classic',
       brief: 'Vivian Chua comes to Bukit Aman on Wednesday night by appointment, in her own car, with a lawyer on a flight from Singapore and a handbag she keeps on her knee. Superintendent Khairul\'s deadline runs out at midnight. She has given statements to better detectives than you, she says, and none of them ever needed a second one. One thing she tells you is not true. Find it, and put the exhibit that breaks it on the table.',

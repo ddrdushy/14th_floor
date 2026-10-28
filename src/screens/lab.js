@@ -1,5 +1,5 @@
 // Puzzle lab: try any mini game on its own. Open with ?screen=lab&game=<id> (needs a saved profile).
-import { h, toast } from '../core/ui.js';
+import { h, toast, isLocal } from '../core/ui.js';
 import { go } from '../core/router.js';
 import { backButton } from '../core/nav.js';
 import { GAMES, CATEGORY_OF } from '../games/registry.js';
@@ -32,7 +32,7 @@ export async function mount(host, params = {}) {
     backButton('Office', () => go('office')),
     h('div', { class: 'topbar-title' }, h('strong', {}, 'Puzzle lab'), h('span', {}, gameId ? `${gameId}, ${CATEGORY_OF[gameId] || ''}` : 'Pick a game')),
     valid ? howToButton(() => openHowTo()) : null,
-    gameId ? h('button', { class: 'btn btn--small', onclick: () => game?.devSolve?.() }, 'Solve (dev)') : null,
+    gameId && isLocal() ? h('button', { class: 'btn btn--small', onclick: () => game?.devSolve?.() }, 'Solve (dev)') : null,
     gameId ? h('button', { class: 'btn btn--small', onclick: () => { const m = game?.hint?.(); toast(m || 'No hint.'); } }, 'Hint') : null);
   host.append(h('section', { class: 'screen scroll' }, top, list, status, gameCol));
   let game = null;

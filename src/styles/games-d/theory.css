@@ -1,0 +1,16 @@
+/* Case Theory (games/theory.js) */
+.th { display: grid; gap: 10px; }
+.th-prompt { margin: 0; font: 600 1.02rem/1.4 var(--font-ui); }
+.th-label { margin: 2px 0 0; font: 700 0.75rem var(--font-ui); text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; }
+.th-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.th-list li { display: grid; grid-template-columns: 1.4em 1fr; align-items: baseline; gap: 2px 6px; padding: 8px 10px; background: #fffaf0; border: 1px dashed var(--ink-soft); border-radius: 6px; font-weight: 600; }
+.th-list li span { font-weight: 800; }
+.th-list li small { grid-column: 2; font-weight: 400; font-family: var(--font-doc); opacity: 0.8; }
+.th-list li.is-found { border-style: solid; border-color: var(--ok, #2f7d4f); background: #eaf4ea; }
+.th-list li.is-found span { color: var(--ok, #2f7d4f); }
+.th-area { width: 100%; min-height: 9em; padding: 10px 12px; font: 16px/1.5 var(--font-doc); color: var(--ink); background: #fff; border: 1px solid var(--ink-soft); border-radius: var(--r-sm); resize: vertical; box-sizing: border-box; }
+.th-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.th-count { font-size: 0.8rem; opacity: 0.7; }
+.th-status { margin: 0; font-weight: 600; min-height: 1.3em; }
+.th-sample { margin: 0; font-family: var(--font-doc); }
+.th-howto { display: grid; gap: 8px; }

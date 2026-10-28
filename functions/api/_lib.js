@@ -2,7 +2,7 @@
 // (created on first use, no SQL console steps), admin auth, and the per-case verdict rules.
 // This file exports no onRequest handler, so Pages does not turn it into a route.
 
-export const SCHEMA_VERSION = 3;
+export const SCHEMA_VERSION = 5;
 
 // Cases in play order. Mirrors CASE_ORDER in src/data/cases.js; a case missing here still works,
 // it is just treated as "after" the known ones when working out how far a player has got.
@@ -201,6 +201,26 @@ const SCHEMA = [
     locked_until INTEGER NOT NULL DEFAULT 0
   )`,
   `CREATE INDEX IF NOT EXISTS saves_player ON saves (player_id)`,
+  // every call to the AI games (interrogation answers, theory judgements, blocked inputs), for the owner
+  `CREATE TABLE IF NOT EXISTS ai_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    at INTEGER NOT NULL,
+    player_id TEXT,
+    case_id TEXT,
+    level_id TEXT,
+    kind TEXT NOT NULL,
+    input TEXT,
+    output TEXT,
+    ms INTEGER,
+    model TEXT,
+    ok INTEGER NOT NULL DEFAULT 1,
+    flag TEXT
+  )`,
+  `CREATE INDEX IF NOT EXISTS ai_log_at ON ai_log (at)`,
+  `CREATE INDEX IF NOT EXISTS ai_log_player ON ai_log (player_id, at)`,
+  `CREATE INDEX IF NOT EXISTS ai_log_level ON ai_log (case_id, level_id, at)`,
+  `CREATE INDEX IF NOT EXISTS ai_log_flag ON ai_log (flag)`,
+  `CREATE INDEX IF NOT EXISTS solves_at ON solves (at)`,
 ];
 
 // Columns added after a table first shipped: [version, sql]. "duplicate column" errors are ignored,
