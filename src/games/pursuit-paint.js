@@ -99,6 +99,40 @@ export function drawGround(type, r, wM = 8) {
       for (const ex of [-3.7, 3.7]) g.fillRect(xAt(ex) - 3, 0, 6, H);
     }
     puddles(g, rg, r, W, H, 6, 18, 55);
+  } else if (type === 'roofdeck') {
+    // a flat concrete roof: tar-sealed joints, patched slabs, a painted walkway line, ponding water
+    g.fillStyle = '#34373a'; g.fillRect(0, 0, W, H);
+    rough(0.66);
+    speckle(g, r, W, H, 4000, 58, 24, 0.4, 2);
+    for (let m = 0; m < TILE_M; m += 2) { g.fillStyle = 'rgba(12,12,12,0.7)'; g.fillRect(0, yAt(m), W, 2); }
+    for (let x = 0; x <= W; x += 2 * ppm) { g.fillStyle = 'rgba(12,12,12,0.6)'; g.fillRect(x, 0, 2, H); }
+    for (let i = 0; i < 5; i++) { g.fillStyle = `rgba(${40 + r() * 20},${40 + r() * 18},${38 + r() * 14},0.6)`; g.fillRect(r() * W, r() * H, 30 + r() * 60, 20 + r() * 50); }
+    g.fillStyle = 'rgba(214,170,40,0.35)';
+    for (const ex of [-3.5, 3.5]) g.fillRect(xAt(ex) - 2, 0, 4, H);
+    puddles(g, rg, r, W, H, 6, 16, 46);
+  } else if (type === 'zinc') {
+    // the lower roofs: rusty zinc sheets in patchwork
+    g.fillStyle = '#2c2e2e'; g.fillRect(0, 0, W, H);
+    rough(0.5);
+    const sh = 1.2 * ppm, sl = 2.4 * (H / TILE_M);
+    for (let y = 0; y < H; y += sl) for (let x = 0; x < W; x += sh) {
+      const v = r();
+      g.fillStyle = v < 0.3 ? `rgb(${70 + r() * 30},${44 + r() * 14},${30})` : `rgb(${58 + v * 26},${62 + v * 24},${64 + v * 22})`;
+      g.fillRect(x, y, sh - 1, sl - 1);
+      g.fillStyle = 'rgba(0,0,0,0.25)';
+      for (let k = 0; k < sh; k += 4) g.fillRect(x + k, y, 1.5, sl - 1);
+    }
+  } else if (type === 'laterite') {
+    // a laterite lorry track: red earth, two ruts, standing water
+    g.fillStyle = '#5a2e1c'; g.fillRect(0, 0, W, H);
+    rough(0.8);
+    for (let i = 0; i < 7000; i++) { const v = r(); g.fillStyle = `rgba(${90 + v * 50},${44 + v * 22},${26 + v * 12},0.5)`; g.fillRect(r() * W, r() * H, 1 + r() * 3, 1 + r() * 3); }
+    for (const rx of [-1.6, 1.4]) {
+      g.fillStyle = 'rgba(40,18,10,0.55)'; g.fillRect(xAt(rx) - 0.35 * ppm, 0, 0.7 * ppm, H);
+      rg.fillStyle = 'rgb(0,90,0)'; rg.fillRect(xAt(rx) - 0.3 * ppm, 0, 0.6 * ppm, H);
+    }
+    for (let i = 0; i < 30; i++) { g.fillStyle = 'rgba(30,40,24,0.5)'; g.fillRect(r() < 0.5 ? r() * 0.12 * W : W - r() * 0.12 * W, r() * H, 3 + r() * 6, 2 + r() * 8); }
+    puddles(g, rg, r, W, H, 6, 14, 40);
   } else if (type === 'planks') {
     g.fillStyle = '#3a2a1c'; g.fillRect(0, 0, W, H);
     rough(0.58);
@@ -259,16 +293,49 @@ function crane(g, x, base, h, s) {
   g.fillStyle = 'rgba(255,220,170,0.9)'; g.fillRect(x + s * 40, base - h + 1, 2, 2);
 }
 
-export function drawBackdrop(type, r, bg) {
+// The landmark on the skyline depends on the city the chase is in, not on the kind of street.
+function komtar(g, x, base, h) {
+  g.fillStyle = '#0c1418';
+  g.fillRect(x - 14, base - h, 28, h + 6);
+  for (let y = base - h + 4; y < base - 4; y += 4) for (let xx = x - 12; xx < x + 12; xx += 3) if ((xx * 7 + y * 13) % 5 < 2) { g.fillStyle = 'rgba(255,214,150,0.45)'; g.fillRect(xx, y, 1.5, 1.5); }
+  g.fillStyle = 'rgba(255,60,60,1)'; g.fillRect(x - 1, base - h - 4, 2, 2);
+}
+function lotusTower(g, x, base, h) {
+  glowAt(g, x, base - h * 0.8, h * 0.45, 'rgba(200,120,255,0.22)');
+  g.fillStyle = '#121a20';
+  g.beginPath(); g.moveTo(x - 7, base); g.lineTo(x - 2.5, base - h * 0.72); g.lineTo(x + 2.5, base - h * 0.72); g.lineTo(x + 7, base); g.fill();
+  // the bud: four petals of light around a pod
+  for (const [dx, k] of [[-1, 0.8], [1, 0.8], [0, 1]]) {
+    g.fillStyle = k < 1 ? 'rgba(186,96,230,0.9)' : 'rgba(120,220,140,0.85)';
+    g.beginPath(); g.ellipse(x + dx * 6, base - h * 0.8, 5 * k, 12 * k, dx * 0.5, 0, Math.PI * 2); g.fill();
+  }
+  g.fillStyle = '#121a20'; g.fillRect(x - 1, base - h, 2, h * 0.14);
+  g.fillStyle = 'rgba(255,60,60,1)'; g.fillRect(x - 1, base - h - 2, 2, 2);
+}
+function landmark(g, city, kind, x, base, h) {
+  if (city === 'colombo') { if (kind === 'twin') lotusTower(g, x, base, h * 1.1); return; }
+  if (city === 'penang') { if (kind === 'twin') komtar(g, x, base, h * 0.9); return; }
+  if (city === 'town') return;
+  if (kind === 'twin') petronas(g, x, base, h); else klTower(g, x, base, h);
+}
+export function drawBackdrop(type, r, bg, haze = 0, city = 'kl') {
   const W = 1024, H = 256;
   const [c, g] = cv(W, H);
-  if (type === 'klcc') {
+  if (type === 'mist') {
+    // nothing but mist and the dark tops of the palms
+    const grd = g.createLinearGradient(0, 0, 0, HOR + 8);
+    grd.addColorStop(0, '#1a2224'); grd.addColorStop(1, bg);
+    g.fillStyle = grd; g.fillRect(0, 0, W, H);
+    g.fillStyle = bg; g.fillRect(0, HOR, W, H);
+    for (let i = 0; i < 40; i++) palmSil(g, r() * W, HOR + 4, 24 + r() * 26, r() < 0.5 ? -1 : 1);
+    glowAt(g, W * 0.72, HOR - 6, 30, 'rgba(255,190,110,0.35)');
+  } else if (type === 'klcc') {
     sky(g, W, '#050b10', '#2a3a4a', bg);
     clouds(g, r, W, 'rgba(40,60,74,0.35)', 8);
     glowAt(g, W / 2, HOR, 360, 'rgba(255,170,90,0.12)');
     skyline(g, r, W, HOR + 4, 8, 34, '#0b1418', 0.3);
-    klTower(g, W / 2 - 170, HOR, 92);
-    petronas(g, W / 2 + 40, HOR + 2, 128);
+    landmark(g, city, 'tower', W / 2 - 170, HOR, 92);
+    landmark(g, city, 'twin', W / 2 + 40, HOR + 2, 128);
     // kampung roofs and palms against the glow
     g.fillStyle = '#050a0b';
     for (let x = -20; x < W; x += 30 + r() * 40) { const hh = 6 + r() * 8; g.beginPath(); g.moveTo(x, HOR + 6); g.lineTo(x + 14, HOR + 6 - hh); g.lineTo(x + 28, HOR + 6); g.fill(); }
@@ -291,21 +358,32 @@ export function drawBackdrop(type, r, bg) {
     g.fillStyle = '#0a1418';
     g.beginPath(); g.moveTo(0, HOR); g.bezierCurveTo(W * 0.2, HOR - 70, W * 0.45, HOR - 50, W * 0.6, HOR - 80); g.bezierCurveTo(W * 0.75, HOR - 100, W * 0.9, HOR - 40, W, HOR - 30); g.lineTo(W, HOR + 6); g.lineTo(0, HOR + 6); g.fill();
     for (let i = 0; i < 30; i++) { g.fillStyle = 'rgba(255,200,130,0.6)'; g.fillRect(W * 0.5 + r() * W * 0.4, HOR - 30 - r() * 40, 1.5, 1.5); }
-    // KOMTAR
-    g.fillStyle = '#0c1418';
-    g.fillRect(W * 0.3 - 14, HOR - 120, 28, 126);
-    windows(g, r, W * 0.3 - 14, HOR - 120, 28, 120, 0.25, 0.4);
-    g.fillStyle = 'rgba(255,60,60,1)'; g.fillRect(W * 0.3 - 1, HOR - 124, 2, 2);
+    // KOMTAR, when this is George Town
+    if (city === 'kl' || city === 'penang') {
+      g.fillStyle = '#0c1418';
+      g.fillRect(W * 0.3 - 14, HOR - 120, 28, 126);
+      windows(g, r, W * 0.3 - 14, HOR - 120, 28, 120, 0.25, 0.4);
+      g.fillStyle = 'rgba(255,60,60,1)'; g.fillRect(W * 0.3 - 1, HOR - 124, 2, 2);
+    } else if (city === 'colombo') lotusTower(g, W * 0.3, HOR, 130);
     skyline(g, r, W, HOR + 4, 6, 22, '#0b1418', 0.25, 0);
     // a temple roof
     g.fillStyle = '#0a1012';
     g.beginPath(); g.moveTo(W * 0.68 - 40, HOR - 18); g.quadraticCurveTo(W * 0.68, HOR - 30, W * 0.68 + 40, HOR - 18); g.lineTo(W * 0.68 + 30, HOR - 10); g.lineTo(W * 0.68 - 30, HOR - 10); g.fill();
+  } else if (type === 'klroof') {
+    // from the roofs the skyline is close and tall
+    sky(g, W, '#050b10', '#26404c', bg);
+    clouds(g, r, W, 'rgba(46,70,84,0.4)', 10);
+    glowAt(g, W / 2, HOR, 420, 'rgba(255,170,90,0.12)');
+    skyline(g, r, W, HOR + 4, 50, 150, '#0b141a', 0.45);
+    landmark(g, city, 'tower', W * 0.3, HOR, 150);
+    landmark(g, city, 'twin', W * 0.64, HOR + 2, 140);
+    skyline(g, r, W, HOR + 6, 14, 54, '#070c0f', 0.3);
   } else if (type === 'chowkit') {
     sky(g, W, '#080a0c', '#3a2c22', bg);
     clouds(g, r, W, 'rgba(70,56,46,0.3)', 8);
     glowAt(g, W / 2, HOR, 380, 'rgba(255,160,80,0.13)');
     skyline(g, r, W, HOR + 4, 20, 70, '#0b1012', 0.35);
-    klTower(g, W * 0.78, HOR, 100);
+    landmark(g, city, 'tower', W * 0.78, HOR, 100);
     skyline(g, r, W, HOR + 6, 6, 26, '#07090a', 0.18);
   } else { // kl
     sky(g, W, '#050a0e', '#1e3640', bg);
@@ -313,9 +391,10 @@ export function drawBackdrop(type, r, bg) {
     glowAt(g, W / 2, HOR, 380, 'rgba(255,170,90,0.1)');
     glowAt(g, W * 0.3, HOR, 200, 'rgba(255,60,140,0.08)');
     skyline(g, r, W, HOR + 4, 30, 110, '#0a1216', 0.4);
-    klTower(g, W * 0.22, HOR, 120);
-    petronas(g, W * 0.7, HOR + 2, 96);
+    landmark(g, city, 'tower', W * 0.22, HOR, 120);
+    landmark(g, city, 'twin', W * 0.7, HOR + 2, 96);
     skyline(g, r, W, HOR + 6, 10, 40, '#060a0c', 0.2);
   }
+  if (haze > 0) { g.globalAlpha = haze; g.fillStyle = bg; g.fillRect(0, 0, W, H); g.globalAlpha = 1; }
   return c;
 }

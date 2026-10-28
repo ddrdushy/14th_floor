@@ -419,7 +419,7 @@ export const CASE02 = {
         clue: 'Handsets sign every call with their own number, under the noise. Look at the sound, do not just listen to it.',
       },
       evidence: {
-        img: 'ev_c2_radio', hotspot: { x: 0.5, y: 0.5, r: 0.12 },
+        img: 'ev_c2_radio', hotspot: { x: 0.23, y: 0.63, r: 0.15 },
         title: 'Handset JKDM-4471',
         short: 'The 2:19 AM call on channel 3, one minute before two figures came round the stack at Crane 7, went out from Customs handset JKDM-4471. The radio room\'s book has it signed out to badge 4471: Norhayati Salleh.',
         text: 'Drawn as a picture, the hiss at the end of the 2:19 call holds a handset number in clean bright blocks: JKDM-4471. The radio room\'s sign-out book has that handset against badge 4471, Norhayati Salleh, from the start of her Monday shift, and it was not signed back in until Tuesday afternoon. Her shift ended at midnight. Her car came back over the bridge at 12:58. The one word on the call is still too low to hear, but you do not need it: one minute later, on the spreader camera, a white helmet and a dark uniform with a cap came round the stack, and Azman ran.',
@@ -495,6 +495,13 @@ export const CASE02 = {
       brief: 'Since Wednesday a man on a blue Yamaha has followed you from the port to Pandamaran and back. On Thursday morning you double back on him in Klang\'s old town, and he drops the bike at the kerb on Jalan Stesen and runs. Down the five-foot ways of the old shophouses, through the sari shops and flower stalls of Little India, under the laundry poles of the back lanes, on tiles the rain has turned to glass. He is lighter than you. He is also more frightened of the people who sent him than of you.',
       params: {
         setting: 'heritage', vehicle: 'foot', difficulty: 'medium', suspect: 'The Yamaha man',
+        route: ['heritage', 'market', 'rooftop', 'docks', 'estate'], legs: 5, skyline: 'town',
+        beats: [
+          'Into Little India: sari shops, flower stalls, garlands swinging in the rain.',
+          'Up the back stairs of a shophouse and out over the old town roofs.',
+          'Down a ladder to the godowns on the Klang river, past the fishing boats.',
+          'Over the river and out past the last houses, into an oil-palm estate. Mist, mud, and nowhere left to hide.',
+        ],
         clue: 'Three cars behind you since Wednesday. Now he is three shopfronts ahead.',
       },
       evidence: {

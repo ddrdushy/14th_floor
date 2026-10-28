@@ -28,7 +28,6 @@
 // the email header reads Level 14, Menara Sinar, Kuala Lumpur, and the lifts there go from 13 to 15.
 //
 // Evidence hotspots were placed by eye on the generated ev_c4_* art (docs/image_prompts.md, Case 4).
-// ev_c4_cassette and ev_c4_toolbag (c4_rv, c4_ch) keep the placeholder hotspot until their art exists.
 
 const BOOK = [
   { id: 'safe', label: 'The safe at 112 Sea Street', note: 'Yogi\'s own safe, behind the cutting bench. Mohan has the second key.' },
@@ -285,7 +284,7 @@ export const CASE04 = {
         clue: 'Side B begins on Wednesday afternoon. Only one call came in after that.',
       },
       evidence: {
-        img: 'ev_c4_cassette', hotspot: { x: 0.5, y: 0.5, r: 0.12 },
+        img: 'ev_c4_cassette', hotspot: { x: 0.38, y: 0.42, r: 0.20 },
         title: 'Three clicks',
         short: 'Side B holds one call: yours, from Malaysia, on Wednesday evening. Three soft clicks just after Tharshini picks up: the relay ringing its mobile, and somebody answering. Port City heard her tell you about the Malaysian.',
         text: 'Turned the right way round and brought to its proper speed, side B is Tharshini in the shop on Wednesday evening, small and tired, answering a call from Malaysia. Yours. "He said a Malaysian had come to help him undo what he had done." Just after she lifts the receiver there are three soft clicks on the line, the sound the relay in the junction box makes when it rings its mobile and somebody picks up. Whoever held that phone at Port City heard Yogi\'s daughter talk about the Malaysian, and heard you ask about him. K. Rajan had checked out of Room 14 twelve hours earlier. After Wednesday evening, the Malaysian still asking questions about Yogi was you. Tharshini stops the tape before her own voice says "prayer", and does not play it again.',
@@ -414,11 +413,18 @@ export const CASE04 = {
       game: 'pursuit',
       brief: 'Tharshini remembers the telephone repairman who came a month ago and fixed nothing: young, a cap, a canvas tool bag with a Telecom sticker that was not Telecom\'s. Herath\'s constable finds a man like that selling second-hand phones off a mat on Fifth Cross Street, where Pettah\'s wholesale stalls trade all night under bare bulbs. You say "112 Sea Street" and he is gone, into the onion sacks and handcarts and chilli stalls, with half the market shouting after him and the other half shouting after you.',
       params: {
-        setting: 'market', vehicle: 'foot', difficulty: 'medium', suspect: 'The repairman',
+        setting: 'market', vehicle: 'foot', difficulty: 'hard', suspect: 'The repairman',
+        route: ['market', 'city', 'rooftop', 'market', 'docks'], legs: 5, skyline: 'colombo',
+        beats: [
+          'Out of Fifth Cross Street onto Main Street, buses and three-wheelers nose to tail.',
+          'Up a warehouse stair and across the Pettah roofs, the Lotus Tower glowing over the lagoon.',
+          'Down into the Second Cross Street wholesale lanes: onion sacks, handcarts, porters shouting.',
+          'Out past the old Dutch hospital towards the harbour fence, cranes against the sky. He is out of street.',
+        ],
         clue: 'A month ago he opened the junction box behind 112 Sea Street and fixed nothing.',
       },
       evidence: {
-        img: 'ev_c4_toolbag', hotspot: { x: 0.5, y: 0.5, r: 0.12 },
+        img: 'ev_c4_toolbag', hotspot: { x: 0.47, y: 0.57, r: 0.20 },
         title: 'He fixed nothing',
         short: 'The repairman\'s bag holds four more GSM relays and a job card on Sinar Gems Lanka\'s account: "112 Sea Street, line maintenance". He delivered the listening phone to Level 9, Port City. A Sinar Cold Chain van drove him to Sea Street and waited in the lane.',
         text: 'Nuwan, 24, has never worked for Telecom. He mends phones at a stall in Maradana and does "special jobs" for anybody who pays cash. In his canvas bag, among onion skins: four more GSM relays still in their baby-monitor boxes, a Telecom identity card with his own photo glued over somebody else\'s, and a carbon job card on Sinar Gems Lanka\'s account, dated a month ago: "112 Sea Street. Line maintenance. Rs 40,000." He set the relay to ring one mobile, and he delivered that mobile himself, boxed, to the managing director\'s office on Level 9 at Port City. He did not go to Sea Street alone. A white Sinar Cold Chain van took him there and waited in the back lane with its engine running; the driver was a big man with a swimmer\'s shoulders who never got out. The plate began WP LH. Herath writes WP LH-4471 on the back of the job card, and goes to wake a magistrate.',

@@ -221,6 +221,12 @@ export const SIDE01 = {
       brief: 'A despatch rider was booked for 12:25 AM to collect "one carton durian, for Singapore" from the row. You find him on Sunday night doing the same run, and he does not want to talk. He sees you coming and his scooter is already moving, off the row and into the back lanes behind the SS2 shops: drain covers, stacked crates, kitchen boys smoking by the bins. He knows every lane. Stay on his tail light until he runs out of them.',
       params: {
         setting: 'city', vehicle: 'scooter', difficulty: 'easy', suspect: 'Despatch rider',
+        route: ['city', 'market', 'kampung', 'city'], legs: 4, skyline: 'kl',
+        beats: [
+          'Straight through the SS2 night market, between the satay smoke and the durian lorries.',
+          'Under the highway and into Kampung Sungai Kayu Ara: zinc fences, chickens, one streetlight.',
+          'Back out onto the SS2 grid. He is running out of lanes he knows.',
+        ],
         clue: 'Booked for 12:25 AM: "one carton durian, for Singapore." Cash on collection.',
       },
       evidence: {

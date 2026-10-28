@@ -149,10 +149,16 @@ export const CASE01 = {
       brief: "On Monday morning you go home to Brickfields to sleep for an hour, and Bala Anne is waiting at the foot of your stairs with a tea towel over his shoulder. A boy has sat at table 6 since six o'clock with one teh and no money, he says, and five minutes ago he went up to your office. He is coming down as you go up. He goes past you, out through Bala's kitchen and into the back lanes behind Jalan Tun Sambanthan. He is nineteen and fast. You are neither. Run anyway.",
       params: {
         setting: 'city', vehicle: 'foot', difficulty: 'easy', suspect: 'The runner',
+        route: ['city', 'market', 'rooftop', 'city'], legs: 4, skyline: 'kl',
+        beats: [
+          'Out of the back lanes and into the flower stalls of Little India, jasmine and wet newspaper underfoot.',
+          'Up a fire stair behind the sari shops and out across the shophouse roofs, the KL Tower lit up ahead.',
+          'Down a drainpipe onto Jalan Tun Sambanthan, under the monorail. He is nineteen, and he is tiring.',
+        ],
         clue: 'Bala Anne: "Table 6, since six o\'clock. One teh, no money. Then up your stairs."',
       },
       evidence: {
-        img: 'ev_c1_backlane', hotspot: { x: 0.5, y: 0.5, r: 0.12 },
+        img: 'ev_c1_backlane', hotspot: { x: 0.40, y: 0.78, r: 0.15 },
         title: 'Before Rachel called',
         short: 'The boy on your stairs was paid RM 300 to photograph your desk and take any letter "from the dentist". The order reached his phone at 12:31 AM on Sunday: forty minutes after Goh fell, two hours before Rachel called you.',
         text: 'Selvam, nineteen, runs errands for the money changers on Jalan Tun Sambanthan, and he talks with his cheek in a puddle behind the banana-leaf kitchens. His phone holds eleven photographs of your desk: the dead fan, the drawer, the silver lighter. And one message, from a Singapore number he does not know, sent at 12:31 AM on Sunday: "PI atas kedai mamak Brickfields. Gambar meja dia. Kalau ada surat dari doktor gigi, ambil." The PI above the mamak in Brickfields. Photograph his desk. If there is a letter from the dentist, take it. RM 300, cash, left under a saucer at table 6. There was no letter. Henry Goh fell at 11:52. Rachel did not dial your number until 2:47. Somebody knew whose number he had given her before she did.',
