@@ -22,16 +22,37 @@ export const CUES = {
   tension: { file: 'music_tension', gain: 0.85, xloop: true },
   closed: { file: 'music_closed', gain: 0.9 },
   fire: { file: 'music_fire', gain: 1, loop: false }, // plays once, then back to the previous cue
+  // added later: each falls back to an older cue while its file is missing
+  theme_case01: { file: 'music_theme_case01', gain: 0.85, xloop: true, fallback: 'puzzle' },
+  theme_side01: { file: 'music_theme_side01', gain: 0.85, xloop: true, fallback: 'puzzle' },
+  theme_case02: { file: 'music_theme_case02', gain: 0.85, xloop: true, fallback: 'puzzle' },
+  theme_case03: { file: 'music_theme_case03', gain: 0.85, xloop: true, fallback: 'puzzle' },
+  theme_case04: { file: 'music_theme_case04', gain: 0.85, xloop: true, fallback: 'puzzle' },
+  theme_case05: { file: 'music_theme_case05', gain: 0.85, xloop: true, fallback: 'puzzle' },
+  puzzle_a: { file: 'music_puzzle_a', gain: 0.5, xloop: true, fallback: 'puzzle' },
+  puzzle_b: { file: 'music_puzzle_b', gain: 0.5, xloop: true, fallback: 'puzzle' },
+  puzzle_c: { file: 'music_puzzle_c', gain: 0.5, xloop: true, fallback: 'puzzle' },
+  interrogation: { file: 'music_interrogation', gain: 0.6, xloop: true, fallback: 'tension' },
+  deduction: { file: 'music_deduction', gain: 0.85, xloop: true, fallback: 'tension' },
+  memory: { file: 'music_memory', gain: 0.85, xloop: true, fallback: 'closed' },
+  resolution: { file: 'music_resolution', gain: 0.9, fallback: 'closed' },
+  chairman: { file: 'music_chairman', gain: 0.9, xloop: true, fallback: 'tension' },
 };
+
+/** The music for a case's own screens (map, board): its theme (the investigation loop until it exists). */
+export const caseTheme = (caseId) => (caseId && CUES[`theme_${caseId}`] ? `theme_${caseId}` : 'puzzle');
+/** One of the puzzle loops, the same one every time for a given level. */
+export function puzzleCue(levelId = '') {
+  let x = 0;
+  for (const ch of String(levelId)) x = (x * 31 + ch.charCodeAt(0)) >>> 0;
+  return ['puzzle_a', 'puzzle_b', 'puzzle_c'][x % 3];
+}
 
 // story cues used in case data, mapped onto the tracks we have
 const ALIASES = {
-  investigation: 'puzzle',
-  port: 'intro',
+  investigation: 'puzzle_a',
+  port: 'theme_case02',
   panic: 'fire',
-  memory: 'closed',
-  deduction: 'tension',
-  resolution: 'closed',
 };
 
 const BASE = 'assets/audio/';
@@ -194,7 +215,11 @@ async function start(cue, { fade = 2.2, restart = false } = {}) {
   if (live && live.cue === cue && !live.el.paused) return; // already playing
   const url = await locate(cue);
   if (wanted !== cue) return; // the game moved on while we were looking
-  if (!url) return; // missing file: keep whatever is playing
+  if (!url) {
+    // missing file: try the cue it stands in for, else keep whatever is playing
+    if (cfg.fallback && CUES[cfg.fallback]) { wanted = cfg.fallback; start(cfg.fallback, { fade, restart }); }
+    return;
+  }
   if (live && live.cue === cue && !live.el.paused) return;
   const mem = memory.get(cue);
   const resumeAt = !restart && cfg.loop !== false && mem && performance.now() - mem.at < RESUME_WINDOW * 1000 ? mem.time : 0;

@@ -9,6 +9,7 @@ import { rngFor, mulberry32, hashStr } from '../core/rng.js';
 import { paintInto, hasImage, imgUrl } from '../core/assets.js';
 import { sfx } from '../core/audio.js';
 import { app } from '../core/app.js';
+import { puzzleCue } from '../core/music.js';
 import { specialtyOf, avatarSvg } from '../core/avatar.js';
 import { backButton, icon } from '../core/nav.js';
 import { openLightbox, openEvidenceFile, evIcon } from '../core/evidence-viewer.js';
@@ -83,6 +84,7 @@ export async function mount(host, { caseId, levelId }) {
   const c = CASES[caseId];
   const cs = getCaseState(caseId);
   const level = findLevel(c, cs, levelId);
+  if (level) app.music?.play?.(level.game === 'interrogation' ? 'interrogation' : puzzleCue(levelId));
   if (!level) { go('map', { caseId }); return {}; }
   const profileName = state().profile?.name || 'detective';
   const saved = cs.inprogress[levelId] || {};

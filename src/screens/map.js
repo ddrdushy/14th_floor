@@ -16,6 +16,7 @@ import { backButton, icon } from '../core/nav.js';
 import { CASES, levelStatus, getCaseState, caseHeading, caseLabel, resolveCaseId, suspectBoard } from '../data/cases.js';
 import { CATEGORY_OF } from '../games/registry.js';
 import { app } from '../core/app.js';
+import { caseTheme } from '../core/music.js';
 import { sfx } from '../core/audio.js';
 import { state, save } from '../core/state.js';
 import { openEvidence, evidenceFileButton } from '../core/evidence-viewer.js';
@@ -34,7 +35,7 @@ export function mount(host, { caseId, fresh = false } = {}) {
   const c = CASES[caseId];
   const cs = getCaseState(caseId);
   const { levels, solved, current, allSolved } = levelStatus(c, cs);
-  app.music?.play?.(c.music || 'investigation');
+  app.music?.play?.(caseTheme(caseId));
   const closed = cs.status === 'closed';
   const finalLabel = closed ? 'Case file' : (c.finalLabel || 'Name the killer');
   const goFinal = () => { sfx.click(); go(closed ? 'closed' : 'deduce', { caseId }); };

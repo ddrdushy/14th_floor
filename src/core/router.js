@@ -1,6 +1,7 @@
 // Screen manager. Each screen module exports mount(root, params) -> { destroy?() }.
 import { gsap } from 'gsap';
 import { app } from './app.js';
+import { caseTheme } from './music.js';
 
 // Which music cue plays under each screen. Screens not listed keep the current music.
 // A screen can still call app.music.play(...) itself for a moment-specific cue.
@@ -15,7 +16,7 @@ export const SCREEN_MUSIC = {
   archive: 'office',
   puzzle: 'puzzle',
   lab: 'puzzle',
-  deduce: 'tension',
+  deduce: 'deduction',
   outcome: 'closed',
   closed: 'closed',
 };
@@ -47,7 +48,10 @@ export async function go(name, params = {}) {
   try {
     const mod = await screens[name]();
     // start the crossfade while the old screen fades out
-    if (SCREEN_MUSIC[name]) app.music?.play(SCREEN_MUSIC[name]);
+    // a case's own screens play its theme (falls back to the office track until the file exists)
+    const caseScreens = name === 'map' || name === 'board' || name === 'archive';
+    const cue = caseScreens && params.caseId ? caseTheme(params.caseId) : SCREEN_MUSIC[name];
+    if (cue) app.music?.play(cue);
     document.body.dataset.screen = name;
     listeners.forEach((fn) => { try { fn(name, params); } catch (e) { console.error(e); } });
     const old = root.firstElementChild;

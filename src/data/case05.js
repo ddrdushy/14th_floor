@@ -828,7 +828,7 @@ export const CASE05 = {
     }
 
     panels.push({
-      img: 'c5_out_05_folder', mood: 'night', fx: ['rain'], place: 'Brickfields. Friday, 2:10 AM.', music: 'memory',
+      img: 'c5_out_05_folder', mood: 'night', fx: ['rain'], place: 'Brickfields. Friday, 2:10 AM.', music: 'chairman',
       lines: [
         { who: null, en: 'Your office door is locked, the way you left it. The folder on your desk is not the way you left anything.' },
         { who: null, en: 'Grey archive board, a small embossed sun on the cover. On the tab, typed, your name. Opened 2016.' },

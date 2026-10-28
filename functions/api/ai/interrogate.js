@@ -18,7 +18,7 @@ const MAX_TURNS = 16;
 
 const clip = (s, n) => String(s ?? '').replace(/\s+/g, ' ').trim().slice(0, n);
 
-function sheet(p, lie) {
+export function sheet(p, lie) {
   const s = p.suspect || {};
   const others = (p.lies || []).filter((l) => l.id !== lie.id);
   return [

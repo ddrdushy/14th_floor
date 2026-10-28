@@ -715,7 +715,7 @@ export const CASE04 = {
         { who: null, en: 'The line goes dead. Your hand has gone to the lighter in your pocket, and stays there.' },
       ];
     panels.push({
-      img: 'c4_out_05_call', mood: 'night', fx: ['rain'], place: 'Galle Face Green. Saturday, 11:58 PM.', music: 'memory',
+      img: 'c4_out_05_call', mood: 'night', fx: ['rain'], place: 'Galle Face Green. Saturday, 11:58 PM.', music: 'chairman',
       lines: [
         ...call,
         { who: null, en: 'Before you board, Herath sends one more photograph: the top of the Port City email, the strip the shredder chewed. Sender: Office of the Chairman. Level 14, Menara Sinar, Kuala Lumpur.' },
