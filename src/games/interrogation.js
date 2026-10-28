@@ -9,7 +9,8 @@
 //
 // params:
 //   setting      'Interview room 3, Bukit Aman. 2:10 AM.'
-//   suspect      { id, name, role, persona }      (portrait: assets/img/sus_<id>.jpg when it exists)
+//   suspect      { id, name, role, persona, voice }  (portrait: assets/img/sus_<id>.jpg when it exists;
+//                voice: ILMU TTS voice for the live replies, voice_1..voice_5: 2 and 3 are male, 1 and 4 female)
 //   facts        [{ id, topic, claim }]           true statements
 //   lies         [{ id, topic, claim, truth, exposedBy }]   one is picked per player
 //   evidence     [{ id, title, text }]            cards the player can present
