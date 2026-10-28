@@ -38,6 +38,13 @@ export const VOICE_OVERRIDES = {
   'Tekanan kerja. Dia terjun.': { lang: 'ms' },
   'Dia suruh saya jangan menangis. Saya menangis juga.': { lang: 'ms' },
 
+  // Case 6: Tamil (Bala Anne), Cantonese (Ah Fook), Malay (labels only, Latin script)
+  'Thambi. Unakku oru phone vandhuchu. Rendu naal munnaadi.': { say: 'தம்பி. உனக்கு ஒரு ஃபோன் வந்துச்சு. ரெண்டு நாள் முன்னாடி.', lang: 'ta' },
+  'Saapittiya, thambi?': { say: 'சாப்பிட்டியா, தம்பி?', lang: 'ta' },
+  'Go go lou baak… ngo laai m zyu keoi.': { say: '嗰個老伯……我拉唔住佢。', lang: 'yue' },
+  'Biarkan, Tuan Ismail. Biar dua-dua sekali.': { lang: 'ms' },
+  'Mana kau punya?': { lang: 'ms' },
+
   // Cantonese (Ken Lim, Lau Kim Hock)
   'Ah Hock Suk hai ngo suk fu ah. Bong ngo yat ci. Ngo kau neih.': { say: '阿Hock叔係我叔父啊。幫我一次。我求你。' },
   'Go bui kopi… hou fu. Hou fu.': { say: '嗰杯kopi……好苦。好苦。' },
@@ -55,4 +62,7 @@ export const VOICE_CAST = {
   'case03:opening|Woman': 'Jo Lim',
   'case04:opening|Woman': 'Tharshini Yogeswaran',
   '???': 'Daniel Raj',
+  // Case 6: the voice at the tape line in 2021 and on Bala Anne's telephone is the Chairman
+  'case06:opening|A voice': 'The Chairman',
+  'case06:ending|A voice': 'The Chairman',
 };

@@ -498,6 +498,12 @@ const PLACES = [
     roads: ['Lebuhraya Persekutuan', 'Lebuhraya LDP', 'Jalan SS2/24', 'Jalan Universiti'], waterName: 'Tasik Kelana Jaya',
   },
   {
+    // checked before the general Port Klang entry: Warehouse 6, Pulau Indah, and Klang town (Case 6)
+    match: /warehouse 6/i, grid: [60, 90], angle: 18, water: 'coast-left', yards: true,
+    districts: ['Pulau Indah', 'Westport', 'Telok Gong', 'Pandamaran', 'Klang', 'Northport', 'Pulau Ketam', 'Jugra'],
+    roads: ['Jalan Pulau Indah', 'Lebuhraya Shapadu', 'Jalan Tengku Kelana', 'Jalan Klang-Banting'], waterName: 'Selat Melaka',
+  },
+  {
     match: /klang|pulau indah/i, grid: [64, 96], angle: 24, water: 'coast-left', yards: true,
     districts: ['Port Klang', 'Pulau Indah', 'Westport', 'Northport', 'Pandamaran', 'Teluk Gong', 'Klang', 'Pulau Ketam'],
     roads: ['Lebuhraya Shapadu', 'Jalan Pelabuhan Utara', 'Jalan Pulau Indah'], waterName: 'Selat Melaka',

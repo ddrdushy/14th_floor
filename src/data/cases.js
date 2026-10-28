@@ -7,15 +7,16 @@ import { CASE02 } from './case02.js';
 import { CASE03 } from './case03.js';
 import { CASE04 } from './case04.js';
 import { CASE05 } from './case05.js';
+import { CASE06 } from './case06.js';
 import { state, caseState } from '../core/state.js';
 
-export const CASES = { case01: CASE01, side01: SIDE01, case02: CASE02, case03: CASE03, case04: CASE04, case05: CASE05 };
-export const CASE_ORDER = ['case01', 'side01', 'case02', 'case03', 'case04', 'case05'];
+export const CASES = { case01: CASE01, side01: SIDE01, case02: CASE02, case03: CASE03, case04: CASE04, case05: CASE05, case06: CASE06 };
+export const CASE_ORDER = ['case01', 'side01', 'case02', 'case03', 'case04', 'case05', 'case06'];
 
 // What the phone says once every written case is closed.
 export const COMING_SOON = {
-  title: 'Case 6',
-  teaser: 'Warehouse 6, Bay 3, Pulau Indah. Five years to the night after the fire, the new roof catches. In the morning Bomba find one body on the black floor and, beside it, a silver flip-top lighter engraved D.R. Farah has to ask you where yours is.',
+  title: 'Case 7',
+  teaser: 'Sinar Holdings turns forty in November. On the night of the anniversary dinner on Level 15 of Menara Sinar, the founder nobody has photographed since 1997 will speak to his guests from behind a screen, one floor above the floor that is not there. You have never seen his face. But you know his voice now, and he knows you will be listening.',
 };
 
 /** Short label for a case: "Case 2" or "Side case". */

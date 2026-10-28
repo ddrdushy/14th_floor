@@ -33,7 +33,7 @@ src/
   three/               the 3D office: rain-on-glass shader, KL skyline, case board with red thread
   screens/             title, profile, intro (motion comic), office, map, puzzle, board, deduce, outcome, closed, archive, lab
   games/               one file per mini game + registry.js (registry_b.js, registry_c.js for newer games)
-  data/                story: intro.js (opening cinematic), cases.js (case order, flag rules), case01.js, side01.js, case02.js, case03.js, case04.js, case05.js
+  data/                story: intro.js (opening cinematic), cases.js (case order, flag rules), case01.js, side01.js, case02.js, case03.js, case04.js, case05.js, case06.js
 public/assets/img/     generated art (Google Flow). Missing images fall back to a placeholder panel.
 ```
 
@@ -51,7 +51,7 @@ Return `{ destroy, hint, devSolve }`. Register it in a registry file.
 
 ### Adding a case
 
-Cases are played in the order of `CASE_ORDER` in `src/data/cases.js` (Case 1, the side case, Case 2, Case 3, Case 4, Case 5). When one closes, the office phone rings; answering it plays the next case's `opening` cinematic and opens its map. Copy the shape of `src/data/case02.js`:
+Cases are played in the order of `CASE_ORDER` in `src/data/cases.js` (Case 1, the side case, Case 2, Case 3, Case 4, Case 5, Case 6). When one closes, the office phone rings; answering it plays the next case's `opening` cinematic and opens its map. Copy the shape of `src/data/case02.js`:
 
 - `suspects`, `levels` (each level = one game + the evidence it reveals + image hotspot), `hints`, `label` (optional, e.g. "Side case")
 - each suspect has `revealedBy: '<level id>'`, the level whose exhibit first makes them a person of interest, and an optional one-line `revealLine`. Nobody is on the map, the board or the office wall before that level is solved; then a "New person of interest" card offers to pin them, and anyone not pinned waits in the board's tray. Spread them over the first half of the case, never all on level 1, and never on a flag-conditional level. Pins are saved in `cases[id].pinnedSuspects`.
@@ -64,7 +64,7 @@ Levels, panels and lines may carry `when: (flags) => boolean`, so earlier choice
 
 ### Images
 
-Image keys live in `src/data/intro.js` (cinematic panels) and in each case file (`opening`, `ending`, `evidence.img`, suspect `img`). Prompts for the side case, Cases 2 to 5 and the evidence added to Case 1 later are in `docs/image_prompts.md`. Save a JPG as `public/assets/img/<key>.jpg`. Evidence photos are 4:3; set `evidence.hotspot` `{x, y, r}` (fractions of the photo) to circle the hidden item.
+Image keys live in `src/data/intro.js` (cinematic panels) and in each case file (`opening`, `ending`, `evidence.img`, suspect `img`). Prompts for the side case, Cases 2 to 6 and the evidence added to Case 1 later are in `docs/image_prompts.md`. Save a JPG as `public/assets/img/<key>.jpg`. Evidence photos are 4:3; set `evidence.hotspot` `{x, y, r}` (fractions of the photo) to circle the hidden item.
 
 #### Video clips
 
@@ -110,7 +110,7 @@ There is no `wrangler.toml` on purpose: with one, Pages takes bindings from the 
 
 `/api/admin/*` needs `Authorization: Bearer <ADMIN_PASSWORD>` (compared in constant time; 401 otherwise, 429 after 10 wrong tries in 5 minutes from one IP). If `ADMIN_PASSWORD` is not set the admin routes answer 503 `not_configured`; if `DB` is not bound every data route answers 503 and the game ignores it. All routes are JSON, same-origin only (cross-site `Origin` gets 403), `no-store`, and never return stack traces. Other admin routes can reuse `requireAdmin` / `adminHandler` from `functions/api/_lib.js`.
 
-Whether a verdict is right follows the flags each case sets: Case 1, Jason and Rizal charged and not Shanti; side case, Bobby only; Case 2, Tony and Norhayati, not Faizal, and Azman found at the kelong; Case 3, Melissa and Shahrul, not Kenny or Cheah, and the X-ray named as Ong Wei Jie; Case 4, Shehani and Kasun, not Mohan or K. Rajan, and the book found at Colombo Fort station; Case 5, Vivian Chua and Zulkifli Hamid, not Superintendent Khairul or K. Rajan, and Daniel found at Mak Teh's in Kampung Baru. The client sends its own `correct` (from `src/data/*.js` `flags()`), but the server recomputes it for known cases (`verdictCorrect` in `_lib.js`); keep both in step when a case's answer changes.
+Whether a verdict is right follows the flags each case sets: Case 1, Jason and Rizal charged and not Shanti; side case, Bobby only; Case 2, Tony and Norhayati, not Faizal, and Azman found at the kelong; Case 3, Melissa and Shahrul, not Kenny or Cheah, and the X-ray named as Ong Wei Jie; Case 4, Shehani and Kasun, not Mohan or K. Rajan, and the book found at Colombo Fort station; Case 5, Vivian Chua and Zulkifli Hamid, not Superintendent Khairul or K. Rajan, and Daniel found at Mak Teh's in Kampung Baru; Case 6, Kamal Ariffin and Jeffrey Ho, not Ah Fook or Amirul, and RU-07 found at the old Sinar depot at Jugra. The client sends its own `correct` (from `src/data/*.js` `flags()`), but the server recomputes it for known cases (`verdictCorrect` in `_lib.js`); keep both in step when a case's answer changes.
 
 ### In the game
 
@@ -153,7 +153,7 @@ Redeploy after adding them. `FISH_API_BASE` is for local tests only (points the 
 
 Open `/admin.html`, sign in, and choose **Voices**. Every speaker in the cinematics is listed with its languages and line count (Narrator, Inspector Farah Iskandar, Jo Lim, Bala Anne, Rachel Goh, Salmah, ...). For each one: **Cast & lines** → search Fish Audio's public voice library (or your own voices with "My voices"), play a voice's sample, **Hear a line** to hear one of that speaker's real lines in it, then **Assign**. Speed and model can be set per speaker; **Silent** keeps a speaker unvoiced. A fallback voice can cover every unassigned speaker; without one, unassigned speakers stay silent. **Generate missing lines** (per speaker, or for everyone at the top) fills the cache in the background, 30 lines per round; **Regenerate (purge)** deletes a speaker's stored lines so the next play makes a new take.
 
-Some caption speakers are one character under another name: "Woman" on the phone is Rachel (intro), Salmah (Case 2), Jo (Case 3) and Tharshini (Case 4), and "???" on the phone at the end of Case 4 and "???" in the intro dream is Daniel (who speaks as "Daniel Raj" at the end of Case 5). That mapping is `VOICE_CAST` in `src/data/voice-overrides.js`, so each person has one voice everywhere.
+Some caption speakers are one character under another name: "Woman" on the phone is Rachel (intro), Salmah (Case 2), Jo (Case 3) and Tharshini (Case 4), and "???" on the phone at the end of Case 4 and "???" in the intro dream is Daniel (who speaks as "Daniel Raj" at the end of Case 5). In Case 6, "A voice" (at the 2021 tape line, and on Bala Anne's telephone) is cast as "The Chairman". That mapping is `VOICE_CAST` in `src/data/voice-overrides.js`, so each person has one voice everywhere.
 
 ### Acting: per-line directions
 

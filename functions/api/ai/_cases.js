@@ -2,8 +2,9 @@
 // text a client sends (which would turn the endpoint into a free chatbot). Add each new case here.
 import { CASE04 } from '../../../src/data/case04.js';
 import { CASE05 } from '../../../src/data/case05.js';
+import { CASE06 } from '../../../src/data/case06.js';
 
-const ALL = [CASE04, CASE05];
+const ALL = [CASE04, CASE05, CASE06];
 export const CASES = Object.fromEntries(ALL.map((c) => [c.id, c]));
 
 /** The params of an AI level, or null. */

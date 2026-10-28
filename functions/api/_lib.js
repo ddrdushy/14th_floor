@@ -6,7 +6,7 @@ export const SCHEMA_VERSION = 5;
 
 // Cases in play order. Mirrors CASE_ORDER in src/data/cases.js; a case missing here still works,
 // it is just treated as "after" the known ones when working out how far a player has got.
-export const CASE_ORDER = ['case01', 'side01', 'case02', 'case03', 'case04', 'case05'];
+export const CASE_ORDER = ['case01', 'side01', 'case02', 'case03', 'case04', 'case05', 'case06'];
 export const caseRank = (id) => {
   const i = CASE_ORDER.indexOf(id);
   return i < 0 ? 99 : i + 1;
@@ -22,6 +22,7 @@ export const caseRankSql = (col) => `CASE ${col} ${CASE_ORDER.map((id, i) => `WH
 //   case03: MELISSA_FREE, SHAHRUL_FREE, KENNY_WRONGED, CHEAH_WRONGED off and BODY_NAMED (xray = weijie)
 //   case04: SHEHANI_FREE, KASUN_FREE, MOHAN_WRONGED, RAJAN_HUNTED off and BOOK_FOUND (book = fort)
 //   case05: VIVIAN_FREE, ZUL_FREE, KHAIRUL_WRONGED, DANIEL_CHARGED off and DANIEL_FOUND (daniel = kgbaru)
+//   case06: KAMAL_FREE, JEFFREY_FREE, AHFOOK_WRONGED, AMIRUL_WRONGED off and ARCHIVE_SEIZED (ru07 = jugra)
 const CORRECT = {
   case01: (c) => c.has('jason') && c.has('rizal') && !c.has('shanti'),
   side01: (c) => c.has('bobby') && !c.has('ahlan') && !c.has('ravi'),
@@ -29,6 +30,7 @@ const CORRECT = {
   case03: (c, a) => c.has('melissa') && c.has('shahrul') && !c.has('kenny') && !c.has('cheah') && a.xray === 'weijie',
   case04: (c, a) => c.has('shehani') && c.has('kasun') && !c.has('mohan') && !c.has('rajan') && a.book === 'fort',
   case05: (c, a) => c.has('vivian') && c.has('zul') && !c.has('khairul') && !c.has('rajan') && a.daniel === 'kgbaru',
+  case06: (c, a) => c.has('kamal') && c.has('jeffrey') && !c.has('ahfook') && !c.has('amirul') && a.ru07 === 'jugra',
 };
 /** true/false for a known case, null when the server has no rule (then the client's value is used). */
 export function verdictCorrect(caseId, charged, answers) {
