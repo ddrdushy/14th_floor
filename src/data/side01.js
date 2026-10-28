@@ -217,9 +217,12 @@ export const SIDE01 = {
     },
     {
       id: 'sd08', phase: 'The money', title: 'The despatch rider',
-      game: 'chase', variant: 'one-way',
-      brief: 'A despatch rider was booked for 12:25 AM to collect "one carton durian, for Singapore" from the row. You find him on Sunday night doing the same run, and he does not want to talk. SS2 is a knot of one-way streets. He knows them. Now so must you.',
-      params: { rounds: 2 },
+      game: 'pursuit',
+      brief: 'A despatch rider was booked for 12:25 AM to collect "one carton durian, for Singapore" from the row. You find him on Sunday night doing the same run, and he does not want to talk. He sees you coming and his scooter is already moving, off the row and into the back lanes behind the SS2 shops: drain covers, stacked crates, kitchen boys smoking by the bins. He knows every lane. Stay on his tail light until he runs out of them.',
+      params: {
+        setting: 'city', vehicle: 'scooter', difficulty: 'easy', suspect: 'Despatch rider',
+        clue: 'Booked for 12:25 AM: "one carton durian, for Singapore." Cash on collection.',
+      },
       evidence: {
         img: 'ev_sd_carton', hotspot: { x: 0.5, y: 0.45, r: 0.18 },
         title: 'Forty-one thousand in the husks',

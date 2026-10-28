@@ -11,6 +11,8 @@ export const GAMES_D = {
   fusebox: () => import('./fusebox.js'),
   interrogation: () => import('./interrogation.js'),
   theory: () => import('./theory.js'),
+  tape: () => import('./tape.js'),
+  pursuit: () => import('./pursuit.js'),
 };
 export const CATEGORY_D = {
   wiretap: 'Wiring',
@@ -23,4 +25,6 @@ export const CATEGORY_D = {
   fusebox: 'Logic',
   interrogation: 'Interrogation',
   theory: 'Deduction',
+  tape: 'Audio forensics',
+  pursuit: 'Action',
 };

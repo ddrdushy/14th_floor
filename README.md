@@ -64,7 +64,7 @@ Levels, panels and lines may carry `when: (flags) => boolean`, so earlier choice
 
 ### Images
 
-Image keys live in `src/data/intro.js` (cinematic panels) and in each case file (`opening`, `ending`, `evidence.img`, suspect `img`). Prompts for the side case and Cases 2 to 5 are in `docs/image_prompts.md`. Save a JPG as `public/assets/img/<key>.jpg`. Evidence photos are 4:3; set `evidence.hotspot` `{x, y, r}` (fractions of the photo) to circle the hidden item.
+Image keys live in `src/data/intro.js` (cinematic panels) and in each case file (`opening`, `ending`, `evidence.img`, suspect `img`). Prompts for the side case, Cases 2 to 5 and the evidence added to Case 1 later are in `docs/image_prompts.md`. Save a JPG as `public/assets/img/<key>.jpg`. Evidence photos are 4:3; set `evidence.hotspot` `{x, y, r}` (fractions of the photo) to circle the hidden item.
 
 #### Video clips
 

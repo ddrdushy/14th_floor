@@ -229,6 +229,23 @@ export const CASE03 = {
       },
     },
     {
+      id: 'c3_tp', phase: 'No. 96', title: 'Statement 03',
+      game: 'tape', variant: 'splice',
+      brief: 'Bomba records every statement taken at a fire. Jo gave hers at 5:31 on Thursday morning on the five-foot way, wrapped in a Bomba blanket, while the hoses were still running. Aishah pulls it up for you at the Lebuh Pantai station and frowns. The station\'s copy has been cut into five pieces and saved back out of order, and the first report calls it "audio rosak, tidak digunakan": audio damaged, not used. "Sound does not damage itself into five neat pieces," Aishah says. Put them back in order.',
+      params: {
+        line: { who: 'Jo Lim', en: 'He unplugged everything every night. Every night. The kettle, the radio, the lathe. He said electricity is a thief that comes in while you sleep.' },
+        pieces: 5,
+        label: 'BOMBA LEBUH PANTAI · KENYATAAN 03 · 05:31',
+        clue: 'Every word is still on the tape. Somebody only changed the order.',
+      },
+      evidence: {
+        img: 'ev_c3_statement', hotspot: { x: 0.5, y: 0.5, r: 0.12 },
+        title: 'Audio damaged, not used',
+        short: 'Restored, Jo\'s statement to Bomba says he unplugged everything every night. The station copy was cut and re-saved at 7:20 AM on Thursday under the duty officer\'s login, ten minutes before he signed "old wiring" into the first report.',
+        text: 'In order, it is Jo\'s voice at 5:31 AM, hoarse from the smoke, saying word for word what she said to you on the phone two hours later, because she has said it to everyone who would listen: he unplugged everything, every night. The first Bomba report quotes none of it. "Family statement: audio damaged, not used." The station log says the recording was opened, cut into five pieces and saved again at 7:20 AM on Thursday, under the login of the duty officer, ten minutes before he signed the report that says "old wiring". Nobody had been inside No. 96 yet. Aishah closes the laptop. "He is not a bad man. He is a man who was told what happened before anybody looked, and wanted his file to agree."',
+      },
+    },
+    {
       id: 'c3_03', phase: 'No. 96', title: 'The archive',
       game: 'sudoku', variant: 'classic',
       brief: 'Behind the workshop Uncle Lim kept his archive: a wall of steel pigeonholes, nine across and nine down, holding every plaster jaw he ever cast for Dr. Goh. The soot has blacked out the labels. He numbered them the way he did everything, so that no number repeats in a row, a column or a block. While Jo\'s colleague cleans the photographs, rebuild his numbers.',
@@ -459,10 +476,13 @@ export const CASE03 = {
     // ---------------- Across the water ----------------
     {
       id: 'c3_jx', phase: 'Across the water', title: 'The rider',
-      game: 'chase', variant: 'one-way',
+      game: 'pursuit',
       when: (flags) => !!flags.JASON_FREE,
-      brief: 'The grey sedan has not been far from you since the bridge. Today it is a boy on a red Honda instead, in a food-delivery jacket with no food, who has been behind you on every street since breakfast. Before you cross to Butterworth you need him off your back. You double back on him in the old town and he runs. He obeys every one-way arrow and every red light. You do not have to.',
-      params: { rounds: 2 },
+      brief: 'The grey sedan has not been far from you since the bridge. Today it is a boy on a red Honda instead, in a food-delivery jacket with no food, who has been behind you on every street since breakfast. Before you cross to Butterworth you need him off your back. You double back on him on Lebuh Armenian and he guns the Honda into the old town: clan-house lanes, five-foot ways, trishaws parked across the tiles, lanterns low enough to take your head off. He knows these lanes. Keep him in sight until they run out.',
+      params: {
+        setting: 'heritage', vehicle: 'scooter', difficulty: 'medium', suspect: 'The rider',
+        clue: 'Food-delivery jacket, no food. Behind you on every street since breakfast.',
+      },
       evidence: {
         img: 'ev_c3_riderphone', hotspot: { x: 0.52, y: 0.65, r: 0.14 },
         title: 'Photographs for J',

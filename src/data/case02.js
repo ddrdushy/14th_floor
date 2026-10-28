@@ -409,6 +409,22 @@ export const CASE02 = {
         text: 'Norhayati did go home. Her Myvi crossed the Pulau Indah bridge toll outbound at 12:05 AM, just as she said. Then it came back inbound at 12:58 AM, and went out again at 3:31 AM, twenty-one minutes after a refrigerated van left Gate 3.',
       },
     },
+    {
+      id: 'c2_sp', phase: 'Customs office', title: 'Channel 3, 2:19 AM',
+      game: 'tape', variant: 'spectro',
+      brief: 'The radio room behind the Customs office records every port channel onto a reel deck older than the cranes, and on Tuesday nobody thought to wipe it. Most of channel 3 that night is Tony Kwan. At 2:19 AM there is one call that is not: a click, one word too low to hear, then two seconds of hiss. Every handset on the terminal stamps its own number into the end of each call as a burst of tones. Ken has sent you a program that draws sound as a picture. Find the band where the hiss stops being hiss.',
+      params: {
+        answer: 'JKDM-4471', noise: 0.6, decoys: 2,
+        label: 'RADIO ROOM · CH 3 · TUE 02:19',
+        clue: 'Handsets sign every call with their own number, under the noise. Look at the sound, do not just listen to it.',
+      },
+      evidence: {
+        img: 'ev_c2_radio', hotspot: { x: 0.5, y: 0.5, r: 0.12 },
+        title: 'Handset JKDM-4471',
+        short: 'The 2:19 AM call on channel 3, one minute before two figures came round the stack at Crane 7, went out from Customs handset JKDM-4471. The radio room\'s book has it signed out to badge 4471: Norhayati Salleh.',
+        text: 'Drawn as a picture, the hiss at the end of the 2:19 call holds a handset number in clean bright blocks: JKDM-4471. The radio room\'s sign-out book has that handset against badge 4471, Norhayati Salleh, from the start of her Monday shift, and it was not signed back in until Tuesday afternoon. Her shift ended at midnight. Her car came back over the bridge at 12:58. The one word on the call is still too low to hear, but you do not need it: one minute later, on the spreader camera, a white helmet and a dark uniform with a cap came round the stack, and Azman ran.',
+      },
+    },
 
     // ---------------- Azman's home ----------------
     {
@@ -475,9 +491,12 @@ export const CASE02 = {
     // ---------------- The hideout trail ----------------
     {
       id: 'c2_15', phase: 'The hideout trail', title: 'The man on the Yamaha',
-      game: 'chase', variant: 'one-way',
-      brief: 'Since Wednesday a man on a blue Yamaha has followed you from the port to Pandamaran and back. On Thursday morning you double back on him in Klang\'s old town and he runs. The old town is all one-way streets and traffic lights, and he obeys every one of them. You do not have to.',
-      params: { rounds: 3 },
+      game: 'pursuit',
+      brief: 'Since Wednesday a man on a blue Yamaha has followed you from the port to Pandamaran and back. On Thursday morning you double back on him in Klang\'s old town, and he drops the bike at the kerb on Jalan Stesen and runs. Down the five-foot ways of the old shophouses, through the sari shops and flower stalls of Little India, under the laundry poles of the back lanes, on tiles the rain has turned to glass. He is lighter than you. He is also more frightened of the people who sent him than of you.',
+      params: {
+        setting: 'heritage', vehicle: 'foot', difficulty: 'medium', suspect: 'The Yamaha man',
+        clue: 'Three cars behind you since Wednesday. Now he is three shopfronts ahead.',
+      },
       evidence: {
         img: 'ev_c2_phone', hotspot: { x: 0.52, y: 0.62, r: 0.14 },
         title: 'Their list',

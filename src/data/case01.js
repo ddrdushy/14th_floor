@@ -142,6 +142,23 @@ export const CASE01 = {
       },
     },
 
+    // ---------------- Brickfields ----------------
+    {
+      id: 'l05b', phase: 'Brickfields', title: 'Your own stairs',
+      game: 'pursuit',
+      brief: "On Monday morning you go home to Brickfields to sleep for an hour, and Bala Anne is waiting at the foot of your stairs with a tea towel over his shoulder. A boy has sat at table 6 since six o'clock with one teh and no money, he says, and five minutes ago he went up to your office. He is coming down as you go up. He goes past you, out through Bala's kitchen and into the back lanes behind Jalan Tun Sambanthan. He is nineteen and fast. You are neither. Run anyway.",
+      params: {
+        setting: 'city', vehicle: 'foot', difficulty: 'easy', suspect: 'The runner',
+        clue: 'Bala Anne: "Table 6, since six o\'clock. One teh, no money. Then up your stairs."',
+      },
+      evidence: {
+        img: 'ev_c1_backlane', hotspot: { x: 0.5, y: 0.5, r: 0.12 },
+        title: 'Before Rachel called',
+        short: 'The boy on your stairs was paid RM 300 to photograph your desk and take any letter "from the dentist". The order reached his phone at 12:31 AM on Sunday: forty minutes after Goh fell, two hours before Rachel called you.',
+        text: 'Selvam, nineteen, runs errands for the money changers on Jalan Tun Sambanthan, and he talks with his cheek in a puddle behind the banana-leaf kitchens. His phone holds eleven photographs of your desk: the dead fan, the drawer, the silver lighter. And one message, from a Singapore number he does not know, sent at 12:31 AM on Sunday: "PI atas kedai mamak Brickfields. Gambar meja dia. Kalau ada surat dari doktor gigi, ambil." The PI above the mamak in Brickfields. Photograph his desk. If there is a letter from the dentist, take it. RM 300, cash, left under a saucer at table 6. There was no letter. Henry Goh fell at 11:52. Rachel did not dial your number until 2:47. Somebody knew whose number he had given her before she did.',
+      },
+    },
+
     // ---------------- The witness ----------------
     {
       id: 'l06', phase: 'The neighbour', title: 'Mrs. Lee remembers',
@@ -169,7 +186,7 @@ export const CASE01 = {
         ],
       },
       evidence: {
-        tag: 6, img: 'ev_neighbour', hotspot: { x: 0.36, y: 0.44, r: 0.13 },
+        tag: 7, img: 'ev_neighbour', hotspot: { x: 0.36, y: 0.44, r: 0.13 },
         title: '"Sign saja lah, doktor."',
         short: 'Two men argued with Goh around 11:40. Ten minutes later: a shout. At midnight the guard came, torch in hand.',
         text: 'Mrs. Lee heard two men in Goh\'s unit around 11:40 PM pressuring him to sign something. About ten minutes later, a shout. At midnight a young guard with a torch knocked on her door, asking what she had heard.',
@@ -200,7 +217,7 @@ export const CASE01 = {
         ],
       },
       evidence: {
-        tag: 7, img: 'ev_floorplan', hotspot: { x: 0.56, y: 0.4, r: 0.15 },
+        tag: 8, img: 'ev_floorplan', hotspot: { x: 0.56, y: 0.4, r: 0.15 },
         title: 'Everyone at 11:40 PM',
         short: 'Shanti: mamak in Bangsar. Rizal: stairwell, L15. Jason: Unit 15-2, next door to Goh.',
         text: 'At 11:40 PM: Shanti was paying for teh tarik in Bangsar, 15 minutes away. Rizal was in the L15 stairwell with his torch. Jason was in Unit 15-2, next door to Goh, with his clipboard. Mrs. Lee was home. Siti was mopping in B2.',
@@ -217,7 +234,7 @@ export const CASE01 = {
         given: ['E', 'T', 'A'],
       },
       evidence: {
-        tag: 8, img: 'ev_diary', hotspot: { x: 0.42, y: 0.42, r: 0.16 },
+        tag: 9, img: 'ev_diary', hotspot: { x: 0.42, y: 0.42, r: 0.16 },
         title: '"If I die, it was not an accident"',
         short: 'Goh kept an X-ray, PK-0821, in his safe. He expected to be killed.',
         text: 'Decoded: "I kept the X-ray. PK zero eight two one. The safe remembers Rachel. If I die it was not an accident." He knew someone wanted him dead.',
@@ -233,7 +250,7 @@ export const CASE01 = {
         contains: [7],
       },
       evidence: {
-        tag: 9, img: 'ev_safe', hotspot: { x: 0.43, y: 0.62, r: 0.14 },
+        tag: 10, img: 'ev_safe', hotspot: { x: 0.43, y: 0.62, r: 0.14 },
         title: 'X-ray, ledger, unsent letter',
         short: 'X-ray PK-0821. A ledger showing RM 180,000 missing. A letter: "On Monday I tell the police the truth."',
         text: 'Inside: a dental X-ray labelled PK-0821. The clinic ledger, with RM 180,000 moved to an account in Shanti Menon\'s name. And an unsent letter: "On Monday I will tell the police the truth about what I did in 2021."',
@@ -259,7 +276,7 @@ export const CASE01 = {
         order: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'],
       },
       evidence: {
-        tag: 10, img: 'ev_cctv', hotspot: { x: 0.49, y: 0.55, r: 0.09 },
+        tag: 11, img: 'ev_cctv', hotspot: { x: 0.49, y: 0.55, r: 0.09 },
         title: '17 minutes deleted',
         short: 'CCTV from 11:41 to 11:58 PM was deleted from the guardhouse terminal, logged in as R.HAMDAN.',
         text: 'The recorder log: footage from 11:41 to 11:58 PM was deleted at 12:09 AM from the guardhouse terminal. User: R.HAMDAN.',
@@ -289,7 +306,7 @@ export const CASE01 = {
         ],
       },
       evidence: {
-        tag: 11, img: 'ev_shoe', hotspot: { x: 0.6, y: 0.82, r: 0.12 },
+        tag: 12, img: 'ev_shoe', hotspot: { x: 0.6, y: 0.82, r: 0.12 },
         title: 'A brogue leaving the lift',
         short: 'The recovered frame: a size 10 brogue sole stepping out of the lift on L15 at 11:55 PM.',
         text: 'The cached thumbnail shows a leather brogue sole, perforated wingtip pattern, stepping out of the lift on L15 at 11:55 PM. The same tread as the print on the balcony.',
@@ -312,7 +329,7 @@ export const CASE01 = {
         liars: ['rizal', 'jason', 'shanti'],
       },
       evidence: {
-        tag: 12, img: 'ev_interview', hotspot: { x: 0.48, y: 0.66, r: 0.14 },
+        tag: 13, img: 'ev_interview', hotspot: { x: 0.48, y: 0.66, r: 0.14 },
         title: 'Three liars, two payments',
         short: 'Shanti, Rizal and Jason all lied. Next morning Rizal and Jason each received RM 5,000 from Sinar Holdings.',
         text: 'Shanti, Rizal and Jason all lied to you. Farah pulled their bank records: the morning after the death, Rizal and Jason each received RM 5,000 from a Singapore company called Sinar Holdings. Shanti received nothing.',
@@ -350,7 +367,7 @@ export const CASE01 = {
         answer: 'L',
       },
       evidence: {
-        tag: 13, img: 'ev_loadingbay', hotspot: { x: 0.68, y: 0.5, r: 0.1 },
+        tag: 14, img: 'ev_loadingbay', hotspot: { x: 0.68, y: 0.5, r: 0.1 },
         title: 'Loading bay, 12:03 AM',
         short: 'The only unseen exit. Gate log: car WXY 1408 left at 12:03 AM. Owner: Jason Ooi.',
         text: 'The only way out no camera can see is the loading bay. Its gate keeps its own log: car WXY 1408 left at 12:03 AM. Registered owner: Jason Ooi.',
