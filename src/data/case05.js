@@ -380,7 +380,7 @@ export const CASE05 = {
       params: {
         setting: 'The office with one chair, Level 14, Menara Sinar. Tuesday, 12:50 AM.',
         suspect: {
-          id: 'zul', name: 'Zulkifli Hamid', role: 'Head of Security, Menara Sinar, 47',
+          id: 'zul', voice: 'voice_2', name: 'Zulkifli Hamid', role: 'Head of Security, Menara Sinar, 47',
           persona: 'Ex-police: short, polite, procedural sentences, as if dictating a statement. Calls Farah "Inspector" and never her name, says "betul" and "tak ada" and "Tuan" out of habit, and tells times to the minute. Gets stiff and quiet when anybody suggests he left the force in disgrace or that he would lie to the woman he taught to shoot; when pressed, he touches the side of his neck above the collar.',
         },
         facts: [
@@ -684,7 +684,7 @@ export const CASE05 = {
       params: {
         setting: 'Interview room 3, Bukit Aman. Wednesday, 11:40 PM.',
         suspect: {
-          id: 'vivian', name: 'Vivian Chua', role: 'Secretary to the Chairman, Sinar Holdings, 56',
+          id: 'vivian', voice: 'voice_4', name: 'Vivian Chua', role: 'Secretary to the Chairman, Sinar Holdings, 56',
           persona: 'Precise convent-school English, never raises her voice, often answers a question with a question. Calls the player "Detective" and Farah "Inspector Iskandar", in full, every time. Lets slip a Cantonese "aiyah" or "mou man tai" only when irritated. Defensive about the Chairman\'s privacy and her twenty-seven years of loyalty; straightens her sleeves when a question lands close.',
         },
         facts: [
