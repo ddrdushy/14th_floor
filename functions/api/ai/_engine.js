@@ -1,0 +1,61 @@
+// The language model behind the AI mini games. Provider-agnostic:
+//   - any OpenAI-compatible chat API (Mistral, ILMU, OpenAI, Groq, OpenRouter, …):
+//       secret AI_API_KEY, plus optional variables AI_BASE_URL (default https://api.mistral.ai/v1)
+//       and AI_MODEL (default mistral-small-latest)
+//   - or Cloudflare Workers AI: a binding named AI (Settings → Bindings → Workers AI), used when no
+//     AI_API_KEY is set; optional AI_MODEL (default @cf/meta/llama-3.3-70b-instruct-fp8-fast)
+// Without either, aiReady() is false and the games fall back to answers from the case file.
+
+export const aiReady = (env) => !!(env.AI_API_KEY || env.AI);
+export const aiProvider = (env) => (env.AI_API_KEY ? `api:${hostOf(env.AI_BASE_URL || 'https://api.mistral.ai/v1')}` : env.AI ? 'workers-ai' : null);
+function hostOf(u) { try { return new URL(u).host; } catch { return 'custom'; } }
+
+export class AiError extends Error {
+  constructor(status, message) { super(message); this.status = status; }
+}
+
+/** Chat completion; resolves the assistant text. `json` asks for a JSON object reply where supported. */
+export async function chat(env, messages, { maxTokens = 260, temperature = 0.7, json = false, timeoutMs = 20000 } = {}) {
+  if (env.AI_API_KEY) {
+    const base = (env.AI_BASE_URL || 'https://api.mistral.ai/v1').replace(/\/+$/, '');
+    const model = env.AI_MODEL || 'mistral-small-latest';
+    const send = async (withFormat) => {
+      const ctl = new AbortController();
+      const t = setTimeout(() => ctl.abort(), timeoutMs);
+      try {
+        return await fetch(`${base}/chat/completions`, {
+          method: 'POST',
+          signal: ctl.signal,
+          headers: { 'content-type': 'application/json', authorization: `Bearer ${env.AI_API_KEY}` },
+          body: JSON.stringify({ model, messages, max_tokens: maxTokens, temperature, ...(withFormat ? { response_format: { type: 'json_object' } } : {}) }),
+        });
+      } finally {
+        clearTimeout(t);
+      }
+    };
+    let res = await send(json);
+    if (json && res.status === 400) res = await send(false); // some providers reject response_format
+    if (!res.ok) throw new AiError(res.status, `model http ${res.status}: ${(await res.text().catch(() => '')).slice(0, 200)}`);
+    const d = await res.json();
+    const text = d?.choices?.[0]?.message?.content;
+    if (typeof text !== 'string') throw new AiError(502, 'model returned no text');
+    return text;
+  }
+  if (env.AI) {
+    const model = env.AI_MODEL || '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
+    const out = await env.AI.run(model, { messages, max_tokens: maxTokens, temperature });
+    const text = typeof out === 'string' ? out : out?.response;
+    if (typeof text !== 'string') throw new AiError(502, 'model returned no text');
+    return text;
+  }
+  throw new AiError(503, 'no model configured');
+}
+
+/** The first JSON object in a model reply (models sometimes wrap it in prose or code fences). */
+export function parseJsonReply(text) {
+  if (typeof text !== 'string') return null;
+  const s = text.indexOf('{');
+  const e = text.lastIndexOf('}');
+  if (s < 0 || e <= s) return null;
+  try { return JSON.parse(text.slice(s, e + 1)); } catch { return null; }
+}

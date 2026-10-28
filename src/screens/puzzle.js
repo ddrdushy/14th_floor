@@ -162,6 +162,8 @@ export async function mount(host, { caseId, levelId }) {
     save();
   };
   const ctx = {
+    caseId,
+    levelId,
     params: level.params,
     variant: level.variant,
     rng: rngFor(caseId, levelId, profileName),

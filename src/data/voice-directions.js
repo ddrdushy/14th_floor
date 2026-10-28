@@ -516,4 +516,172 @@ export const VOICE_DIRECTIONS = {
   '012woax46tf': { say: '[clipped, formal] Kasun Ranaweera is arrested at the Bloemendhal depot gate, his forearms still scored pink. [break] [softer, troubled] In the jeep he asks only one thing: whether the old man had children.' },
   // Tharshini Yogeswaran: Appa used to say a stone tells the truth to anybody who holds it to the light long enough. You held it long enough.
   '05r2p0i6eth': { say: '[tearful, grateful] Appa used to say a stone tells the truth to anybody who holds it to the light long enough. [break] [quiet, warm] You held it long enough.', speed: 0.9 },
+
+  // ---------------- case05 ----------------
+  // Narrator: On the television over Bala Anne's counter: a glass tower on Jalan Ampang, blue lights, and a white sheet on a wet pavement. A director of Sinar Holdings has fallen.
+  '2cj06yd35tl': { say: '[low, weary, morning-after] On the television over Bala Anne\'s counter: a glass tower on Jalan Ampang, blue lights, and a white sheet on a wet pavement. [break] [quiet, ominous] A director of Sinar Holdings has fallen.', speed: 0.95 },
+  // Bala Anne: Thambi. Idhu andha Sinar dhaane?  /  Boy. Isn't that your Sinar?
+  '0oqsekepbk2': { say: '[low, uneasy, not looking away from the screen] தம்பி. [break] இது அந்த சினார் தானே?', speed: 0.92 },
+  // Bala Anne: You say that name in your sleep. I can hear it through the floor.
+  '0gakzt7h9u9': { say: '[gruff, worried, half scolding] You say that name in your sleep. [break] [softer] I can hear it through the floor.' },
+  // Narrator: Under the picture, smaller: Dr. Shanti Menon's appeal will be heard in March. This time Bala Anne does not turn the sound down. He turns it off.
+  '0d17oggjh6o': { say: '[flat, guilty] Under the picture, smaller: Dr. Shanti Menon\'s appeal will be heard in March. [break] This time Bala Anne does not turn the sound down. [quiet, heavy] He turns it off.', speed: 0.93 },
+  // Bala Anne: That durian man Ravi sent a box of fruit for you. I put it on the five-foot way. I am not having durian in my kitchen.
+  '1itqidt9axs': { say: '[grumbling, wry] That durian man Ravi sent a box of fruit for you. I put it on the five-foot way. [break] [indignant, comic] I am not having durian in my kitchen.' },
+  // Narrator: Under the till, a letter with a Sri Lankan stamp. Tharshini, three lines: Chithappa's trial is in January. The shop is sold. Appa's loupe is still around my neck.
+  '0ufi2obxlf7': { say: '[quiet, heavy, guilty] Under the till, a letter with a Sri Lankan stamp. Tharshini, three lines: [break] Chithappa\'s trial is in January. [break] The shop is sold. [long-break] [tender, aching] Appa\'s loupe is still around my neck.', speed: 0.9 },
+  // Narrator: You take them out of the drawer and stand them in a row: the paper kancils, one from every city they have sent you to. Mont Kiara. Penang. Colombo.
+  '0aaokfiu8bp': { say: '[low, intimate, slow] You take them out of the drawer and stand them in a row: the paper kancils, one from every city they have sent you to. [break] Mont Kiara. [break] Penang. [break] Colombo.', speed: 0.92 },
+  // Narrator: And a voice on a Colombo line, the last night there. Not yet. Go home. Look at the lifts.
+  '2g3unqg4fid': { say: '[hushed, remembering] And a voice on a Colombo line, the last night there. [long-break] [whispering] Not yet. Go home. Look at the lifts.', speed: 0.88 },
+  // Narrator: And a call from Colombo on the last night there, with nobody on the line but the sea and one long breath.
+  '14602kbr5br': { cue: '[hushed, haunted, slow]', speed: 0.88 },
+  // Narrator: The lifts in Menara Sinar go from 13 to 15. Last night a man came down past all of them.
+  '07loa1knthf': { say: '[low, ominous] The lifts in Menara Sinar go from thirteen to fifteen. [long-break] [cold, quiet] Last night a man came down past all of them.', speed: 0.9 },
+  // Inspector Farah Iskandar: Yang ini, aku punya.  /  This one is mine.
+  '08upg5xlexc': { say: '[low, fierce, possessive] Yang ini, [break] aku punya.', speed: 0.95 },
+  // Inspector Farah Iskandar: Dato' Rashid Osman. Group Finance Director, Sinar Holdings. He lay on that pavement through the whole storm before anybody called it in. His fist was closed. This was in it.
+  '1ib57wuzdn7': { say: '[clipped, professional, tired] Dato\' Rashid Osman. Group Finance Director, Sinar Holdings. [break] [angry, controlled] He lay on that pavement through the whole storm before anybody called it in. [break] [quieter] His fist was closed. [break] This was in it.' },
+  // Inspector Farah Iskandar: You know whose this is. Do not tell me. Not yet.
+  '1gxkfk7qfo6': { say: '[low, urgent, almost pleading] You know whose this is. [break] Do not tell me. [break] [softer] Not yet.', speed: 0.92 },
+  // Inspector Farah Iskandar: Colombo put out a red notice for a K. Rajan, on your word. Immigration says he landed at KLIA nine days ago. My superintendent read it before I did.
+  '2dz0vzlnob3': { say: '[dry, pointed] Colombo put out a red notice for a K. Rajan, on your word. Immigration says he landed at K L I A nine days ago. [break] [bitter, low] My superintendent read it before I did.' },
+  // Inspector Farah Iskandar: Herath sent me the last page of a gem cutter's book. Every valuation for the Office of the Chairman. That page is the only reason I am allowed to stand on this pavement.
+  '0gdj72cq286': { say: '[measured, grim] Herath sent me the last page of a gem cutter\'s book. Every valuation for the Office of the Chairman. [break] [low, firm] That page is the only reason I am allowed to stand on this pavement.' },
+  // Inspector Farah Iskandar: Herath says the gem cutter's book was collected from Fort station by a man with a sun on his shirt. So I have nothing that gets me past that lobby. Except you.
+  '20daoledmxx': { say: '[flat, frustrated] Herath says the gem cutter\'s book was collected from Fort station by a man with a sun on his shirt. [break] So I have nothing that gets me past that lobby. [long-break] [dry, reluctant] Except you.' },
+  // Inspector Farah Iskandar: And Westport says a Sri Lankan reefer technician walked off a Sinar Cold Chain feeder on Friday night and never walked back on. Scratches on both arms.
+  '069zujougj5': { say: '[businesslike, uneasy] And Westport says a Sri Lankan reefer technician walked off a Sinar Cold Chain feeder on Friday night and never walked back on. [break] [cold] Scratches on both arms.' },
+  // Narrator: Menara Sinar is thirty-eight storeys of green glass on Jalan Ampang, four hundred metres from the twin towers, with a brass sun on its crown that catches the morning before anything else on the street.
+  '121i45dt8ms': { cue: '[atmospheric, measured, faintly bitter]', speed: 0.95 },
+  // Narrator: Count the floors from the pavement and you run out of numbers. A third of the way up there is one storey of black glass with no light behind it. Above it, Level 15. Below it, Level 13.
+  '22x7o8r1bs5': { say: '[slow, observant] Count the floors from the pavement and you run out of numbers. [break] A third of the way up there is one storey of black glass with no light behind it. [break] Above it, Level fifteen. [break] Below it, Level thirteen.', speed: 0.93 },
+  // Narrator: He landed under the black glass.
+  '23e8fj7my1m': { say: '[long-break][quiet, grave] He landed under the black glass.', speed: 0.88 },
+  // Narrator: At the tape, a young woman with a press lanyard that nobody will let her use. Nurul Ain. His daughter.
+  '0lbbm3iaw8t': { say: '[gentle, sober] At the tape, a young woman with a press lanyard that nobody will let her use. [break] Nurul Ain. [break] [soft] His daughter.', speed: 0.93 },
+  // Nurul Ain: Everybody keeps telling me he jumped. Maybe he did. He stopped sleeping in September. He said he had signed things he could not unsign.
+  '16zb18lq0rr': { say: '[numb, brittle, holding it together] Everybody keeps telling me he jumped. [break] Maybe he did. [break] He stopped sleeping in September. [voice catching] He said he had signed things he could not unsign.', speed: 0.92 },
+  // Nurul Ain: At 11:43 he sent me two words.
+  '0owxnz8253e': { say: '[quiet, shaking] At eleven forty-three he sent me two words.', speed: 0.9 },
+  // Nurul Ain: Maafkan Abah.  /  Forgive your father.
+  '01mktgdhxja': { say: '[long-break][barely holding back tears, whispering] Maafkan Abah.', speed: 0.82 },
+  // Nurul Ain: And last week he said a strange thing. If a man who folds paper animals ever comes to you, Ain, help him.
+  '13gtsmkdy4g': { say: '[sniffing, puzzled, searching your face] And last week he said a strange thing. [break] [softer, quoting her father] If a man who folds paper animals ever comes to you, Ain, help him.', speed: 0.92 },
+  // Supt. Khairul Anuar: Tekanan kerja. Dia terjun.  /  Pressure at work. He jumped.
+  '28y6b2bkqmr': { say: '[brusque, dismissive, loud] Tekanan kerja. [break] Dia terjun.' },
+  // Supt. Khairul Anuar: By Wednesday this file is closed, Farah. And your friend from Brickfields is not police.
+  '1d87031v768': { say: '[condescending, warning] By Wednesday this file is closed, Farah. [break] [cold, contemptuous] And your friend from Brickfields is not police.' },
+  // Narrator: When he has gone, Farah says one word, Wednesday, the way you say the name of a river you have to cross.
+  '1wij22p4ixh': { cue: '[dry, quiet, resolute]', speed: 0.93 },
+  // Narrator: The lobby is black marble with a brass sun set in the floor, so that everybody who comes in has to walk across it.
+  '1zchgvi0xje': { cue: '[low, wary, observant]' },
+  // Zulkifli Hamid: Welcome to Menara Sinar. Anything you need, you ask me first. Inspector. Long time.
+  '0vv8ydpfgxy': { say: '[smooth, polite, quietly controlling] Welcome to Menara Sinar. Anything you need, you ask me first. [break] [warmer, knowing] Inspector. [break] Long time.' },
+  // Narrator: Behind him an old man in grey overalls has a lift panel open. 12, 13, 15. He catches you counting.
+  '0o5r4w2ciy5': { say: '[low, wry] Behind him an old man in grey overalls has a lift panel open. [break] Twelve, thirteen, fifteen. [break] He catches you counting.' },
+  // Uncle Wong: Sap sei lau? Mou sap sei lau gaa.  /  Fourteen? There is no fourteen.
+  '0f0il7yv0bh': { say: '[old man, gruff, amused] 十四樓？[break] 冇十四樓㗎。' },
+  // Uncle Wong: Sap sei. Sat sei.  /  Fourteen sounds like "sure to die".
+  '1iinz3lgf4k': { say: '[low, superstitious, serious] 十四。[break] 實死。', speed: 0.9 },
+
+  // ---------------- case05:ending ----------------
+  // Narrator: Dang Wangi amends its file on the morning of the third night's tahlil. Not a fall. Pushed, from the fourteenth floor of a building with no fourteenth floor.
+  '22nez3tem8x': { say: '[measured, sober] Dang Wangi amends its file on the morning of the third night\'s tahlil. [break] Not a fall. [quiet, grave] Pushed, from the fourteenth floor of a building with no fourteenth floor.', speed: 0.93 },
+  // Nurul Ain: They say it is finished. My editor says it is finished. Everybody is very sure about everything except what happened.
+  '2b0xj7u9oxu': { say: '[hollow, bitter] They say it is finished. My editor says it is finished. [break] [quiet, weary] Everybody is very sure about everything except what happened.', speed: 0.9 },
+  // Narrator: Vivian Chua flies to Singapore on Thursday morning on a Sinar jet. At Seletar a woman in a grey dress is waiting for her on the tarmac. Sinar Holdings thanks its Company Secretary for twenty-seven years of service.
+  '0d1q031mkmw': { say: '[dry, sardonic] Vivian Chua flies to Singapore on Thursday morning on a Sinar jet. [break] [low, ominous] At Seletar a woman in a grey dress is waiting for her on the tarmac. [break] [flat, bitter] Sinar Holdings thanks its Company Secretary for twenty-seven years of service.' },
+  // Narrator: Vivian Chua flies to Singapore on Thursday morning on a Sinar jet. Sinar Holdings thanks its Company Secretary for twenty-seven years of service.
+  '2brqif9djq6': { say: '[dry, sardonic] Vivian Chua flies to Singapore on Thursday morning on a Sinar jet. [break] [flat, bitter] Sinar Holdings thanks its Company Secretary for twenty-seven years of service.' },
+  // Narrator: By Friday the Office of the Chairman has a new secretary. Her name is at the bottom of the letter Sinar's lawyers send to Bukit Aman: Melissa Ong.
+  '0n36s4xj54w': { say: '[low, ominous] By Friday the Office of the Chairman has a new secretary. Her name is at the bottom of the letter Sinar\'s lawyers send to Bukit Aman: [break] [emphasis] Melissa Ong.' },
+  // Narrator: Zulkifli Hamid is made Head of Security at Sinar Cold Chain, Westport. He leaves Menara Sinar on Wednesday with a cake from the night guards.
+  '1ocvxin7etj': { say: '[flat, bitter] Zulkifli Hamid is made Head of Security at Sinar Cold Chain, Westport. [break] [dry, sour] He leaves Menara Sinar on Wednesday with a cake from the night guards.' },
+  // Narrator: Superintendent Khairul Anuar is suspended. The murder charge is dropped on Friday. The envelope is not. On Monday somebody at Bukit Aman starts returning Farah's calls.
+  '2e5f11uqxr3': { say: '[measured, dry] Superintendent Khairul Anuar is suspended. The murder charge is dropped on Friday. [break] The envelope is not. [break] [faintly hopeful] On Monday somebody at Bukit Aman starts returning Farah\'s calls.' },
+  // Narrator: Superintendent Khairul Anuar gives the press conference himself, thanks his officers, and does not look at Farah once.
+  '2fuv6q0tssx': { cue: '[dry, bitter, contemptuous]' },
+  // Narrator: Bomba seals the fourteenth floor for fire-safety breaches. It is the only charge in Kuala Lumpur that Sinar's lawyers cannot argue away by lunch.
+  '14typxmppw2': { say: '[measured, faintly wry] Bomba seals the fourteenth floor for fire-safety breaches. [break] [dry] It is the only charge in Kuala Lumpur that Sinar\'s lawyers cannot argue away by lunch.' },
+  // Narrator: DBKL's file says what it has said since 1997. Level 14 of Menara Sinar is a plant floor: pumps, ducts, transformers. Nobody at DBKL can find who signed the plans.
+  '1nmero4zpi3': { say: '[flat, sardonic] D B K L\'s file says what it has said since 1997. Level fourteen of Menara Sinar is a plant floor: pumps, ducts, transformers. [break] [low, uneasy] Nobody at D B K L can find who signed the plans.' },
+  // Narrator: The shelves are bare. The chair still faces the window, and the telescope beside it still points south-west, at Brickfields.
+  '117nvjo7mp2': { say: '[hushed, uneasy] The shelves are bare. [break] The chair still faces the window, [break] [cold, quiet] and the telescope beside it still points south-west, at Brickfields.', speed: 0.9 },
+  // Vivian Chua: You think Floor 14 was his office. It was his memory. You have only seen the part he chose to forget.
+  '1mw05yfzhty': { say: '[calm, precise, faintly pitying] You think Floor fourteen was his office. [break] It was his memory. [break] [cool, quiet] You have only seen the part he chose to forget.', speed: 0.92 },
+  // Narrator: Azman sends Farah a photograph from the cab of a crane at Westport, 4 AM on Thursday: a reefer unit going aboard a Singapore feeder. Serial RU-19.
+  '22xt8w2unon': { say: '[low, tense] Azman sends Farah a photograph from the cab of a crane at Westport, four in the morning on Thursday: a reefer unit going aboard a Singapore feeder. [break] [ominous] Serial R U nineteen.' },
+  // Narrator: The export permit for RU-19 is stamped at Westport. Officer: N. SALLEH.
+  '2gdb4aai5pi': { say: '[flat, cold] The export permit for R U nineteen is stamped at Westport. [break] Officer: [emphasis] N. Salleh.' },
+  // Narrator: The man who drove the reefer van down to the loading bay at three on Monday morning had a Sri Lankan seaman's pass, and four healing scratches on each forearm.
+  '1w1f0gpw0ad': { say: '[low, ominous] The man who drove the reefer van down to the loading bay at three on Monday morning had a Sri Lankan seaman\'s pass, [break] [cold] and four healing scratches on each forearm.' },
+  // Narrator: Farah sends one car and no radio. Mak Teh rolls up the warung shutter before anybody knocks, and points up the stairs without a word.
+  '120ptioibj6': { say: '[hushed, tense, dawn] Farah sends one car and no radio. [break] Mak Teh rolls up the warung shutter before anybody knocks, and points up the stairs without a word.', speed: 0.93 },
+  // Narrator: He is at the window with two glasses of teh. He has drunk one. He looks older than five years, and exactly the same.
+  '19l1fzxaevq': { say: '[slow, overwhelmed, tender] He is at the window with two glasses of teh. [break] He has drunk one. [long-break] [voice thick] He looks older than five years, and exactly the same.', speed: 0.85 },
+  // Daniel Raj: You are late, machan. Five years late. I am not complaining.
+  '2duubb8sas0': { say: '[warm, tired, a crooked smile in the voice] You are late, machan. [break] Five years late. [break] [soft laugh] I am not complaining.', speed: 0.9 },
+  // Daniel Raj: In 2021 they gave me a choice. Stay dead, and the detective lives. Come back, and the detective burns next. So I stayed dead.
+  '0c0c96oli88': { say: '[low, quiet, confessing] In 2021 they gave me a choice. [break] Stay dead, and the detective lives. [break] Come back, and the detective burns next. [long-break] [aching, simple] So I stayed dead.', speed: 0.88 },
+  // Daniel Raj: You gave the boy in Bay 3 his name back. Wei Jie. I watched them bury him as me, and I said nothing.
+  '06nibxeog87': { say: '[grieving, ashamed] You gave the boy in Bay three his name back. [break] Wei Jie. [break] [voice breaking] I watched them bury him as me, and I said nothing.', speed: 0.87 },
+  // Daniel Raj: Mannichidu, machan.  /  Forgive me, machan.
+  '0qajuibormc': { say: '[long-break][close to tears, very quiet] மன்னிச்சிடு, [break] மச்சான்.', speed: 0.82 },
+  // Narrator: You put the silver lighter on the sill between the glasses. He pushes it back. Its twin is in his pocket. He bought two in 2016, one each, for two people who never smoked.
+  '0kzjs91clpm': { say: '[tender, quiet] You put the silver lighter on the sill between the glasses. [break] He pushes it back. [break] Its twin is in his pocket. [long-break] [wistful, almost smiling] He bought two in 2016, one each, for two people who never smoked.', speed: 0.88 },
+  // Narrator: Farah takes him to a house whose address she gives nobody, not even you. He goes down the wooden stairs with his hands in his pockets, like a man going to buy bread.
+  '240o14w3rec': { say: '[quiet, relieved, bittersweet] Farah takes him to a house whose address she gives nobody, not even you. [break] [gentle] He goes down the wooden stairs with his hands in his pockets, like a man going to buy bread.', speed: 0.9 },
+  // Narrator: Your office door is locked, the way you left it. The folder on your desk is not the way you left anything.
+  '1aqxr8nxpq8': { say: '[tense, hushed] Your office door is locked, the way you left it. [break] [cold, slow] The folder on your desk is not the way you left anything.', speed: 0.92 },
+  // Narrator: Grey archive board, a small embossed sun on the cover. On the tab, typed, your name. Opened 2016.
+  '1qqlu4921sa': { say: '[slow, dread] Grey archive board, a small embossed sun on the cover. [break] On the tab, typed, your name. [long-break] [whispering] Opened 2016.', speed: 0.88 },
+  // Narrator: Inside, one photograph: you and Daniel at table 6 in Restoran Bala, taken from across Jalan Tun Sambanthan. August 2021, the week before the fire.
+  '02c36nue1x4': { say: '[low, shaken] Inside, one photograph: you and Daniel at table six in Restoran Bala, taken from across Jalan Tun Sambanthan. [long-break] [aching, quiet] August 2021, the week before the fire.', speed: 0.88 },
+  // Narrator: And one typed list. H. Goh. Lim Chee Keong. P. Yogeswaran. Rashid Osman. Every name struck through by hand, in blue ink.
+  '0kfwmjqqgei': { say: '[slow, grave, a roll call] And one typed list. [break] H. Goh. [break] Lim Chee Keong. [break] P. Yogeswaran. [break] Rashid Osman. [long-break] [cold] Every name struck through by hand, in blue ink.', speed: 0.86 },
+  // Narrator: Under them, two names nobody has struck through yet. The first is Daniel's. The second is yours.
+  '0hsq723ts3c': { say: '[whispering, afraid] Under them, two names nobody has struck through yet. [break] The first is Daniel\'s. [long-break] [very quiet] The second is yours.', speed: 0.84 },
+  // Narrator: Across the city, on Jalan Ampang, one storey of black glass that Bomba sealed this morning has a light on in it.
+  '0x5ndmvtmz8': { say: '[long-break][hushed, ominous, slow] Across the city, on Jalan Ampang, one storey of black glass that Bomba sealed this morning [break] has a light on in it.', speed: 0.84 },
+  // Narrator: Farah's team searches your office while Bala Anne watches from the stairs with a ladle in his hand. They find your kettle, your files, and nobody.
+  '0ks1y6c6s9p': { say: '[flat, rueful] Farah\'s team searches your office while Bala Anne watches from the stairs with a ladle in his hand. [break] [quiet, hollow] They find your kettle, your files, and nobody.' },
+  // Narrator: By the time anybody thinks of Kampung Baru it is evening. Mak Teh is sitting on the warung steps. At noon, she says, two men in polo shirts with a little sun on the pocket went up, and came down with a third man between them. A van was waiting at the end of the Saloma bridge.
+  '22h0k3dx6js': { say: '[heavy, slow] By the time anybody thinks of Kampung Baru it is evening. Mak Teh is sitting on the warung steps. [break] [low, dread] At noon, she says, two men in polo shirts with a little sun on the pocket went up, and came down with a third man between them. [break] [quiet, sick] A van was waiting at the end of the Saloma bridge.', speed: 0.92 },
+  // Mak Teh: Dia suruh saya jangan menangis. Saya menangis juga.  /  He told me not to cry. I cried anyway.
+  '0iyvlzdtam6': { say: '[old woman, crying softly] Dia suruh saya jangan menangis. [break] [sobbing] Saya menangis juga.', speed: 0.85 },
+  // Narrator: Upstairs, a chair on its side, two glasses of teh across the floorboards, and in the tea a silver flip-top lighter, the twin of the one in your pocket. Engraved inside the lid: D.R.
+  '298imfraqhd': { say: '[hushed, stricken] Upstairs, a chair on its side, two glasses of teh across the floorboards, [break] and in the tea a silver flip-top lighter, the twin of the one in your pocket. [long-break] [whispering] Engraved inside the lid: D. R.', speed: 0.87 },
+  // Narrator: The warrant in his name stays open. Whether he ran or was taken, he is a wanted man now, and nobody looks hard for a wanted man who has disappeared.
+  '04ppanp04tb': { say: '[bitter, low] The warrant in his name stays open. [break] Whether he ran or was taken, he is a wanted man now, [break] [quiet, guilty] and nobody looks hard for a wanted man who has disappeared.', speed: 0.92 },
+  // Narrator: Farah's people walk the length of the morning flight to Colombo at KLIA. Seat 14A is empty. It was booked from a Sinar travel account at four on Monday morning.
+  '1uo4kurcjqo': { say: '[tense, flat] Farah\'s people walk the length of the morning flight to Colombo at K L I A. [break] Seat fourteen A is empty. [break] [cold, realizing] It was booked from a Sinar travel account at four on Monday morning.' },
+  // Narrator: Bomba opens the fourteenth floor for Farah a second time. There is nobody on it but the two of you, and a chair facing the window.
+  '1ap0pxa5w3z': { say: '[flat, hollow] Bomba opens the fourteenth floor for Farah a second time. [break] [quiet, uneasy] There is nobody on it but the two of you, and a chair facing the window.' },
+  // Narrator: Farah does not send anybody anywhere.
+  '0ilwb3o75xm': { cue: '[flat, final]', speed: 0.9 },
+  // Narrator: A warrant for murder goes out in the name of K. Rajan. Under it, in pencil, where only she will see it, Farah writes the other name.
+  '0g8vsq1rvha': { say: '[clipped, formal] A warrant for murder goes out in the name of K. Rajan. [long-break] [quiet, aching] Under it, in pencil, where only she will see it, Farah writes the other name.', speed: 0.9 },
+  // Nurul Ain: They say it was the man with the paper animals. Abah told me to help him. I do not know which one of them was lying to me.
+  '1hps9upsofg': { say: '[hurt, confused] They say it was the man with the paper animals. [break] Abah told me to help him. [break] [bitter, breaking] I do not know which one of them was lying to me.', speed: 0.9 },
+  // Narrator: Farah sends four cars, because the warrant says murder. Mak Teh stands in the warung doorway with her hand over her mouth.
+  '25ii5q3yqi1': { say: '[heavy, clipped] Farah sends four cars, because the warrant says murder. [break] [sorrowful] Mak Teh stands in the warung doorway with her hand over her mouth.', speed: 0.93 },
+  // Narrator: He comes down the wooden steps with his hands held out in front of him before anybody asks. He looks older than five years, and exactly the same.
+  '1cmmeeggu7b': { say: '[slow, stricken] He comes down the wooden steps with his hands held out in front of him before anybody asks. [long-break] [voice thick] He looks older than five years, and exactly the same.', speed: 0.87 },
+  // Daniel Raj: Machan. You did right, with what they gave you.
+  '17c5mco4k83': { say: '[calm, gentle, forgiving] Machan. [break] You did right, with what they gave you.', speed: 0.88 },
+  // Narrator: He is remanded at Sungai Buloh, in a block where Sinar's lawyers already have three clients.
+  '1l13j6cbvb9': { say: '[flat, low, dread] He is remanded at Sungai Buloh, [break] in a block where Sinar\'s lawyers already have three clients.', speed: 0.92 },
+  // Narrator: Superintendent Khairul Anuar signs the remand order himself.
+  '14wtmlb7k93': { cue: '[cold, quiet, ominous]', speed: 0.9 },
+  // Narrator: Zulkifli Hamid is arrested in the control room on B1, in front of his own monitors. He takes the earpiece out himself, coils the wire, and puts it in Farah's hand. "You still drop your left shoulder when you shoot," he tells her.
+  '23efd1082au': { say: '[clipped, formal] Zulkifli Hamid is arrested in the control room on B one, in front of his own monitors. [break] [slower, sad] He takes the earpiece out himself, coils the wire, and puts it in Farah\'s hand. [break] [quiet, bitter] "You still drop your left shoulder when you shoot," he tells her.' },
+  // Narrator: Superintendent Khairul Anuar is arrested at Bukit Aman in front of his own officers. The murder charge will not last the week. The envelope in his glovebox, RM 8,000 in fifties, will.
+  '1pecmomnc1t': { say: '[clipped, formal] Superintendent Khairul Anuar is arrested at Bukit Aman in front of his own officers. [break] The murder charge will not last the week. [break] [dry, pointed] The envelope in his glovebox, eight thousand ringgit in fifties, will.' },
+  // Nurul Ain: You arrested a superintendent. My editor cleared the whole front page for it. Abah would have read it twice and asked who was still upstairs.
+  '0ziizqyzuk2': { say: '[dry, tired, sceptical] You arrested a superintendent. My editor cleared the whole front page for it. [break] [sad, knowing] Abah would have read it twice and asked who was still upstairs.', speed: 0.92 },
+  // Narrator: Vivian Chua is arrested at her house in Bukit Tunku at five in the morning. She is dressed, with her handbag on her knee, as if she has been waiting for a car. She asks for one telephone call, and does not make it.
+  '0tj6oku1s49': { say: '[clipped, formal] Vivian Chua is arrested at her house in Bukit Tunku at five in the morning. [break] [uneasy] She is dressed, with her handbag on her knee, as if she has been waiting for a car. [break] [quiet, cold] She asks for one telephone call, and does not make it.' },
+  // Nurul Ain: He did not jump. He was pushed while he was trying to undo something. I can write that now. I can write both of those.
+  '149rdips4t8': { say: '[tearful, steadying] He did not jump. [break] He was pushed while he was trying to undo something. [break] [quiet, fierce, grateful] I can write that now. I can write both of those.', speed: 0.9 },
 };

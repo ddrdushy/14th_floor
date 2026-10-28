@@ -9,6 +9,7 @@ export const GAMES_D = {
   searchlight: () => import('./searchlight.js'),
   dialtone: () => import('./dialtone.js'),
   fusebox: () => import('./fusebox.js'),
+  interrogation: () => import('./interrogation.js'),
 };
 export const CATEGORY_D = {
   wiretap: 'Wiring',
@@ -19,4 +20,5 @@ export const CATEGORY_D = {
   searchlight: 'Logic',
   dialtone: 'Listening',
   fusebox: 'Logic',
+  interrogation: 'Interrogation',
 };

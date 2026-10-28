@@ -28,6 +28,16 @@ export const VOICE_OVERRIDES = {
   // Sri Lankan Malay (Uncle Saldin, Case 4): Latin script, only the label
   'Orang Malaysia tu datang lagi semalam. Dua teh. Minum satu.': { lang: 'ms' },
 
+  // Case 5: Tamil (Bala Anne, Daniel Raj), Cantonese (Uncle Wong), Malay (labels only, Latin script)
+  'Thambi. Idhu andha Sinar dhaane?': { say: 'தம்பி. இது அந்த சினார் தானே?', lang: 'ta' },
+  'Mannichidu, machan.': { say: 'மன்னிச்சிடு, மச்சான்.', lang: 'ta' },
+  'Sap sei lau? Mou sap sei lau gaa.': { say: '十四樓？冇十四樓㗎。', lang: 'yue' },
+  'Sap sei. Sat sei.': { say: '十四。實死。', lang: 'yue' },
+  'Yang ini, aku punya.': { lang: 'ms' },
+  'Maafkan Abah.': { lang: 'ms' },
+  'Tekanan kerja. Dia terjun.': { lang: 'ms' },
+  'Dia suruh saya jangan menangis. Saya menangis juga.': { lang: 'ms' },
+
   // Cantonese (Ken Lim, Lau Kim Hock)
   'Ah Hock Suk hai ngo suk fu ah. Bong ngo yat ci. Ngo kau neih.': { say: '阿Hock叔係我叔父啊。幫我一次。我求你。' },
   'Go bui kopi… hou fu. Hou fu.': { say: '嗰杯kopi……好苦。好苦。' },

@@ -6,15 +6,16 @@ import { SIDE01 } from './side01.js';
 import { CASE02 } from './case02.js';
 import { CASE03 } from './case03.js';
 import { CASE04 } from './case04.js';
+import { CASE05 } from './case05.js';
 import { state, caseState } from '../core/state.js';
 
-export const CASES = { case01: CASE01, side01: SIDE01, case02: CASE02, case03: CASE03, case04: CASE04 };
-export const CASE_ORDER = ['case01', 'side01', 'case02', 'case03', 'case04'];
+export const CASES = { case01: CASE01, side01: SIDE01, case02: CASE02, case03: CASE03, case04: CASE04, case05: CASE05 };
+export const CASE_ORDER = ['case01', 'side01', 'case02', 'case03', 'case04', 'case05'];
 
 // What the phone says once every written case is closed.
 export const COMING_SOON = {
-  title: 'Case 5',
-  teaser: 'Menara Sinar, Jalan Ampang. The lifts go from 13 to 15. On Monday morning a director of Sinar Holdings is found on the pavement under a window of the floor that is not there. In his fist: a paper kancil, folded from a Colombo tuk-tuk receipt.',
+  title: 'Case 6',
+  teaser: 'Warehouse 6, Bay 3, Pulau Indah. Five years to the night after the fire, the new roof catches. In the morning Bomba find one body on the black floor and, beside it, a silver flip-top lighter engraved D.R. Farah has to ask you where yours is.',
 };
 
 /** Short label for a case: "Case 2" or "Side case". */

@@ -481,6 +481,12 @@ const initials = (name) => name.replace(HONORIFIC, '').split(/\s+/).slice(0, 2).
 
 const PLACES = [
   {
+    // checked before the general Kuala Lumpur entry: Menara Sinar, Jalan Ampang (Case 5)
+    match: /ampang|klcc/i, grid: [44, 60], angle: -22, water: 'river',
+    districts: ['KLCC', 'Jalan Ampang', 'Kampung Baru', 'Chow Kit', 'Bukit Nanas', 'Dang Wangi', 'Bukit Bintang', 'Masjid Jamek', 'Brickfields', 'Ampang Hilir'],
+    roads: ['Jalan Ampang', 'Jalan Tun Razak', 'Jalan Sultan Ismail', 'Jalan Tuanku Abdul Rahman', 'Jalan Raja Muda Musa'], waterName: 'Sungai Klang',
+  },
+  {
     match: /kiara|kuala lumpur/i, grid: [52, 70], angle: -16, water: 'river',
     districts: ['Mont Kiara', 'Sri Hartamas', 'Segambut', 'Damansara Heights', 'Bangsar', 'Brickfields', 'Kampung Baru', 'Chow Kit', 'Bukit Bintang', 'Sentul'],
     roads: ['Jalan Duta', 'Lebuhraya Sprint', 'Jalan Kuching', 'Jalan Tun Razak'], waterName: 'Sungai Klang',
