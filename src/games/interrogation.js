@@ -22,6 +22,35 @@ import { h, toast } from '../core/ui.js';
 import { sfx } from '../core/audio.js';
 import { hasImage, imgUrl } from '../core/assets.js';
 import { playerId } from '../core/telemetry.js';
+import { voicesOn, voiceVolume, stopVoice } from '../core/voice-player.js';
+import { app } from '../core/app.js';
+import { state } from '../core/state.js';
+
+// the suspect's AI replies spoken live (ILMU text-to-speech through /api/ai/speak)
+let speaking = null;
+function hush() {
+  if (!speaking) return;
+  try { speaking.pause(); } catch { /* ignore */ }
+  URL.revokeObjectURL(speaking.src);
+  speaking = null;
+  app.music?.unduck?.();
+}
+async function sayLine(caseId, levelId, text, sig) {
+  if (!sig || !voicesOn() || state().settings.sound === false) return;
+  try {
+    const res = await fetch('./api/ai/speak', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ case_id: caseId, level_id: levelId, text, sig }) });
+    if (!res.ok) return;
+    const url = URL.createObjectURL(await res.blob());
+    hush();
+    stopVoice();
+    const a = new Audio(url);
+    a.volume = voiceVolume();
+    speaking = a;
+    app.music?.duck?.(0.35);
+    a.onended = a.onerror = () => { if (speaking === a) hush(); };
+    await a.play().catch(() => hush());
+  } catch { /* the caption is enough */ }
+}
 
 export const meta = { id: 'interrogation', name: 'Interrogation', category: 'Interrogation' };
 
@@ -228,6 +257,7 @@ export function mount(el, ctx) {
     turns.push({ q, a: d.reply, claims: (d.claims || []).filter((c) => statements[c]), kind });
     persist();
     render();
+    if (d.sig) sayLine(ctx.caseId, ctx.levelId, d.reply, d.sig);
     return d;
   }
   async function ask() {
@@ -287,6 +317,6 @@ export function mount(el, ctx) {
       render();
       confront();
     },
-    destroy() { done = true; },
+    destroy() { done = true; hush(); },
   };
 }

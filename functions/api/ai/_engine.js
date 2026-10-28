@@ -8,7 +8,10 @@
 
 export const aiReady = (env) => !!(env.AI_API_KEY || env.AI);
 export const DEFAULT_BASE = 'https://api.ilmu.ai/v1';
-export const DEFAULT_MODEL = 'ilmu-mini-v3.3';
+// ilmu-v3.1 with reasoning off stayed in character and never invented facts in testing (~0.7 s a reply);
+// ilmu-mini-v3.3 was faster but made up damaging details under pressure.
+export const DEFAULT_MODEL = 'ilmu-v3.1';
+const DEFAULT_REASONING = { 'ilmu-v3.1': 'none' };
 export const baseUrl = (env) => (env.AI_BASE_URL || DEFAULT_BASE).replace(/\/+$/, '');
 export const aiProvider = (env) => (env.AI_API_KEY ? `api:${hostOf(baseUrl(env))}` : env.AI ? 'workers-ai' : null);
 function hostOf(u) { try { return new URL(u).host; } catch { return 'custom'; } }
@@ -22,7 +25,7 @@ export async function chat(env, messages, { maxTokens = 260, temperature = 0.7, 
   if (env.AI_API_KEY) {
     const base = baseUrl(env);
     const model = modelOverride || env.AI_MODEL || DEFAULT_MODEL;
-    const effort = reasoning ?? env.AI_REASONING;
+    const effort = reasoning ?? env.AI_REASONING ?? DEFAULT_REASONING[model];
     const send = async (withFormat) => {
       const ctl = new AbortController();
       const t = setTimeout(() => ctl.abort(), timeoutMs);
@@ -62,4 +65,35 @@ export function parseJsonReply(text) {
   const e = text.lastIndexOf('}');
   if (s < 0 || e <= s) return null;
   try { return JSON.parse(text.slice(s, e + 1)); } catch { return null; }
+}
+
+// ---------- speech (live lines from the AI games) ----------
+// ILMU text-to-speech (OpenAI-style /audio/speech). Voices voice_1 … voice_5 (and OpenAI-style names).
+export const ttsReady = (env) => !!env.AI_API_KEY && !env.AI_TTS_OFF;
+
+/** Speak a line; resolves an ArrayBuffer of audio/mpeg. */
+export async function speech(env, text, voice) {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), 20000);
+  try {
+    const res = await fetch(`${baseUrl(env)}/audio/speech`, {
+      method: 'POST', signal: ctl.signal,
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${env.AI_API_KEY}` },
+      body: JSON.stringify({ model: env.AI_TTS_MODEL || 'ilmu-tts-v2.1', input: text, voice: voice || 'voice_1', response_format: 'mp3' }),
+    });
+    if (!res.ok) throw new AiError(res.status, `tts http ${res.status}`);
+    return await res.arrayBuffer();
+  } finally {
+    clearTimeout(t);
+  }
+}
+
+// Lines the server wrote are signed, so /api/ai/speak only ever voices them (it is not a free TTS).
+async function hmacKey(env) {
+  const secret = `${env.ADMIN_PASSWORD || ''}:${env.AI_API_KEY || ''}:floor14-speak`;
+  return crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+}
+export async function signLine(env, scope, text) {
+  const mac = await crypto.subtle.sign('HMAC', await hmacKey(env), new TextEncoder().encode(`${scope}|${text}`));
+  return [...new Uint8Array(mac)].slice(0, 16).map((b) => b.toString(16).padStart(2, '0')).join('');
 }

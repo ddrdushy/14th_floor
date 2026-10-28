@@ -42,6 +42,7 @@ export const onRequestPost = adminHandler(async ({ request, env }) => {
     const type = r.headers.get('content-type') || '';
     const buf = await r.arrayBuffer();
     const small = buf.byteLength < 4000 ? new TextDecoder().decode(buf) : null;
+    if (b.raw && r.ok) return new Response(buf, { headers: { 'content-type': type || 'audio/mpeg', 'cache-control': 'no-store' } });
     return json({ ok: r.ok, status: r.status, ms: Date.now() - t0, type, bytes: buf.byteLength, text: small });
   }
   return fail(400, 'bad_op');

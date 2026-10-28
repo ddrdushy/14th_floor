@@ -10,7 +10,7 @@
 // The prompt is built only from the case file on the server (./_cases.js), never from client text other
 // than the question and the short history, so the endpoint cannot be used as a general chatbot.
 import { handler, json, fail, readJson, methodNotAllowed, UUID_RE, clientIp, overLimit } from '../_lib.js';
-import { aiReady, chat, parseJsonReply } from './_engine.js';
+import { aiReady, chat, parseJsonReply, ttsReady, signLine } from './_engine.js';
 import { aiLevel } from './_cases.js';
 
 const MAX_Q = 240;
@@ -106,7 +106,9 @@ export const onRequestPost = handler(async ({ request, env }) => {
     if (confront) claims = [];
     else if (topicItem && allowed.has(topicItem.id) && !claims.includes(topicItem.id)) claims.push(topicItem.id);
     if (!reply) return json({ ok: true, ai: false, ...fallback(p, lie, topic, confront) });
-    return json({ ok: true, ai: true, reply, claims, ...(confront ? { right: confront.right } : {}) });
+    // a signature lets the game ask /api/ai/speak for this exact line in the suspect's voice
+    const sig = ttsReady(env) ? await signLine(env, `${b.case_id}|${b.level_id}`, reply) : null;
+    return json({ ok: true, ai: true, reply, claims, ...(sig ? { sig } : {}), ...(confront ? { right: confront.right } : {}) });
   } catch (err) {
     console.error('floor14 ai error', err?.status, err?.message);
     return json({ ok: true, ai: false, ...fallback(p, lie, topic, confront), ...(confront ? { right: confront.right } : {}) });
