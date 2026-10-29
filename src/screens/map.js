@@ -482,6 +482,12 @@ const initials = (name) => name.replace(HONORIFIC, '').split(/\s+/).slice(0, 2).
 
 const PLACES = [
   {
+    // checked before the Case 5 entry: Level 15 of Menara Sinar, Basement 2, Brickfields and Chow Kit (Case 7)
+    match: /level 15/i, grid: [48, 66], angle: -18, water: 'river',
+    districts: ['KLCC', 'Jalan Ampang', 'Kampung Baru', 'Chow Kit', 'Brickfields', 'Dang Wangi', 'Bukit Nanas', 'KL Sentral', 'Cheras', 'Jalan Kia Peng'],
+    roads: ['Jalan Ampang', 'Jalan Tun Sambanthan', 'Jalan Raja Muda Musa', 'Jalan Raja Bot', 'Jalan Tuanku Abdul Rahman'], waterName: 'Sungai Klang',
+  },
+  {
     // checked before the general Kuala Lumpur entry: Menara Sinar, Jalan Ampang (Case 5)
     match: /ampang|klcc/i, grid: [44, 60], angle: -22, water: 'river',
     districts: ['KLCC', 'Jalan Ampang', 'Kampung Baru', 'Chow Kit', 'Bukit Nanas', 'Dang Wangi', 'Bukit Bintang', 'Masjid Jamek', 'Brickfields', 'Ampang Hilir'],

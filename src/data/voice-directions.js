@@ -858,4 +858,208 @@ export const VOICE_DIRECTIONS = {
   '1aseo6etuct': { say: '[calm, unhurried, warm and courteous, utterly cold underneath] Good evening, detective. [break] Five years ago I let you go into the fire. [break] This year I let you come out of it. [long-break] [softly] Keep the lighter.', speed: 0.86 },
   // Narrator: You know the voice. You have known it every night for five years. Before you can say anything, you hear a silver lid flick open, and shut, and open. Then the dialling tone.
   '06e3hih6p5o': { say: '[whispering, shaken] You know the voice. [break] You have known it every night for five years. [break] Before you can say anything, you hear a silver lid flick open, [break] and shut, [break] and open. [long-break] [flat] Then the dialling tone.', speed: 0.85 },
+
+  // ---------------- case07 ----------------
+  // Narrator: The courier will not come in out of the rain. He hands Bala Anne a black envelope across the counter, a small brass sun pressed into its flap, and waits to watch it opened.
+  '1jh2fr0tp58': { cue: '[low, weary, intimate][rain outside]', speed: 0.94 },
+  // Narrator: Sinar Holdings Berhad, forty years. Saturday, 14 November, Level 15, Menara Sinar. The Chairman will address his guests. Table 6. For two.
+  '2cuhi62erk6': { say: '[reading aloud, flat, faintly ironic] Sinar Holdings Berhad, forty years. [break] Saturday, fourteen November, Level fifteen, Menara Sinar. [break] The Chairman will address his guests. [long-break] [quiet] Table six. [break] For two.', speed: 0.92 },
+  // Bala Anne: Thambi. Poga vendaam.  /  Boy. Don't go.
+  '2d2llrm4s5b': { say: '[gruff, worried, almost pleading] தம்பி. [break] போக வேண்டாம்.', speed: 0.9 },
+  // Bala Anne: Table six. That is my table. Now he is taking my tables also.
+  '12mqx2rqunm': { cue: '[grumbling, wounded pride, half joking]', speed: 0.95 },
+  // Narrator: On the television over the counter, Dr. Shanti Menon's appeal has been put off again, to next year. Bala Anne does not even look up.
+  '1opb8s2w0f7': { cue: '[quiet, tired, matter of fact]', speed: 0.94 },
+  // Bala Anne: That durian man Ravi says if you go to the big party, bring him back a piece of cake. I told him come and eat here like a human being.
+  '1sd10pop503': { cue: '[exasperated, affectionate, dry humour]' },
+  // Narrator: Pinned by the till, a postcard from Pandamaran with no message, only a drawing of two hands in bandages. Ah Fook's trial is in January.
+  '0hwdn0nhrv8': { cue: '[quiet, uneasy, guilty]', speed: 0.92 },
+  // Narrator: Pinned by the till, three lines from Puan Rohana in Klang: Amirul is out on bail. He sleeps in his old room and does not speak.
+  '19e5b34ol02': { cue: '[quiet, heavy, sad]', speed: 0.92 },
+  // Narrator: Tonight Menara Sinar is lit amber from the pavement to the brass sun on its crown, all but one storey, a third of the way up, that stays black.
+  '2f9tll9zk7d': { cue: '[slow, ominous, watchful]', speed: 0.92 },
+  // Narrator: In the drop-off lane, a grey sedan with its engine running. WXY 1408. The driver wears a white shirt and does not look at you, which is how you know he has been looking.
+  '09qs4dinu6z': { say: '[low, tense] In the drop-off lane, a grey sedan with its engine running. [break] WXY one four zero eight. [break] The driver wears a white shirt and does not look at you, [break] [cold] which is how you know he has been looking.', speed: 0.93 },
+  // Inspector Farah Iskandar: Table six, for two. He knew I would come. Officially I am here for the deputy minister. Unofficially I am your plus one, and I am not dancing.
+  '13p789g9s1z': { say: '[dry, clipped, guarded] Table six, for two. He knew I would come. [break] Officially I am here for the deputy minister. [break] [deadpan] Unofficially I am your plus one, and I am not dancing.' },
+  // Inspector Farah Iskandar: My superintendent is at table two with the deputy minister. Khairul has a new watch. I have not asked him where from.
+  '2gbkzc3llbv': { cue: '[low, contemptuous, sidelong]' },
+  // Inspector Farah Iskandar: Khairul is suspended, and he is still invited. Table thirty, by the kitchen door. Sinar never forgets a friend.
+  '2bpckmeuyut': { cue: '[bitter, sardonic]' },
+  // Inspector Farah Iskandar: Ninety officers at Bukit Aman are still reading the cartons from Jugra. Half the names on tonight's guest list are in them.
+  '1ukmipsdnw0': { cue: '[quiet, grim satisfaction]' },
+  // Inspector Farah Iskandar: Every name on tonight's guest list was in a carton I never got to open. They will all shake my hand.
+  '25dile91u10': { cue: '[quiet, bitter, resigned]', speed: 0.97 },
+  // Inspector Farah Iskandar: Daniel is in a house I have not told you about, with two of my men and the television on. He asked me to tell you one thing. Do not drink anything you did not order.
+  '0gyn9j5b8ua': { say: '[low, careful, protective] Daniel is in a house I have not told you about, with two of my men and the television on. [break] He asked me to tell you one thing. [break] [serious] Do not drink anything you did not order.', speed: 0.97 },
+  // Inspector Farah Iskandar: Daniel is in Sungai Buloh, Block C, with the radio on. His lawyer says February. He asked me to tell you one thing. Do not drink anything you did not order.
+  '229mt0bua3l': { say: '[low, tired, careful] Daniel is in Sungai Buloh, Block C, with the radio on. His lawyer says February. [break] He asked me to tell you one thing. [break] [serious] Do not drink anything you did not order.', speed: 0.97 },
+  // Narrator: Nobody has seen Daniel since August. Every few weeks a paper kancil comes under your office door, folded from something of theirs. You keep them in the drawer, and Farah does not ask.
+  '1ewb27zqsoe': { cue: '[soft, aching, controlled]', speed: 0.9 },
+  // Narrator: At the lift doors, a man in a dinner jacket with an earpiece and a policeman's stillness: Zulkifli Hamid, up from Westport for the night. As Farah passes him he says, very quietly, "Left shoulder, Inspector."
+  '107w3adn3gk': { say: '[low, tense, watchful] At the lift doors, a man in a dinner jacket with an earpiece and a policeman\'s stillness: [break] Zulkifli Hamid, up from Westport for the night. [break] As Farah passes him he says, very quietly, [whispering] "Left shoulder, Inspector."', speed: 0.93 },
+  // Narrator: Level 15 has been emptied of its directors for one night and turned into a ballroom: three hundred guests at round tables, a band playing P. Ramlee, and at the far end, a screen.
+  '0jsrcboye1w': { cue: '[measured, a trace of wonder, wary]', speed: 0.94 },
+  // Narrator: Twelve panels of white silk, five metres high, with Sinar's sun painted across them in gold. Behind it the light is off. Everybody looks at it anyway.
+  '29oh7g0f8nc': { cue: '[hushed, uneasy, slow]', speed: 0.92 },
+  // Narrator: Under your feet is the floor that is not there. Rosli stands at the fire exit in his dress uniform, because Bomba sealed Level 14 after Dato' Rashid fell, and somebody has to stand on top of the seal.
+  '07ewpklq16g': { cue: '[low, dry, uneasy]', speed: 0.93 },
+  // Narrator: At the door the Office of the Chairman's new secretary greets every guest by name. Melissa Ong. She greets you by yours, and does not offer her hand.
+  '2333wh77ttv': { cue: '[cool, wary, quiet]', speed: 0.94 },
+  // Narrator: On every table, a card from the Office of the Chairman in a secretary's copperplate. Vivian Chua writes them from Singapore now, Farah says, and they come up by courier.
+  '18419s81kyc': { cue: '[quiet, wary, faintly bitter]', speed: 0.94 },
+  // Narrator: In the press pen, behind a velvet rope, a young woman with a camera she has been told not to raise: Nurul Ain, whose father fell from the floor below.
+  '0rbndan9atb': { cue: '[soft, sad, protective]', speed: 0.93 },
+  // Narrator: An old man in a white shirt, with a staff badge that has no name on it, sets a glass of teh tarik in front of you. Nobody at table six ordered it. It is made exactly the way Bala Anne makes it.
+  '1evlgfqf45w': { cue: '[quiet, puzzled, warm turning uneasy]', speed: 0.93 },
+  // Muthu: Thambi. Vilakku anainjadhum, thiraikku pinnaadi paaru.  /  Boy. When the lights go out, look behind the screen.
+  '1fh7eajft3t': { say: '[very soft, an old man\'s whisper, urgent and kind] தம்பி. [break] விளக்கு அணைஞ்சதும், [break] திரைக்குப் பின்னாடி பாரு.', speed: 0.85 },
+  // Muthu: Bala-kitta sollu, Muthu vandhaan-nu.  /  Tell Bala that Muthu came.
+  '011vwjwxeza': { say: '[gentle, tired, a small sad smile] பாலா கிட்ட சொல்லு, [break] முத்து வந்தான்னு.', speed: 0.86 },
+  // Narrator: Then he is gone through a service door beside the screen, hands behind his back, like a man who has walked through it all his life.
+  '1mte2157sqy': { cue: '[quiet, watchful]', speed: 0.93 },
+  // Tan Sri Azhar: Ladies and gentlemen. For the fortieth time: the man who made Sinar.
+  '1c4wx78mwhs': { say: '[polished, grand, a practised master of ceremonies] Ladies and gentlemen. [break] [reverent] For the fortieth time: [break] the man who made Sinar.', speed: 0.95 },
+  // Narrator: The room goes dark, and the screen lights from behind. On the silk, the shadow of a man in a high-backed chair, a cigarette in his hand.
+  '1nddubix2wx': { cue: '[hushed, slow, ominous]', speed: 0.9 },
+  // The Chairman: Forty years ago I had one lorry, a yard in the oil palm under Bukit Jugra, and a sun painted on the gate. I have the gate still.
+  '2adf70r1syw': { say: '[calm, unhurried, warm and courteous, utterly cold underneath] Forty years ago I had one lorry, [break] a yard in the oil palm under Bukit Jugra, [break] and a sun painted on the gate. [long-break] [softly] I have the gate still.', speed: 0.86 },
+  // The Chairman: And at table six, a detective I have watched for ten years. Good evening, detective. You came. I knew you would be listening.
+  '1rvys934ki4': { say: '[calm, intimate, amused, speaking to one person in a crowded room] And at table six, a detective I have watched for ten years. [break] Good evening, detective. [break] You came. [long-break] [softly] I knew you would be listening.', speed: 0.86 },
+  // Narrator: Three hundred people turn to look at you. On the silk the shadow lifts a lighter, and the flame comes up a beat after the snap, as if the hand were waiting to hear it.
+  '0i2wsoeynay': { cue: '[tense, low, noticing something wrong]', speed: 0.92 },
+  // The Chairman: Empat puluh tahun. Empat puluh saat.  /  Forty years. Forty seconds.
+  '06zooufhvmp': { say: '[slow, ceremonial, quiet finality] Empat puluh tahun. [long-break] Empat puluh saat.', speed: 0.84 },
+  // Narrator: Every light on Level 15 goes out at once: forty seconds of dark, one for each year. Three hundred people hold their breath, because that is what they were told to do.
+  '0r90bqqg58o': { cue: '[hushed, tense, breath held]', speed: 0.9 },
+  // Narrator: You are already walking, the way the old man asked, between the tables, toward the edge of the screen.
+  '25riblnit60': { cue: '[low, urgent, quiet]', speed: 0.95 },
+  // Narrator: Two metres from the silk you hear a chair creak, and a sound like somebody breathing through a straw. Then a hand closes on your arm.
+  '2day707jhy6': { say: '[whispering, frightened] Two metres from the silk you hear a chair creak, [break] and a sound like somebody breathing through a straw. [long-break] [sharp] Then a hand closes on your arm.', speed: 0.88 },
+  // Bishnu Thapa: Sorry, boss. Nobody goes behind the screen. Nobody.
+  '1bnk3z3ujex': { cue: '[urgent whisper, frightened, apologetic, Nepali-accented]' },
+  // Narrator: The lights come up. The screen is white and empty. Three hundred people applaud. You go back to table six, and your teh has gone cold.
+  '2g8rwndkvru': { cue: '[flat, deflated, uneasy]', speed: 0.93 },
+  // Narrator: At fourteen minutes past ten Tan Sri Azhar Kamaruddin goes behind the screen, as he has every year since 1997, to thank an empty chair.
+  '0o05kupzadi': { cue: '[measured, slow, ominous]', speed: 0.93 },
+  // Tan Sri Azhar: Tuan dah tak ada.  /  The Chairman is gone.
+  '0qu7d967bpw': { cue: '[shocked, shaking, almost a sob]', speed: 0.88 },
+  // Narrator: Three hundred telephones say it before he has finished: the Chairman of Sinar Holdings is dead.
+  '0med27l7cma': { cue: '[fast, rising, chaotic]' },
+  // Inspector Farah Iskandar: Lifts off. Stairs shut. Nobody leaves this floor until I say so, Tan Sri. Not even you.
+  '2evivs3ykrh': { cue: '[commanding, sharp, steel in it]', speed: 1.05 },
+  // Narrator: In the high-backed chair behind the silk, his head fallen to one side and a cigarette burnt down to the filter between his fingers, sits the old man who brought you your teh.
+  '2gazget7udz': { cue: '[quiet, cold, grieving]', speed: 0.88 },
+  // Inspector Farah Iskandar: Three hundred people watched this man give a speech. He has no microphone. He has no earpiece. He has a staff badge with no name on it.
+  '04c8xesjo1l': { cue: '[low, hard, thinking aloud]', speed: 0.97 },
+  // Inspector Farah Iskandar: Whoever was talking to us tonight, it was not him.
+  '15spcc4x0ux': { cue: '[quiet, certain, chilled]', speed: 0.92 },
+  // Narrator: His wallet says Muthusamy a/l Perumal, seventy-one, Jalan Thambapillay, Brickfields. Two streets from your office.
+  '23wt13hm72z': { cue: '[quiet, heavy, close to home]', speed: 0.9 },
+  // Narrator: At two minutes past eleven Sinar Holdings tells the press that the Chairman is well, and thanks his guests for a memorable evening.
+  '000mxoc4tr3': { cue: '[dry, cold, bitter irony]', speed: 0.92 },
+
+  // ---------------- case07:ending ----------------
+  // Narrator: Hamidah Yusof reads the file twice and writes no charge against the man at the desk. "Bring me the man at the desk," she says, "and I will bring you the man on the telephone."
+  '111ytbozlfs': { cue: '[flat, disappointed, quiet]', speed: 0.94 },
+  // Narrator: She reads "behind the screen", and crosses it out. "The man behind the screen is in the mortuary, detective."
+  '0nhp0gi2atj': { cue: '[dry, weary, cutting]', speed: 0.95 },
+  // Narrator: Under "and abetment by", the line stays blank, as it has stayed blank for three cases.
+  '0kj0fqw6xqf': { cue: '[quiet, bleak, final]', speed: 0.9 },
+  // Narrator: At Subang, customs clears a Sinar jet to Seletar at 7:15 on Sunday morning. One passenger, name withheld. Officer: N. SALLEH.
+  '1qrhbzk0u10': { cue: '[clipped, cold, knowing]', speed: 0.95 },
+  // Narrator: Farah's constable at Chow Kit saw the driver of the black car for two seconds: an older Chinese man in a white shirt, with a jade bangle on his wrist.
+  '1fpsy15m6g0': { cue: '[low, tense, recognition]', speed: 0.93 },
+  // Narrator: Farah's constable at Chow Kit saw the driver of the black car for two seconds: a Sri Lankan face, and four old scratches on his forearm.
+  '1jc7t1xfkip': { cue: '[low, tense, recognition]', speed: 0.93 },
+  // Narrator: Rizal Hamdan resigns from Kawalan Sentosa on Monday by text message, and his telephone is switched off by lunchtime.
+  '20iarmf76qb': { cue: '[dry, contemptuous]', speed: 0.95 },
+  // Narrator: Workmen take the screen down panel by panel and roll the silk round cardboard tubes. The high-backed chair stays where it is, because nobody has been told what to do with it.
+  '1qow0j9diei': { cue: '[quiet, melancholy, slow]', speed: 0.92 },
+  // Narrator: Sinar Holdings tells Bursa Malaysia that its Chairman is in good health and will not be taking questions. The share price closes up four sen.
+  '1zuzebimb1x': { cue: '[dry, bitter irony]', speed: 0.95 },
+  // Narrator: Tan Sri Azhar's office on Level 15 is empty by noon. His succession memo is on the board's agenda on Thursday, under somebody else's initials.
+  '03lw9dvg4s0': { cue: '[clipped, wry]', speed: 0.95 },
+  // Narrator: Tan Sri Azhar Kamaruddin chairs Monday's board meeting from the chair at the head of the table. It is noticed that he does not lean back in it.
+  '1zfqd5oauuo': { cue: '[quiet, wry, uneasy]', speed: 0.94 },
+  // Narrator: Dr. Meera Rajaratnam hands Farah the file marked TUAN herself, and closes her clinic for a week. She says she will never again examine a patient whose name she does not know.
+  '0qfzluj4ggl': { cue: '[quiet, sober, a little hopeful]', speed: 0.93 },
+  // Narrator: The Malaysian Medical Council suspends Dr. Meera Rajaratnam. Her patients receive a letter. The old man with the bad heart keeps taking his tablets.
+  '1vwl67svoc2': { cue: '[flat, then gently sad]', speed: 0.93 },
+  // Narrator: Desmond Yap goes back to work on Monday. On Wednesday morning the attendants find his car in Bay V1 on Basement 2 with the engine running and a hose from the exhaust. Dang Wangi call it a suicide. His headset is round his neck.
+  '1011kvlmn6l': { say: '[flat, cold] Desmond Yap goes back to work on Monday. [break] On Wednesday morning the attendants find his car in Bay V one on Basement two, with the engine running and a hose from the exhaust. [break] Dang Wangi call it a suicide. [long-break] [quiet] His headset is round his neck.', speed: 0.9 },
+  // Narrator: Kamal Ariffin flies in from Colombo for the dinner and is seen at table twenty-eight in a borrowed suit. He flies back on Sunday before anybody thinks to ask him why.
+  '225z0by42bz': { cue: '[dry, uneasy]', speed: 0.95 },
+  // Narrator: You tell Daniel about the old man with the teh, and the chair, and the forty seconds, and the dockets in Bala Anne's shoebox.
+  '0zvs1akunjd': { cue: '[quiet, late night, tired]', speed: 0.93 },
+  // Daniel Raj: Table seven. August 2016. The old man in the white shirt who paid for our teh. That was Muthu?
+  '2b3be3dr21c': { say: '[slow, stunned, remembering] Table seven. [break] August 2016. [break] The old man in the white shirt who paid for our teh. [long-break] [disbelieving] That was Muthu?', speed: 0.88 },
+  // Daniel Raj: Ten years I have been sure of one thing, machan: that I had seen him once. I never saw him at all.
+  '05ysbkew37e': { say: '[quiet, shaken, rueful] Ten years I have been sure of one thing, machan: [break] that I had seen him once. [long-break] [whispering] I never saw him at all.', speed: 0.86 },
+  // Narrator: He folds a kancil out of the gala's menu card while he talks, and does not seem to know he is doing it.
+  '24ef3tqzm3x': { cue: '[soft, tender, sad]', speed: 0.92 },
+  // Narrator: Through the glass you tell Daniel about the old man with the teh, and the chair, and the forty seconds.
+  '1ncmbghd1vf': { cue: '[quiet, heavy]', speed: 0.93 },
+  // Daniel Raj: Then I have never seen him, machan. Not once. And he has seen me every day for ten years.
+  '1nxz7uiodv9': { say: '[quiet, cold dawning fear] Then I have never seen him, machan. [break] Not once. [long-break] And he has seen me every day for ten years.', speed: 0.87 },
+  // Narrator: His trial has been moved to March, on an application signed by a superintendent at Bukit Aman.
+  '19irf3wz3rw': { cue: '[dry, bitter]', speed: 0.95 },
+  // Narrator: Wherever the black car went after Chow Kit, it went with Daniel in the back of it.
+  '1w2asyqtngw': { cue: '[quiet, aching]', speed: 0.9 },
+  // Narrator: At midnight something slides under your office door: a kancil folded from a gala menu card, its gold border on the outside. Pricked along one fold with a pin: MASIH HIDUP. Still alive.
+  '1bfqfiia387': { say: '[hushed, tense, then a breath of relief] At midnight something slides under your office door: [break] a kancil folded from a gala menu card, its gold border on the outside. [break] Pricked along one fold with a pin: [long-break] masih hidup. [break] [soft] Still alive.', speed: 0.88 },
+  // Narrator: He has been in the same car as the man. He has sat beside him in the dark. Whether he has seen his face, the kancil does not say.
+  '0qx3fn5ct9c': { cue: '[low, haunted]', speed: 0.88 },
+  // Narrator: Ain lays her photograph on Mak Teh's table between two glasses of teh: an old man in a white shirt, lit from below, his mouth shut, while three hundred people heard him speak.
+  '0ljedlnjryu': { cue: '[quiet, morning, tender]', speed: 0.93 },
+  // Nurul Ain: You let the man at the desk walk out of that building. He was three metres from my lens with his hand on his headset, and his lips were moving.
+  '25jqj0zmb1u': { cue: '[bitter, accusing, controlled]' },
+  // Narrator: Muthu has no family left, so Bala Anne walks in front with the fire pot, barefoot, in a white veshti, the way a son would.
+  '1cfv9o1okx7': { cue: '[slow, tender, grave]', speed: 0.9 },
+  // Narrator: Two hundred men in white shirts stand in the heat. Drivers, mostly. Half of Brickfields knew him, and not one of them knew who he drove for.
+  '1bu2ut5zmt2': { cue: '[quiet, heavy heat, reflective]', speed: 0.92 },
+  // Bala Anne: Muthu nalla manushan.  /  Muthu was a good man.
+  '0c64vkjer5s': { say: '[low, grieving, steady] முத்து [break] நல்ல மனுஷன்.', speed: 0.85 },
+  // Narrator: Across the road in the Cheras cemetery, a headstone that said Daniel Raj for five years says Ong Wei Jie now.
+  '1frj1jprhz0': { cue: '[quiet, bittersweet]', speed: 0.92 },
+  // Narrator: You smell the cigarette before you feel the hand. It settles on your right shoulder, light, in a white cuff, the way a man rests his hand on an old friend.
+  '02dkzitczd8': { say: '[whispering, very still, dread] You smell the cigarette before you feel the hand. [break] It settles on your right shoulder, light, in a white cuff, [break] the way a man rests his hand on an old friend.', speed: 0.86 },
+  // The Chairman: Jangan tengok belakang, detektif.  /  Don't look back, detective.
+  '0zf8k2enplc': { say: '[close to the ear, calm, almost tender, utterly cold underneath] Jangan tengok belakang, [break] detektif.', speed: 0.84 },
+  // The Chairman: That is what your partner said to you in the fire. I was close enough to hear it.
+  '1hkpbusjrv2': { say: '[close, quiet, courteous, amused] That is what your partner said to you in the fire. [break] [softly] I was close enough to hear it.', speed: 0.86 },
+  // The Chairman: Muthu drove me for forty years and never once looked in the mirror. I need a new driver.
+  '1uateshm825': { say: '[close, unhurried, warm and courteous, utterly cold underneath] Muthu drove me for forty years and never once looked in the mirror. [long-break] I need a new driver.', speed: 0.85 },
+  // The Chairman: The first of December. Ten past two. Outside Restoran Bala. You may look in the mirror as often as you like.
+  '1hzqkxrbny1': { say: '[quiet, precise, an invitation that is an order] The first of December. [break] Ten past two. [break] Outside Restoran Bala. [long-break] [softly, amused] You may look in the mirror as often as you like.', speed: 0.85 },
+  // Narrator: A lid snaps open by your ear, and shut. The hand lifts. When you turn round there are two hundred men in white shirts, and one of them is walking away, and you will never know which.
+  '18ljz2rwqvf': { say: '[whispering, shaken] A lid snaps open by your ear, [break] and shut. [break] The hand lifts. [long-break] When you turn round there are two hundred men in white shirts, [break] and one of them is walking away, [break] [flat] and you will never know which.', speed: 0.85 },
+  // Narrator: In your jacket pocket, where his hand was, a car key on a ring with a small brass sun.
+  '143do682873': { cue: '[very quiet, cold, final]', speed: 0.86 },
+  // Narrator: Rosli breaks his own Bomba seal on Level 14 for a second look, and finds his own dust again. By noon Sinar's lawyers have the broken seal in a letter to DBKL.
+  '0er11ml1fty': { cue: '[dry, rueful]', speed: 0.95 },
+  // Narrator: Under it, "and abetment by", and for the first time in three cases she writes something after it: a person unknown, the user of prepaid line 011-2604 1986, in a vehicle without registration plates, in Bay V1, Basement 2, Menara Sinar, at 9:51 PM.
+  '0fryg4wwztg': { say: '[slow, deliberate, quiet triumph held down] Under it, "and abetment by", and for the first time in three cases she writes something after it: [break] a person unknown, the user of prepaid line zero one one, two six zero four, one nine eight six, [break] in a vehicle without registration plates, in Bay V one, Basement two, Menara Sinar, [break] at nine fifty-one PM.', speed: 0.9 },
+  // Inspector Farah Iskandar: It is not a name. It is a place, a time and a telephone. In this country men have gone to prison on less. Not men like him. Not yet.
+  '0ly2vvct271': { say: '[low, hard, tired] It is not a name. [break] It is a place, a time and a telephone. [break] In this country men have gone to prison on less. [long-break] [quiet] Not men like him. [break] Not yet.', speed: 0.95 },
+  // Narrator: Sinar's studio in Damansara hands over its recordings of every Chairman's speech, very politely. None of them has last night on it, and none of them says "sekarang".
+  '1dabjzdf4bb': { cue: '[dry, weary irony]', speed: 0.95 },
+  // Narrator: Nobody tells her where he was sitting.
+  '0q0rjh6dxq6': { cue: '[flat, quiet]', speed: 0.93 },
+  // Narrator: Tan Sri Azhar Kamaruddin is arrested at his house in Damansara Heights in front of two photographers who were told exactly where to stand. By noon Sinar Holdings has a new Group Managing Director, and its share price has gone up.
+  '1lxo4ghabm8': { cue: '[clipped, formal, sour irony]', speed: 0.97 },
+  // Narrator: Dr. Meera Rajaratnam is arrested at her clinic on Jalan Kia Peng between two patients. She asks Farah to tell the second one, an old man with a bad heart, that she is sorry, and that he must keep taking his tablets.
+  '1enlyy7de90': { cue: '[clipped, then gentle and sad]', speed: 0.94 },
+  // Narrator: Desmond Yap is charged on Monday morning in the magistrates' court on Jalan Duta. He asks for his headset back, and when they say no, he holds one hand over his right ear for the whole hearing, as if somebody might still speak into it.
+  '17ifz8pj6cb': { say: '[clipped, formal, then uneasy] Desmond Yap is charged on Monday morning in the magistrates\' court on Jalan Duta. [break] He asks for his headset back, and when they say no, [break] [quiet] he holds one hand over his right ear for the whole hearing, as if somebody might still speak into it.', speed: 0.93 },
+  // Narrator: Hamidah Yusof writes the charge against Desmond Yap herself: Section 302, murder.
+  '2gn6jo3pnq9': { cue: '[clipped, firm, satisfied]', speed: 0.95 },
+  // Nurul Ain: The first photograph of the man behind the screen since 1997, and it is the wrong man. My editor wants it on the front page as the Chairman. I am going to put his real name under it. Muthusamy Perumal. Somebody should.
+  '1i1npmzj8mn': { say: '[tired, fierce, grief steadied into purpose] The first photograph of the man behind the screen since 1997, [break] and it is the wrong man. [break] My editor wants it on the front page as the Chairman. [break] I am going to put his real name under it. [long-break] [firm] Muthusamy Perumal. [break] Somebody should.', speed: 0.93 },
+  // Narrator: Nurul Ain is charged with murder in the same courthouse that heard her father's inquest. She has no camera. She asks the press on the steps to take her photograph, so that somebody does.
+  '0t35gz6dtoa': { cue: '[clipped, then quiet and sad]', speed: 0.93 },
+  // Narrator: Ain's photograph is in a Dang Wangi evidence bag. Mak Teh has a print of it pinned behind her counter, where the calendar used to be, and tells anybody who asks that it is her uncle.
+  '28saf1tppjv': { cue: '[quiet, wry, tender]', speed: 0.93 },
+  // Nurul Ain: You got the man at the desk. You also got somebody who was never behind that screen in the dark. Abah would have asked which one of those the Chairman wanted.
+  '0k81yq81t1u': { cue: '[bitter, measured, grieving]', speed: 0.97 },
 };

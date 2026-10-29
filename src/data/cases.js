@@ -8,15 +8,16 @@ import { CASE03 } from './case03.js';
 import { CASE04 } from './case04.js';
 import { CASE05 } from './case05.js';
 import { CASE06 } from './case06.js';
+import { CASE07 } from './case07.js';
 import { state, caseState } from '../core/state.js';
 
-export const CASES = { case01: CASE01, side01: SIDE01, case02: CASE02, case03: CASE03, case04: CASE04, case05: CASE05, case06: CASE06 };
-export const CASE_ORDER = ['case01', 'side01', 'case02', 'case03', 'case04', 'case05', 'case06'];
+export const CASES = { case01: CASE01, side01: SIDE01, case02: CASE02, case03: CASE03, case04: CASE04, case05: CASE05, case06: CASE06, case07: CASE07 };
+export const CASE_ORDER = ['case01', 'side01', 'case02', 'case03', 'case04', 'case05', 'case06', 'case07'];
 
 // What the phone says once every written case is closed.
 export const COMING_SOON = {
-  title: 'Case 7',
-  teaser: 'Sinar Holdings turns forty in November. On the night of the anniversary dinner on Level 15 of Menara Sinar, the founder nobody has photographed since 1997 will speak to his guests from behind a screen, one floor above the floor that is not there. You have never seen his face. But you know his voice now, and he knows you will be listening.',
+  title: 'Case 8',
+  teaser: 'On the first of December, at ten past two in the morning, a black car with no plates will stop outside Restoran Bala with its engine running and the driver\'s door open. The back seat will already be taken. For forty years one man drove him and never once looked in the mirror. He has asked for you. Bala Anne says do not go. Farah says she will be three cars behind. You have a key with a brass sun on it, and you have not yet decided whether to look.',
 };
 
 /** Short label for a case: "Case 2" or "Side case". */

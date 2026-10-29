@@ -45,6 +45,15 @@ export const VOICE_OVERRIDES = {
   'Biarkan, Tuan Ismail. Biar dua-dua sekali.': { lang: 'ms' },
   'Mana kau punya?': { lang: 'ms' },
 
+  // Case 7: Tamil (Bala Anne, Muthu), Malay (labels only, Latin script: the Chairman, Tan Sri Azhar)
+  'Thambi. Poga vendaam.': { say: 'தம்பி. போக வேண்டாம்.', lang: 'ta' },
+  'Thambi. Vilakku anainjadhum, thiraikku pinnaadi paaru.': { say: 'தம்பி. விளக்கு அணைஞ்சதும், திரைக்குப் பின்னாடி பாரு.', lang: 'ta' },
+  'Bala-kitta sollu, Muthu vandhaan-nu.': { say: 'பாலா கிட்ட சொல்லு, முத்து வந்தான்னு.', lang: 'ta' },
+  'Muthu nalla manushan.': { say: 'முத்து நல்ல மனுஷன்.', lang: 'ta' },
+  'Empat puluh tahun. Empat puluh saat.': { lang: 'ms' },
+  'Tuan dah tak ada.': { lang: 'ms' },
+  'Jangan tengok belakang, detektif.': { lang: 'ms' },
+
   // Cantonese (Ken Lim, Lau Kim Hock)
   'Ah Hock Suk hai ngo suk fu ah. Bong ngo yat ci. Ngo kau neih.': { say: '阿Hock叔係我叔父啊。幫我一次。我求你。' },
   'Go bui kopi… hou fu. Hou fu.': { say: '嗰杯kopi……好苦。好苦。' },

@@ -30,6 +30,7 @@ export const CUES = {
   theme_case04: { file: 'music_theme_case04', gain: 0.85, xloop: true, fallback: 'puzzle' },
   theme_case05: { file: 'music_theme_case05', gain: 0.85, xloop: true, fallback: 'puzzle' },
   theme_case06: { file: 'music_theme_case06', gain: 0.85, xloop: true, fallback: 'puzzle' },
+  theme_case07: { file: 'music_theme_case07', gain: 0.85, xloop: true, fallback: 'puzzle' },
   puzzle_a: { file: 'music_puzzle_a', gain: 0.5, xloop: true, fallback: 'puzzle' },
   puzzle_b: { file: 'music_puzzle_b', gain: 0.5, xloop: true, fallback: 'puzzle' },
   puzzle_c: { file: 'music_puzzle_c', gain: 0.5, xloop: true, fallback: 'puzzle' },

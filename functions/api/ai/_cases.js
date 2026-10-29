@@ -3,8 +3,9 @@
 import { CASE04 } from '../../../src/data/case04.js';
 import { CASE05 } from '../../../src/data/case05.js';
 import { CASE06 } from '../../../src/data/case06.js';
+import { CASE07 } from '../../../src/data/case07.js';
 
-const ALL = [CASE04, CASE05, CASE06];
+const ALL = [CASE04, CASE05, CASE06, CASE07];
 export const CASES = Object.fromEntries(ALL.map((c) => [c.id, c]));
 
 /** The params of an AI level, or null. */
