@@ -37,10 +37,6 @@
 // 2:10 AM call to the BALA line at the end). Private note: his identity is still undecided; nothing in this
 // case (the 2016 engraving order, the table-seven stranger, the black car) may pin it to a person.
 // If DANIEL_TAKEN, Daniel was in RU-07: he is rescued exactly when ARCHIVE_SEIZED.
-//
-// Every evidence entry uses a placeholder hotspot until the art exists; real hotspots are set after the
-// ev_c6_* images are generated (docs/image_prompts.md, Case 6).
-const HOT = () => ({ x: 0.5, y: 0.5, r: 0.12 });
 
 // Daniel's fate from Case 5: safe in Farah's house, remanded at Sungai Buloh, or taken by Sinar.
 const TAKEN = (f) => !!f.DANIEL_TAKEN || !f.DANIEL_FOUND;
@@ -346,7 +342,7 @@ export const CASE06 = {
         clue: 'Behind the voice, twice, the snap of a flip-top lid.',
       },
       evidence: {
-        img: 'ev_c6_microcassette', hotspot: { x: 0.50, y: 0.47, r: 0.10 },
+        img: 'ev_c6_microcassette', hotspot: { x: 0.50, y: 0.52, r: 0.18 },
         title: 'Let it burn',
         short: 'Spliced back: a man\'s voice at the tape line at 12:41 AM on 14 August 2021, close to Ismail\'s pocket, calm as a man ordering tea: "Biarkan, Tuan Ismail. Biar dua-dua sekali." Let it burn. Both of them. You and Daniel were inside Bay 3. It is the voice from your dream.',
         text: 'The tape hisses, and then there is a fire on it: the roar, a hose coupling, men shouting in Malay. Then a voice very close to the microphone, as if its owner has stepped up to Ismail and put a hand on his shoulder. Not loud. Not hurried. "Biarkan, Tuan Ismail. Biar dua-dua sekali." Let it burn. Both of them. Behind it, twice, the snap of a flip-top lid opening and closing. Then Ismail\'s own voice, low, dictating into his pocket out of thirty years\' habit: "Kru ditahan di pintu. Enam minit." Crew held at the door. Six minutes. Then nothing but fire until the tape runs out. You were inside Bay 3 in those six minutes, and so was Daniel. You have heard this voice every night for five years and told yourself you made it up. Rosli stops the deck and does not look at you, which is a kindness.',
@@ -453,7 +449,7 @@ export const CASE06 = {
         clue: 'Farah, by the door: "Klang Selatan have the charge typed and the photographer booked. If he is lying about something small, find out what it is before they do."',
       },
       evidence: {
-        img: 'ev_c6_statement', hotspot: { x: 0.50, y: 0.50, r: 0.15 },
+        img: 'ev_c6_statement', hotspot: { x: 0.82, y: 0.64, r: 0.15 },
         title: 'What the fence saw',
         short: 'Caught in one lie, Ah Fook tells it all. 7:40 PM: a black car with no plates by Bay 2, a man smoking in the back. 9:05: a prime mover with a reefer out of the back gate with no lights, away from Westport. 11:55: the old man and a man in a reflective vest with a long steel bar. 12:02: the vest came out alone with a jerry can. Ah Fook went in under the shutter. The old man was already dead.',
         text: 'He tells it to his bandages. He went through the fence at half past eleven, as most nights, for the reefer generators in row D. At 7:40, when he was waiting in the palms for the yard to go quiet, a black car with no number plates had parked beside Bay 2 for twenty minutes with its back window down, and a man in the back seat smoked, and a man in a blue shirt stood at the window with his hands folded. At 9:05 a prime mover pulled a white reefer out of the back gate onto the estate road with its lights off, and turned away from Westport. At 11:55 an old man with a big torch met a man in a reflective vest at Bay 3\'s side door; the vest had a long steel bar; there was shouting, once. At 12:02 the vest came out alone with a jerry can, padlocked the door and drove off in a pickup. Then light under the roller shutter. "I went under. Forty centimetres. The old man\'s eyes were open, boss. He was not blinking at the fire." He pulled him two metres by the collar before the roof lining came down, grabbed the torch to find the way out, and ran. "Sinar. You understand? Sinar." He never saw the vest\'s face. And the landing craft the fishermen saw at one is Ah Seng\'s ice barge, which goes to Pulau Ketam every night at one with the ice reefer on deck, as it has since his father.',
@@ -698,7 +694,7 @@ export const CASE06 = {
         clue: 'Hamidah taps the sheet. "Three things I can prove in court. Four, and I will let you buy me a teh tarik."',
       },
       evidence: {
-        img: 'ev_c6_report', hotspot: { x: 0.50, y: 0.50, r: 0.15 },
+        img: 'ev_c6_report', hotspot: { x: 0.49, y: 0.56, r: 0.16 },
         title: 'The blank line again',
         short: 'The prosecutor reads your report twice, signs a charge against Kamal Ariffin for murder, and leaves the abetment line blank, as she did for Zul. "Last time it was a secretary. This time it is a man who has driven for him since 1987. Bring me his own words."',
         text: 'Hamidah Yusof reads it twice with the pencil she never uses. Then a charge sheet: Kamal bin Ariffin, Section 302, murder; Section 435, mischief by fire. Under it, "and abetment by", and nothing. "Last time it was a secretary who never said his name," she says. "This time it is a man who has worked for him since he was eighteen. Men like that do not say the name either. But they say everything else, if you ask them about the right night." She looks at the lighter in its evidence bag on the corner of your sheet, and then at you. "Somebody has had a copy of your partner\'s lighter for ten years, detective, and used it every day. That is not evidence. That is a man telling you he is patient."',
