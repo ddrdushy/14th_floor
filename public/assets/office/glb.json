@@ -1,0 +1,39 @@
+{
+ "bakes": {
+  "morning": {
+   "lamp_default": false
+  },
+  "afternoon": {
+   "lamp_default": false
+  },
+  "evening": {
+   "lamp_default": true
+  },
+  "night": {
+   "lamp_default": true
+  }
+ },
+ "bake_seconds": {
+  "lamp_room": 68.7,
+  "lamp_desk": 113.7,
+  "flash_room": 69.0,
+  "flash_desk": 120.0,
+  "night_room": 125.8,
+  "night_desk": 247.5
+ },
+ "version": 1793941568,
+ "backdrop": {
+  "pos": [
+   -1.0,
+   1.65,
+   -2.4
+  ],
+  "look": [
+   -1.0,
+   1.65,
+   -4.0
+  ],
+  "fov": 84,
+  "aspect": 1.6
+ }
+}

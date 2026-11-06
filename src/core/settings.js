@@ -9,6 +9,7 @@ import { MODES, MODE_INFO, currentMode, syncHints } from './difficulty.js';
 import { haptic, canVibrate } from './feel.js';
 import '../styles/feel.css';
 import { CASES } from '../data/cases.js';
+import { officeSettingsGroup } from '../three/officeSettings.js';
 
 let openPanel = null;
 
@@ -204,6 +205,7 @@ export function openSettings() {
         h('h3', {}, 'Voices'),
         toggleRow('Spoken dialogue', 'set-voices', () => s.voices !== false, (v) => { s.voices = v; save(); }),
         sliderRow('Voice volume', 'set-voice-vol', () => s.voiceVolume ?? 1, (v) => { s.voiceVolume = v; save(); })),
+      officeSettingsGroup(),
       leaderboardGroup(s),
       h('section', { class: 'set-group' },
         h('h3', {}, 'Help'),

@@ -1,0 +1,257 @@
+{
+ "plates": {
+  "morning_portrait": {
+   "board": [
+    0.887,
+    0.2462,
+    1.5326,
+    0.4641
+   ],
+   "tod": "morning",
+   "orient": "portrait",
+   "w": 1080,
+   "h": 1920,
+   "fov": 71.12794571667291,
+   "fov_view": 68.0,
+   "overscan": 1.06,
+   "view": "officeTall",
+   "pos": [
+    -0.45,
+    1.76,
+    -0.1
+   ],
+   "look": [
+    -0.4,
+    0.95,
+    -4.0
+   ],
+   "lamp_default": false,
+   "render_s": 581.4,
+   "lamp_sign": 1.0
+  },
+  "afternoon_portrait": {
+   "board": [
+    0.887,
+    0.2462,
+    1.5326,
+    0.4641
+   ],
+   "tod": "afternoon",
+   "orient": "portrait",
+   "w": 1080,
+   "h": 1920,
+   "fov": 71.12794571667291,
+   "fov_view": 68.0,
+   "overscan": 1.06,
+   "view": "officeTall",
+   "pos": [
+    -0.45,
+    1.76,
+    -0.1
+   ],
+   "look": [
+    -0.4,
+    0.95,
+    -4.0
+   ],
+   "lamp_default": false,
+   "render_s": 589.1,
+   "lamp_sign": 1.0
+  },
+  "evening_portrait": {
+   "board": [
+    0.887,
+    0.2462,
+    1.5326,
+    0.4641
+   ],
+   "tod": "evening",
+   "orient": "portrait",
+   "w": 1080,
+   "h": 1920,
+   "fov": 71.12794571667291,
+   "fov_view": 68.0,
+   "overscan": 1.06,
+   "view": "officeTall",
+   "pos": [
+    -0.45,
+    1.76,
+    -0.1
+   ],
+   "look": [
+    -0.4,
+    0.95,
+    -4.0
+   ],
+   "lamp_default": true,
+   "render_s": 593.8,
+   "lamp_sign": -1.0
+  },
+  "night_portrait": {
+   "board": [
+    0.887,
+    0.2462,
+    1.5326,
+    0.4641
+   ],
+   "tod": "night",
+   "orient": "portrait",
+   "w": 1080,
+   "h": 1920,
+   "fov": 71.12794571667291,
+   "fov_view": 68.0,
+   "overscan": 1.06,
+   "view": "officeTall",
+   "pos": [
+    -0.45,
+    1.76,
+    -0.1
+   ],
+   "look": [
+    -0.4,
+    0.95,
+    -4.0
+   ],
+   "lamp_default": true,
+   "render_s": 608.9,
+   "lamp_sign": -1.0
+  },
+  "morning_landscape": {
+   "board": [
+    0.5822,
+    0.1906,
+    0.8986,
+    0.532
+   ],
+   "tod": "morning",
+   "orient": "landscape",
+   "w": 1920,
+   "h": 1080,
+   "fov": 52.60509593944197,
+   "fov_view": 50.0,
+   "overscan": 1.06,
+   "view": "office",
+   "pos": [
+    0.4,
+    1.72,
+    -0.4
+   ],
+   "look": [
+    0.3,
+    1.26,
+    -4.0
+   ],
+   "lamp_default": false,
+   "render_s": 586.6,
+   "lamp_sign": 1.0
+  },
+  "afternoon_landscape": {
+   "board": [
+    0.5822,
+    0.1906,
+    0.8986,
+    0.532
+   ],
+   "tod": "afternoon",
+   "orient": "landscape",
+   "w": 1920,
+   "h": 1080,
+   "fov": 52.60509593944197,
+   "fov_view": 50.0,
+   "overscan": 1.06,
+   "view": "office",
+   "pos": [
+    0.4,
+    1.72,
+    -0.4
+   ],
+   "look": [
+    0.3,
+    1.26,
+    -4.0
+   ],
+   "lamp_default": false,
+   "render_s": 544.4,
+   "lamp_sign": 1.0
+  },
+  "evening_landscape": {
+   "board": [
+    0.5822,
+    0.1906,
+    0.8986,
+    0.532
+   ],
+   "tod": "evening",
+   "orient": "landscape",
+   "w": 1920,
+   "h": 1080,
+   "fov": 52.60509593944197,
+   "fov_view": 50.0,
+   "overscan": 1.06,
+   "view": "office",
+   "pos": [
+    0.4,
+    1.72,
+    -0.4
+   ],
+   "look": [
+    0.3,
+    1.26,
+    -4.0
+   ],
+   "lamp_default": true,
+   "render_s": 593.2,
+   "lamp_sign": -1.0
+  },
+  "night_landscape": {
+   "board": [
+    0.5822,
+    0.1906,
+    0.8986,
+    0.532
+   ],
+   "tod": "night",
+   "orient": "landscape",
+   "w": 1920,
+   "h": 1080,
+   "fov": 52.60509593944197,
+   "fov_view": 50.0,
+   "overscan": 1.06,
+   "view": "office",
+   "pos": [
+    0.4,
+    1.72,
+    -0.4
+   ],
+   "look": [
+    0.3,
+    1.26,
+    -4.0
+   ],
+   "lamp_default": true,
+   "render_s": 606.1,
+   "lamp_sign": -1.0
+  }
+ },
+ "ids": {
+  "none": 0,
+  "glass": 1,
+  "phone": 2,
+  "board": 3,
+  "folder": 4,
+  "lighter": 5,
+  "cup": 6,
+  "lamp": 7,
+  "ceiling": 8,
+  "screen": 9,
+  "shade": 10,
+  "wall": 11,
+  "floor": 12,
+  "desk": 13
+ },
+ "depth": [
+  0.3,
+  7.0
+ ],
+ "version": 1793936808
+}
