@@ -14,14 +14,20 @@
   }
  },
  "bake_seconds": {
-  "lamp_room": 68.7,
-  "lamp_desk": 113.7,
-  "flash_room": 69.0,
-  "flash_desk": 120.0,
-  "night_room": 125.8,
-  "night_desk": 247.5
+  "lamp_room": 88.3,
+  "lamp_desk": 140.4,
+  "flash_room": 88.7,
+  "flash_desk": 146.2,
+  "morning_room": 159.4,
+  "morning_desk": 291.7,
+  "afternoon_room": 160.5,
+  "afternoon_desk": 294.6,
+  "evening_room": 166.0,
+  "evening_desk": 298.9,
+  "night_room": 163.0,
+  "night_desk": 297.6
  },
- "version": 1793941568,
+ "version": 1793971309,
  "backdrop": {
   "pos": [
    -1.0,

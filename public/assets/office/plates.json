@@ -26,7 +26,7 @@
     -4.0
    ],
    "lamp_default": false,
-   "render_s": 581.4,
+   "render_s": 856.4,
    "lamp_sign": 1.0
   },
   "afternoon_portrait": {
@@ -55,7 +55,7 @@
     -4.0
    ],
    "lamp_default": false,
-   "render_s": 589.1,
+   "render_s": 820.9,
    "lamp_sign": 1.0
   },
   "evening_portrait": {
@@ -84,7 +84,7 @@
     -4.0
    ],
    "lamp_default": true,
-   "render_s": 593.8,
+   "render_s": 1149.5,
    "lamp_sign": -1.0
   },
   "night_portrait": {
@@ -113,7 +113,7 @@
     -4.0
    ],
    "lamp_default": true,
-   "render_s": 608.9,
+   "render_s": 1007.4,
    "lamp_sign": -1.0
   },
   "morning_landscape": {
@@ -142,7 +142,7 @@
     -4.0
    ],
    "lamp_default": false,
-   "render_s": 586.6,
+   "render_s": 807.3,
    "lamp_sign": 1.0
   },
   "afternoon_landscape": {
@@ -171,7 +171,7 @@
     -4.0
    ],
    "lamp_default": false,
-   "render_s": 544.4,
+   "render_s": 841.7,
    "lamp_sign": 1.0
   },
   "evening_landscape": {
@@ -200,7 +200,7 @@
     -4.0
    ],
    "lamp_default": true,
-   "render_s": 593.2,
+   "render_s": 874.9,
    "lamp_sign": -1.0
   },
   "night_landscape": {
@@ -229,7 +229,7 @@
     -4.0
    ],
    "lamp_default": true,
-   "render_s": 606.1,
+   "render_s": 898.5,
    "lamp_sign": -1.0
   }
  },
@@ -253,5 +253,5 @@
   0.3,
   7.0
  ],
- "version": 1793936808
+ "version": 1793968862
 }

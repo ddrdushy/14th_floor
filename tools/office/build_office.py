@@ -37,6 +37,8 @@ from mathutils import Matrix, Vector
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.normpath(os.path.join(HERE, '..', '..'))
 IMG = os.path.join(REPO, 'public', 'assets', 'img')
+TEX = os.path.join(HERE, 'tex')  # photo textures (Google Flow), 1024 px, see prep_textures()
+TEX_WORK = None  # set in main(): <work>/tex, derived textures
 
 # ---------------------------------------------------------------- mirrored from src/three/OfficeScene.js
 WIN = dict(x=-1.0, y=1.68, w=2.2, h=1.7)
@@ -71,6 +73,54 @@ def T(x, y, z):
 def hsh(n):
     x = math.sin(n * 127.1 + 311.7) * 43758.5453
     return x - math.floor(x)
+
+
+# ================================================================== photo textures
+def prep_textures(work):
+    """Derived textures from tools/office/tex: the leather pad re-cut to the desk inset's 2.5:1 shape (borders
+    kept, centre stretched 1.6x across). Everything else is used as it is, tiled in the shaders."""
+    global TEX_WORK
+    from PIL import Image
+    TEX_WORK = os.path.join(work, 'tex')
+    os.makedirs(TEX_WORK, exist_ok=True)
+    out = os.path.join(TEX_WORK, 'leather_pad.png')
+    src = os.path.join(TEX, 'leather_green.jpg')
+    if os.path.exists(src) and (not os.path.exists(out) or os.path.getmtime(out) < os.path.getmtime(src)):
+        im = Image.open(src).convert('RGB')
+        b = 24  # stitched border
+        top = im.crop((0, 0, 1024, b))
+        body = im.crop((0, 409, 1024, 1024))
+        cw = int((1024 - 2 * b) * 1.6)
+        def row(strip):
+            h = strip.height
+            mid = strip.crop((b, 0, 1024 - b, h)).resize((cw, h), Image.LANCZOS)
+            r = Image.new('RGB', (cw + 2 * b, h))
+            r.paste(strip.crop((0, 0, b, h)), (0, 0))
+            r.paste(mid, (b, 0))
+            r.paste(strip.crop((1024 - b, 0, 1024, h)), (cw + b, 0))
+            return r
+        t, bd = row(top), row(body)
+        pad = Image.new('RGB', (t.width, t.height + bd.height))
+        pad.paste(t, (0, 0))
+        pad.paste(bd, (0, t.height))
+        pad.save(out)
+    return TEX_WORK
+
+
+def tex(name):
+    if name == 'leather_pad':
+        return os.path.join(TEX_WORK or os.path.join(HERE, 'work', 'tex'), 'leather_pad.png')
+    return os.path.join(TEX, name + '.jpg')
+
+
+def has_tex(name):
+    return os.path.exists(tex(name))
+
+
+def hex_ratio(target, source):
+    """Per-channel linear multiplier that moves a texture's mean colour (source hex) to the look we want (target hex)."""
+    a, b = C(target), C(source)
+    return tuple(min(4.0, x / max(y, 1e-4)) for x, y in zip(a, b))
 
 
 # ================================================================== materials
@@ -150,10 +200,12 @@ class M:
             n.rings_direction = direction
         return n.outputs['Fac']
 
-    def image(self, path, v=None, extension='CLIP', colorspace='sRGB'):
+    def image(self, path, v=None, extension='CLIP', colorspace='sRGB', projection='FLAT', blend=0.0, interp='Linear'):
         img = bpy.data.images.load(path, check_existing=True)
         img.colorspace_settings.name = colorspace
-        n = self.node('ShaderNodeTexImage', extension=extension)
+        n = self.node('ShaderNodeTexImage', extension=extension, projection=projection, interpolation=interp)
+        if projection == 'BOX':
+            n.projection_blend = blend
         n.image = img
         if v is not None:
             self.set(n.inputs['Vector'], v)
@@ -216,6 +268,37 @@ class M:
         a = self.node('ShaderNodeAttribute', attribute_name='wear', attribute_type='GEOMETRY').outputs['Fac']
         return self.mr(a, 0.0, 1.0, 1.0, 0.85)
 
+    def objrand(self, k=1.0):
+        return self.math('MULTIPLY', self.node('ShaderNodeObjectInfo').outputs['Random'], k)
+
+    def lum(self, c):
+        return self.node('ShaderNodeRGBToBW', {'Color': c}).outputs[0]
+
+    def bombed(self, path, P, size, extension='REPEAT', projection='FLAT', blend=0.0, seed=0.0):
+        """The same photo texture sampled twice (different scale, offset and a quarter turn) and blended by a
+        large noise, so no tile repeat reads. P is a metric coordinate; size is the tile size in metres."""
+        a = self.image(path, self.mapping(P, scale=(1 / size,) * 3, loc=(seed, seed * 0.7, seed * 0.3)), extension, projection=projection, blend=blend).outputs['Color']
+        b = self.image(path, self.mapping(P, scale=(1 / (size * 1.37),) * 3, loc=(0.37 + seed, 0.61, 0.23), rot=(0, 0, 1.5708) if projection == 'FLAT' else (0.0, 0.0, 0.0)), extension, projection=projection, blend=blend).outputs['Color']
+        k = self.mr(self.noise(P, 0.45 / size, 3, 0.5), 0.38, 0.62)
+        return self.mixc(k, a, b)
+
+    def room_grime(self, P, kind='wall'):
+        """Fake occlusion where surfaces meet: room corners, the ceiling line, along the skirting (0..1)."""
+        x, y, z = self.sep(P)
+        ax = self.math('ABSOLUTE', x)
+        to_side = self.math('SUBTRACT', 3.0, ax)                     # distance to a side wall
+        to_back = self.math('SUBTRACT', 4.0, y)                      # Blender y = -three z: back wall at y = 4
+        to_front = self.math('ADD', y, 2.0)
+        n = self.node('ShaderNodeNewGeometry').outputs['Normal']
+        nx = self.math('ABSOLUTE', self.sep(n)[0])
+        if kind == 'wall':
+            corner = self.mixf(self.math('GREATER_THAN', nx, 0.5), to_side, self.math('MINIMUM', to_back, to_front))
+            edge = self.math('MINIMUM', self.math('MINIMUM', corner, self.math('SUBTRACT', 3.0, z)), self.math('MAXIMUM', z, 0.0))
+        else:  # floor / ceiling: distance to the nearest wall
+            edge = self.math('MINIMUM', to_side, self.math('MINIMUM', to_back, to_front))
+        g = self.mr(edge, 0.0, 0.45, 1.0, 0.0, interp='SMOOTHSTEP')
+        return self.math('MULTIPLY', g, self.mr(self.noise(P, 3.0, 4), 0.25, 0.75, 0.6, 1.0))
+
     def up(self):
         """1 on faces pointing up (dust)."""
         n = self.node('ShaderNodeNewGeometry').outputs['Normal']
@@ -262,15 +345,23 @@ def mat(name):
 
 def build_materials():
     # ---- painted plaster: sage-grey gloss paint gone chalky; grime low on the wall, smoke and damp at the top
-    def paint(name, base, dark_floor=True, damp=0.5):
+    def paint(name, base, dark_floor=True, damp=0.5, photo=False, kind='wall'):
         m = M(name)
         P = m.pos()
         x, y, z = m.sep(P)
         big = m.noise(P, 0.9, 5, 0.6)
         fine = m.noise(P, 26, 8, 0.65)
         b1, b2 = C(base, 0.88), C(base, 1.04)
-        col = m.mixc(m.mr(big, 0.3, 0.7), b1, b2)
-        col = m.mixc(m.mr(fine, 0.35, 0.7, 0.0, 0.12), col, C('#6b6656'))
+        crack = None
+        if photo and has_tex('wall_sage'):
+            # the plaster photo, 1.5 m a tile, box-projected in world space and bombed so it never repeats
+            t = m.bombed(tex('wall_sage'), P, 1.5, projection='BOX', blend=0.25)
+            col = m.mixc(1.0, t, hex_ratio(base, '#a5b1a0'), 'MULTIPLY')
+            col = m.mixc(m.mr(big, 0.3, 0.7, 0.0, 0.25), col, C(base, 0.82))
+            crack = m.lum(t)
+        else:
+            col = m.mixc(m.mr(big, 0.3, 0.7), b1, b2)
+            col = m.mixc(m.mr(fine, 0.35, 0.7, 0.0, 0.12), col, C('#6b6656'))
         # damp tide-marks and mildew near the ceiling, worst in the corners and round the window head
         streak = m.noise(m.mapping(P, scale=(9, 9, 0.6)), 3.0, 6, 0.6)
         tide = m.mr(m.math('ADD', z, m.math('MULTIPLY', streak, 0.6)), 2.25, 2.95)
@@ -284,18 +375,22 @@ def build_materials():
         drip = m.noise(m.mapping(P, scale=(40, 40, 0.8)), 2.0, 4, 0.5)
         dripmask = m.math('MULTIPLY', m.mr(drip, 0.58, 0.72), m.mr(z, 0.9, 2.6, 0.4, 1.0))
         col = m.mixc(m.math('MULTIPLY', dripmask, 0.35 * damp), col, C('#5e5540'))
+        if photo:
+            col = m.mixc(m.math('MULTIPLY', m.room_grime(P, kind), 0.55), col, C(base, 0.3))
         nrm = m.bump(m.noise(P, 140, 3, 0.5), 0.12, 0.002)
         nrm = m.bump(m.noise(P, 2.2, 3, 0.5), 0.06, 0.02, nrm)
+        if crack is not None:
+            nrm = m.bump(crack, 0.25, 0.002, nrm)
         rough = m.mr(fine, 0.3, 0.7, 0.72, 0.92)
         return m.done(m.bsdf(base=col, rough=rough, normal=nrm, spec=0.4))
 
-    MATS['wall'] = paint('wall', '#8c9e8e', damp=0.8)
-    MATS['reveal'] = paint('reveal', '#a3ad9c', damp=1.0)
-    MATS['ceiling'] = paint('ceiling', '#cfc8b2', dark_floor=False, damp=0.6)
+    MATS['wall'] = paint('wall', '#8c9e8e', damp=0.8, photo=True)
+    MATS['reveal'] = paint('reveal', '#a3ad9c', damp=1.0, photo=True)
+    MATS['ceiling'] = paint('ceiling', '#cfc8b2', dark_floor=False, damp=0.6, photo=True, kind='ceiling')
     MATS['door_paint'] = paint('door_paint', '#5d6b58', dark_floor=False, damp=0.2)
 
     # ---- timber: grain along object X, pores, varnish worn on edges and where hands go
-    def wood(name, dark, mid, light, rough=0.38, wear=0.6, varnish=True, scale=1.0, grain_axis='X', coat=0.6):
+    def wood(name, dark, mid, light, rough=0.38, wear=0.85, varnish=True, scale=1.0, grain_axis='X', coat=0.6, photo=True, tone=1.0):
         m = M(name)
         o = m.obj()
         st = (0.35, 9, 9) if grain_axis == 'X' else ((9, 0.35, 9) if grain_axis == 'Y' else (9, 9, 0.35))
@@ -303,13 +398,28 @@ def build_materials():
         n = m.noise(g, 1.8, 8, 0.62, dist=2.2)
         rings = m.wave(m.mapping(o, scale=tuple(s * scale * 0.5 for s in st)), 2.2, dist=9, detail=4, kind='BANDS', direction='X' if grain_axis == 'X' else ('Y' if grain_axis == 'Y' else 'Z'))
         f = m.math('ADD', m.math('MULTIPLY', n, 0.65), m.math('MULTIPLY', rings, 0.35))
-        col = m.ramp(f, [(0.25, C(dark)), (0.5, C(mid)), (0.78, C(light))])
         pores = m.noise(m.mapping(o, scale=tuple(s * scale * 22 for s in st)), 4.0, 2, 0.5)
+        if photo and has_tex('desk_mahogany'):
+            # the mahogany photo laid along the grain axis (0.9 m a tile, mirrored so seams never show); each
+            # piece of timber gets its own random offset; across the grain = the sum of the other two axes
+            ox, oy, oz = m.sep(o)
+            along = {'X': ox, 'Y': oy, 'Z': oz}[grain_axis]
+            others = [c for k, c in (('X', ox), ('Y', oy), ('Z', oz)) if k != grain_axis]
+            across = m.math('ADD', others[0], others[1])
+            r = m.objrand(17.0)
+            uvw = m.comb(m.math('ADD', m.math('DIVIDE', along, 0.9 / scale), r), m.math('ADD', m.math('DIVIDE', across, 0.9 / scale), m.math('MULTIPLY', r, 0.61)), 0.0)
+            ta = m.image(tex('desk_mahogany'), uvw, 'MIRROR').outputs['Color']
+            tb = m.image(tex('desk_mahogany'), m.mapping(uvw, scale=(0.73, 0.73, 1), loc=(0.41, 0.17, 0)), 'MIRROR').outputs['Color']
+            t = m.mixc(m.mr(m.noise(o, 1.1, 3), 0.4, 0.6), ta, tb)
+            col = m.mixc(1.0, t, tuple(k * tone for k in hex_ratio(mid, '#652f17')), 'MULTIPLY')
+            f = m.math('ADD', m.math('MULTIPLY', m.lum(t), 1.6), m.math('MULTIPLY', n, 0.3))
+        else:
+            col = m.ramp(f, [(0.25, C(dark)), (0.5, C(mid)), (0.78, C(light))])
         col = m.mixc(m.mr(pores, 0.55, 0.75, 0, 0.35), col, C(dark, 0.5))
         e = m.edges(0.006)
         blot = m.mr(m.noise(o, 3.5, 6, 0.6), 0.5, 0.75)
-        worn = m.math('MAXIMUM', m.math('MULTIPLY', e, wear), m.math('MULTIPLY', blot, wear * 0.5))
-        col = m.mixc(m.math('MULTIPLY', worn, 0.55), col, C(light, 1.15))
+        worn = m.math('MAXIMUM', m.math('MULTIPLY', e, wear), m.math('MULTIPLY', blot, wear * 0.2))
+        col = m.mixc(m.math('MULTIPLY', worn, 0.6), col, m.mixc(1.0, col, (1.6, 1.45, 1.3), 'MULTIPLY'))
         col = m.mixc(m.math('MULTIPLY', m.mr(m.ao(0.03), 0.4, 1.0, 1.0, 0.0), 0.5), col, C(dark, 0.45))
         r = m.mixf(worn, rough, min(0.85, rough + 0.35))
         r = m.math('ADD', r, m.math('MULTIPLY', m.noise(o, 30, 4), 0.12))
@@ -318,46 +428,76 @@ def build_materials():
             return m.done(m.bsdf(base=col, rough=r, normal=nrm, coat=m.mixf(worn, coat, 0.1), coat_rough=0.12, spec=0.5))
         return m.done(m.bsdf(base=col, rough=r, normal=nrm, spec=0.4))
 
-    MATS['desk'] = wood('desk', '#170b06', '#2e180c', '#452614', rough=0.3)
-    MATS['desk_side'] = wood('desk_side', '#150a05', '#2a160b', '#3e2312', rough=0.4, grain_axis='Z')
+    MATS['desk'] = wood('desk', '#1e0c06', '#4a2010', '#6a3418', rough=0.3)
+    MATS['desk_side'] = wood('desk_side', '#1a0a05', '#3e1a0d', '#5a2c15', rough=0.4, grain_axis='Z')
     MATS['panel'] = wood('panel', '#120905', '#24140b', '#362012', rough=0.45, grain_axis='Z', wear=0.4)
     MATS['rail'] = wood('rail', '#120905', '#24140b', '#3a2414', rough=0.4)
     MATS['frame_wood'] = wood('frame_wood', '#160b06', '#2e1a0e', '#452a16', rough=0.4)
     MATS['chair_wood'] = wood('chair_wood', '#160b05', '#2c170b', '#432612', rough=0.35, grain_axis='Z')
     MATS['radio_wood'] = wood('radio_wood', '#30180c', '#62361b', '#83512b', rough=0.3, scale=2.0)
-    MATS['shelf'] = wood('shelf', '#2a1a10', '#4b3220', '#6a4a30', rough=0.6, varnish=False)
+    MATS['shelf'] = wood('shelf', '#2a1a10', '#4b3220', '#6a4a30', rough=0.6, varnish=False, photo=False)
 
-    # ---- timber floorboards (boards run toward the window), varnish worn grey on the walking line
+    # ---- timber floorboards, 12 cm wide and 1.35 m long, running toward the window. Each board shows one
+    # plank of the teak photo (10 planks across it, so the photo is 1.2 m square): a random plank, a random
+    # place along it, flipped at random, and its own tone. Worn grey on the walking line, dust at the skirting.
     m = M('floor')
     P = m.pos()
     x, y, z = m.sep(P)
-    bc = m.comb(y, x, 0.0)
-    brick = m.node('ShaderNodeTexBrick', {'Vector': bc, 'Color1': (0.6, 0.6, 0.6), 'Color2': (1.0, 1.0, 1.0), 'Mortar': (0, 0, 0), 'Scale': 1.0,
-                                           'Mortar Size': 0.0022, 'Mortar Smooth': 0.3, 'Bias': 0.0, 'Brick Width': 1.35, 'Row Height': 0.118}, offset=0.37, offset_frequency=1, squash=1.0, squash_frequency=1)
-    tone = m.sep(brick.outputs['Color'])[0]
-    gap = brick.outputs['Factor']
-    g = m.vmath('ADD', m.mapping(bc, scale=(0.5, 14, 14)), m.vmath('SCALE', brick.outputs['Color'], scale=37.0))
-    grain = m.noise(g, 2.0, 8, 0.6, dist=2.5)
-    col = m.ramp(m.math('ADD', m.math('MULTIPLY', grain, 0.6), m.math('MULTIPLY', tone, 0.5)), [(0.35, C('#140b06')), (0.62, C('#2a180d')), (0.85, C('#3d2514'))])
+    BW, BL = 0.12, 1.35
+    row = m.math('FLOOR', m.math('DIVIDE', x, BW))
+    shift = m.math('MULTIPLY', m.white(m.comb(row, 3.1, 0.0)), BL)
+    along = m.math('ADD', y, shift)
+    col_i = m.math('FLOOR', m.math('DIVIDE', along, BL))
+    uL = m.math('FRACT', m.math('DIVIDE', x, BW))
+    vL = m.math('FRACT', m.math('DIVIDE', along, BL))
+    bid = m.comb(row, col_i, 0.0)
+    r1 = m.white(bid)
+    r2 = m.white(m.vmath('ADD', bid, (5.3, 1.7, 0.0)))
+    r3 = m.white(m.vmath('ADD', bid, (2.2, 8.1, 0.0)))
+    flip = m.math('GREATER_THAN', r3, 0.5)
+    uF = m.mixf(flip, uL, m.math('SUBTRACT', 1.0, uL))
+    vF = m.mixf(flip, vL, m.math('SUBTRACT', 1.0, vL))
+    gap = m.math('SUBTRACT', 1.0, m.math('MULTIPLY', m.math('MULTIPLY', m.mr(uL, 0.0, 0.035), m.mr(uL, 0.965, 1.0, 1.0, 0.0)),
+                                                       m.math('MULTIPLY', m.mr(vL, 0.0, 0.0025), m.mr(vL, 0.9975, 1.0, 1.0, 0.0))))
+    tone = m.math('ADD', 0.82, m.math('MULTIPLY', r2, 0.36))
+    if has_tex('floor_teak'):
+        k = m.math('FLOOR', m.math('MULTIPLY', r1, 9.999))
+        tu = m.math('SUBTRACT', m.math('DIVIDE', m.math('ADD', k, m.math('ADD', 0.1, m.math('MULTIPLY', uF, 0.8))), 10.0), 0.002)
+        tv = m.math('ADD', m.math('MULTIPLY', vF, BL / 1.2), m.math('MULTIPLY', r2, 3.0))
+        t = m.image(tex('floor_teak'), m.comb(tu, tv, 0.0), 'MIRROR').outputs['Color']
+        col = m.mixc(1.0, t, hex_ratio('#3a2414', '#524b45'), 'MULTIPLY')
+        col = m.mixc(1.0, col, m.comb(tone, tone, tone), 'MULTIPLY')
+        grain = m.lum(t)
+    else:
+        grain = m.noise(m.mapping(m.comb(y, x, 0.0), scale=(0.5, 14, 14)), 2.0, 8, 0.6, dist=2.5)
+        col = m.ramp(m.math('ADD', m.math('MULTIPLY', grain, 0.6), m.math('MULTIPLY', r2, 0.5)), [(0.35, C('#140b06')), (0.62, C('#2a180d')), (0.85, C('#3d2514'))])
     walk = m.math('ADD', m.math('MULTIPLY', m.noise(P, 1.2, 4), 0.6), m.mr(m.vmath('DISTANCE', P, T(-0.2, 0, -1.8)), 0.4, 2.0, 0.6, 0.0))
     worn = m.mr(walk, 0.5, 0.95)
-    col = m.mixc(m.math('MULTIPLY', worn, 0.5), col, C('#4a3d30'))
-    col = m.mixc(m.mr(m.noise(P, 9, 8, 0.7), 0.55, 0.75, 0, 0.5), col, C('#24170e'))
+    col = m.mixc(m.math('MULTIPLY', worn, 0.4), col, C('#4a3d30'))
+    col = m.mixc(m.mr(m.noise(P, 9, 8, 0.7), 0.55, 0.75, 0, 0.4), col, C('#24170e'))
+    col = m.mixc(m.math('MULTIPLY', m.room_grime(P, 'floor'), 0.6), col, C('#1a140e'))
     col = m.mixc(gap, col, C('#0b0704'))
-    r = m.mixf(worn, 0.22, 0.6)
+    r = m.mixf(worn, 0.24, 0.6)
     r = m.math('ADD', r, m.math('MULTIPLY', m.noise(P, 40, 4), 0.1))
+    r = m.math('ADD', r, m.math('MULTIPLY', m.room_grime(P, 'floor'), 0.3))
     nrm = m.bump(m.math('SUBTRACT', 1.0, gap), 0.25, 0.002)
-    nrm = m.bump(grain, 0.04, 0.001, nrm)
-    MATS['floor'] = m.done(m.bsdf(base=col, rough=r, normal=nrm, coat=m.mixf(worn, 0.5, 0.0), coat_rough=0.15))
+    nrm = m.bump(grain, 0.08, 0.001, nrm)
+    MATS['floor'] = m.done(m.bsdf(base=col, rough=r, normal=nrm, coat=m.mixf(worn, 0.45, 0.0), coat_rough=0.15))
 
     # ---- green leather writing inset, rubbed pale where wrists rest
     m = M('leather')
     o = m.obj()
     grainl = m.voronoi(o, 520, out='Distance')
-    rub = m.mr(m.noise(o, 2.5, 5), 0.45, 0.7)
-    col = m.mixc(rub, C('#16301f'), C('#3b4e33'))
-    col = m.mixc(m.mr(m.noise(o, 12, 6), 0.55, 0.7, 0, 0.4), col, C('#0e1a12'))
-    MATS['leather'] = m.done(m.bsdf(base=col, rough=m.mixf(rub, 0.5, 0.75), normal=m.bump(grainl, 0.15, 0.0005), sheen=0.15))
+    if has_tex('leather_green'):
+        # the leather pad photo, re-cut to the inset's shape (prep_textures); v = 0 is the edge nearest the chair
+        t = m.image(tex('leather_pad'), m.uv(), 'EXTEND').outputs['Color']
+        col = m.mixc(1.0, t, (0.75, 0.9, 0.72), 'MULTIPLY')
+        rub = m.mr(m.lum(t), 0.04, 0.12)
+    else:
+        rub = m.mr(m.noise(o, 2.5, 5), 0.45, 0.7)
+        col = m.mixc(rub, C('#16301f'), C('#3b4e33'))
+        col = m.mixc(m.mr(m.noise(o, 12, 6), 0.55, 0.7, 0, 0.4), col, C('#0e1a12'))
+    MATS['leather'] = m.done(m.bsdf(base=col, rough=m.mixf(rub, 0.45, 0.78), normal=m.bump(grainl, 0.15, 0.0005), sheen=0.15))
 
     # ---- metals
     def metal(name, color, rough=0.3, tarnish=None, fingerprints=0.15):
@@ -530,6 +670,21 @@ def build_materials():
     col = m.mixc(m.mr(pile, 0.3, 0.7, 0.0, 0.35), col, C('#1a0806'))
     MATS['rug'] = m.done(m.bsdf(base=col, rough=0.95, sheen=0.1, normal=m.bump(pile, 0.25, 0.002)))
 
+    # ---- cardboard archive box and a worn leather briefcase (floor clutter)
+    m = M('cardboard')
+    o = m.obj()
+    ox, oy, oz = m.sep(o)
+    flute = m.math('SINE', m.math('MULTIPLY', m.math('ADD', ox, oy), 900.0))
+    col = m.mixc(m.mr(m.noise(o, 6, 6), 0.3, 0.7), C('#7e6040'), C('#8e6e48'))
+    col = m.mixc(m.mr(m.noise(o, 2.0, 5), 0.6, 0.75, 0, 0.25), col, C('#5e4428'))
+    col = m.mixc(m.math('MULTIPLY', m.edges(), 0.5), col, C('#c2a070'))
+    MATS['cardboard'] = m.done(m.bsdf(base=col, rough=0.9, normal=m.bump(flute, 0.03, 0.0005)))
+    m = M('briefcase')
+    o = m.obj()
+    col = m.mixc(m.mr(m.noise(o, 4, 6), 0.3, 0.7), C('#1c100a'), C('#24150c'))
+    col = m.mixc(m.math('MULTIPLY', m.edges(), 0.25), col, C('#6a4630'))
+    MATS['briefcase'] = m.done(m.bsdf(base=col, rough=m.mixf(m.math('MULTIPLY', m.edges(), 0.4), 0.42, 0.7), normal=m.bump(m.voronoi(o, 300), 0.12, 0.0006), coat=0.2, coat_rough=0.3))
+
     # ---- emitters and screens
     m = M('bulb')
     MATS['bulb'] = m.done(m.emission(C('#ffd6a0'), 18.0))
@@ -646,19 +801,55 @@ def build_city_materials():
         bright = m.math('MULTIPLY', m.math('MULTIPLY', lit, curtain), m.math('ADD', 0.25, m.math('MULTIPLY', m.white(m.vmath('ADD', cell, (3.1, 9.7, 0))), 0.9)))
         return win, col, m.math('MULTIPLY', bright, lit_mul)
 
-    # near shophouses across the road: painted render, louvred windows, signboards (abstract, unreadable)
+    # near shophouses across the road: the shophouse photo on each front (per-shop props fw / fh = width and
+    # height, set in build_city). The photo's top is the roofline; its two upper floors repeat downward on taller
+    # shops; the bottom 3.4 m shows its shopfront. Each shop gets its own hue, value and a mirror. At night some
+    # windows glow through their shutters.
     m = M('facade_near')
     P = m.pos()
     o = m.obj()
-    base = m.ramp(m.white(m.vmath('SNAP', P, (5.0, 5.0, 100.0))), [(0.0, C('#d8cfb4')), (0.2, C('#9fb8b0')), (0.4, C('#d6a98c')), (0.55, C('#e2d27e')), (0.7, C('#a9b9cf')), (0.85, C('#c9c4bc')), (1.0, C('#8faa8a'))], interp='CONSTANT')
-    base = m.mixc(m.mr(m.noise(P, 0.6, 6), 0.4, 0.7), base, C('#d4c9a8'))
-    grime = m.mr(m.noise(m.mapping(P, scale=(3, 3, 0.4)), 1.5, 6), 0.45, 0.7)
-    base = m.mixc(m.math('MULTIPLY', grime, 0.6), base, C('#3c3a30'))
-    win, wcol, bright = windows(m, P, 3.6, 1.6, knob(m, 'near_lit', 0.3), '#ffc77a', sill=0.36, head=0.3, gap=0.5)
+    ox, oy, oz = m.sep(o)
+    fw = m.node('ShaderNodeAttribute', attribute_name='fw', attribute_type='OBJECT').outputs['Fac']
+    fh = m.node('ShaderNodeAttribute', attribute_name='fh', attribute_type='OBJECT').outputs['Fac']
+    rnd = m.node('ShaderNodeObjectInfo').outputs['Random']
     wet = knob(m, 'wet', 0.6)
-    glassc = m.mixc(0.5, C('#1a2028'), C('#2a3440'))
-    col = m.mixc(win, base, glassc)
-    sh = m.bsdf(base=col, rough=m.mixf(win, m.mixf(wet, 0.8, 0.35), 0.05), emit=wcol, emit_str=m.math('MULTIPLY', bright, knob(m, 'near_emit', 3.0)))
+    if has_tex('facade_shophouse'):
+        u = m.math('ADD', m.math('DIVIDE', ox, fw), 0.5)
+        u = m.mixf(m.math('GREATER_THAN', rnd, 0.5), u, m.math('SUBTRACT', 1.0, u))
+        imgh = m.math('MULTIPLY', fw, 1.3)                       # the photo is stretched 1.3x tall: 2.9 m floors
+        v = m.math('SUBTRACT', 0.97, m.math('DIVIDE', m.math('SUBTRACT', fh, oz), imgh))
+        wrapped = m.math('ADD', 0.258, m.node('ShaderNodeMath', {0: m.math('SUBTRACT', v, 0.258), 1: 0.347}, operation='FLOORED_MODULO').outputs[0])
+        v = m.mixf(m.math('LESS_THAN', v, 0.258), v, wrapped)
+        v = m.mixf(m.math('LESS_THAN', oz, 3.4), v, m.math('MULTIPLY', m.math('DIVIDE', oz, 3.4), 0.25))
+        t = m.image(tex('facade_shophouse'), m.comb(u, v, 0.0), 'EXTEND').outputs['Color']
+        hs = m.node('ShaderNodeHueSaturation', {'Hue': m.math('ADD', 0.42, m.math('MULTIPLY', rnd, 0.2)), 'Saturation': m.math('ADD', 0.75, m.math('MULTIPLY', rnd, 0.5)),
+                                                'Value': m.math('ADD', 0.72, m.math('MULTIPLY', m.white(m.comb(rnd, 2.0, 0.0)), 0.3)), 'Fac': 1.0, 'Color': t}).outputs[0]
+        nz = m.sep(m.node('ShaderNodeNewGeometry').outputs['Normal'])[2]
+        roof = m.mixc(m.noise(P, 1.5, 6), C('#4a4038'), C('#6a5a4a'))
+        col = m.mixc(m.math('GREATER_THAN', nz, 0.6), hs, roof)
+        # window glow: the photo's six window openings, a random few lit per shop per floor
+        win_u = m.math('MAXIMUM', m.math('MAXIMUM', m.math('MULTIPLY', m.mr(u, 0.142, 0.15), m.mr(u, 0.255, 0.262, 1, 0)),
+                                                     m.math('MULTIPLY', m.mr(u, 0.444, 0.452), m.mr(u, 0.558, 0.566, 1, 0))),
+                           m.math('MULTIPLY', m.mr(u, 0.75, 0.758), m.mr(u, 0.865, 0.872, 1, 0)))
+        win_v = m.math('MAXIMUM', m.math('MULTIPLY', m.mr(v, 0.61, 0.62), m.mr(v, 0.77, 0.78, 1, 0)), m.math('MULTIPLY', m.mr(v, 0.258, 0.268), m.mr(v, 0.426, 0.436, 1, 0)))
+        win = m.math('MULTIPLY', m.math('MULTIPLY', win_u, win_v), m.math('LESS_THAN', nz, 0.6))
+        cell = m.comb(m.math('FLOOR', m.math('MULTIPLY', u, 3.0)), m.math('FLOOR', m.math('DIVIDE', oz, 2.9)), m.math('MULTIPLY', rnd, 97.0))
+        lit = m.math('MULTIPLY', win, m.math('LESS_THAN', m.white(cell), knob(m, 'near_lit', 0.3)))
+        leak = m.math('ADD', 0.25, m.math('MULTIPLY', m.lum(t), 2.5))    # light through the shutter slats
+        hue = m.white(m.vmath('ADD', cell, (7.3, 1.1, 0)))
+        wcol = m.mixc(m.mr(hue, 0.0, 0.8), C('#ff9a40'), C('#ffc77a'))
+        wcol = m.mixc(m.mr(hue, 0.8, 0.82), wcol, C('#cfe0ff'))
+        bright = m.math('MULTIPLY', m.math('MULTIPLY', lit, leak), m.math('ADD', 0.4, m.math('MULTIPLY', m.white(m.vmath('ADD', cell, (3.1, 9.7, 0))), 0.8)))
+        # at night the street lamps and shop lights below wash the lower floors warm
+        wash = m.math('MULTIPLY', knob(m, 'street_wash', 0.0), m.math('EXPONENT', m.math('DIVIDE', oz, -3.5)))
+        glow = m.mixc(1.0, hs, C('#ffb070'), 'MULTIPLY')
+        emit = m.vmath('ADD', m.vmath('SCALE', wcol, scale=m.math('MULTIPLY', bright, knob(m, 'near_emit', 3.0))), m.vmath('SCALE', glow, scale=m.math('MULTIPLY', wash, 0.5)))
+        sh = m.bsdf(base=col, rough=m.mixf(wet, 0.8, 0.45), emit=emit, emit_str=1.0)
+    else:
+        base = m.ramp(m.white(m.vmath('SNAP', P, (5.0, 5.0, 100.0))), [(0.0, C('#d8cfb4')), (0.2, C('#9fb8b0')), (0.4, C('#d6a98c')), (0.55, C('#e2d27e')), (0.7, C('#a9b9cf')), (0.85, C('#c9c4bc')), (1.0, C('#8faa8a'))], interp='CONSTANT')
+        win, wcol, bright = windows(m, P, 3.6, 1.6, knob(m, 'near_lit', 0.3), '#ffc77a', sill=0.36, head=0.3, gap=0.5)
+        col = m.mixc(win, base, m.mixc(0.5, C('#1a2028'), C('#2a3440')))
+        sh = m.bsdf(base=col, rough=m.mixf(win, m.mixf(wet, 0.8, 0.35), 0.05), emit=wcol, emit_str=m.math('MULTIPLY', bright, knob(m, 'near_emit', 3.0)))
     MATS['facade_near'] = m.done(haze_mix(m, sh, P))
 
     m = M('roof_near')
@@ -1033,7 +1224,7 @@ def build_blinds():
 def build_desk():
     x, z, top, w, d = DESK['x'], DESK['z'], DESK['top'], DESK['w'], DESK['d']
     box('desk_top', w, 0.045, d, mat('desk'), (x, top - 0.0225, z), bevel=0.008, segs=3, pass_index=IDS['desk'])
-    plane('desk_leather', w - 0.36, d - 0.3, mat('leather'), (x, top + 0.0012, z + 0.02), facing='y', pass_index=IDS['desk'])
+    plane('desk_leather', w - 0.36, d - 0.3, mat('leather'), (x, top + 0.0024, z + 0.02), facing='y', pass_index=IDS['desk'])
     box('desk_leather_lip', w - 0.34, 0.002, d - 0.28, mat('leather'), (x, top + 0.0005, z + 0.02), bevel=0.0, pass_index=IDS['desk'])
     for side in (-1, 1):
         px = x + side * (w / 2 - 0.26)
@@ -1047,6 +1238,7 @@ def build_desk():
     box('modesty', w - 1.0, 0.5, 0.02, mat('desk_side'), (x, top - 0.3, z - d / 2 + 0.05), bevel=0.004, pass_index=IDS['desk'])
     box('apron', w - 1.0, 0.08, 0.02, mat('desk'), (x, top - 0.085, z + d / 2 - 0.03), bevel=0.005, pass_index=IDS['desk'])
 
+    build_floor_clutter()
     build_lamp()
     build_folder()
     build_lighter()
@@ -1285,8 +1477,7 @@ def build_props():
             vv.co.y *= 0.8
         make_obj(f'coat_sleeve{side}', bm, mat('coat'), (rx + 0.04 + side * 0.19, 1.36, rz + 0.08), smooth_angle=1.5)
         OBJECTS[f'coat_sleeve{side}'].rotation_euler = (0, -side * 0.08, 0.15)
-        box(f'coat_lapel{side}', 0.055, 0.24, 0.01, mat('coat'), (rx + 0.04 + side * 0.04, 1.62, rz + 0.154), bevel=0.004)
-        OBJECTS[f'coat_lapel{side}'].rotation_euler = (0, side * 0.18, 0)
+    build_coat_front(rx + 0.04, rz + 0.07, 0.15, prof)
     # fedora
     lathe('hat', [(0.0, 0.0), (0.15, 0.0), (0.152, 0.006), (0.14, 0.01), (0.086, 0.012), (0.08, 0.06), (0.07, 0.1), (0.04, 0.108), (0.0, 0.1)], mat('felt'), (rx - 0.005, 1.87, rz), segs=36)
     OBJECTS['hat'].rotation_euler = (0.1, 0, 0)
@@ -1396,6 +1587,103 @@ def build_props():
     lathe('pendant_shade', [(0.0, 0.0), (0.02, 0.0), (0.03, -0.02), (0.13, -0.12), (0.125, -0.125), (0.0, -0.01)], mat('ac_plastic'), (1.9, 2.45, -1.6), segs=24)
 
 
+def build_coat_front(cx, cz, rot, prof):
+    """Notched lapels lying on the coat's front (they follow its squashed-ellipse surface), a turned-up collar,
+    double-breasted buttons and a belt buckle."""
+    def radius(y):
+        pts = sorted((py, pr) for pr, py in prof if pr > 0)
+        for (y0, r0), (y1, r1) in zip(pts, pts[1:]):
+            if y0 <= y <= y1:
+                return r0 + (r1 - r0) * (y - y0) / max(y1 - y0, 1e-6)
+        return pts[-1][1] if y > pts[-1][0] else pts[0][1]
+
+    def front(x, y, lift=0.0):
+        r = radius(y) * (1.0 + 0.01)
+        zz = 0.42 * math.sqrt(max(r * r - x * x, 0.0)) + lift
+        return (x, y, zz)
+
+    outline = [(0.03, 1.775), (0.095, 1.752), (0.128, 1.655), (0.104, 1.632), (0.138, 1.56), (0.02, 1.37), (0.004, 1.42), (0.012, 1.70)]
+    for side in (-1, 1):
+        bm = bmesh.new()
+        pts = outline if side > 0 else [(-px, py) for px, py in reversed(outline)]
+        # a fan of quads from the outline to the lapel's spine, so the lapel bends with the coat
+        top = [bm.verts.new(T(*front(px, py, 0.007))) for px, py in pts]
+        bm.faces.new(top)
+        bmesh.ops.triangulate(bm, faces=bm.faces[:])
+        bmesh.ops.subdivide_edges(bm, edges=bm.edges[:], cuts=2, use_grid_fill=False)
+        for v in bm.verts:
+            three = Vector((v.co.x, v.co.z, -v.co.y))
+            fx, fy, fz = front(three.x, three.y, 0.007)
+            v.co = T(fx, fy, fz)
+        # face the lapel outward before giving it thickness (the mirrored side comes out inside-out otherwise,
+        # which the GLB bake shows as black patches)
+        for f in bm.faces:
+            if f.normal.y > 0:  # Blender +Y = into the coat
+                f.normal_flip()
+        bmesh.ops.solidify(bm, geom=bm.faces[:], thickness=0.006)
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces[:])
+        res = bmesh.ops.bevel(bm, geom=[e for e in bm.edges if not e.is_manifold or e.calc_face_angle(0) > 1.0], offset=0.002, segments=1, affect='EDGES', clamp_overlap=True)
+        mark_wear(bm, res['faces'])
+        make_obj(f'coat_lapel{side}', bm, mat('coat'), (cx, 0, cz), rot_y=rot, smooth_angle=0.8)
+    # collar: a band standing round the neck, open at the front
+    bm = bmesh.new()
+    rings = []
+    for j, (yy, sc) in enumerate(((1.772, 1.18), (1.84, 1.05))):
+        ring = []
+        for k in range(15):
+            a = math.radians(-60 + 300 * k / 14)  # open at the front (270 degrees)
+            ring.append(bm.verts.new(T(math.cos(a) * 0.085 * sc, yy, -math.sin(a) * 0.085 * sc * 0.6)))
+        rings.append(ring)
+    for k in range(14):
+        bm.faces.new((rings[0][k], rings[0][k + 1], rings[1][k + 1], rings[1][k]))
+    bmesh.ops.solidify(bm, geom=bm.faces[:], thickness=0.006)
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces[:])
+    make_obj('coat_collar', bm, mat('coat'), (cx, 0, cz), rot_y=rot, smooth_angle=1.2)
+    for k, (bx, by) in enumerate(((-0.055, 1.33), (0.055, 1.33), (-0.05, 1.17), (0.05, 1.17))):
+        fx, fy, fz = front(bx, by, 0.004)
+        cyl(f'coat_button{k}', 0.011, 0.011, 0.006, mat('black_plastic'), (cx + fx * math.cos(rot) + fz * math.sin(rot), fy, cz - fx * math.sin(rot) + fz * math.cos(rot)), segs=12, axis='z', rot_y=rot)
+    fx, fy, fz = front(0.0, 1.24, 0.012)
+    box('coat_buckle', 0.04, 0.05, 0.006, mat('brass'), (cx + fz * math.sin(rot), 1.24, cz + fz * math.cos(rot)), rot_y=rot, bevel=0.002)
+
+
+def build_floor_clutter():
+    """What a working office leaves on the floor: an archive box of old files, a briefcase against the desk, a
+    tied stack of newspapers, a dropped sheet and a crumpled page."""
+    x, z = DESK['x'], DESK['z']
+    # archive box, lid half off, files sticking up
+    bx, bz, br = -1.32, -2.32, 0.32
+    box('archive_box', 0.42, 0.28, 0.32, mat('cardboard'), (bx, 0.14, bz), rot_y=br, bevel=0.006)
+    box('archive_lid', 0.44, 0.05, 0.34, mat('cardboard'), (bx - 0.05, 0.31, bz + 0.03), rot_y=br + 0.22, bevel=0.006)
+    OBJECTS['archive_lid'].rotation_euler = (0.12, -0.08, br + 0.22)
+    for k in range(4):
+        f = box(f'archive_file{k}', 0.3, 0.012, 0.22, mat('manila' if k % 2 else 'paper_typed'), (bx + (hsh(k + 40) - 0.5) * 0.06, 0.29 + k * 0.004, bz + (k - 1.5) * 0.05), rot_y=br + (hsh(k + 41) - 0.5) * 0.2, bevel=0.002)
+        f.rotation_euler = (math.pi / 2 - 0.18, 0, br + (hsh(k + 41) - 0.5) * 0.2)
+    plane('archive_label', 0.14, 0.07, mat('card_white'), (bx + math.sin(br) * 0.162, 0.17, bz + math.cos(br) * 0.162), rot_y=br)
+    # briefcase standing against the right pedestal
+    cx_, cz_, cr = x + 0.66, z + 0.62, -0.25
+    box('briefcase', 0.44, 0.31, 0.1, mat('briefcase'), (cx_, 0.165, cz_), rot_y=cr, bevel=0.012, segs=3)
+    OBJECTS['briefcase'].rotation_euler = (-0.12, 0, cr)
+    tube('briefcase_handle', [(cx_ - 0.07, 0.33, cz_ - 0.02), (cx_ - 0.05, 0.37, cz_ - 0.025), (cx_ + 0.05, 0.37, cz_ - 0.035), (cx_ + 0.07, 0.33, cz_ - 0.04)], 0.008, mat('briefcase'))
+    for k in (-0.13, 0.13):
+        box(f'briefcase_latch{k}', 0.03, 0.022, 0.01, mat('brass'), (cx_ + k * math.cos(cr), 0.29, cz_ + 0.055 - k * math.sin(cr)), rot_y=cr, bevel=0.002)
+    # newspapers tied with string, by the coat rack
+    nx, nz = 0.95, -3.35
+    for k in range(7):
+        box(f'news_stack{k}', 0.42, 0.018, 0.3, mat('newsprint'), (nx + (hsh(k + 60) - 0.5) * 0.03, 0.009 + k * 0.019, nz + (hsh(k + 61) - 0.5) * 0.03), rot_y=0.3 + (hsh(k + 62) - 0.5) * 0.12, bevel=0.004)
+    for k in (-0.08, 0.08):
+        tube(f'news_string{k}', [(nx - 0.2, 0.0, nz + k), (nx - 0.21, 0.07, nz + k), (nx, 0.138, nz + k), (nx + 0.21, 0.07, nz + k), (nx + 0.2, 0.0, nz + k)], 0.0015, mat('card_white'))
+    # a dropped sheet on the rug and a crumpled page by the chair
+    plane('dropped_sheet', 0.21, 0.297, mat('paper_typed'), (x - 0.12, 0.0085, z + 1.12), facing='y', rot_y=0.9)
+    bm = bmesh.new()
+    bmesh.ops.create_icosphere(bm, subdivisions=2, radius=0.04)
+    for vv in bm.verts:
+        vv.co *= 0.75 + hsh(77 + vv.index) * 0.5
+    make_obj('crumple_floor', bm, mat('paper'), (x + 0.95, 0.035, z + 1.35), smooth_angle=0.4)
+    # two cigarette ends that missed the ashtray's last trip to the bin
+    for k in range(2):
+        cyl(f'butt{k}', 0.004, 0.004, 0.028, mat('cig'), (x + 0.3 + k * 0.07, 0.005, z + 1.25 + k * 0.05), segs=8, axis='x', rot_y=k * 1.3 + 0.4)
+
+
 def build_clock_hands():
     face = (0.42, 2.48, BACK + 0.0385)
     for name, ln, wd in (('clock_hour', 0.075, 0.011), ('clock_minute', 0.115, 0.007)):
@@ -1444,24 +1732,22 @@ def build_city():
     x = -70.0
     i = 0
     while x < 60:
-        w = rnd.choice([4.5, 5.0, 6.0, 6.5])
-        h = rnd.choice([9.0, 9.5, 12.5, 13.0, 8.5])
-        tower(f'shop{i}', x + w / 2, zf, w - 0.05, 14.0, h, 'facade_near')
-        # parapet and roof
-        box(f'shop_parapet{i}', w, 0.6, 0.25, mat('facade_near'), (x + w / 2, street_y + h + 0.3, zf + 7), bevel=0.0, collection='city', smooth=False)
-        if rnd.random() < 0.65:
+        w = rnd.choice([5.5, 6.0, 6.5, 7.0])
+        h = rnd.choice([8.6, 9.0, 11.5, 12.4, 8.4])
+        shop = tower(f'shop{i}', x + w / 2, zf, w - 0.05, 14.0, h, 'facade_near')
+        shop['fw'], shop['fh'] = w - 0.05, h
+        if rnd.random() < 0.3:
+            box(f'shop_parapet{i}', w, 0.5, 0.25, mat('roof_near'), (x + w / 2, street_y + h + 0.25, zf + 7), bevel=0.0, collection='city', smooth=False)
+        if rnd.random() < 0.35:
             sw, sh = w * rnd.uniform(0.5, 0.85), rnd.uniform(0.7, 1.2)
             box(f'shop_sign{i}', sw, sh, 0.2, mat('sign'), (x + w / 2, street_y + rnd.uniform(4.0, 6.0), zf + 7.3), bevel=0.0, collection='city', smooth=False)
-        for k in range(rnd.randint(0, 3)):  # air-conditioner compressors on the facade and roof
-            box(f'shop_ac{i}_{k}', 0.8, 0.55, 0.3, mat('ac_plastic'), (x + rnd.uniform(0.6, w - 0.6), street_y + rnd.uniform(5, h - 1), zf + 7.2), bevel=0.0, collection='city', smooth=False)
+        rnd.randint(0, 3)  # (the photo has its own air-conditioners; keep the random sequence stable)
         if rnd.random() < 0.4:
             cyl(f'shop_tank{i}', 0.6, 0.6, 1.2, mat('ac_plastic'), (x + w * 0.4, street_y + h + 0.6, zf + rnd.uniform(-3, 3)), segs=12, collection='city', smooth=False)
         x += w
         i += 1
     for k in range(int((x + 70) / 6)):
         pass
-    for fl in (3.4, 6.9, 10.4):
-        box(f'shop_ledge{fl}', 135.0, 0.25, 0.5, mat('roof_near'), (-5.0, street_y + fl, zf + 7.2), bevel=0.0, collection='city', smooth=False)
     # the street and the far ground
     plane('street', 400, 400, mat('ground'), (0, street_y, -150), facing='y', collection='city')
 
@@ -1729,7 +2015,7 @@ RIGS = {
                       lamp=False, board=False, neon=0.0, street=0.0, city=dict(near_lit=0.02, tower_lit=0.02, near_emit=0.3, tower_emit=0.2, landmark_emit=0.0, sign_emit=0.0, wet=0.3),
                       exposure=1.2, city_glow=0.0, corridor=6, fill=150.0, fill_color=C('#f0ede4')),
     # amber dusk, the lamp on, the city's lights coming on
-    'evening': dict(sun=dict(elev=11, azim=30, color=C('#ff9442'), strength=5.0, angle=1.2),
+    'evening': dict(sun=dict(elev=17, azim=22, color=C('#ff8a3a'), strength=8.0, angle=1.0),
                     sky=dict(horizon=C('#ff9a5a'), mid=C('#c46a6a'), zenith=C('#3c3c6e'), cloud=C('#c0705a'), cover=0.55, strength=1.0),
                     haze=dict(color=C('#c97a5e'), dist=1600, amount=1.0, strength=1.0),
                     lamp=True, board=True, neon=0.6, street=0.3, city=dict(near_lit=0.22, tower_lit=0.25, near_emit=1.2, tower_emit=1.6, landmark_emit=0.8, sign_emit=1.0, wet=0.6),
@@ -1738,7 +2024,7 @@ RIGS = {
     'night': dict(sun=None,
                   sky=dict(horizon=C('#3a2a3a'), mid=C('#1a1a2c'), zenith=C('#06080e'), cloud=C('#4a3438'), cover=0.75, strength=0.5),
                   haze=dict(color=C('#3a2c34'), dist=2400, amount=1.0, strength=1.0),
-                  lamp=True, board=True, neon=1.0, street=1.0, city=dict(near_lit=0.3, tower_lit=0.35, near_emit=1.6, tower_emit=2.4, landmark_emit=2.5, sign_emit=2.2, wet=0.9),
+                  lamp=True, board=True, neon=1.0, street=1.0, city=dict(near_lit=0.55, tower_lit=0.35, near_emit=4.5, tower_emit=2.4, landmark_emit=2.5, sign_emit=2.2, wet=0.9, street_wash=1.0),
                   exposure=0.9, city_glow=60.0, corridor=18),
 }
 
@@ -1759,7 +2045,7 @@ def apply_rig(tod, lamp_override=None):
         sun.hide_render = True
     set_sky(**r['sky'])
     h = r['haze']
-    set_city(haze_color=h['color'], haze_dist=h['dist'], haze_amount=h['amount'], haze_strength=h['strength'], neon=8.0 * max(r['neon'], 0.05), **r['city'])
+    set_city(haze_color=h['color'], haze_dist=h['dist'], haze_amount=h['amount'], haze_strength=h['strength'], neon=8.0 * max(r['neon'], 0.05), **{'street_wash': 0.0, **r['city']})
     lamp_on = r['lamp'] if lamp_override is None else lamp_override
     LIGHTS['lamp_light'].data.energy = 40.0 if lamp_on else 0.0
     MATS['bulb'].node_tree.nodes['Emission'].inputs['Strength'].default_value = 18.0 if lamp_on else 0.0
@@ -2182,6 +2468,7 @@ def main():
     ap.add_argument('--path', default=None)
     a = ap.parse_args()
     os.makedirs(a.work, exist_ok=True)
+    prep_textures(a.work)
     blend = os.path.join(a.work, 'office.blend')
     tods = a.tod.split(',')
     orients = a.orient.split(',')
