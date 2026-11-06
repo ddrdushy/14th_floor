@@ -483,6 +483,24 @@ const initials = (name) => name.replace(HONORIFIC, '').split(/\s+/).slice(0, 2).
 
 const PLACES = [
   {
+    // checked first: Brickfields to Jugra, by Batu Road, Jalan Ampang, the Federal Highway and Pulau Indah (Case 8)
+    match: /brickfields to jugra/i, grid: [62, 92], angle: 16, water: 'coast-left', yards: true,
+    districts: ['Brickfields', 'Batu Road', 'Jalan Ampang', 'Bukit Bintang', 'Sentul', 'Batu Tiga', 'Shah Alam', 'Pulau Indah', 'Banting', 'Jugra'],
+    roads: ['Lebuhraya Persekutuan', 'Jalan Tun Sambanthan', 'Jalan Tuanku Abdul Rahman', 'Jalan Pulau Indah', 'Jalan Klang-Banting'], waterName: 'Selat Melaka',
+  },
+  {
+    // checked before any /jugra/ entry: the coroner's court at Shah Alam, the Jugra yard, Banting and Butterworth (Case 11)
+    match: /shah alam/i, grid: [46, 64], angle: 12, water: 'river',
+    districts: ['Shah Alam', 'Jugra', 'Bukit Jugra', 'Banting', 'Kampung Jugra', 'Jenjarom', 'Klang', 'Kepong', 'Butterworth', 'Bagan Luar'],
+    roads: ['Jalan Klang-Banting', 'Persiaran Sultan', 'Jalan Sultan Abdul Samad', 'Lebuhraya Persekutuan'], waterName: 'Sungai Langat',
+  },
+  {
+    // checked before the general Kuala Lumpur entry: the Jugra gate, the Banting road, HKL, Menara Sinar, Bukit Aman, Cheras (Case 12)
+    match: /jugra and kuala lumpur/i, grid: [56, 84], angle: 14, water: 'river',
+    districts: ['Jugra', 'Bukit Jugra', 'Banting', 'Jenjarom', 'Kanchong Darat', 'Brickfields', 'Jalan Ampang', 'Bukit Aman', 'Cheras', 'Jalan Pahang'],
+    roads: ['Jalan Klang-Banting', 'Jalan Jugra', 'Jalan Tun Sambanthan', 'Jalan Ampang', 'Jalan Pahang'], waterName: 'Sungai Langat',
+  },
+  {
     // checked before the Case 5 entry: Level 15 of Menara Sinar, Basement 2, Brickfields and Chow Kit (Case 7)
     match: /level 15/i, grid: [48, 66], angle: -18, water: 'river',
     districts: ['KLCC', 'Jalan Ampang', 'Kampung Baru', 'Chow Kit', 'Brickfields', 'Dang Wangi', 'Bukit Nanas', 'KL Sentral', 'Cheras', 'Jalan Kia Peng'],
@@ -524,6 +542,18 @@ const PLACES = [
     match: /colombo|sri lanka/i, grid: [36, 50], angle: -12, water: 'coast-left', yards: true,
     districts: ['Pettah', 'Fort', 'Kotahena', 'Slave Island', 'Kollupitiya', 'Bloemendhal', 'Port City', 'Mount Lavinia', 'Wellawatte', 'Borella'],
     roads: ['Galle Road', 'Sea Street', 'Main Street', 'Sir James Peiris Mawatha', 'Baseline Road'], waterName: 'Indian Ocean',
+  },
+  {
+    // Melaka: the iron room on Jalan Kampung Pantai, the river, the Settlement, St. Paul's Hill (Case 9)
+    match: /melaka|malacca/i, grid: [42, 58], angle: -14, water: 'river',
+    districts: ['Kampung Pantai', 'Jonker Street', 'Kampung Morten', 'Bandar Hilir', 'Ujong Pasir', 'Bukit China', 'Banda Kaba', 'Melaka Raya', 'Peringgit', 'Ayer Keroh'],
+    roads: ['Jalan Kampung Pantai', 'Jalan Tukang Emas', 'Jalan Hang Jebat', 'Jalan Parameswara', 'Jalan Tun Ali'], waterName: 'Sungai Melaka',
+  },
+  {
+    // Singapore: Telok Ayer Street, Ann Siang Hill, Tuas and the Woodlands checkpoint (Case 10)
+    match: /telok ayer|singapore/i, grid: [34, 46], angle: -14, water: 'coast-right',
+    districts: ['Telok Ayer', 'Amoy Street', 'Ann Siang Hill', 'Chinatown', 'Tanjong Pagar', 'Raffles Place', 'Outram', 'Little India', 'Tuas', 'Woodlands'],
+    roads: ['Telok Ayer Street', 'Amoy Street', 'Cross Street', 'Club Street', 'Serangoon Road'], waterName: 'Singapore Strait',
   },
 ];
 

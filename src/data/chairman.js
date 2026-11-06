@@ -326,6 +326,191 @@ export const THREADS = [
     text: 'At Muthu\'s cremation a hand in a white cuff settled on your shoulder: "Muthu drove me for forty years and never once looked in the mirror. I need a new driver." The first of December, ten past two, outside Restoran Bala. When you turned there were two hundred men in white shirts, and in your pocket a car key on a ring with a small brass sun.',
     unlock: ended('case07'),
   },
+
+  // ---------------- Case 8: Ten Past Two ----------------
+  {
+    // case08 c8_01 "The boot": THE RULES, and "Terima kasih" in ink, left-handed
+    id: 'c8_rules', caseId: 'case08', from: 'c8_01', img: 'ev_c8_rules',
+    title: 'Nine rules',
+    text: 'In the boot of the car, nine typed rules for his driver. Nothing on the phones. The driver does not look in the mirror. Four minutes at any stop. Never the same road twice. Nobody gets out on the right. Washed by hand. Cash, the morning after. Say thank you. At ten past two, the lamp. Under them, in ink, "Terima kasih", dragged along the line by the side of the hand: written left-handed.',
+    unlock: solvedLv('case08', 'c8_01'),
+  },
+  {
+    // case08 c8_07 "Leong Brothers": the tailor's statement
+    id: 'c8_tailor', caseId: 'case08', from: 'c8_07', img: 'ev_c8_tape',
+    title: 'Measured in the dark',
+    text: 'A tailor on Batu Road has measured him by touch, in the back of the car with the light off, since December 1986: three white shirts a year, collar fifteen and a half, the right cuff three-quarters of an inch wider for a watch. On the first of December, out of season, "a shirt for a long journey". "Forty years, and I have never seen his face."',
+    unlock: solvedLv('case08', 'c8_07'),
+  },
+  {
+    // case08 c8_15 "Two back seats": mitochondrial DNA only, in no file, in both cars
+    id: 'c8_hair', caseId: 'case08', from: 'c8_15', img: 'ev_c8_hair',
+    title: 'A man in no file',
+    text: 'Grey hairs with no root, behind the driver\'s seat of the black car and on the back seat of the escort car an hour later. Rootless hair gives only mitochondrial DNA, the mother\'s line. The two match. They match nobody in any database in Malaysia.',
+    unlock: solvedLv('case08', 'c8_15'),
+  },
+  {
+    // case08 c8_22 "Three lengths behind": the escort's one true thing
+    id: 'c8_two', caseId: 'case08', from: 'c8_22', img: 'ev_c8_cap',
+    title: 'Two in the back',
+    text: 'The escort drove three lengths behind the black car for twenty-three years. "I never saw his face. Some nights there are two in the back. I have never known which one is him."',
+    unlock: solvedLv('case08', 'c8_22'),
+  },
+  {
+    // case08 ending, panels c8_out_05 (JPJ) and c8_out_06_phone ("Keep the plate.")
+    id: 'c8_plate', caseId: 'case08', from: 'ending', img: 'c8_out_06_phone',
+    title: 'Keep the plate',
+    text: 'At ten past two on Friday, Bala Anne\'s wall phone: "You did not stop. Muthu would not have stopped either. Thank you, detective. Keep the plate." BCK 210 was a Bedford lorry, registered in 1984 to Teoh Ah Chuan of Jugra, and transferred to Sinar Pengangkutan on 3 December 1986. He kept its plate for forty years.',
+    unlock: ended('case08'),
+  },
+
+  // ---------------- Case 9: Box 14 ----------------
+  {
+    // case09 c9_04 "Not a good man": Muthiah Chettiar's 1986 ledger
+    id: 'c9_loan', caseId: 'case09', from: 'c9_04', img: 'ev_c9_ledger',
+    title: 'Not a good man',
+    text: 'His first money: on 2 December 1986 a Chettiar firm in Melaka lent RM 18,000 to "Sinar Pengangkutan, Jugra, the bearer", against a lorry, with M. Perumal as guarantor. It was repaid on 1 December 1987, to the day, and the same day Box 14 was rented for fifty years, paid in advance. In the margin, in the moneylender\'s hand: "Not a good man. But he will repay."',
+    unlock: solvedLv('case09', 'c9_04'),
+  },
+  {
+    // case09 c9_16 "What he photographed": Shamsul's thumbnails of Box 14
+    id: 'c9_shadow', caseId: 'case09', from: 'c9_16', img: 'ev_c9_watch',
+    title: 'The photographer\'s shadow',
+    text: 'Box 14 held a Seiko stopped at 2:10 with river mud in its crown, engraved TEOH A.C. 1979; the registration card of the lorry BCK 210; and a 1986 photograph of the Jugra gate with a sun freshly painted on it and a girl of about fifteen holding a brush. Across the laterite in front of her lies the long afternoon shadow of whoever held the camera: a slim man in a cap.',
+    unlock: solvedLv('case09', 'c9_16'),
+  },
+  {
+    // case09 c9_22 "Leave the gold": the iron room's visitor book, from Vanessa Low's car
+    id: 'c9_fourmin', caseId: 'case09', from: 'c9_22', img: 'ev_c9_visitorbook',
+    title: 'Four minutes a year',
+    text: 'Every first of December from 1987 to 2025 the iron room was opened before dawn for the bearer of Box 14, for four minutes, and the visitor book signed "M.P.". On 1 December 2026 the same four minutes, and no signature: only a small sun, drawn in ink.',
+    unlock: solvedLv('case09', 'c9_22'),
+  },
+  {
+    // case09 ending, panel c9_out_03_grave (NOTE_FOUND): the note under the grille, nine points
+    id: 'c9_ninepts', caseId: 'case09', from: 'ending', img: 'c9_out_03_grave',
+    title: 'Nine points',
+    text: 'The cancelled note from Box 14, found under the grille of an empty grave on St. Paul\'s Hill: Muthu\'s right thumb as guarantor, and the borrower\'s left thumb, with nine clear points. The national search needs twelve. "Nine points is a man. It is not yet a name."',
+    unlock: ended('case09', (f) => f.NOTE_FOUND),
+  },
+  {
+    // case09 ending, panel c9_out_05_newyear: the photograph sent back
+    id: 'c9_fiftyfive', caseId: 'case09', from: 'ending', img: 'c9_out_05_newyear',
+    title: 'She is fifty-five now',
+    text: 'At 2:10 AM on New Year\'s Day a courier brought the original photograph from Box 14 to Restoran Bala\'s shutter: "Tuan says terima kasih." On the back, in the left-handed hand, two lines: "Selamat Tahun Baru, detektif. She is fifty-five now."',
+    unlock: ended('case09'),
+  },
+
+  // ---------------- Case 10: Telok Ayer ----------------
+  {
+    // case10 c10_07 "The pocket recorder": Arthur's rehearsal, "I do not cross water"
+    id: 'c10_water', caseId: 'case10', from: 'c10_07', img: 'ev_c10_recorder',
+    title: 'I do not cross water',
+    text: 'Arthur Seah met him once, in 1987, on the Johor side of the Causeway. He would not cross to Singapore. "I do not cross water," he said, as if it were a rule of the house.',
+    unlock: solvedLv('case10', 'c10_07'),
+  },
+  {
+    // case10 c10_13 "The microfiche": the deed's signing page; Farah's JPN check
+    id: 'c10_trust', caseId: 'case10', from: 'c10_13', img: 'ev_c10_microfiche',
+    title: 'The Jugra Trust',
+    text: 'At the top of Sinar is a trust, settled at Johor Bahru on 1 December 1987 with Seah & Seah of Singapore as trustee. It owns Sinar Holdings Pte Ltd, which owns 51% of Sinar Holdings Berhad. The settlor on paper is Muthusamy a/l Perumal. The signature is not his, and neither is the left thumb.',
+    unlock: solvedLv('case10', 'c10_13'),
+  },
+  {
+    // case10 c10_14 "The brass bowl": the unburnt corner, in a left hand
+    id: 'c10_corner', caseId: 'case10', from: 'c10_14', img: 'ev_c10_bowl',
+    title: '...drives me last',
+    text: 'The letter of wishes was amended on 19 August 2016, in his own left hand. It was burned on the morning you were to read it. One corner survived the brass bowl, with the end of one line: "...drives me last."',
+    unlock: solvedLv('case10', 'c10_14'),
+  },
+  {
+    // case10 ending, panel c10_out_02_ward (ARTHUR_FOUND): the recital
+    id: 'c10_wishes', caseId: 'case10', from: 'ending', img: 'c10_out_02_ward',
+    title: 'Whoever drives me last',
+    text: 'From a hospital bed, Arthur Seah recited the letter of wishes from memory: "On my death the Trust is to be directed by whoever drives me last." He told him that was not a legal sentence. "It will be, Arthur, when I am dead."',
+    unlock: ended('case10', (f) => f.ARTHUR_FOUND),
+  },
+
+  // ---------------- Case 11: The Gate ----------------
+  {
+    // case11 c11_03 "The applicant": Siew Yang's evidence (the window, the words, the sun on the gate)
+    id: 'c11_back', caseId: 'case11', from: 'c11_03', img: 'ev_c11_window',
+    title: 'Don\'t look back',
+    text: 'At ten past two on 1 December 1986 a girl of fifteen at the window of her father\'s yard office saw his lorry go nose first into the Langat, a torch held up on the bank, and a man in the water at the cab door with his back to her. Across the yard a man\'s voice said: jangan tengok belakang. The year before she had painted a sun on the gate, and the driver said that would be the name of the company.',
+    unlock: solvedLv('case11', 'c11_03'),
+  },
+  {
+    // case11 c11_08 "Two versions": the 1986 carbon against the 1987 retyping, and the hand
+    id: 'c11_hand', caseId: 'case11', from: 'c11_08', img: 'ev_c11_twopages',
+    title: 'The same hand',
+    text: 'The man who drove for Teoh wrote his own statement for Balai Jugra that morning, by hand, in Malay: the kelindan holding the torch, the door that would not open. The closed loop of the k, the crossed 7, the ink dragged along each line by a left hand: the hand of "Terima kasih" and of "Amended 19.8.2016". The page with his name on it was torn out in 1987.',
+    unlock: solvedLv('case11', 'c11_08'),
+  },
+  {
+    // case11 c11_16 "One page under water": the sketchbook drawing (answers u_210)
+    id: 'c11_210', caseId: 'case11', from: 'c11_16', img: 'ev_c11_page',
+    title: 'Ten past two',
+    text: 'Siew Yang\'s pencil, the week after: the ramp, the cab under the water, a man at its door seen from behind, a light on the bank, and a clock at ten past two pressed through the paper. Teoh Ah Chuan drowned at ten past two, and his watch stopped there. It is always ten past two because of that minute.',
+    unlock: solvedLv('case11', 'c11_16'),
+  },
+  {
+    // case11 c11_22 "A-hia": Teoh Ah Kow's evidence on solve, 3 AM on 1 December 1986
+    id: 'c11_time', caseId: 'case11', from: 'c11_22', img: 'ev_c11_watch',
+    title: 'I will keep the time',
+    text: 'At three in the morning on 1 December 1986 the man who drove for Teoh came to the brother\'s door wet to the knees, with the drowned man\'s watch in his hand. "Your debts are finished. Tell them it was the brakes." He gave the brother the watch to hold, and took it back. "I will keep the time."',
+    unlock: solvedLv('case11', 'c11_22'),
+  },
+
+  // ---------------- Case 12: Unknown Male ----------------
+  {
+    // case12 c12_08 "The steel table": the laryngectomy, the brass-sun lighter, the tenth rule
+    id: 'c12_novoice', caseId: 'case12', from: 'c12_08', img: 'ev_c12_table',
+    title: 'No voice',
+    text: 'The man who died behind the driver\'s seat at the Jugra gate wore a cravat over an old, healed laryngectomy. He had not spoken with his own throat for ten years or more. In his fist, a silver lighter with a brass sun on the lid; in his pocket, the nine rules and a tenth: "10. Whoever drives me last."',
+    unlock: solvedLv('case12', 'c12_08'),
+  },
+  {
+    // case12 c12_09 "Two kinds of test": mitochondrial DNA against the grey hair of 1 December
+    id: 'c12_mother', caseId: 'case12', from: 'c12_09', img: 'ev_c12_hair',
+    title: 'His mother\'s line',
+    text: 'His nuclear DNA is in no file anywhere. His mitochondrial DNA matches the grey rootless hair from the back seats on the first of December: him, or a brother, or anyone born of his mother\'s line. A family, Dr. Lim says, not a man.',
+    unlock: solvedLv('case12', 'c12_09'),
+  },
+  {
+    // case12 c12_10 "The left fist": nine points of sixteen against the 1987 deed
+    id: 'c12_ninepoints', caseId: 'case12', from: 'c12_10', img: 'ev_c12_thumb',
+    title: 'Nine points of sixteen',
+    text: 'The dead man\'s left thumb against the left thumb on the 1987 Jugra Trust deed: nine points of sixteen, and nothing that disagrees. "Consistent. Not conclusive. In this country, not a name."',
+    unlock: solvedLv('case12', 'c12_10'),
+  },
+  {
+    // case12 c12_12 "Behind the roller shutter": Bay V2, the second car, the second key
+    id: 'c12_twocars', caseId: 'case12', from: 'c12_12', img: 'ev_c12_v2',
+    title: 'Two cars',
+    text: 'Behind a roller shutter on Basement 2, a second bay with a second sun painted on it, and a second black car with no plates. One left at ten to one with the man who died in the back. The other left at twenty past one, and nobody saw who was in it. Two cars, two keys.',
+    unlock: solvedLv('case12', 'c12_12'),
+  },
+  {
+    // case12 ending, panels c12_out_02_form and c12_out_04_cemetery (any answer but "chairman")
+    id: 'c12_unknown', caseId: 'case12', from: 'ending', img: 'c12_out_04_cemetery',
+    title: 'Unknown male',
+    text: 'The man from the back seat was buried in plot 2741 at the Cheras public cemetery, in a row of numbered boards. Nobody claimed him. Nothing in this file carries his name.',
+    unlock: ended('case12', (f) => !f.CHAIRMAN_DECLARED_DEAD),
+  },
+  {
+    // case12 ending, panels c12_out_02_form and c12_out_03_bursa (cert = chairman)
+    id: 'c12_declared', caseId: 'case12', from: 'ending', img: 'c12_out_03_bursa',
+    title: 'Declared dead',
+    text: 'The burial permit says the Chairman of Sinar Holdings Berhad. Sinar announced his death with deep regret, and the share price rose eleven sen before lunch.',
+    unlock: ended('case12', (f) => !!f.CHAIRMAN_DECLARED_DEAD),
+  },
+  {
+    // case12 ending, panels c12_out_06_backdoor and c12_out_07_mirror
+    id: 'c12_mirror', caseId: 'case12', from: 'ending', img: 'c12_out_07_mirror',
+    title: 'The mirror',
+    text: 'At ten past two on Wednesday a second black car stopped outside Restoran Bala with its back door open, and the voice came from the driver\'s seat: "Good evening, detective. Not the front. Tonight I drive." A hand in a white cuff tilted the mirror until it held your eyes and his. You looked.',
+    unlock: ended('case12'),
+  },
 ];
 
 /** What a case's group says when no thread in it leads to Sinar (the side case). */
@@ -394,6 +579,28 @@ export const KNOWN = [
   { id: 'h_smokes', group: 'habits', text: 'He smokes, and has lit the third lighter thousands of times.', unlock: solvedLv('case06', 'c6_01') }, // c6_01
   { id: 'h_car', group: 'habits', text: 'He comes himself only to watch, and never gets out of the car.', unlock: solvedLv('case06', 'c6_21') }, // c6_21 "He never gets out."
   { id: 'h_standin', group: 'habits', text: 'He sends somebody else: to his doctor, and to sit in his chair.', unlock: solvedLv('case07', 'c7_14') }, // c7_14
+
+  // Season Two. Case 8: Ten Past Two
+  { id: 'v_hums', group: 'voice', text: 'He hums P. Ramlee\'s Getaran Jiwa.', unlock: opened('case08') }, // case08 opening, Banting road
+  { id: 'v_notmine', group: 'voice', text: 'Of the attack on Farah, he said: "That was not mine."', unlock: opened('case08') }, // case08 opening, 3:12
+  { id: 'pl_lorry', group: 'places', text: 'The road from Jugra, forty years ago, at night, in a lorry with no lights.', unlock: opened('case08') }, // case08 opening, Banting road
+  { id: 'p_tailor', group: 'people', text: 'A tailor who has measured him in the dark for forty years and never seen his face.', unlock: solvedLv('case08', 'c8_07') }, // c8_07
+  { id: 'p_escort', group: 'people', text: 'An escort who drove three lengths behind him for twenty-three years and never saw his face.', unlock: solvedLv('case08', 'c8_22') }, // c8_22
+  { id: 'o_plate', group: 'objects', text: 'A lorry\'s number plate, BCK 210, with a small sun painted in its corner.', unlock: solvedLv('case08', 'c8_01') }, // c8_01
+  { id: 'o_shirts', group: 'objects', text: 'White shirts, three a year since 1986. Collar 15½. The right cuff cut wider for a watch.', unlock: solvedLv('case08', 'c8_07') }, // c8_07
+  { id: 'o_band', group: 'objects', text: 'His first order from the tailor, 2 December 1986: a white shirt and a black mourning band.', unlock: solvedLv('case08', 'c8_12') }, // c8_12
+  { id: 'h_left', group: 'habits', text: 'He writes with his left hand.', unlock: solvedLv('case08', 'c8_01') }, // c8_01
+  { id: 'h_streets', group: 'habits', text: 'He calls Kuala Lumpur\'s streets by the names they lost in the early 1980s: Batu Road, Birch Road, Treacher Road.', unlock: solvedLv('case08', 'c8_08') }, // c8_08
+  { id: 'h_behind', group: 'habits', text: 'He rides directly behind the driver, where the mirror cannot see him.', unlock: opened('case08') }, // case08 opening, 2:10 AM
+  { id: 'h_gate', group: 'habits', text: 'On the first of December he left the car at the gate of Warehouse 6 while you looked at Bay 3. A telephone did the rest of the drive.', unlock: ended('case08', (f) => !!f.TAIL_TRACED) }, // c8_14, c8_16; stated only once the player has said so (TAIL_TRACED)
+
+  // Case 9: Box 14
+  { id: 'm_chettiar', group: 'money', text: 'His first money: RM 18,000 from a Chettiar firm in Melaka, 2 December 1986, repaid to the day a year later.', unlock: solvedLv('case09', 'c9_04') }, // c9_04
+  { id: 'h_fourmin', group: 'habits', text: 'Once a year, before dawn on the first of December, four minutes at Box 14.', unlock: solvedLv('case09', 'c9_22') }, // c9_09, c9_22
+
+  // Case 10: Telok Ayer
+  { id: 'h_water', group: 'habits', text: 'He does not cross water. In 1987 he would not cross the Causeway to Singapore.', unlock: solvedLv('case10', 'c10_07') }, // c10_07
+  { id: 'm_trust', group: 'money', text: 'The top of Sinar is a Singapore trust settled in his driver\'s name, with a thumb that is not his driver\'s.', unlock: solvedLv('case10', 'c10_13') }, // c10_13
 ];
 
 // ------------------------------------------------------------------------------------------------
@@ -410,12 +617,18 @@ export const UNKNOWN = [
   { id: 'u_alive', q: 'Five years ago he let you go into the fire. Why let you come out?', unlock: ended('case06') }, // case06 ending call
   { id: 'u_table7', q: 'Who was the old man in the white shirt at table seven, in August 2016?', unlock: ended('case06', (f) => !TAKEN(f)), until: any(solvedLv('case07', 'c7_14'), ended('case07', (f) => !HELD(f))) }, // case06 ending (safehouse / prison panel); answered by c7_14
   { id: 'u_archive', q: 'Where is RU-07 now, with his memory inside it?', unlock: ended('case06', (f) => f.ARCHIVE_LOST) }, // case06 ending
-  { id: 'u_210', q: 'Why is it always ten past two?', unlock: all(ended('case05'), ended('case06')) }, // case05 ending (2:10 folder), case06 ending (2:10 call)
+  { id: 'u_210', q: 'Why is it always ten past two?', unlock: all(ended('case05'), ended('case06')), until: solvedLv('case11', 'c11_16') }, // case05 ending (2:10 folder), case06 ending (2:10 call); answered by c11_16
   { id: 'u_lamp', q: 'Who set a lamp on sealed Level 14 to come on at 2:10 every night?', unlock: solvedLv('case07', 'c7_10') }, // c7_10
   { id: 'u_seen', q: 'Has anybody alive seen his face?', unlock: solvedLv('case07', 'c7_22') }, // c7_22
   { id: 'u_v1', q: 'Where does the black car go when it leaves Bay V1?', unlock: solvedLv('case07', 'c7_12') }, // c7_12
   { id: 'u_daniel', q: 'Daniel has sat beside him in the dark. Has he seen his face?', unlock: ended('case07', HELD) }, // case07 ending, held branch
-  { id: 'u_dec1', q: 'What does he want with you on the first of December, at ten past two?', unlock: ended('case07') }, // case07 ending
+  { id: 'u_dec1', q: 'What does he want with you on the first of December, at ten past two?', unlock: ended('case07'), until: ended('case08') }, // case07 ending; case08 answers it ("Drive me.")
+  { id: 'u_plate', q: 'Why did he keep a lorry\'s number plate for forty years?', unlock: solvedLv('case08', 'c8_01') }, // c8_01
+  { id: 'u_watch', q: 'Whose watch did he keep for forty years, and why stop it at ten past two?', unlock: solvedLv('case09', 'c9_16'), until: solvedLv('case11', 'c11_16') }, // c9_16; c11_16 answers both halves (Teoh Ah Chuan's watch, stopped when he drowned)
+  { id: 'u_last', q: 'Who drives him last?', unlock: any(solvedLv('case10', 'c10_14'), ended('case10')) }, // c10_14, case10 ending
+  { id: 'u_plot', q: 'Who is buried in plot 2741 at Cheras?', unlock: ended('case12') }, // case12 ending, panel c12_out_04_cemetery
+  { id: 'u_other', q: 'Who was the other man in the back?', unlock: solvedLv('case12', 'c12_12') }, // c12_12 (and c12_jx for JASON_FREE players)
+  { id: 'u_mirror', q: 'Whose eyes were in the mirror?', unlock: ended('case12') }, // case12 ending, panel c12_out_07_mirror
 ];
 
 /** What the file calls him, as the cases have shown it. */
@@ -443,7 +656,8 @@ export const fileOpen = (save) => THREADS.some((t) => isOn(t, save));
 // met in the cases they have reached, plus one way out. The list never suggests an answer: there is
 // none yet. Order is story order, the order the player met them.
 
-// Recurring people (not suspects). `met` says when the player has met them by name.
+// Recurring people (not suspects). `met` says when the player has met them by name; `aka` names the same
+// person as a later case's suspect list writes it, so the theory list shows them once.
 const PEOPLE = [
   { id: 'farah', at: 'case01', name: 'Inspector Farah Iskandar', where: 'Bukit Aman. She was at Mont Kiara the night Henry Goh fell.', met: opened('case01') },
   { id: 'rachel', at: 'case01', name: 'Rachel Goh', where: 'Henry Goh\'s daughter. She called you at 2:47 AM.', met: opened('case01') },
@@ -460,6 +674,13 @@ const PEOPLE = [
   { id: 'makteh', at: 'case05', name: 'Mak Teh', where: 'Case 5. The warung on Jalan Raja Muda Musa, Kampung Baru.', met: solvedLv('case05', 'c5_13') },
   { id: 'bishnu', at: 'case05', name: 'Bishnu Thapa', where: 'Case 5. Night guard at Menara Sinar.', met: solvedLv('case05', 'c5_05') },
   { id: 'muthu', at: 'case07', name: 'Muthu', where: 'Case 7. The old man who brought you a teh at table six.', met: opened('case07') },
+  { id: 'asri', at: 'case08', name: 'Sjn. Asri', aka: ['Sjn. Mohd. Asri bin Ghazali'], where: 'Case 8. Farah\'s sergeant at D9.', met: opened('case08') },
+  { id: 'leong', at: 'case08', name: 'Leong Kam Wah', where: 'Case 8. The tailor on Batu Road.', met: opened('case08') },
+  { id: 'itam', at: 'case08', name: 'Pak Itam', where: 'Case 8. The watchman at the Jugra gate.', met: opened('case08') },
+  { id: 'ram', at: 'case09', name: 'Ramanathan "Ram" Chettiar', where: 'Case 9. Keeper of the iron room in Melaka. He looks at the key, not the face.', met: opened('case09') },
+  { id: 'arthur', at: 'case10', name: 'Arthur Seah', where: 'Case 10. Solicitor, Seah & Seah, 214 Telok Ayer Street. He witnessed the 1987 deed.', met: opened('case10') },
+  { id: 'teo', at: 'case10', name: 'ASP Teo Wei Ling', where: 'Case 10. Singapore Police Force CID. Farah\'s classmate in Lyon.', met: opened('case10') },
+  { id: 'siewyang', at: 'case11', name: 'Teoh Siew Yang', where: 'Case 11. The girl who painted the sun on the gate at Jugra, now a sign painter in Butterworth.', met: opened('case11') },
 ];
 
 export const UNMET_ID = 'char:unmet';
@@ -471,13 +692,16 @@ export const UNMET_ID = 'char:unmet';
 export function candidates(save) {
   const out = [];
   const seen = new Set();
-  const push = (cand) => {
-    const key = cand.name.toLowerCase();
+  // one person, one entry: "Supt. Khairul Anuar" is "Khairul Anuar", "Pak Itam (Ibrahim bin Sulong)" is "Pak Itam"
+  const keyOf = (name) => name.toLowerCase().replace(/\s*\(.*?\)\s*/g, ' ').replace(/^(supt|sjn|asp|tan sri)\.?\s+/, '').trim();
+  const push = (cand, aka = []) => {
+    const key = keyOf(cand.name);
     if (seen.has(key)) return;
     seen.add(key);
+    for (const a of aka) seen.add(keyOf(a));
     out.push(cand);
   };
-  for (const p of PEOPLE) if (p.met(save)) push({ id: `char:${p.id}`, name: p.name, where: p.where, img: null });
+  for (const p of PEOPLE) if (p.met(save)) push({ id: `char:${p.id}`, name: p.name, where: p.where, img: null }, p.aka);
   for (const caseId of CASE_ORDER) {
     const c = CASES[caseId];
     const cs = csOf(save, caseId);

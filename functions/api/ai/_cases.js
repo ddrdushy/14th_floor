@@ -4,8 +4,13 @@ import { CASE04 } from '../../../src/data/case04.js';
 import { CASE05 } from '../../../src/data/case05.js';
 import { CASE06 } from '../../../src/data/case06.js';
 import { CASE07 } from '../../../src/data/case07.js';
+import { CASE08 } from '../../../src/data/case08.js';
+import { CASE09 } from '../../../src/data/case09.js';
+import { CASE10 } from '../../../src/data/case10.js';
+import { CASE11 } from '../../../src/data/case11.js';
+import { CASE12 } from '../../../src/data/case12.js';
 
-const ALL = [CASE04, CASE05, CASE06, CASE07];
+const ALL = [CASE04, CASE05, CASE06, CASE07, CASE08, CASE09, CASE10, CASE11, CASE12];
 export const CASES = Object.fromEntries(ALL.map((c) => [c.id, c]));
 
 /** The params of an AI level, or null. */

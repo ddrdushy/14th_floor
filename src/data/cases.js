@@ -9,15 +9,22 @@ import { CASE04 } from './case04.js';
 import { CASE05 } from './case05.js';
 import { CASE06 } from './case06.js';
 import { CASE07 } from './case07.js';
+import { CASE08 } from './case08.js';
+import { CASE09 } from './case09.js';
+import { CASE10 } from './case10.js';
+import { CASE11 } from './case11.js';
+import { CASE12 } from './case12.js';
 import { state, caseState } from '../core/state.js';
 
-export const CASES = { case01: CASE01, side01: SIDE01, case02: CASE02, case03: CASE03, case04: CASE04, case05: CASE05, case06: CASE06, case07: CASE07 };
-export const CASE_ORDER = ['case01', 'side01', 'case02', 'case03', 'case04', 'case05', 'case06', 'case07'];
+export const CASES = { case01: CASE01, side01: SIDE01, case02: CASE02, case03: CASE03, case04: CASE04, case05: CASE05, case06: CASE06, case07: CASE07, case08: CASE08, case09: CASE09, case10: CASE10, case11: CASE11, case12: CASE12 };
+export const CASE_ORDER = ['case01', 'side01', 'case02', 'case03', 'case04', 'case05', 'case06', 'case07', 'case08', 'case09', 'case10', 'case11', 'case12'];
 
-// What the phone says once every written case is closed.
+// What the phone says once every written case is closed. `title` heads the call ("Case 13", or a
+// season: "Season Three"); `note` is the line under the teaser.
 export const COMING_SOON = {
-  title: 'Case 8',
-  teaser: 'On the first of December, at ten past two in the morning, a black car with no plates will stop outside Restoran Bala with its engine running and the driver\'s door open. The back seat will already be taken. For forty years one man drove him and never once looked in the mirror. He has asked for you. Bala Anne says do not go. Farah says she will be three cars behind. You have a key with a brass sun on it, and you have not yet decided whether to look.',
+  title: 'Season Three',
+  teaser: 'He let you look. Somewhere south of the city a black car with no plates is driving with its mirror turned the wrong way, and for the first time in forty years the man at the wheel does not mind being seen. Floor 14 will return.',
+  note: 'Season Two is closed. The next season is being written. Your choices so far are saved and will follow you into it.',
 };
 
 /** Short label for a case: "Case 2" or "Side case". */

@@ -59,6 +59,29 @@ export const VOICE_OVERRIDES = {
   'Go bui kopi… hou fu. Hou fu.': { say: '嗰杯kopi……好苦。好苦。' },
   'Ho sam ge sai lou. Ngo mou zaak keoi.': { say: '好心嘅細路。我冇怪佢。' },
   'Di cin fan lai zau dak lah.': { say: '啲錢返嚟就得啦。' },
+
+  // Case 8: Tamil (Bala Anne), Cantonese (Leong Kam Wah), Malay (label only: Pak Itam)
+  'Thambi. Andha car-la ēra vendaam.': { say: 'தம்பி. அந்த கார்ல ஏற வேண்டாம்.', lang: 'ta' },
+  'Tuan. Gin saam zou hou zo.': { say: 'Tuan。件衫做好咗。', lang: 'yue' },
+  'Selamat pagi, Tuan.': { lang: 'ms' },
+
+  // Case 9: Tamil (Ram Chettiar)
+  'Thaathaa sonnaar: mugatha paakkaadhe, saaviya paaru.': { say: 'தாத்தா சொன்னார்: முகத்தைப் பாக்காதே, சாவியைப் பாரு.', lang: 'ta' },
+
+  // Case 10: Sinhala (Inspector Ruwan Herath, on the telephone from Colombo)
+  'Ayubowan.': { say: 'ආයුබෝවන්.', lang: 'si' },
+
+  // Case 11: Malay (Tarmizi Hassan, Pak Itam: labels only, Latin script), Penang Hokkien (Teoh Siew Yang: label only, romanised)
+  'Saya tulis kemalangan. Empat puluh tahun saya tulis kemalangan.': { lang: 'ms' },
+  'Empat puluh tahun saya tulis. Hari ini saya cakap.': { lang: 'ms' },
+  'Air tengah pasang, tuan. Jangan dekat.': { lang: 'ms' },
+  'A-pa bo tng lai.': { lang: 'zh-hokkien' },
+
+  // Case 12: Malay (Sjn. Asri on the radio, Hamidah Yusof writing the burial permit): labels only, Latin script
+  'Kereta dah keluar dari V1. Satu penumpang. Saya ikut dengan motor.': { lang: 'ms' },
+  'Puan, saya hilang dia di Jenjarom.': { lang: 'ms' },
+  'Puan. Maaf. Saya hilang dia.': { lang: 'ms' },
+  'Tidak dikenali. Lelaki, lebih kurang tujuh puluh lima tahun.': { lang: 'ms' },
 };
 
 // Who voices a caption speaker, when the caption hides it ("Woman" on the phone is a different person

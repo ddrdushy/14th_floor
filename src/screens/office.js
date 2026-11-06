@@ -106,7 +106,7 @@ export function mount(host) {
     }
     await modal({
       title: COMING_SOON.title,
-      body: h('div', {}, h('p', { class: 'doc' }, COMING_SOON.teaser), h('p', {}, 'The next case is being written. Your choices so far are saved and will follow you into it.')),
+      body: h('div', {}, h('p', { class: 'doc' }, COMING_SOON.teaser), h('p', {}, COMING_SOON.note || 'The next case is being written. Your choices so far are saved and will follow you into it.')),
       buttons: [{ label: 'Hang up', kind: 'primary', value: true }],
     });
     app.scene.ringPhone(true);

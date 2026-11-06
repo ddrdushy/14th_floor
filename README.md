@@ -34,7 +34,7 @@ src/
   three/               the 3D office: rain-on-glass shader, KL skyline, case board with red thread
   screens/             title, profile, intro (motion comic), office, map, puzzle, board, deduce, outcome, closed, archive, lab
   games/               one file per mini game + registry.js (registry_b.js, registry_c.js for newer games)
-  data/                story: intro.js (opening cinematic), cases.js (case order, flag rules), case01.js, side01.js, case02.js, case03.js, case04.js, case05.js, case06.js, case07.js
+  data/                story: intro.js (opening cinematic), cases.js (case order, flag rules), case01.js, side01.js, case02.js, case03.js, case04.js, case05.js, case06.js, case07.js, case08.js to case12.js (Season Two)
 public/assets/img/     generated art (Google Flow). Missing images fall back to a placeholder panel.
 ```
 
@@ -52,11 +52,11 @@ Return `{ destroy, hint, devSolve }`. Register it in a registry file.
 
 ### Adding a case
 
-Cases are played in the order of `CASE_ORDER` in `src/data/cases.js` (Case 1, the side case, Case 2, Case 3, Case 4, Case 5, Case 6, Case 7). When one closes, the office phone rings; answering it plays the next case's `opening` cinematic and opens its map. Copy the shape of `src/data/case02.js`:
+Cases are played in the order of `CASE_ORDER` in `src/data/cases.js` (Case 1, the side case, Case 2, Case 3, Case 4, Case 5, Case 6, Case 7, then Season Two: Case 8, Case 9, Case 10, Case 11, Case 12). When one closes, the office phone rings; answering it plays the next case's `opening` cinematic and opens its map. Copy the shape of `src/data/case02.js`:
 
 - `suspects`, `levels` (each level = one game + the evidence it reveals + image hotspot), `hints`, `label` (optional, e.g. "Side case")
 - each suspect has `revealedBy: '<level id>'`, the level whose exhibit first makes them a person of interest, and an optional one-line `revealLine`. Nobody is on the map, the board or the office wall before that level is solved; then a "New person of interest" card offers to pin them, and anyone not pinned waits in the board's tray. Spread them over the first half of the case, never all on level 1, and never on a flag-conditional level. Pins are saved in `cases[id].pinnedSuspects`.
-- `opening`: cinematic panels; the last panel can be `{ title: { kicker: 'Case 2', name: 'Container 47' } }`
+- `opening`: cinematic panels; the last panel can be `{ title: { kicker: 'Case 2', name: 'Container 47' } }` (an ending can close on one too: Case 12's last panel is `{ title: { kicker: 'Floor 14', name: 'End of Season Two' } }`)
 - `deduction`: copy for the deduction room, plus optional extra `questions` (e.g. "Where is Azman hiding?") with options
 - `flagNames` + `flags({ charged, answers })`: the hidden story flags this case sets
 - `ending(v)`: the outcome cinematic, built from the verdict (`v.charged`, `v.answers`, `v.flags`, `v.has(id)`)
@@ -65,7 +65,7 @@ Levels, panels and lines may carry `when: (flags) => boolean`, so earlier choice
 
 ### Images
 
-Image keys live in `src/data/intro.js` (cinematic panels) and in each case file (`opening`, `ending`, `evidence.img`, suspect `img`). Prompts for the side case, Cases 2 to 7 and the evidence added to Case 1 later are in `docs/image_prompts.md`. Save a JPG as `public/assets/img/<key>.jpg`. Evidence photos are 4:3; set `evidence.hotspot` `{x, y, r}` (fractions of the photo) to circle the hidden item.
+Image keys live in `src/data/intro.js` (cinematic panels) and in each case file (`opening`, `ending`, `evidence.img`, suspect `img`). Prompts for the side case, Cases 2 to 12 and the evidence added to Case 1 later are in `docs/image_prompts.md`. Season Two keys follow `c8_intro_…`, `c8_out_…`, `ev_c8_…`, `sus_<id>` (and the same for 9 to 12); its evidence uses the placeholder hotspot `{ x: 0.5, y: 0.5, r: 0.12 }` until the art exists. Save a JPG as `public/assets/img/<key>.jpg`. Evidence photos are 4:3; set `evidence.hotspot` `{x, y, r}` (fractions of the photo) to circle the hidden item.
 
 #### Video clips
 
@@ -111,7 +111,7 @@ There is no `wrangler.toml` on purpose: with one, Pages takes bindings from the 
 
 `/api/admin/*` needs `Authorization: Bearer <ADMIN_PASSWORD>` (compared in constant time; 401 otherwise, 429 after 10 wrong tries in 5 minutes from one IP). If `ADMIN_PASSWORD` is not set the admin routes answer 503 `not_configured`; if `DB` is not bound every data route answers 503 and the game ignores it. All routes are JSON, same-origin only (cross-site `Origin` gets 403), `no-store`, and never return stack traces. Other admin routes can reuse `requireAdmin` / `adminHandler` from `functions/api/_lib.js`.
 
-Whether a verdict is right follows the flags each case sets: Case 1, Jason and Rizal charged and not Shanti; side case, Bobby only; Case 2, Tony and Norhayati, not Faizal, and Azman found at the kelong; Case 3, Melissa and Shahrul, not Kenny or Cheah, and the X-ray named as Ong Wei Jie; Case 4, Shehani and Kasun, not Mohan or K. Rajan, and the book found at Colombo Fort station; Case 5, Vivian Chua and Zulkifli Hamid, not Superintendent Khairul or K. Rajan, and Daniel found at Mak Teh's in Kampung Baru; Case 6, Kamal Ariffin and Jeffrey Ho, not Ah Fook or Amirul, and RU-07 found at the old Sinar depot at Jugra; Case 7, Desmond Yap only, not Tan Sri Azhar, Nurul Ain or Dr. Meera, and the voice traced to the car in Bay V1 on Basement 2. The client sends its own `correct` (from `src/data/*.js` `flags()`), but the server recomputes it for known cases (`verdictCorrect` in `_lib.js`); keep both in step when a case's answer changes.
+Whether a verdict is right follows the flags each case sets: Case 1, Jason and Rizal charged and not Shanti; side case, Bobby only; Case 2, Tony and Norhayati, not Faizal, and Azman found at the kelong; Case 3, Melissa and Shahrul, not Kenny or Cheah, and the X-ray named as Ong Wei Jie; Case 4, Shehani and Kasun, not Mohan or K. Rajan, and the book found at Colombo Fort station; Case 5, Vivian Chua and Zulkifli Hamid, not Superintendent Khairul or K. Rajan, and Daniel found at Mak Teh's in Kampung Baru; Case 6, Kamal Ariffin and Jeffrey Ho, not Ah Fook or Amirul, and RU-07 found at the old Sinar depot at Jugra; Case 7, Desmond Yap only, not Tan Sri Azhar, Nurul Ain or Dr. Meera, and the voice traced to the car in Bay V1 on Basement 2; Case 8, Roslan Daud and Superintendent Khairul, not Murali Krishnan or Encik Kamarul, and the man in the back seat traced to the gate of Warehouse 6 at Pulau Indah (exit = bay3); Case 9, Vanessa Low and Shamsul Bakri, not Ram Chettiar or Jock Sequeira, and the promissory note on St. Paul's Hill (note = xavier); Case 10, Clarissa Seah and Gary Raju, not Lucas Seah or R. Rajendran, and Arthur Seah's route out of the bolted room named as the old file lift (method = lift); Case 11, Teoh Ah Kow only, not Ridzuan Tarmizi, Teoh Siew Yang or Shamir Kassim, and the coroner's finding that the man who drove for Teoh held the cab door shut while Muthu held the torch (night = held); Case 12, Sjn. Asri only, not Tan Sri Azhar, Pak Itam or Nurul Ain, and the burial permit left as "Unidentified male, about seventy-five" (cert = unknown). The client sends its own `correct` (from `src/data/*.js` `flags()`), but the server recomputes it for known cases (`verdictCorrect` in `_lib.js`); keep both in step when a case's answer changes.
 
 ### In the game
 
@@ -154,7 +154,7 @@ Redeploy after adding them. `FISH_API_BASE` is for local tests only (points the 
 
 Open `/admin.html`, sign in, and choose **Voices**. Every speaker in the cinematics is listed with its languages and line count (Narrator, Inspector Farah Iskandar, Jo Lim, Bala Anne, Rachel Goh, Salmah, ...). For each one: **Cast & lines** → search Fish Audio's public voice library (or your own voices with "My voices"), play a voice's sample, **Hear a line** to hear one of that speaker's real lines in it, then **Assign**. Speed and model can be set per speaker; **Silent** keeps a speaker unvoiced. A fallback voice can cover every unassigned speaker; without one, unassigned speakers stay silent. **Generate missing lines** (per speaker, or for everyone at the top) fills the cache in the background, 30 lines per round; **Regenerate (purge)** deletes a speaker's stored lines so the next play makes a new take.
 
-Some caption speakers are one character under another name: "Woman" on the phone is Rachel (intro), Salmah (Case 2), Jo (Case 3) and Tharshini (Case 4), and "???" on the phone at the end of Case 4 and "???" in the intro dream is Daniel (who speaks as "Daniel Raj" at the end of Case 5). In Case 6, "A voice" (at the 2021 tape line, and on Bala Anne's telephone) is cast as "The Chairman"; in Case 7 he speaks as "The Chairman" directly (the speech on Level 15 and Muthu's cremation). That mapping is `VOICE_CAST` in `src/data/voice-overrides.js`, so each person has one voice everywhere.
+Some caption speakers are one character under another name: "Woman" on the phone is Rachel (intro), Salmah (Case 2), Jo (Case 3) and Tharshini (Case 4), and "???" on the phone at the end of Case 4 and "???" in the intro dream is Daniel (who speaks as "Daniel Raj" at the end of Case 5). In Case 6, "A voice" (at the 2021 tape line, and on Bala Anne's telephone) is cast as "The Chairman"; in Case 7 he speaks as "The Chairman" directly (the speech on Level 15 and Muthu's cremation). That mapping is `VOICE_CAST` in `src/data/voice-overrides.js`, so each person has one voice everywhere. Season Two adds no mapping: every speaker is captioned under their cast name (the Chairman as "The Chairman"; the 1986 "jangan tengok belakang" in Case 11 is the Narrator, by design). Its twelve new speakers are Sjn. Asri, Leong Kam Wah and Pak Itam (Case 8), Ram Chettiar, Vanessa Low and Hamidah Yusof (Case 9), Arthur Seah, Clarissa Seah and ASP Teo Wei Ling (Case 10), and Tarmizi Hassan, Teoh Siew Yang and Teoh Ah Kow (Case 11); each keeps one voice in every case they speak in.
 
 ### Acting: per-line directions
 
@@ -206,7 +206,7 @@ await A('/generate', { method: 'POST', body: JSON.stringify({ voice: 'You@det_02
 
 ### Costs
 
-Fish bills by UTF-8 bytes of text: $15 per million bytes on `s2.1-pro` / `s2-pro` (`s2.1-pro-free` is $0 for testing). All 508 lines in the manifest (through Case 7) are about 57 KB of text, so voicing the whole game once costs roughly **$0.85** per full set of voices. The player's 4 `You` lines are generated once per detective portrait (8 x 130 bytes, a fraction of a cent). Each unique line is generated once and then served from KV; players replaying never cost anything. You pay again only when you reassign a voice, change its speed/model, purge, or edit a line. Tamil and Chinese text costs 3 bytes per character. KV on the free plan allows 1,000 writes a day (one per generated line) and 100,000 reads.
+Fish bills by UTF-8 bytes of text: $15 per million bytes on `s2.1-pro` / `s2-pro` (`s2.1-pro-free` is $0 for testing). All 897 lines in the manifest (through Case 12) are about 104 KB of text, so voicing the whole game once costs roughly **$1.56** per full set of voices. The player's 4 `You` lines are generated once per detective portrait (8 x 130 bytes, a fraction of a cent). Each unique line is generated once and then served from KV; players replaying never cost anything. You pay again only when you reassign a voice, change its speed/model, purge, or edit a line. Tamil and Chinese text costs 3 bytes per character. KV on the free plan allows 1,000 writes a day (one per generated line) and 100,000 reads.
 
 ### Testing locally without a Fish key
 

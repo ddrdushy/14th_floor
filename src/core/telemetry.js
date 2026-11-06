@@ -101,6 +101,11 @@ const RULES = {
   case05: (f) => !f.VIVIAN_FREE && !f.ZUL_FREE && !f.KHAIRUL_WRONGED && !f.DANIEL_CHARGED && !!f.DANIEL_FOUND,
   case06: (f) => !f.KAMAL_FREE && !f.JEFFREY_FREE && !f.AHFOOK_WRONGED && !f.AMIRUL_WRONGED && !!f.ARCHIVE_SEIZED,
   case07: (f) => !f.DESMOND_FREE && !f.AZHAR_WRONGED && !f.AIN_WRONGED && !f.MEERA_WRONGED && !!f.VOICE_TRACED,
+  case08: (f) => !f.ROSLAN_FREE && !f.KHAIRUL_FREE && !f.MURALI_WRONGED && !f.KAMARUL_WRONGED && !!f.TAIL_TRACED,
+  case09: (f) => !f.VANESSA_FREE && !f.SHAMSUL_FREE && !f.RAM_WRONGED && !f.JOCK_WRONGED && !!f.NOTE_FOUND,
+  case10: (f) => !f.CLARISSA_FREE && !f.GARY_FREE && !f.LUCAS_WRONGED && !f.RAJENDRAN_WRONGED && !!f.ARTHUR_FOUND,
+  case11: (f) => !f.AHKOW_FREE && !f.YANG_WRONGED && !f.RIDZUAN_WRONGED && !f.SHAMIR_WRONGED && !!f.GATE_TRUTH,
+  case12: (f) => !f.ASRI_FREE && !f.AZHAR_WRONGED_12 && !f.ITAM_WRONGED && !f.AIN_WRONGED_12 && !!f.CERT_UNKNOWN,
 };
 export function verdictCorrect(caseId, charged = [], answers = {}) {
   const c = CASES[caseId];

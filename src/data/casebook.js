@@ -66,6 +66,47 @@ export const CHOICES = {
     VOICE_TRACED: 'You told Hamidah where the voice came from, and she wrote it on the charge sheet.',
     VOICE_LOST: 'The line under "and abetment by" stayed blank.',
   },
+  case08: {
+    ROSLAN_FREE: 'You let Roslan Daud walk. He still drives three lengths behind the car.',
+    KHAIRUL_FREE: 'Superintendent Khairul, who told the escort where Farah was, was never charged.',
+    MURALI_WRONGED: 'You charged Murali Krishnan, who only saw it in his mirror and drove on.',
+    KAMARUL_WRONGED: 'You charged Encik Kamarul, who was at a karaoke lounge in Klang at 3:12.',
+    TAIL_TRACED: 'You said he got out at the gate of Warehouse 6, and the escort\'s toll card went south to Melaka.',
+    TAIL_LOST: 'Hamidah\'s records came back empty. Nobody knows where he got out of the car.',
+  },
+  case09: {
+    VANESSA_FREE: 'You let Vanessa Low, the hotel manager who switched the iron room off, walk.',
+    SHAMSUL_FREE: 'You let Shamsul Bakri, the river pilot who brought the thieves, walk.',
+    RAM_WRONGED: 'You had Ram Chettiar charged. He told them the date, but he was at the hospital with his mother when the box was drilled.',
+    JOCK_WRONGED: 'You had Jock Sequeira charged for a key he wrote a receipt for.',
+    NOTE_FOUND: 'Melaka Tengah found the promissory note under the grille of the empty grave on St. Paul\'s Hill: the borrower\'s left thumb, nine clear points.',
+    NOTE_LOST: 'The note with two thumbprints was gone from St. Paul\'s Hill before anybody looked there.',
+  },
+  case10: {
+    CLARISSA_FREE: 'You let Clarissa Seah walk, and she is still the Jugra Trust\'s trustee.',
+    GARY_FREE: 'You let Gary Raju walk, back to the plant in Tuas.',
+    LUCAS_WRONGED: 'You charged Lucas Seah, who only slept on a bench across the road.',
+    RAJENDRAN_WRONGED: 'You charged the night guard Rajendran, who only slept at his desk.',
+    ARTHUR_FOUND: 'You told Teo it was the file lift. Arthur Seah came out of the cold alive, and recited the letter of wishes.',
+    ARTHUR_LOST: 'Teo searched the wrong way. Arthur Seah was not found.',
+  },
+  case11: {
+    AHKOW_FREE: 'You let Teoh Ah Kow walk.',
+    YANG_WRONGED: 'You charged Teoh Siew Yang, who never left the gallery.',
+    RIDZUAN_WRONGED: 'You charged Ridzuan, whose flask never got past the door.',
+    SHAMIR_WRONGED: 'You charged Shamir Kassim with the tea. He only cut a tape and offered money.',
+    GATE_TRUTH: 'The coroner found that the man who drove for Teoh held the cab door shut while Muthu held the torch.',
+    GATE_WRONG: 'The file of 1986 was closed again, on the wrong finding.',
+  },
+  case12: {
+    ASRI_FREE: 'You let Sergeant Asri walk, and he went on driving Farah home.',
+    AZHAR_WRONGED_12: 'You charged Tan Sri Azhar with a murder done before he found the gate.',
+    ITAM_WRONGED: 'You charged Pak Itam, whose hands could not have held the cushion.',
+    AIN_WRONGED_12: 'You charged Nurul Ain, who took two photographs and ran.',
+    CERT_UNKNOWN: 'The man in the back seat was buried as "Unidentified male, about seventy-five".',
+    CERT_SIGNED: 'You had Hamidah write more on the burial permit than the evidence could carry.',
+    CHAIRMAN_DECLARED_DEAD: 'You had the man in the back seat certified as the Chairman of Sinar Holdings.',
+  },
 };
 
 const list = (names) => (names.length < 3 ? names.join(' and ') : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`);
@@ -199,6 +240,100 @@ export const RECAPS = {
     out.push('At Muthu\'s cremation a hand in a white cuff rested on your shoulder: the first of December, ten past two, outside Restoran Bala.');
     return out;
   },
+  case08: (v) => {
+    const f = v.flags;
+    const out = ['At ten past two on the first of December you drove the black car from Brickfields to Jugra with a voice behind you. At 3:12 Farah, three cars behind, was pushed into the divider, and you did not stop.'];
+    if (!f.ROSLAN_FREE && !f.KHAIRUL_FREE) out.push('You named Roslan Daud, the escort who rammed her, and Superintendent Khairul, who told him where she was.');
+    else {
+      if (!f.ROSLAN_FREE) out.push('You named Roslan Daud, the escort who rammed her.');
+      if (!f.KHAIRUL_FREE) out.push('You named Superintendent Khairul, who told the escort where she was.');
+      const free = [];
+      if (f.ROSLAN_FREE) free.push('Roslan Daud');
+      if (f.KHAIRUL_FREE) free.push('Superintendent Khairul');
+      out.push(`${list(free)} went free.`);
+    }
+    const wronged = [];
+    if (f.MURALI_WRONGED) wronged.push('Murali Krishnan');
+    if (f.KAMARUL_WRONGED) wronged.push('Encik Kamarul');
+    if (wronged.length) out.push(`${list(wronged)} ${wronged.length === 1 ? 'was' : 'were'} charged as well.`);
+    out.push(f.TAIL_TRACED
+      ? 'You said he got out at the gate of Warehouse 6. The escort\'s toll card went south, to Melaka.'
+      : 'Nobody told Hamidah where he got out of the car.');
+    out.push('In the boot: nine rules, "Terima kasih" in ink, and a lorry\'s number plate, BCK 210. At ten past two on Friday: "Keep the plate."');
+    return out;
+  },
+  case09: (v) => {
+    const f = v.flags;
+    const out = ['On Christmas Eve, under the fireworks, somebody drilled Box 14 in a Chettiar iron room in Melaka and left the gold in every other box.'];
+    if (!f.VANESSA_FREE && !f.SHAMSUL_FREE) out.push('You named Vanessa Low, the hotel manager who switched off the alarm, and Shamsul Bakri, who brought the thieves up the river.');
+    else {
+      const free = [];
+      if (f.VANESSA_FREE) free.push('Vanessa Low');
+      if (f.SHAMSUL_FREE) free.push('Shamsul Bakri');
+      out.push(`${list(free)} went free.`);
+    }
+    if (f.RAM_WRONGED) out.push('Ram Chettiar, the keeper of the iron room, was charged.');
+    if (f.JOCK_WRONGED) out.push('Jock Sequeira, the locksmith, was charged.');
+    out.push(f.NOTE_FOUND
+      ? 'The promissory note was under the grille of the empty grave on St. Paul\'s Hill: Muthu\'s right thumb, and a left thumb with nine clear points.'
+      : 'The note with two thumbprints was gone before anybody looked in the right place.');
+    out.push('Box 14 had held a watch stopped at ten past two. On New Year\'s Day a courier brought you the photograph from the box: "She is fifty-five now."');
+    return out;
+  },
+  case10: (v) => {
+    const f = v.flags;
+    const out = ['In Singapore, the old solicitor Arthur Seah, who witnessed the 1987 deed of the trust at the top of Sinar, vanished from a room bolted on the inside, hours before he was to show it to you.'];
+    if (!f.CLARISSA_FREE && !f.GARY_FREE) out.push('You named his granddaughter Clarissa Seah, who drugged his tea and sent the old file lift up, and Gary Raju of Tuas SecureShred, who carried him out in a shredding bin.');
+    else {
+      const free = [];
+      if (f.CLARISSA_FREE) free.push('Clarissa Seah');
+      if (f.GARY_FREE) free.push('Gary Raju');
+      out.push(`${list(free)} went free.`);
+    }
+    const wronged = [];
+    if (f.LUCAS_WRONGED) wronged.push('his son Lucas');
+    if (f.RAJENDRAN_WRONGED) wronged.push('the night guard Rajendran');
+    if (wronged.length) out.push(`${list(wronged)} ${wronged.length === 1 ? 'was' : 'were'} charged as well.`);
+    out.push('The deed names Muthu as the man who settled the trust, but neither the signature nor the left thumb is his.');
+    out.push(f.ARTHUR_FOUND
+      ? 'Arthur was found alive in a cold store at Tuas, and recited the letter of wishes: "On my death the Trust is to be directed by whoever drives me last."'
+      : 'Arthur Seah was not found. Of the letter of wishes only a burnt corner survived: "...drives me last."');
+    out.push('At ten past two the telephone in your hotel rang: "You crossed the water for me, detective. I never have."');
+    return out;
+  },
+  case11: (v) => {
+    const f = v.flags;
+    const out = ['The coroner reopened the 1986 drowning of Teoh Ah Chuan at his yard under Bukit Jugra. On the third day of the inquest, Corporal Tarmizi, who wrote "accident" in 1986, was poisoned in the witness room before he could say who paid him.'];
+    if (!f.AHKOW_FREE) out.push('You named Teoh Ah Kow, the dead man\'s brother: kecubung seeds in a canteen teh.');
+    else out.push('Teoh Ah Kow, the dead man\'s brother, who put kecubung seeds in the corporal\'s teh, went home to Banting.');
+    const wronged = [];
+    if (f.YANG_WRONGED) wronged.push('Siew Yang');
+    if (f.RIDZUAN_WRONGED) wronged.push('the corporal\'s son Ridzuan');
+    if (f.SHAMIR_WRONGED) wronged.push('Sinar\'s lawyer Shamir Kassim');
+    if (wronged.length) out.push(`${list(wronged)} ${wronged.length === 1 ? 'was' : 'were'} charged as well.`);
+    out.push(f.GATE_TRUTH
+      ? 'The coroner found that the man who drove for Teoh held the cab door shut under the water while Muthu held the torch. Siew Yang painted her father\'s name on the gate.'
+      : 'The coroner\'s finding left the night of 1986 where the corporal had left it.');
+    out.push('At ten past two on the eve of the new year, the voice on Bala Anne\'s telephone said thank you, and asked you to come to the gate on the fifteenth night, and to bring the plate.');
+    return out;
+  },
+  case12: (v) => {
+    const f = v.flags;
+    const out = ['On the fifteenth night of the new year the black car burned at the Jugra gate. Behind the driver\'s seat sat a man of about seventy-five with no voice and a lighter in his fist, dead before the fire.'];
+    out.push(f.ASRI_FREE
+      ? 'Sergeant Asri, who drove the car to the gate, went on driving Farah home.'
+      : 'You named Sergeant Asri, Farah\'s own, who drove the car to the gate and lit it.');
+    const wronged = [];
+    if (f.AZHAR_WRONGED_12) wronged.push('Tan Sri Azhar');
+    if (f.ITAM_WRONGED) wronged.push('Pak Itam');
+    if (f.AIN_WRONGED_12) wronged.push('Nurul Ain');
+    if (wronged.length) out.push(`${list(wronged)} ${wronged.length === 1 ? 'was' : 'were'} charged as well.`);
+    if (f.CERT_UNKNOWN) out.push('Hamidah wrote only what could be proved: unidentified male, about seventy-five.');
+    else if (f.CHAIRMAN_DECLARED_DEAD) out.push('Hamidah wrote that he was the Chairman of Sinar Holdings, and Sinar agreed.');
+    else out.push('Hamidah wrote more on the form than nine points and a grey hair could carry.');
+    out.push('At ten past two on Wednesday a second black car stopped outside Restoran Bala with its back door open. "Tonight I drive."');
+    return out;
+  },
 };
 
 export const SETUPS = {
@@ -233,5 +368,25 @@ export const SETUPS = {
   case07: () => [
     'A black envelope with a brass sun: Sinar Holdings turns forty. Table 6, for two.',
     'An old man in a white shirt brought you a teh and told you to look behind the screen when the lights went out. When they came back, he was dead in the chair. Nobody leaves the floor until dawn.',
+  ],
+  case08: () => [
+    'At ten past two on the first of December a black car with no plates stopped outside Restoran Bala, and you got into the front of it. A hand in a white cuff touched your shoulder: don\'t look back.',
+    'Farah followed three cars behind. At 3:12 on the Federal Highway somebody put her car into the divider, and the voice behind you said do not stop.',
+  ],
+  case09: () => [
+    'Box 14, in a Chettiar iron room in Melaka, was rented in 1987 for fifty years by a lorry company from Jugra. On Christmas Eve, three days before a court could open it, somebody drilled it open.',
+    'The thieves took nothing else. On Christmas morning the gold in the other forty-one boxes was still there.',
+  ],
+  case10: () => [
+    'A solicitor of eighty-two on Telok Ayer Street, Singapore, wrote to you: in 1987 he watched a man sign a trust deed on the Johor shore. Come on Friday at seven, he said; he would have it all out on the table.',
+    'At seven on Friday his door was bolted from the inside. When the police broke it, the room was empty, and so was the deed box.',
+  ],
+  case11: () => [
+    'The coroner at Shah Alam reopened a file closed in eleven minutes in December 1986: Teoh Ah Chuan, drowned in his own lorry at his yard at Jugra. Cause: accident.',
+    'The man who wrote "accident", retired Corporal Tarmizi Hassan, told you in the corridor that he had been writing it for forty years. The girl who painted the sun on the gate sat in the front row with her brushes.',
+  ],
+  case12: () => [
+    'He asked you to come to the gate at Jugra at ten past two on the fifteenth night of the new year, and to bring the plate.',
+    'You were late. The black car was burning under the pink sun, and in the back seat sat a man in a white shirt with a lighter in his fist.',
   ],
 };
