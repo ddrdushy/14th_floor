@@ -113,7 +113,7 @@
     -4.0
    ],
    "lamp_default": true,
-   "render_s": 1007.4,
+   "render_s": 912.1,
    "lamp_sign": -1.0
   },
   "morning_landscape": {
@@ -229,7 +229,7 @@
     -4.0
    ],
    "lamp_default": true,
-   "render_s": 898.5,
+   "render_s": 913.2,
    "lamp_sign": -1.0
   }
  },
@@ -253,5 +253,5 @@
   0.3,
   7.0
  ],
- "version": 1793968862
+ "version": 1793973783
 }
