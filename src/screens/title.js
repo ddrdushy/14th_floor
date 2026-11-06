@@ -11,6 +11,7 @@ import { hasImage, imgUrl } from '../core/assets.js';
 import { openSettings } from '../core/settings.js';
 import { playerPortraitSvg } from '../core/avatar.js';
 import { openCloudLoad } from '../core/cloud.js';
+import { installState, onInstallChange, installApp, iosInstallHint } from '../core/pwa.js';
 
 const KEY_ART = 'title_keyart';
 let gatePassed = false; // once per page load
@@ -105,9 +106,28 @@ export function mount(host) {
   }
   items.push(item('Continue on this device', 'Played elsewhere? Load your game with your name and PIN', () => openCloudLoad()));
   items.push(item('Leaderboard', null, () => go('leaderboard', { back: 'title' })));
-  items.push(item('Settings', null, () => openSettings()));
+  const settingsItem = item('Settings', null, () => openSettings());
+  items.push(settingsItem);
   items.push(item('Credits', null, showCredits));
   const menu = h('nav', { class: 'ts-menu', 'aria-label': 'Main menu' }, items);
+
+  // "Install Floor 14" (core/pwa.js): while the browser can install the game, or on iOS Safari with the
+  // Share > Add to Home Screen steps. The browser's offer can arrive after the menu is drawn.
+  let installItem = null;
+  const syncInstall = (kind) => {
+    if (kind && !installItem) {
+      installItem = item('Install Floor 14', kind === 'ios' ? 'Add it to your Home Screen, play full screen' : 'Play full screen from your home screen, even offline', () => installApp());
+      installItem.classList.add('ts-item--install');
+      settingsItem.before(installItem);
+      items.splice(items.indexOf(settingsItem), 0, installItem);
+    } else if (!kind && installItem) {
+      installItem.remove();
+      items.splice(items.indexOf(installItem), 1);
+      installItem = null;
+    }
+  };
+  syncInstall(installState());
+  cleanups.push(onInstallChange(syncInstall));
   menu.addEventListener('keydown', (e) => {
     if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
     e.preventDefault();
@@ -208,6 +228,7 @@ export function mount(host) {
     menu.hidden = false;
     if (animate && !calm) gsap.from(items, { opacity: 0, x: -16, duration: 0.6, stagger: 0.08, ease: 'power2.out' });
     items[0].focus({ preventScroll: true });
+    iosInstallHint(); // once per device, iOS Safari only
   };
   const pass = (e) => {
     if (gatePassed) return;

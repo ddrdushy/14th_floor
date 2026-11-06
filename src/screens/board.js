@@ -344,6 +344,7 @@ export function mount(host, { caseId, back = 'map', levelId } = {}) {
       h('div', { class: 'board-tools' },
         linkBtn,
         evidenceFileButton(caseId),
+        h('button', { class: 'btn btn--small board-read-btn', type: 'button', onclick: () => go('casefile', { caseId, back: 'board' }) }, 'Read the file'),
         h('button', { class: 'btn btn--small board-help-btn', type: 'button', 'aria-label': 'How the board works', title: 'How the board works', onclick: () => showHelp() }, h('span', { 'aria-hidden': 'true' }, '?')))),
     h('div', { class: 'board-legend', 'aria-label': 'Thread colours' },
       h('span', { class: 'bl-item' }, h('i', { class: 'bl-swatch bl-auto', 'aria-hidden': 'true' }), 'Dark dashed: the trail you found'),

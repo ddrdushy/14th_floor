@@ -1,6 +1,10 @@
 // Leaderboard: the duty roster at Bukit Aman. One tab per case plus an overall board.
 // Per case: correct verdict first, then total puzzle time, then magnifiers used.
 // Data comes from /api/leaderboard through core/telemetry.js; without a backend it says so and stays calm.
+// Ranks count every ranked detective; only those who show their name are listed, so a gap in the
+// numbers is someone who keeps theirs private ("A detective" in the "Around you" strip). Your row is
+// highlighted with how far you moved since you last looked (core/rank-watch.js keeps that in the save).
+// Each name carries a small badge for the difficulty that player plays on (a label, not a ranking).
 import { h } from '../core/ui.js';
 import { go } from '../core/router.js';
 import { backButton } from '../core/nav.js';
@@ -10,6 +14,7 @@ import { CASES, CASE_ORDER, caseLabel } from '../data/cases.js';
 import { fetchLeaderboard, sharing, showingName } from '../core/telemetry.js';
 import { sfx } from '../core/audio.js';
 import { app } from '../core/app.js';
+import { seenBoard, markSeen, sinceLastTime } from '../core/rank-watch.js';
 
 const TAB_KEY = 'floor14.lb.tab';
 
@@ -22,6 +27,17 @@ export function fmtDuration(sec) {
 }
 
 const sr = (text) => h('span', { class: 'sr-only' }, text);
+
+const MODE_LABEL = { story: 'Story', detective: 'Detective', hardboiled: 'Hardboiled' };
+/** The difficulty badge next to a name (nothing for players not seen since modes shipped). */
+export function modeBadge(mode) {
+  const label = MODE_LABEL[mode];
+  if (!label) return null;
+  return h('span', { class: `lb-mode lb-mode--${mode}`, title: `Plays on ${label}` }, sr('Difficulty: '), label);
+}
+
+/** "▲ 2 since last time" */
+const deltaTag = (d) => (d ? h('span', { class: `lb-delta ${d.up ? 'is-up' : 'is-down'}` }, h('span', { 'aria-hidden': 'true' }, d.up ? '▲ ' : '▼ '), d.text) : null);
 
 export function mount(host, params = {}) {
   // the roster covers the whole screen, so the 3D office can rest
@@ -93,6 +109,9 @@ export function mount(host, params = {}) {
     you.replaceChildren();
     const data = await fetchLeaderboard(id);
     if (destroyed || my !== req) return;
+    // how far you moved since you last looked at this board, then remember this look
+    const delta = data.ok && data.near ? sinceLastTime(seenBoard(id), data.near.rank) : null;
+    if (data.ok && data.near) markSeen(id, data.near);
     if (!data.ok) {
       body.replaceChildren(h('div', { class: 'lb-state lb-state--off' },
         h('strong', {}, data.reason === 'offline' ? 'The roster is out of reach.' : 'The line to Bukit Aman went dead.'),
@@ -102,13 +121,14 @@ export function mount(host, params = {}) {
         h('button', { class: 'btn btn--paper btn--small', type: 'button', onclick: load }, 'Try again')));
       return;
     }
-    body.replaceChildren(data.rows.length ? table(id, data.rows) : h('div', { class: 'lb-state' },
+    if (data.rows.some((r, i) => r.rank !== i + 1)) rule.textContent += ' Gaps in the numbers are detectives who keep their name private.';
+    body.replaceChildren(data.rows.length ? table(id, data.rows, delta) : h('div', { class: 'lb-state' },
       h('strong', {}, 'No names on this roster yet.'),
       h('p', {}, id === 'overall' ? 'Close a case and show your name to be the first.' : 'Close this case and show your name to be the first.')));
-    you.replaceChildren(...youLine(id, data));
+    you.replaceChildren(...youLine(id, data, delta));
   }
 
-  function table(id, rows) {
+  function table(id, rows, delta) {
     const overall = id === 'overall';
     return h('table', { class: `lb-table${overall ? ' lb-table--overall' : ''}` },
       h('caption', { class: 'sr-only' }, `${label(id)} leaderboard, top ${rows.length}`),
@@ -120,7 +140,7 @@ export function mount(host, params = {}) {
         h('th', { scope: 'col', class: 'lb-num lb-hints' }, h('span', { 'aria-hidden': 'true' }, 'Hints'), sr('Magnifiers used')))),
       h('tbody', {}, rows.map((r) => h('tr', { class: `${r.you ? 'is-you' : ''}${r.rank <= 3 ? ` is-top is-top${r.rank}` : ''}` },
         h('td', { class: 'lb-rank' }, h('span', { class: 'lb-rank-n' }, String(r.rank))),
-        h('th', { scope: 'row', class: 'lb-name' }, h('div', { class: 'lb-name-in' }, h('span', { class: 'lb-name-text' }, r.name), r.you ? h('span', { class: 'lb-you-tag' }, 'You') : null)),
+        h('th', { scope: 'row', class: 'lb-name' }, h('div', { class: 'lb-name-in' }, h('span', { class: 'lb-name-text' }, r.name), modeBadge(r.mode), r.you ? h('span', { class: 'lb-you-tag' }, 'You') : null, r.you ? deltaTag(delta) : null)),
         h('td', { class: 'lb-ok' }, overall
           ? h('span', { class: 'lb-count', title: `${r.correct} of ${r.closed} closed correctly` }, h('b', {}, String(r.correct)), `/${r.closed}`)
           : r.correct
@@ -130,7 +150,26 @@ export function mount(host, params = {}) {
         h('td', { class: 'lb-num lb-hints' }, String(r.hints))))));
   }
 
-  function youLine(id, data) {
+  // the 2 detectives above you and the 2 below, names only for those who show theirs
+  function around(near) {
+    if (!near || !near.rows?.length) return null;
+    return h('div', { class: 'lb-near' },
+      h('h2', { class: 'lb-near-title' }, 'Around you'),
+      h('ol', { class: 'lb-near-list' }, near.rows.map((r) => h('li', { class: `lb-near-row${r.you ? ' is-you' : ''}` },
+        h('span', { class: 'lb-near-rank' }, `#${r.rank}`),
+        h('span', { class: 'lb-near-name' }, h('span', { class: `lb-name-text${r.anon && !r.you ? ' is-anon' : ''}` }, r.you ? (state().profile?.name || 'You') : r.anon ? 'A detective' : r.name),
+          modeBadge(r.mode), r.you ? h('span', { class: 'lb-you-tag' }, 'You') : null),
+        h('span', { class: 'lb-near-time' }, fmtDuration(r.time))))));
+  }
+
+  function youLine(id, data, delta) {
+    const lines = youText(id, data, delta);
+    // the neighbourhood, when your own row is not already in the list above
+    if (data.near && !data.rows.some((r) => r.you)) lines.push(around(data.near));
+    return lines.filter(Boolean);
+  }
+
+  function youText(id, data, delta) {
     const settingsBtn = (text) => h('button', { class: 'lb-link', type: 'button', onclick: async () => { await openSettings(); if (!destroyed) load(); } }, text);
     if (!sharing()) return [h('p', {}, 'You are not sharing progress, so you are not on the roster. ', settingsBtn('Change in Settings'))];
     const y = data.you;
@@ -139,12 +178,12 @@ export function mount(host, params = {}) {
       if (y?.dev) return [h('p', {}, 'Cases played with dev tools are not ranked.')];
       return [h('p', {}, id === 'overall' ? 'Close a case to get on the roster.' : 'Close this case to get on the roster.')];
     }
-    if (!y.eligible) return [h('p', {}, y.dev ? 'Cases played with dev tools are not ranked.' : 'This file was closed too quickly to be ranked.')];
+    if (!y.eligible || y.rank == null) return [h('p', {}, y.dev ? 'Cases played with dev tools are not ranked.' : 'This file was closed too quickly to be ranked.')];
     if (!y.shown || !showingName()) {
-      return [h('p', {}, h('strong', {}, `You would be #${y.rank}${of}. `), 'Your name is hidden. ', settingsBtn('Show it in Settings'))];
+      return [h('p', {}, h('strong', {}, `You are #${y.rank}${of}. `), deltaTag(delta), delta ? ' ' : null, 'Your name is hidden, so others see you as "A detective". ', settingsBtn('Show it in Settings'))];
     }
-    if (!data.rows.some((r) => r.you)) return [h('p', {}, h('strong', {}, `You are #${y.rank}${of}.`), ` ${fmtDuration(y.time)}, ${y.hints} ${y.hints === 1 ? 'magnifier' : 'magnifiers'}.`)];
-    return [h('p', {}, h('strong', {}, `You are #${y.rank}${of}.`))];
+    if (!data.rows.some((r) => r.you)) return [h('p', {}, h('strong', {}, `You are #${y.rank}${of}.`), ` ${fmtDuration(y.time)}, ${y.hints} ${y.hints === 1 ? 'magnifier' : 'magnifiers'}. `, deltaTag(delta))];
+    return [h('p', {}, h('strong', {}, `You are #${y.rank}${of}. `), deltaTag(delta))];
   }
 
   select(active);

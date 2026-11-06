@@ -107,7 +107,7 @@ body[data-screen='office'] .screen-host { pointer-events: none; }
   .hub-file-title { grid-column: 1; font-size: 1.45rem; }
   .hub-file-count { grid-column: 2; grid-row: 1 / span 2; margin: 0; flex-direction: column; align-items: flex-end; gap: 4px; font-size: 0.82rem; text-align: right; }
   .hub-pins { max-width: 110px; justify-content: flex-end; }
-  .hub-panel .btn:not(.btn--primary):not(.hub-go) { flex: 1 1 96px; padding-inline: 0.5em; font-size: 0.92rem; }
+  .hub-panel .btn:not(.btn--primary):not(.hub-go) { flex: 1 1 120px; padding-inline: 0.5em; font-size: 0.92rem; }
   .hub-panel .btn--ghost { justify-content: center; color: var(--paper); }
 }
 

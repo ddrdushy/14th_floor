@@ -1,0 +1,90 @@
+/* Floor 14: phone-app touches (core/pwa.js, core/notice.js, core/chase-landscape.js) and the
+   leaderboard-update pieces (core/rank-watch.js, screens/leaderboard.js). Imported last in main.js. */
+
+/* ---------- tappable notices in the toast stack ---------- */
+.notice {
+  pointer-events: auto; display: flex; align-items: stretch;
+  background: var(--paper); color: var(--ink); box-shadow: var(--shadow-paper);
+  border-left: 4px solid var(--thread); border-radius: 0 var(--r-sm) var(--r-sm) 0;
+}
+.notice-main {
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 10px 6px 10px 12px;
+  border: 0; background: none; color: inherit; text-align: left; font: inherit; min-height: 52px;
+}
+button.notice-main { cursor: pointer; }
+button.notice-main:focus-visible { outline: 2px solid var(--thread); outline-offset: -2px; }
+.notice-ico {
+  flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--ink); color: var(--paper); font-size: 0.85rem; line-height: 1;
+}
+.notice-text { display: grid; gap: 2px; min-width: 0; }
+.notice-text strong { font-family: var(--font-display); font-weight: 800; font-size: 1.22rem; line-height: 1.05; letter-spacing: 0.01em; }
+.notice-text small { font-family: var(--font-doc); font-size: 0.84rem; color: var(--ink-soft); }
+.notice-x {
+  flex: none; width: 40px; border: 0; background: none; color: var(--ink-soft);
+  font-size: 1.4rem; line-height: 1; cursor: pointer; min-height: 0;
+}
+.notice-x:hover { color: var(--ink); }
+.notice--up { border-left-color: var(--ok); }
+.notice--up .notice-ico { background: var(--ok); color: #fff; }
+.notice--down .notice-ico { background: var(--thread); color: #fff; }
+.notice--update { border-left-color: var(--sodium); }
+.notice--update .notice-ico { background: var(--sodium); color: var(--ink); font-size: 1.1rem; }
+
+/* ---------- title menu: install ---------- */
+.ts-item--install .ts-item-label { color: var(--sodium); }
+
+/* ---------- iOS "Add to Home Screen" steps ---------- */
+.pwa-steps { margin: 4px 0 0; padding-left: 1.4em; display: grid; gap: 8px; }
+.pwa-share { display: inline-flex; vertical-align: -4px; color: #0a84ff; }
+
+/* ---------- chase: full screen, landscape ---------- */
+.chase-chip {
+  position: absolute; z-index: 85; left: 50%; transform: translateX(-50%);
+  bottom: calc(var(--pn-h, 0px) + env(safe-area-inset-bottom) + 18px);
+  display: flex; align-items: center; gap: 10px; padding: 8px 16px 8px 10px; min-height: 48px;
+  border: 1px solid rgba(232, 163, 61, 0.6); border-radius: 999px;
+  background: rgba(12, 18, 24, 0.94); color: var(--paper); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  font: inherit; text-align: left; white-space: nowrap; animation: chase-chip-in 0.3s var(--ease);
+}
+.chase-chip strong { display: block; font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; line-height: 1; }
+.chase-chip small { display: block; font-size: 0.74rem; color: var(--mist); }
+.chase-chip-ico {
+  flex: none; width: 30px; height: 20px; border: 2px solid var(--sodium); border-radius: 4px;
+  position: relative; animation: chase-chip-turn 2.4s var(--ease) infinite;
+}
+.chase-chip-ico::after { content: ''; position: absolute; right: 3px; top: 50%; width: 3px; height: 3px; margin-top: -1.5px; border-radius: 50%; background: var(--sodium); }
+@keyframes chase-chip-in { from { opacity: 0; transform: translate(-50%, 10px); } }
+@keyframes chase-chip-turn { 0%, 30% { transform: rotate(-90deg); } 60%, 100% { transform: rotate(0deg); } }
+@media (prefers-reduced-motion: reduce) { .chase-chip, .chase-chip-ico { animation: none; } }
+
+/* ---------- leaderboard: difficulty badge, movement, the neighbourhood ---------- */
+.lb-mode {
+  flex: none; font-family: var(--font-ui); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; line-height: 1; padding: 3px 5px 2px; border: 1px solid currentColor; border-radius: 2px;
+  color: var(--ink-soft); white-space: nowrap;
+}
+.lb-mode--story { color: var(--ok); }
+.lb-mode--hardboiled { color: var(--thread); background: rgba(179, 32, 42, 0.08); }
+
+.lb-delta { display: inline-flex; align-items: center; flex: none; font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; }
+.lb-delta.is-up { color: var(--ok); }
+.lb-delta.is-down { color: var(--thread); }
+.lb-table tr.is-you { background: rgba(179, 32, 42, 0.14); }
+.lb-table tr.is-you .lb-name-text { font-weight: 700; }
+
+.lb-near { margin-top: 14px; }
+.lb-near-title { margin: 0 0 6px; font-family: var(--font-ui); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+.lb-near-list { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.lb-near-row { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 8px 6px; border-bottom: 1px dashed rgba(29, 26, 22, 0.28); font-variant-numeric: tabular-nums; }
+.lb-near-row.is-you { background: rgba(179, 32, 42, 0.14); box-shadow: inset 4px 0 0 var(--thread); }
+.lb-near-rank { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; text-align: center; }
+.lb-near-name { display: flex; align-items: center; gap: 6px; min-width: 0; font-family: var(--font-doc); }
+.lb-near-name .is-anon { color: var(--ink-soft); font-style: italic; }
+.lb-near-time { font-family: var(--font-doc); font-size: 0.92rem; }
+
+@media (max-width: 520px) {
+  .lb-mode { font-size: 0.56rem; padding: 2px 4px 1px; }
+  .lb-near-row { grid-template-columns: 34px minmax(0, 1fr) auto; padding: 8px 3px; gap: 6px; }
+  .lb-near-name { flex-wrap: wrap; gap: 2px 6px; }
+}

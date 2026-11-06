@@ -7,6 +7,7 @@
 //   Players   search, sort, filters, CSV export; one player's file with play time, per-puzzle times,
 //             AI transcript and timeline                                 GET /api/admin/players, /player/:id
 //   AI        the AI games' log, latency, outcomes and a model test bench (./ai-tab.js)
+//   Theories  who players think the Chairman is, and why (./theories-tab.js)  GET /api/admin/chairman
 //   Voices    src/admin/voices.js, when it exists (import.meta.glob), mounted into #voices
 import '@fontsource/big-shoulders-display/800';
 import '@fontsource/archivo/400';
@@ -20,6 +21,7 @@ import {
 import { lineChart, barChart } from './charts.js';
 import { renderCasesTab } from './cases-tab.js';
 import { renderAiTab, renderTranscript } from './ai-tab.js';
+import { renderTheoriesTab } from './theories-tab.js';
 
 export { h, fmtDuration };
 
@@ -130,7 +132,7 @@ function cleanup() {
 let tabHandles = {};
 const ui = {};
 let withDev = store.get(DEV_KEY, localStorage) === '1';
-const TABS = [['overview', 'Overview'], ['cases', 'Cases'], ['players', 'Players'], ['ai', 'AI'], ['voices', 'Voices']];
+const TABS = [['overview', 'Overview'], ['cases', 'Cases'], ['players', 'Players'], ['ai', 'AI'], ['theories', 'Theories'], ['voices', 'Voices']];
 const ctx = { api, explain, stamp: () => stamp(), withDev: () => withDev };
 
 function showApp() {
@@ -166,12 +168,12 @@ function showApp() {
   route();
 }
 
-const loaded = { overview: null, cases: null, players: null, ai: null, voices: null };
+const loaded = { overview: null, cases: null, players: null, ai: null, theories: null, voices: null };
 function route() {
   const hash = location.hash.replace(/^#/, '') || 'overview';
   const [view, rawArg] = hash.split('/');
   const arg = rawArg ? decodeURIComponent(rawArg) : '';
-  const name = ['overview', 'cases', 'players', 'player', 'ai', 'voices'].includes(view) ? view : 'overview';
+  const name = ['overview', 'cases', 'players', 'player', 'ai', 'theories', 'voices'].includes(view) ? view : 'overview';
   const tab = name === 'player' ? 'players' : name;
   for (const [id] of TABS) ui[id].hidden = tab !== id;
   ui.nav.forEach((a) => (a.dataset.view === tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
@@ -180,6 +182,7 @@ function route() {
   if (name === 'players') showPlayers();
   if (name === 'player' && arg) showPlayer(arg);
   if (tab === 'ai' && !loaded.ai) showAi();
+  if (tab === 'theories' && !loaded.theories) { loaded.theories = 'yes'; swapHandle('theories', renderTheoriesTab(ui.theories, ctx)); }
   if (tab === 'voices' && !loaded.voices) loadVoices();
 }
 
@@ -188,6 +191,7 @@ function refresh() {
   loaded.players = null;
   loaded.cases = null;
   loaded.ai = null;
+  loaded.theories = null;
   route();
 }
 

@@ -193,4 +193,41 @@ export const sfx = {
   lift: () => { tone(1318, 0.5, { vol: 0.12 }); tone(1046, 0.7, { vol: 0.1, at: 0.25 }); },
   stamp: () => { tone(70, 0.18, { type: 'square', vol: 0.3 }); tone(120, 0.1, { type: 'triangle', vol: 0.2, at: 0.01 }); },
   alarm: () => [0, 0.3, 0.6].forEach((a) => tone(880, 0.22, { type: 'square', vol: 0.06, at: a })),
+  // a rubber stamp on a file card: a dull wooden knock with a papery slap on top (the solve stamp)
+  thud: () => {
+    tone(95, 0.16, { type: 'sine', vol: 0.32, glide: 55 });
+    tone(210, 0.06, { type: 'triangle', vol: 0.08, at: 0.005 });
+    if (!enabled() || !ensure()) return;
+    const t = ctx.currentTime;
+    const src = noise();
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 1400;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.22, t + 0.004);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
+    src.connect(lp).connect(g).connect(master);
+    src.start(t);
+    src.stop(t + 0.12);
+  },
+  // promotion: a short muted-brass rise, minor to major
+  fanfare: () => {
+    [[220, 0], [277, 0.12], [330, 0.24]].forEach(([f, at]) => tone(f, 0.32, { type: 'sawtooth', vol: 0.035, at, attack: 0.02 }));
+    [440, 554, 659].forEach((f) => tone(f, 1.2, { type: 'triangle', vol: 0.07, at: 0.4, attack: 0.03 }));
+    tone(110, 1.3, { type: 'sine', vol: 0.12, at: 0.4, attack: 0.03 });
+  },
 };
+
+// Cue listeners: core/feel.js turns a game's "wrong" cue (sfx.bad, sfx.alarm) into a buzz on phones,
+// without touching any game. Listeners hear every cue by name, even with the sound switched off.
+const cueListeners = new Set();
+/** Subscribe to sound cues by name ('bad', 'good', 'solve', ...). Returns an unsubscribe function. */
+export const onCue = (fn) => (cueListeners.add(fn), () => cueListeners.delete(fn));
+for (const name of Object.keys(sfx)) {
+  const play = sfx[name];
+  sfx[name] = (...args) => {
+    cueListeners.forEach((fn) => { try { fn(name); } catch { /* a listener never breaks a sound */ } });
+    return play(...args);
+  };
+}

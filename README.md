@@ -22,7 +22,8 @@ Requires Node 20+. If you copied `node_modules` from another machine, delete it 
 | `/?dev&screen=puzzle&case=case02&level=c2_03` | Jump to a puzzle in another case |
 | `/?screen=opening&case=side01` | Play a case's opening cinematic (opens the case) |
 | `/?dev&screen=lab&game=sudoku` | Puzzle lab: try any mini game on its own |
-| `/?screen=office`, `map`, `board`, `deduce`, `archive` | Jump to a screen |
+| `/?screen=office`, `map`, `board`, `deduce`, `archive`, `sinar` | Jump to a screen (`sinar` is the Sinar File) |
+| `/?screen=casefile&case=case03` | The case file reader for one case (needs that case started) |
 
 ## How it fits together
 

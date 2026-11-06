@@ -9,6 +9,8 @@ import { avatarSvg } from '../core/avatar.js';
 import { sfx, startRain } from '../core/audio.js';
 import { app } from '../core/app.js';
 import '../styles/cases.css';
+import { fileOpen } from '../data/chairman.js';
+import { checkReturn, openStorySoFar } from '../core/casebook.js';
 
 export function mount(host) {
   const s = state();
@@ -62,6 +64,8 @@ export function mount(host) {
   buttons.push(
     h('button', { class: 'btn nav-dup', onclick: () => go('board', { caseId: mainId, back: 'office' }) }, 'Case board'),
     h('button', { class: 'btn', onclick: () => go('archive') }, 'Case archive'),
+    fileOpen(s) ? h('button', { class: 'btn', onclick: () => go('sinar', { back: 'office' }) }, 'The Sinar File') : null,
+    h('button', { class: 'btn', onclick: () => openStorySoFar() }, 'Story so far'),
     h('button', { class: 'btn', onclick: () => go('leaderboard', { back: 'office' }) }, 'Leaderboard'),
     h('button', { class: 'btn btn--ghost', onclick: () => go('title') }, 'Title screen'));
   // the case file on top of the panel: which case, and how much of it is pinned up so far
@@ -107,6 +111,10 @@ export function mount(host) {
     });
     app.scene.ringPhone(true);
   }
+
+  // back after three days or more with a case open: offer the story so far, once
+  if (!ringing) checkReturn();
+  else { s.lastSeenAt = Date.now(); }
 
   return { destroy: () => app.scene.onPick(null) };
 }

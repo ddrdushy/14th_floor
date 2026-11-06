@@ -14,6 +14,9 @@ export const SCREEN_MUSIC = {
   map: 'office',
   board: 'office',
   archive: 'office',
+  casefile: 'office',
+  sinar: 'chairman', // the Sinar File
+  replay: 'intro', // "Watch again" from the case file
   puzzle: 'puzzle',
   lab: 'puzzle',
   deduce: 'deduction',
@@ -49,7 +52,7 @@ export async function go(name, params = {}) {
     const mod = await screens[name]();
     // start the crossfade while the old screen fades out
     // a case's own screens play its theme (falls back to the office track until the file exists)
-    const caseScreens = name === 'map' || name === 'board' || name === 'archive';
+    const caseScreens = name === 'map' || name === 'board' || name === 'archive' || name === 'casefile';
     const cue = caseScreens && params.caseId ? caseTheme(params.caseId) : SCREEN_MUSIC[name];
     if (cue) app.music?.play(cue);
     document.body.dataset.screen = name;

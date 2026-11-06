@@ -18,7 +18,10 @@ function fresh() {
     solvedTotal: 0,
     cases: {},
     flags: {},
-    settings: { sound: true, music: true, musicVolume: 0.6, sfxVolume: 0.8 },
+    // difficulty: 'story' | 'detective' | 'hardboiled' (core/difficulty.js; the leaderboard reads it too)
+    settings: { sound: true, music: true, musicVolume: 0.6, sfxVolume: 0.8, difficulty: 'detective', vibration: true },
+    // the one-time "how hard?" question on a new profile (core/settings.js askDifficulty)
+    difficultyAsked: false,
     // tutorials: game ids whose "How to play" card was dismissed, and the once-only case explainer
     seenHowTo: {},
     seenLoop: false,
@@ -58,6 +61,9 @@ function load() {
     out.profile = withProfileDefaults(out.profile);
     if (!out.seenHowTo || typeof out.seenHowTo !== 'object' || Array.isArray(out.seenHowTo)) out.seenHowTo = {};
     out.seenLoop = out.seenLoop === true;
+    // saves from before difficulty modes: a detective already at work plays Detective and is never asked
+    if (typeof parsed.difficultyAsked !== 'boolean') out.difficultyAsked = !!parsed.profile;
+    if (!['story', 'detective', 'hardboiled'].includes(out.settings.difficulty)) out.settings.difficulty = 'detective';
     return out;
   } catch {
     return fresh();
@@ -82,6 +88,8 @@ export function replaceSave(next) {
   const out = { ...fresh(), ...next, settings: { ...fresh().settings, ...(next.settings || {}), ...keep } };
   out.profile = withProfileDefaults(out.profile);
   if (!out.seenHowTo || typeof out.seenHowTo !== 'object' || Array.isArray(out.seenHowTo)) out.seenHowTo = {};
+  // a detective with progress elsewhere is never asked how hard; neither is one this device already asked
+  out.difficultyAsked = next.difficultyAsked === true || data.difficultyAsked === true || (typeof next.difficultyAsked !== 'boolean' && !!out.profile);
   data = out;
   try { localStorage.setItem(KEY, JSON.stringify(data)); } catch { /* session only */ }
 }

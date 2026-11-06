@@ -407,3 +407,6 @@ a.a-btn { color: inherit; text-decoration: none; }
   .tbl--log td.r { text-align: left; }
   .tbl--log td.r .phase { display: inline; margin-left: 6px; }
 }
+
+/* Theories tab: reasons wrap */
+.tbl td.wrap { white-space: normal; min-width: 220px; max-width: 520px; }

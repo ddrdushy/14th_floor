@@ -2,7 +2,7 @@
 // that clears as you progress. Solving it reveals the hidden item and pins the evidence.
 import { h, toast, fmtTime, isDev } from '../core/ui.js';
 import { go } from '../core/router.js';
-import { state, save } from '../core/state.js';
+import { state, save, onChange } from '../core/state.js';
 import { CASES, getCaseState, findLevel, resolveCaseId, suspectsRevealedBy, pinnedSuspectIds, pinSuspect } from '../data/cases.js';
 import { GAMES, CATEGORY_OF } from '../games/registry.js';
 import { rngFor, mulberry32, hashStr } from '../core/rng.js';
@@ -14,6 +14,9 @@ import { specialtyOf, avatarSvg } from '../core/avatar.js';
 import { backButton, icon } from '../core/nav.js';
 import { openLightbox, openEvidenceFile, evIcon } from '../core/evidence-viewer.js';
 import { resolveHowTo, showGameHowTo, showLoopTutorial, needsLoopTutorial, markLoopSeen, seenHowTo, markHowToSeen, closeHowTo, howToButton, goalLine, isHowToOpen } from '../core/howto.js';
+import { adjust, currentMode, isMode, modeLabel, syncHints, MODE_INFO } from '../core/difficulty.js';
+import { haptic, watchWrongMoves, stampSecured, flyToBoard, showRankUp, closeRankUp, momentumLine, cleanStreak, rankAt, announce } from '../core/feel.js';
+import { askDifficulty } from '../core/settings.js';
 
 function fogLayer(canvas, seedKey, hotspot) {
   const g = canvas.getContext('2d');
@@ -86,7 +89,20 @@ export async function mount(host, { caseId, levelId }) {
   const level = findLevel(c, cs, levelId);
   if (level) app.music?.play?.(level.game === 'interrogation' ? 'interrogation' : puzzleCue(levelId));
   if (!level) { go('map', { caseId }); return {}; }
+  // a new profile is asked once how hard it wants the puzzles (core/settings.js); older saves never are
+  if (!state().difficultyAsked && !cs.solved[levelId]) await askDifficulty();
   const profileName = state().profile?.name || 'detective';
+  // a puzzle under way (its game state is saved, or a magnifier was used) keeps the mode it was started
+  // in, so a resumed board always matches its params; one started before modes existed was Detective.
+  // A puzzle only opened and left takes the current mode.
+  const started = cs.inprogress[levelId];
+  const underway = !!started && (started.game != null || started.hinted > 0);
+  const mode = underway ? (isMode(started.mode) ? started.mode : 'detective') : currentMode();
+  cs.inprogress[levelId] = { ...(started || {}), mode };
+  syncHints(cs, currentMode(), c.hints);
+  save();
+  const params = adjust(level.game, level.params, mode, level.variant);
+  const modeBadge = (extra = '') => h('span', { class: `mode-badge${extra}`, 'data-mode': mode, title: `${modeLabel(mode)} mode. ${MODE_INFO[mode].short}` }, modeLabel(mode));
   const saved = cs.inprogress[levelId] || {};
   let elapsed = saved.time || 0;
   let solved = false;
@@ -117,8 +133,9 @@ export async function mount(host, { caseId, levelId }) {
   // game column
   const sheet = h('div', { class: 'game-sheet' });
   const mod = await GAMES[level.game]();
-  const ht = resolveHowTo(mod, { params: level.params, variant: level.variant });
-  sheet.append(h('h2', {}, mod.meta.name), h('p', { class: 'game-brief' }, `${CATEGORY_OF[level.game]} puzzle.`));
+  const ht = resolveHowTo(mod, { params, variant: level.variant });
+  sheet.append(h('h2', {}, mod.meta.name),
+    h('div', { class: 'pz-mode-row' }, h('p', { class: 'game-brief' }, `${CATEGORY_OF[level.game]} puzzle.`), modeBadge()));
   // with a howTo the old rules paragraph is hidden (styles/howto.css) and a one-line goal replaces it
   if (ht) { sheet.classList.add('has-howto'); sheet.append(goalLine(ht, () => openHowTo())); }
   const gameEl = h('div', {});
@@ -166,7 +183,7 @@ export async function mount(host, { caseId, levelId }) {
   const ctx = {
     caseId,
     levelId,
-    params: level.params,
+    params,
     variant: level.variant,
     rng: rngFor(caseId, levelId, profileName),
     saved: saved.game,
@@ -180,6 +197,9 @@ export async function mount(host, { caseId, levelId }) {
     onSolved: () => finish(),
   };
   const game = mod.mount(gameEl, ctx) || {};
+  // a game's wrong-move cue also buzzes on phones; magnifier count follows a mode change in Settings
+  const stopWrong = watchWrongMoves();
+  const offChange = onChange(() => { hintCount.textContent = String(cs.hints); });
 
   // first puzzle ever: how a case works; first time with this game: its rules
   (async () => {
@@ -215,20 +235,26 @@ export async function mount(host, { caseId, levelId }) {
     cs.inprogress[levelId] = { ...(cs.inprogress[levelId] || {}), hinted: (cs.inprogress[levelId]?.hinted || 0) + 1 };
     save();
     hintCount.textContent = String(cs.hints);
+    haptic('hint');
     toast(msg, 5200);
   }
 
+  let promoted = null;
   async function finish() {
     if (solved) return;
     solved = true;
     clearInterval(tick);
     sfx.solve();
+    haptic('solve');
     ctx.onProgress(1);
     // record first, so the exhibit is never lost if the player leaves during the reveal
     if (!cs.solved[levelId]) {
-      cs.solved[levelId] = { time: elapsed, hints: cs.inprogress[levelId]?.hinted || 0, at: Date.now() };
+      const before = rankAt(state().solvedTotal || 0).name;
+      cs.solved[levelId] = { time: elapsed, hints: cs.inprogress[levelId]?.hinted || 0, at: Date.now(), mode };
       if (!cs.evidence.includes(levelId)) cs.evidence.push(levelId);
       state().solvedTotal++;
+      const after = rankAt(state().solvedTotal);
+      if (after.name !== before) promoted = after;
     }
     delete cs.inprogress[levelId];
     save();
@@ -264,10 +290,12 @@ export async function mount(host, { caseId, levelId }) {
       h('span', { class: 'pzr-stamp', 'aria-hidden': 'true' }, 'Pinned'),
       h('h3', {}, ev.title),
       h('p', {}, ev.text),
-      h('p', { class: 'pzr-time' }, `Solved in ${fmtTime(elapsed)}.`));
+      h('p', { class: 'pzr-time' }, `Solved in ${fmtTime(elapsed)}.`, modeBadge()));
+    const momentum = h('p', { class: 'pzr-momentum', hidden: true });
+    const streak = h('p', { class: 'pzr-streak', hidden: true });
     const reveal = h('div', { class: 'pz-reveal' },
       h('div', { class: 'pzr-photo' }, photo, fullBtn),
-      h('div', { class: 'pzr-side' }, h('p', { class: 'pzr-kicker' }, `Exhibit ${ev.tag} found`), card, status, actions));
+      h('div', { class: 'pzr-side' }, h('p', { class: 'pzr-kicker' }, `Exhibit ${ev.tag} found`), card, momentum, streak, status, actions));
     root.classList.add('is-revealed');
     root.append(reveal);
     reveal.scrollTop = 0;
@@ -279,12 +307,24 @@ export async function mount(host, { caseId, levelId }) {
     // CSS-driven ring so it shows even if animation frames are slow
     hotspot.classList.add('is-revealed');
 
+    // the rubber stamp lands, then how far the case has come, then a promotion if this solve earned one
+    stampSecured(card, { sub: `No. ${ev.tag}` }).then(() => {
+      if (destroyed) return;
+      const line = momentumLine(c, cs, levelId);
+      const run = cleanStreak();
+      if (line) { momentum.textContent = line; momentum.hidden = false; }
+      if (run >= 2) { streak.textContent = `Clean streak: ${run} exhibits in a row without a magnifier.`; streak.hidden = false; }
+      announce(`Exhibit ${ev.tag} secured. ${line}`);
+      if (promoted) setTimeout(() => { if (!destroyed) showRankUp(promoted); }, 350);
+    });
+
     // anyone this exhibit makes a person of interest, one at a time, after the exhibit is pinned
     const known = new Set(pinnedSuspectIds(c, cs));
     const newcomers = suspectsRevealedBy(c, levelId).filter((s) => !known.has(s.id));
 
     function pin() {
       sfx.pin();
+      flyToBoard(card, root);
       card.classList.add('is-pinned');
       status.textContent = 'Pinned to the case board. Take your time.';
       nextPerson();
@@ -339,6 +379,9 @@ export async function mount(host, { caseId, levelId }) {
     destroy() {
       destroyed = true;
       closeHowTo();
+      closeRankUp();
+      stopWrong();
+      offChange();
       clearInterval(tick);
       window.removeEventListener('resize', onResize);
       game.destroy?.();

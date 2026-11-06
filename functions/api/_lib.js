@@ -2,7 +2,7 @@
 // (created on first use, no SQL console steps), admin auth, and the per-case verdict rules.
 // This file exports no onRequest handler, so Pages does not turn it into a route.
 
-export const SCHEMA_VERSION = 5;
+export const SCHEMA_VERSION = 7;
 
 // Cases in play order. Mirrors CASE_ORDER in src/data/cases.js; a case missing here still works,
 // it is just treated as "after" the known ones when working out how far a player has got.
@@ -225,6 +225,28 @@ const SCHEMA = [
   `CREATE INDEX IF NOT EXISTS ai_log_level ON ai_log (case_id, level_id, at)`,
   `CREATE INDEX IF NOT EXISTS ai_log_flag ON ai_log (flag)`,
   `CREATE INDEX IF NOT EXISTS solves_at ON solves (at)`,
+  // "Who is the Chairman?": each player's current theory, and every change to it (api/chairman/guess.js)
+  `CREATE TABLE IF NOT EXISTS chairman_guesses (
+    player_id TEXT PRIMARY KEY,
+    who TEXT NOT NULL,
+    label TEXT,
+    why TEXT,
+    after TEXT,
+    changes INTEGER NOT NULL DEFAULT 1,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+  )`,
+  `CREATE INDEX IF NOT EXISTS chairman_guesses_who ON chairman_guesses (who)`,
+  `CREATE TABLE IF NOT EXISTS chairman_history (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    player_id TEXT NOT NULL,
+    who TEXT NOT NULL,
+    label TEXT,
+    why TEXT,
+    after TEXT,
+    at INTEGER NOT NULL
+  )`,
+  `CREATE INDEX IF NOT EXISTS chairman_history_at ON chairman_history (at)`,
 ];
 
 // Columns added after a table first shipped: [version, sql]. "duplicate column" errors are ignored,
@@ -235,6 +257,8 @@ const ALTERS = [
   [3, `ALTER TABLE saves ADD COLUMN pin_hash TEXT`],
   [3, `ALTER TABLE saves ADD COLUMN pin_fails INTEGER NOT NULL DEFAULT 0`],
   [3, `ALTER TABLE saves ADD COLUMN locked_until INTEGER NOT NULL DEFAULT 0`],
+  // difficulty the player last played on: 'story' | 'detective' | 'hardboiled' (a leaderboard label only)
+  [7, `ALTER TABLE players ADD COLUMN difficulty TEXT`],
 ];
 
 let migrated = null; // one schema pass per isolate

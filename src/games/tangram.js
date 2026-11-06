@@ -2,6 +2,9 @@
 // Pieces turn in 45 degree steps, the parallelogram can be flipped, and every drop snaps a corner
 // to the grid. Coverage is checked by sampling the area: 97% of the silhouette must be covered.
 // Each silhouette is stored as a known solution, so every one is guaranteed solvable.
+//
+// optional params (difficulty modes, core/difficulty.js): cover 0.9..0.99, the share of the silhouette
+// that must be covered (default 0.97); spill 0.01..0.08, the share allowed outside it (default 0.03).
 import { h } from '../core/ui.js';
 import { shuffle, mulberry32 } from '../core/rng.js';
 import { sfx } from '../core/audio.js';
@@ -60,6 +63,8 @@ export function mount(el, ctx) {
   const rounds = Math.max(1, Math.min(SHAPES.length, params.rounds || 3));
   const order = params.shapes ? params.shapes.map((id) => SHAPES.find((s) => s.id === id)).filter(Boolean) : shuffle(rng, SHAPES).slice(0, rounds);
   const trayRng = rng();
+  const coverNeed = Number.isFinite(Number(params.cover)) ? Math.max(0.9, Math.min(0.99, Number(params.cover))) : 0.97;
+  const spillMax = Number.isFinite(Number(params.spill)) ? Math.max(0.01, Math.min(0.08, Number(params.spill))) : 0.03;
   const portrait = (el.clientWidth || el.parentElement?.clientWidth || 800) < 540;
   const BW = portrait ? 10 : 18, BH = portrait ? 17 : 10;
   const targetBox = portrait ? { x: 0, y: 0.5, w: 10, h: 8 } : { x: 0, y: 0, w: 10, h: 10 };
@@ -168,7 +173,7 @@ export function mount(el, ctx) {
     coverage = m.coverage;
     covEl.textContent = `Silhouette covered: ${Math.floor(m.coverage * 100)}%`;
     ctx.onProgress(Math.min(0.99, (round + Math.min(1, m.coverage) * 0.9) / rounds));
-    if (m.coverage >= 0.97 && m.spill <= 0.03 && !done) {
+    if (m.coverage >= coverNeed && m.spill <= spillMax && !done) {
       sfx.good();
       if (round >= rounds - 1) {
         done = true;

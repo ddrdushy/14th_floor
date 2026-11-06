@@ -9,3 +9,10 @@
   Referrer-Policy: no-referrer
 /api/*
   X-Robots-Tag: noindex
+# service worker (built from src/pwa/sw.template.js): always checked for a new version
+/sw.js
+  Cache-Control: no-cache
+  Service-Worker-Allowed: /
+/manifest.webmanifest
+  Content-Type: application/manifest+json
+  Cache-Control: public, max-age=3600

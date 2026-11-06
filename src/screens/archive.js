@@ -5,6 +5,7 @@ import { backButton } from '../core/nav.js';
 import { state, save } from '../core/state.js';
 import { CASES, CASE_ORDER, caseHeading } from '../data/cases.js';
 import { app } from '../core/app.js';
+import { fileOpen } from '../data/chairman.js';
 
 const listNames = (names) => (names.length < 3 ? names.join(' and ') : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`);
 
@@ -22,15 +23,21 @@ export function mount(host) {
         h('h3', {}, caseHeading(c)),
         h('p', {}, closed ? `Closed. Charged: ${listNames(names)}.${extra.length ? ` ${extra.map((o) => o.label).join('. ')}.` : ''}` : `Open. ${Object.keys(cs.solved).length} exhibits so far.`),
         cs.reopened ? h('p', {}, `Reopened ${cs.reopened} ${cs.reopened === 1 ? 'time' : 'times'}.`) : null),
-      closed
-        ? h('button', { class: 'btn btn--paper', onclick: () => reopen(id) }, 'Reopen the file')
-        : h('button', { class: 'btn btn--primary', onclick: () => go('map', { caseId: id }) }, 'Continue'));
+      h('div', { class: 'archive-actions' },
+        h('button', { class: 'btn btn--paper', onclick: () => go('casefile', { caseId: id, back: 'archive' }) }, 'Read the file'),
+        closed
+          ? h('button', { class: 'btn btn--paper', onclick: () => reopen(id) }, 'Reopen the file')
+          : h('button', { class: 'btn btn--primary', onclick: () => go('map', { caseId: id }) }, 'Continue')));
   });
   host.append(h('section', { class: 'screen' },
     h('header', { class: 'topbar' },
       backButton('Office', () => go('office')),
       h('div', { class: 'topbar-title' }, h('strong', {}, 'Case archive'), h('span', {}, 'Every file you have touched.'))),
-    h('div', { class: 'scroll', style: { flex: 1 } }, h('div', { class: 'archive-list' }, items.length ? items : h('p', { class: 'doc' }, 'No files yet.')))));
+    h('div', { class: 'scroll', style: { flex: 1 } }, h('div', { class: 'archive-list' },
+      fileOpen(s) ? h('article', { class: 'archive-item archive-sinar' },
+        h('div', {}, h('h3', {}, 'The Sinar File'), h('p', {}, 'Every thread that leads to the top of Sinar Holdings, from every case.')),
+        h('div', { class: 'archive-actions' }, h('button', { class: 'btn btn--primary', onclick: () => go('sinar', { back: 'archive' }) }, 'Open it'))) : null,
+      items.length ? items : h('p', { class: 'doc' }, 'No files yet.')))));
 
   async function reopen(id) {
     const ok = await modal({

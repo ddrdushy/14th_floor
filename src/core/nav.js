@@ -8,7 +8,7 @@ import { openSettings } from './settings.js';
 import { CASES, levelStatus, resolveCaseId } from '../data/cases.js';
 
 // screens that get the bar; cinematics, the title and detective creation stay full screen
-const NAV_SCREENS = new Set(['office', 'map', 'puzzle', 'board', 'deduce', 'archive', 'closed', 'lab']);
+const NAV_SCREENS = new Set(['office', 'map', 'puzzle', 'board', 'deduce', 'archive', 'closed', 'lab', 'casefile', 'sinar']);
 
 const ICONS = {
   office: '<path d="M4 20h16M6 20V9l6-4 6 4v11M10 20v-5h4v5" />',

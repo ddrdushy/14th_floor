@@ -1,12 +1,31 @@
-// Settings panel: music on/off and volume, sound effects on/off and volume.
+// Settings panel: difficulty and vibration, music on/off and volume, sound effects on/off and volume.
 // Opened from the title menu and from the global gear button (main.js).
 import { h } from './ui.js';
-import { state, save } from './state.js';
+import { state, save, onChange } from './state.js';
 import { app } from './app.js';
 import { sfx, startRain, stopRain, applySfxVolume, unlock } from './audio.js';
 import { showLoopTutorial } from './howto.js';
+import { MODES, MODE_INFO, currentMode, syncHints } from './difficulty.js';
+import { haptic, canVibrate } from './feel.js';
+import '../styles/feel.css';
+import { CASES } from '../data/cases.js';
 
 let openPanel = null;
+
+// A case opened while Story or Hardboiled is chosen gets its magnifier budget on the next save, so the
+// map and the office show the right count before any puzzle is opened. syncHints is a no-op once in step.
+let syncing = false;
+onChange((data) => {
+  if (syncing) return;
+  syncing = true;
+  try {
+    let changed = false;
+    for (const [id, cs] of Object.entries(data.cases || {})) changed = syncHints(cs, currentMode(), CASES[id]?.hints) || changed;
+    if (changed) save();
+  } finally {
+    syncing = false;
+  }
+});
 
 function toggleRow(label, id, get, set) {
   const sw = h('button', { class: 'set-switch', role: 'switch', id, 'aria-checked': String(get()), onclick: () => {
@@ -35,6 +54,77 @@ function paceRow(s) {
     btns.forEach((b, i) => b.setAttribute('aria-pressed', String(opts[i][0] === cur())));
   } }, label));
   return h('div', { class: 'set-row' }, h('span', { id: 'set-pace-label' }, 'Music pace'), h('div', { class: 'set-seg', role: 'group', 'aria-labelledby': 'set-pace-label' }, btns));
+}
+
+// Difficulty (core/difficulty.js): state().settings.difficulty, read by the puzzle screen and the leaderboard.
+// A change counts from the next puzzle opened; magnifiers of open cases move to the new budget at once.
+export function setDifficulty(mode) {
+  if (!MODES.includes(mode)) return;
+  const s = state();
+  s.settings.difficulty = mode;
+  s.difficultyAsked = true;
+  for (const [id, cs] of Object.entries(s.cases || {})) syncHints(cs, mode, CASES[id]?.hints);
+  save();
+}
+
+function difficultyRow() {
+  const desc = h('p', { class: 'set-mode-desc', id: 'set-mode-desc', 'aria-live': 'polite' }, MODE_INFO[currentMode()].long);
+  const btns = MODES.map((m) => h('button', { type: 'button', class: 'set-seg-btn', 'data-mode': m, 'aria-pressed': String(currentMode() === m), 'aria-describedby': 'set-mode-desc', onclick: () => {
+    setDifficulty(m);
+    sfx.click();
+    btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === currentMode())));
+    desc.textContent = MODE_INFO[currentMode()].long;
+  } }, MODE_INFO[m].label));
+  return h('div', { class: 'set-row set-row--stack' },
+    h('span', { id: 'set-mode-label' }, 'Difficulty'),
+    h('div', { class: 'set-seg', role: 'group', 'aria-labelledby': 'set-mode-label' }, btns),
+    desc,
+    h('p', { class: 'set-mode-note' }, 'Counts from the next puzzle you start. A puzzle already under way keeps its mode.'));
+}
+
+function gameGroup(s) {
+  const vib = toggleRow('Vibration', 'set-vibration', () => s.vibration !== false, (v) => {
+    s.vibration = v;
+    save();
+    if (v) haptic('hint');
+  });
+  return h('section', { class: 'set-group' },
+    h('h3', {}, 'Game'),
+    difficultyRow(),
+    vib,
+    canVibrate() ? null : h('p', { class: 'set-help' }, 'This device or browser cannot vibrate, so this does nothing here.'));
+}
+
+/**
+ * The one-time question on a new profile: how hard? Resolves with the chosen mode. Escape or a tap
+ * outside keeps Detective. Never shown to a save that already had a detective (state.js).
+ */
+export function askDifficulty() {
+  return new Promise((resolve) => {
+    const overlay = document.getElementById('overlay');
+    const before = document.activeElement;
+    const finish = (mode) => {
+      document.removeEventListener('keydown', onKey);
+      backdrop.remove();
+      setDifficulty(MODES.includes(mode) ? mode : 'detective');
+      before?.focus?.();
+      resolve(currentMode());
+    };
+    const onKey = (e) => { if (e.key === 'Escape') finish('detective'); };
+    const opts = MODES.map((m) => h('li', {}, h('button', { class: 'diff-ask-opt', type: 'button', 'data-mode': m, onclick: () => { sfx.click(); finish(m); } },
+      h('span', { class: 'mode-badge', 'data-mode': m, 'aria-hidden': 'true' }, m === 'detective' ? 'As written' : m === 'story' ? 'Easier' : 'Harder'),
+      h('b', {}, MODE_INFO[m].label),
+      h('span', { class: 'diff-ask-desc' }, MODE_INFO[m].short))));
+    const box = h('div', { class: 'diff-ask', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'diff-ask-title', 'aria-describedby': 'diff-ask-lede' },
+      h('h2', { id: 'diff-ask-title' }, 'How do you like your cases?'),
+      h('p', { class: 'diff-ask-lede', id: 'diff-ask-lede' }, 'Pick how hard the puzzles push back. The story is the same in every mode.'),
+      h('ul', { class: 'diff-ask-list' }, opts),
+      h('p', { class: 'diff-ask-foot' }, 'You can change this any time in Settings.'));
+    const backdrop = h('div', { class: 'modal-backdrop diff-ask-backdrop', onclick: (e) => { if (e.target === backdrop) finish('detective'); } }, box);
+    overlay.append(backdrop);
+    document.addEventListener('keydown', onKey);
+    box.querySelector('[data-mode="detective"]')?.focus();
+  });
 }
 
 // Leaderboard and privacy (read by core/telemetry.js through the save):
@@ -95,6 +185,7 @@ export function openSettings() {
       h('header', { class: 'set-head' },
         h('h2', { id: 'set-title' }, 'Settings'),
         h('button', { class: 'set-close', 'aria-label': 'Close settings', onclick: close }, h('span', { 'aria-hidden': 'true' }, '×'))),
+      gameGroup(s),
       h('section', { class: 'set-group' },
         h('h3', {}, 'Music'),
         toggleRow('Music', 'set-music', () => s.music !== false, (v) => app.music.setEnabled(v)),

@@ -1,5 +1,8 @@
 // Escape route: trace a path from the stairwell to an exit without entering any camera's view.
 // Camera cones are hidden until a camera catches you.
+//
+// optional param (difficulty modes, core/difficulty.js): showCameras 0..n, how many camera views are
+// marked on the plan from the start (default 0). The map, cameras and the one safe exit never change.
 import { h } from '../core/ui.js';
 import { sfx } from '../core/audio.js';
 import { put, svg, text, rect, grid, arrow, ring, tap, chip, badge, C } from '../core/howto-kit.js';
@@ -38,6 +41,8 @@ export function mount(el, ctx) {
   const H = map.length, W = map[0].length;
   const cones = params.cameras.map((c) => visibleCells(map, c));
   const revealed = new Set(saved?.revealed || []);
+  const shown = Math.max(0, Math.min(params.cameras.length, Math.floor(Number(params.showCameras) || 0)));
+  for (let i = 0; i < shown; i++) revealed.add(i);
   let caught = saved?.caught || 0;
   let start;
   map.forEach((row, y) => [...row].forEach((ch, x) => { if (ch === 'S') start = [x, y]; }));

@@ -58,6 +58,10 @@ const uuid = () => {
 const settings = () => state().settings || {};
 export const sharing = () => settings().shareProgress !== false;
 export const showingName = () => settings().showOnBoard === true;
+// Difficulty mode, set by the difficulty settings: 'story' | 'detective' | 'hardboiled' (default
+// 'detective'). Sent with session_start and profile_set; the leaderboard shows it as a label only.
+const DIFFICULTIES = ['story', 'detective', 'hardboiled'];
+export const difficulty = () => (DIFFICULTIES.includes(settings().difficulty) ? settings().difficulty : 'detective');
 const isDevSession = () => { try { return isDev(); } catch { return false; } };
 
 /**
@@ -156,9 +160,10 @@ function diff() {
   // name) is private: the owner's dashboard and the cloud save
   if (s.profile) {
     const show = showingName() && !!s.profile.name;
-    const key = `p:${show ? 1 : 0}:${s.profile.name || ''}`;
+    const mode = difficulty();
+    const key = `p:${show ? 1 : 0}:${mode}:${s.profile.name || ''}`;
     if (store.profileKey !== key) {
-      enqueue('profile_set', { data: { show, name: show ? s.profile.name : null, profile: s.profile.name || null } });
+      enqueue('profile_set', { data: { show, name: show ? s.profile.name : null, profile: s.profile.name || null, difficulty: mode } });
       store.profileKey = key;
     }
   }
@@ -288,15 +293,17 @@ export async function initTelemetry() {
     const had = s.playerId;
     playerId();
     if (!had && s.profile) save(); // keep the id in the save (additive field)
-    enqueue('session_start', { data: { dev: isDevSession(), v: VERSION, lang: (navigator.language || '').slice(0, 16) } });
+    enqueue('session_start', { data: { dev: isDevSession(), v: VERSION, lang: (navigator.language || '').slice(0, 16), difficulty: difficulty() } });
     diff();
     flush();
   } catch { /* the game never notices */ }
 }
 
 /**
- * The leaderboard for a case ('overall' for all cases). Resolves { ok, rows, total, you } or
- * { ok: false, reason: 'offline' | 'error' }. Sends anything queued first, so a case just closed shows up.
+ * The leaderboard for a case ('overall' for all cases). Resolves { ok, rows, total, named, you, near }
+ * or { ok: false, reason: 'offline' | 'error' }. Sends anything queued first, so a case just closed
+ * shows up. `near` (only while sharing) is { rank, total, rows } with the 2 players above and below
+ * you; rows without a name (`anon`) are players who keep theirs hidden. See functions/api/leaderboard.js.
  */
 export async function fetchLeaderboard(caseId = 'overall') {
   try {

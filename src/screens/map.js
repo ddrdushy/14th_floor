@@ -126,6 +126,7 @@ export function mount(host, { caseId, fresh = false } = {}) {
   const evBtn = evidenceFileButton(caseId);
   evBtn.classList.add('btn--paper');
   actions.push(evBtn);
+  actions.push(h('button', { class: 'btn btn--paper mf-read', type: 'button', onclick: () => go('casefile', { caseId, back: 'map' }) }, 'Read the file'));
 
   const fileToggle = h('button', { class: 'mf-toggle', type: 'button', 'aria-controls': 'map-file-more', onclick: () => setOpen(!open_) },
     h('span', { class: 'mf-toggle-label' }), h('span', { class: 'mf-toggle-ico', 'aria-hidden': 'true', html: chevron() }));

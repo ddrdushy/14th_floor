@@ -8,6 +8,9 @@ import {
 } from './_lib.js';
 
 const cleanId = (v) => (typeof v === 'string' && ID_RE.test(v) ? v : null);
+// difficulty mode (state().settings.difficulty in the game): a leaderboard label, never part of the ranking
+const DIFFICULTIES = new Set(['story', 'detective', 'hardboiled']);
+const cleanDifficulty = (v) => (typeof v === 'string' && DIFFICULTIES.has(v) ? v : null);
 
 function cleanEvent(e, now) {
   if (!e || typeof e !== 'object' || !EVENT_TYPES.has(e.type)) return null;
@@ -23,6 +26,7 @@ function cleanEvent(e, now) {
     case 'session_start':
       data = { dev: raw.dev === true, v: clampInt(raw.v, 0, 1000, 0) };
       if (typeof raw.lang === 'string') data.lang = raw.lang.slice(0, 16);
+      if (cleanDifficulty(raw.difficulty)) data.difficulty = raw.difficulty;
       break;
     case 'level_solved':
       data = { time: clampInt(raw.time, 0, LIMITS.levelSeconds), hints: clampInt(raw.hints, 0, LIMITS.levelHints) };
@@ -46,6 +50,7 @@ function cleanEvent(e, now) {
       const show = raw.show === true;
       // `profile` is the detective's own name, kept private (owner dashboard, cloud save); `name` is public
       data = { show, name: show ? cleanName(raw.name) : null, profile: cleanName(raw.profile) };
+      if (cleanDifficulty(raw.difficulty)) data.difficulty = raw.difficulty;
       break;
     }
     default:
@@ -128,6 +133,12 @@ export const onRequestPost = handler(async ({ request, env }) => {
       stmts.push(db.prepare(`UPDATE players SET detective_name = ?2, show_on_board = ?3, profile_name = COALESCE(?4, profile_name) WHERE id = ?1`)
         .bind(playerId, e.data.show ? e.data.name : null, e.data.show && e.data.name ? 1 : 0, e.data.profile));
     }
+  }
+  // the difficulty the player last played on (latest session_start or profile_set that names one)
+  const withMode = clean.filter((e) => (e.type === 'session_start' || e.type === 'profile_set') && e.data.difficulty);
+  if (withMode.length) {
+    const last = withMode.reduce((a, b) => (b.at >= a.at ? b : a));
+    stmts.push(db.prepare(`UPDATE players SET difficulty = ?2 WHERE id = ?1`).bind(playerId, last.data.difficulty));
   }
   // case totals come from the per-puzzle rows
   for (const caseId of touched) {

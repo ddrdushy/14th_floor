@@ -5,6 +5,7 @@ import { CASES, getCaseState, caseHeading, progress, resolveCaseId } from '../da
 import { sfx } from '../core/audio.js';
 import { app } from '../core/app.js';
 import '../styles/cases.css';
+import { theoryNudge } from '../core/casebook.js';
 
 const listNames = (names) => (names.length < 3 ? names.join(' and ') : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`);
 
@@ -32,6 +33,7 @@ export function mount(host, { caseId } = {}) {
       h('p', {}, `${Object.keys(cs.solved).length} exhibits. ${fmtTime(total)} of puzzle work. ${used} ${used === 1 ? 'magnifier' : 'magnifiers'} used.`),
       h('p', { style: { borderTop: '1px dashed var(--ink-soft)', paddingTop: '12px' } }, 'If you ever doubt this file, it waits for you in the case archive.'),
       ringing ? h('p', {}, 'Back in Brickfields, the office phone has started ringing.') : null,
+      theoryNudge(caseId),
       h('div', { style: { display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '18px' } },
         h('button', { class: 'btn btn--primary', 'data-back': '', onclick: () => go('office') }, 'Back to the office'),
         h('button', { class: 'btn btn--paper', onclick: () => go('archive') }, 'Case archive'),
