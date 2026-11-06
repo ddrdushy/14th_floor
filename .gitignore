@@ -4,3 +4,6 @@ dist
 .wrangler
 *.m4a
 .dev.vars
+
+# private story planning (spoilers, owner-only notes)
+docs/arc_season2.md
