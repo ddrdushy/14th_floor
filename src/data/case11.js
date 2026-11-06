@@ -34,8 +34,6 @@
 const WAS_HELD = (f) => (!!f.DANIEL_TAKEN || !f.DANIEL_FOUND) && !f.ARCHIVE_SEIZED; // he rode hooded in the back seat on 1 Dec
 const DNAA = (f) => !!f.DANIEL_CHARGED; // his charge was withdrawn as a discharge not amounting to acquittal
 
-// Every evidence photo uses the placeholder hotspot until the art exists; real hotspots come after the art.
-const HOT = () => ({ x: 0.5, y: 0.5, r: 0.12 });
 
 // The line the splice tape restores: it must stay word for word the same as in the opening.
 const TARMIZI_LINE = { who: 'Tarmizi Hassan', orig: 'Saya tulis kemalangan. Empat puluh tahun saya tulis kemalangan.', en: 'I wrote "accident". For forty years I have been writing "accident".' };
@@ -192,7 +190,7 @@ export const CASE11 = {
         messageSpaced: 'NAME PAGE MISSING',
       },
       evidence: {
-        img: 'ev_c11_index', hotspot: HOT(),
+        img: 'ev_c11_index', hotspot: { x: 0.30, y: 0.48, r: 0.18 },
         title: 'Name torn out',
         short: 'Report 41/86, Balai Polis Jugra: Corporal T. Hassan at the yard at 6:02 AM, "kemalangan" entered at 6:13. Eleven minutes. The index lists a statement by "pemandu", the driver, pages 1 to 3. Page 1, the one a statement form keeps a name and an identity card number on, has been gone since 1987.',
         text: 'Four typed pages and one index sheet, everything in the same flat 1987 typewriter, ruled with a pencil. Report 41/86, Balai Polis Jugra. Death of Teoh Ah Chuan, 52, lorry owner, by drowning, at his yard, Jugra. The corporal of the day, T. Hassan, arrived at 6:02 AM and wrote "kemalangan" at 6:13: an accident, in eleven minutes, while the lorry was still in the river. Body identified by the brother, Teoh Ah Kow. Attendant asleep. Brakes failed. Then the index, item by item, and item 4: "Kenyataan pemandu, 3 muka surat." A statement by the driver, three pages. Pages 2 and 3 are in the file. Page 1, the page on which a 1986 statement form asks for the man\'s full name and identity card number, is not, and in the margin a clerk has pencilled one word with a date: "tiada, 1987". None. Hamidah reads it over your shoulder. "They did not lose his name," she says. "Somebody took it out with a ruler."',
@@ -213,7 +211,7 @@ export const CASE11 = {
         ],
       },
       evidence: {
-        img: 'ev_c11_tide', hotspot: HOT(),
+        img: 'ev_c11_tide', hotspot: { x: 0.62, y: 0.30, r: 0.15 },
         title: 'Three metres of water',
         short: 'At 2:10 AM on 1 December 1986 the Langat stood at the highest spring tide of the year: three metres over the foot of the ramp. BCK 210 had passed its brake test in November. Its last night\'s run ended at 61,588 km, and the Bomba photograph shows tyre marks running front first from the shed into the river. It did not roll back into shallow water. It was driven into deep water.',
         text: 'The marine engineer lays his numbers out for the coroner like a man laying out a body. The highest tide of the year at Kuala Langat came on the night of 30 November to 1 December 1986, and it stood at its top at ten past two: three metres and a centimetre over the datum, three metres of brown water over the foot of the ramp. The brakes passed JPJ in November with distances a new lorry would be proud of. The odometer says the lorry came home from Port Klang that night as it did every night, and the Bomba photograph of 6 AM shows the rest: tyre marks in the wet laterite from the shed door to the top of the ramp, front wheels first, pressing in harder where somebody put his foot down. "Shallow water," the engineer reads from the file, and takes his glasses off. "There is no shallow water at that ramp at two in the morning on a spring tide, Puan Coroner. And a lorry that rolls back goes in backwards. This one went in nose first, under its own engine."',
@@ -249,7 +247,7 @@ export const CASE11 = {
         ],
       },
       evidence: {
-        img: 'ev_c11_window', hotspot: HOT(),
+        img: 'ev_c11_window', hotspot: { x: 0.45, y: 0.40, r: 0.18 },
         title: 'Two men on the ramp',
         short: 'Siew Yang, fifteen, at the yard office window at ten past two: the lorry going front first into a high tide, a torch held up on the bank, and a man in the water at the cab door with his back to her. Across the yard, a man\'s voice: "Jangan tengok belakang." Her uncle told her she dreamed it. She painted the sun on the gate in 1985, and the driver named the company after it.',
         text: 'She tells it without once looking at the gallery, where her uncle sits with his beads. Two men, and neither of them her father, who was in the cab. One on the bank with the torch up and steady, the way you hold a light for somebody who is working. One in the water at the driver\'s door, his head and shoulders out, his back to the window, not swimming, not moving, holding on. Then the words, across the whole yard, in a voice that was not shouting: don\'t look back. The coroner asks her which of the two men said it, and she says she has asked herself that every night since she was fifteen. The sun on the gate was hers before it was anybody\'s; the driver looked at it a long time and said that would be the name of the company, and a year later it was. Sinar. A ray of the sun. When she steps down she picks up her brushes, and her flask of kopi, and walks back to the front row, and sits two seats further from her uncle than she did in the morning.',
@@ -263,7 +261,7 @@ export const CASE11 = {
       brief: 'While the coroner walks the ramp with her clerk and an umbrella, Pak Itam gives you the shade of his hut, a glass of water, and his back: he goes and stands by the gate. One room of planks and zinc, a table, a bed, a calendar, forty years of keys and tins and string. Farah says that a watchman\'s hut is where everything a yard ever lost ends up. Find everything. The list shows only outlines.',
       params: { scene: 'desk', targets: 13, objects: 74 },
       evidence: {
-        img: 'ev_c11_cabdoor', hotspot: HOT(),
+        img: 'ev_c11_cabdoor', hotspot: { x: 0.65, y: 0.48, r: 0.18 },
         title: 'A cab door in the wall',
         short: 'The back wall of the hut is not a wall: under six or seven coats of green paint it is the driver\'s door of a Bedford lorry cab, window wound up and painted over. Its inside handle is bent outward, the steel stretched, as if somebody outside held the door shut against somebody inside pulling to open it. Under the green, the cab\'s old cream. On a nail beside it, an old gate key.',
         text: 'You only see it because the afternoon sun comes through a gap in the zinc and lies along a seam that is too straight for planks. The hut\'s back wall is a door. Under the green paint, six or seven coats of it, is the driver\'s door of a Bedford cab, hinges and all, set into the planks as if it had always been there, its window wound up and painted over. Farah scrapes a thumbnail at the bottom edge and finds the cream that old Bedfords were sprayed in the factory, and the JPJ card for BCK 210 on the exhibit table says cream. Then she opens the door the wrong way, from inside the hut, and you both look at the handle. The inside handle is bent outward, the steel stretched thin at the root, the way a handle bends when a man inside pulls on it with everything he has and a man outside holds the door shut against him. On a nail beside it hangs an old gate key, heavier than the ones on Pak Itam\'s string, rusted the colour of laterite. Asked where his wall came from, Pak Itam answers in a pantun: "Kalau ada sumur di ladang, boleh kita menumpang mandi; kalau ada umur yang panjang, boleh kita berjumpa lagi." If there is a well in the field we may bathe there; if there is a long life left, we may meet again. Then he goes back to the gate.',
@@ -282,7 +280,7 @@ export const CASE11 = {
         clue: 'Every word is still there. Somebody only changed the order.',
       },
       evidence: {
-        img: 'ev_c11_recording', hotspot: HOT(),
+        img: 'ev_c11_recording', hotspot: { x: 0.52, y: 0.14, r: 0.14 },
         title: 'Cut at 4:40',
         short: 'Spliced back: Tarmizi in the box on Tuesday, "Saya tulis kemalangan. Empat puluh tahun saya tulis kemalangan." Then: "In 1987 I tore out the page with his name on it. The rest I kept." The recording was cut into five and re-saved at 4:40 PM under the recording clerk\'s login. He says a lawyer paid him to tidy the afternoon. On his desk, a business card: Shamir Kassim, watching brief for Sinar.',
         text: 'Put back in order, the afternoon plays as the gallery heard it. The old corporal\'s voice, thin, in Malay, louder than he means it: "I wrote accident. For forty years I have been writing accident." A pause long enough for the coroner\'s pen to stop. Then the part nobody had expected, and which the cut file had scattered into five places so that it said nothing: "Pada tahun 1987 saya koyak muka surat yang ada nama dia. Yang lain saya simpan." In 1987 I tore out the page with his name on it. The rest I kept. The recording clerk, Encik Norman, twenty-six, gives up after the second question. A lawyer came to the recording room at four, he says, with RM 5,000, and asked him to tidy the afternoon so that it would be hard to quote. He does not know the lawyer\'s name. On his desk, under his keyboard, is the lawyer\'s business card: Shamir Kassim, Advocate & Solicitor, the man who has sat at the end of the bar table all week on a watching brief for Sinar Holdings. Hamidah puts the card in an envelope. "Interfering with a record of the court," she says. "I can charge that before dinner."',
@@ -301,7 +299,7 @@ export const CASE11 = {
         clue: 'Puan Khadijah: "He chose it himself. He said it was the year he started telling lies. He said it every night this week, in his sleep."',
       },
       evidence: {
-        img: 'ev_c11_tin', hotspot: HOT(),
+        img: 'ev_c11_tin', hotspot: { x: 0.62, y: 0.42, r: 0.20 },
         title: 'Through T.A.K.',
         short: 'In the tin: the corporal\'s carbon of the driver\'s handwritten statement of 1 December 1986, pages 2 and 3, the name page torn away at the staple; Muthu\'s statement in Tamil, two lines; and in pencil, in the corporal\'s own hand, on the back of a charge sheet: "Dibayar RM 2,000. 2.12.86. Melalui T.A.K." Paid RM 2,000, through T.A.K.',
         text: 'One, nine, eight, six, and the lid comes up with a sigh of old rubber. Inside, in a police envelope gone soft as cloth, three things a corporal of Balai Jugra kept for forty years under his bed. A carbon copy, blue on onion-skin, of a statement written by hand in Malay on the morning of 1 December 1986: pages 2 and 3, and at the staple the torn stub of page 1, the page with the name. Two lines in Tamil in a careful hand, signed with a thumb: Muthusamy a/l Perumal, kelindan, who says he was asleep and woke to shouting. And on the back of an old charge sheet, in the corporal\'s pencil, a note he wrote for nobody: "Dibayar RM 2,000. 2.12.86. Melalui T.A.K." Paid RM 2,000. 2 December 1986. Through T.A.K. Under it, in another pencil, years later: "1.12.87. Sama." The same. Puan Khadijah reads the initials over your shoulder and puts her hand to her mouth. "Teoh Ah Kow," she says. "The brother. He came to the house once, in 1987. He stood at the gate and would not come in."',
@@ -337,7 +335,7 @@ export const CASE11 = {
         ],
       },
       evidence: {
-        img: 'ev_c11_transcript', hotspot: HOT(),
+        img: 'ev_c11_transcript', hotspot: { x: 0.42, y: 0.55, r: 0.18 },
         title: 'Every day in 1986',
         short: 'Pak Itam, on Tuesday: the driver came from Kuala Lumpur in 1985 with one bag and a white shirt for Sundays, and spoke Hokkien to the towkay, Tamil to Muthu, Malay to the police and English to the bank. "I saw his face every day in 1986. I have not seen it since 1987." Asked to describe it: "Biasa. Ordinary. Like anybody. If I say, the gate goes."',
         text: 'Nine minutes in the box, and the transcript reads like a man walking along the edge of a ramp. He kept the gate from 1985; he keeps it still. The driver came from the city with one bag, and wore the white shirt only on Sundays, and had four languages for four kinds of people: Hokkien for the man who paid him, Tamil for the man who rode beside him, Malay for the police, English for the bank. On the night itself, toddy and sleep and nothing heard, which is what he told the corporal in 1986 and what he tells the coroner now, in the same words. Then the only answer in the transcript that sounds like it cost him something: he saw the driver\'s face every day in 1986, and he has not seen it since 1987. He will not say what it looked like. Ordinary, like anybody, and if he says, the gate goes. When the coroner asked whether he was afraid, he gave her the old pantun, "Pisang emas dibawa belayar, masak sebiji di atas peti; hutang emas boleh dibayar, hutang budi dibawa mati": a debt of gold can be paid back, a debt of kindness you carry to the grave. The transcript does not say whose debt, or to whom.',
@@ -349,7 +347,7 @@ export const CASE11 = {
       brief: 'After the court rises on Wednesday, Hamidah lays two documents side by side on the coroner\'s bench under the reading lamp: the district\'s own file, retyped in 1987 by the clerk with the ruler, and the corporal\'s carbon of what the driver wrote with his own hand on the morning of 1 December 1986. They are meant to say the same thing. Find where they do not.',
       params: { differences: 9 },
       evidence: {
-        img: 'ev_c11_twopages', hotspot: HOT(),
+        img: 'ev_c11_twopages', hotspot: { x: 0.62, y: 0.50, r: 0.18 },
         title: 'The same hand',
         short: 'The typed file of 1987 against the 1986 carbon: "2.10 pagi" became "3.00 pagi"; "kelindan memegang lampu suluh", the attendant holding the torch, became "kelindan tidur", asleep; "pintu tidak boleh dibuka", the door would not open, became "brek gagal", the brakes failed. And the handwriting, letter for letter: the closed loop of the k, the crossed 7, the ink dragged along each line by a left hand. The hand of "Terima kasih", and of "Amended 19.8.2016".',
         text: 'Nine places where a clerk in 1987 made a carbon of 1986 say something else. The time: ten past two became three o\'clock, an hour when an attendant might reasonably be asleep. The attendant: in the driver\'s own words he was on the bank "memegang lampu suluh", holding the torch; typed, he is asleep in the shed. The cause: in the driver\'s own words "pintu tidak boleh dibuka", the door would not open, which is what a man writes who wants it understood that he tried; typed, the brakes failed, which needs nobody to have tried anything. The man on the bank with the torch, in the driver\'s own hand, was the kelindan: Muthu, who held a light for him at ten past two, was told across the yard not to look back, and drove him for forty years without once looking in the mirror. Then Hamidah moves the lamp, and you stop reading the words and look at the hand. A small, quick, slanting hand in Malay, the k with its loop closed like a knot, the 7 crossed through the stem, and on every line the ink smeared a little to the right where the side of the writing hand dragged through it before it dried. Farah lays two photographs beside the carbon from the exhibits of this season: the rules card from the boot on 1 December, with two words in ink, "Terima kasih"; and the envelope from Telok Ayer Street, "Amended 19.8.2016". The same k. The same 7. The same drag of a left hand. Nobody in the room says anything for a while.',
@@ -366,7 +364,7 @@ export const CASE11 = {
         clue: 'The bank printed its statements on Wednesday at two. Ridzuan\'s photocopies were handed in on Monday morning.',
       },
       evidence: {
-        img: 'ev_c11_passbooks', hotspot: HOT(),
+        img: 'ev_c11_passbooks', hotspot: { x: 0.38, y: 0.55, r: 0.18 },
         title: 'The morning after the first',
         short: 'Teoh Ah Kow\'s account: RM 300 credited on the 2nd of every month since January 1987, from "S.P. Jugra", later Sinar Holdings: the morning after the first. The Tarmizi family\'s: RM 1,000 a month since 1987 from the same payer, and a house in Banting built on it, in Ridzuan\'s name. The two cells Ridzuan changed are the two that named the payer.',
         text: 'Two columns of money that arrive like clockwork and have done since the year Sinar began. Teoh Ah Kow, Banting: RM 300 on the second day of every month since January 1987, four hundred and eighty-one times, from a payer the bank first wrote as S.P. Jugra, then as Sinar Pengangkutan, then as Sinar Holdings Berhad. Never on the first. Always the morning after. The Tarmizi family: RM 1,000 a month since 1987, from the same payer, into an account opened in the corporal\'s name and moved into his son\'s in 2015, when the son needed a house loan and the bank needed an income. The house in Banting, two storeys, a tow truck in the drive, is in Ridzuan\'s name. On the photocopies Ridzuan handed the coroner on Monday, two cells have been changed with correction fluid and a careful pen: the payer\'s name, twice, became "Pencen". Pension. Hamidah holds the photocopy up to the window and the white shows through. "His father wrote accident for forty years," she says, "and the son learned to write pension."',
@@ -379,7 +377,7 @@ export const CASE11 = {
       brief: 'At Bukit Aman ninety officers are still reading the cartons that came out of the reefer under Bukit Jugra: every official Sinar has paid since it began. Farah asks for carton T, and the officer who has it says there is one folder in it older than all the others, the figures inked over in blue, as if somebody had meant to forget them and could not throw them away. The cross-sums in the margins survive. Put the figures back.',
       params: { difficulty: 'medium' },
       evidence: {
-        img: 'ev_c11_cartont', hotspot: HOT(),
+        img: 'ev_c11_cartont', hotspot: { x: 0.62, y: 0.62, r: 0.18 },
         title: 'The first page',
         short: 'The oldest folder in the whole archive of Level 14, in carton T: "Kpl. Tarmizi Hassan, Balai Jugra. RM 2,000 (2.12.86). RM 2,000 (1.12.87)." Then RM 1,000 a month, every month, to this one. Before the port, before the tower, before any of them: the first official Sinar ever bought was a corporal, for two thousand ringgit.',
         text: 'Every folder in the archive has the same shape: a name, a post, a figure, a date, and the figure again every month until the name is struck through. This one is soft at the corners and the cardboard has gone the colour of tea. Kpl. Tarmizi Hassan, Balai Jugra. RM 2,000, 2.12.86. RM 2,000, 1.12.87. Then a thousand a month, every month, in figures that change hands three times across forty years and never once miss. It is the first page of the whole archive: older than the superintendents, older than the customs officers, older than the fire investigator, older than the tower. Farah stands with it in her hands in the basement at Bukit Aman for a long time. "Two thousand ringgit," she says. "Everything since started at two thousand ringgit and an old man who was afraid of losing his stripes."',
@@ -404,7 +402,7 @@ export const CASE11 = {
         solvedText: 'The morning plays in order. The lawyer was gone eleven minutes before the tray came, the son\'s flask never went in, and the tea came from the canteen.',
       },
       evidence: {
-        img: 'ev_c11_corridor', hotspot: HOT(),
+        img: 'ev_c11_corridor', hotspot: { x: 0.50, y: 0.43, r: 0.18 },
         title: 'Nine-forty',
         short: 'Siew Yang never left the gallery. Shamir was in the witness room from 9:20 to 9:22, eleven minutes before the tray. Asri refused Ridzuan\'s flask at the door at 9:28. At 9:3x the canteen sold two teh, one kaw with extra condensed milk; at 9:34 an old man in a white shirt carried them down the corridor; at 9:36 Asri took the tray in. At 9:40 Tarmizi drank. At 10:05 he collapsed.',
         text: 'Pinned in order, Wednesday morning is very short. At 9:15 the applicant and her uncle sit down in the front row, and the gallery camera keeps Siew Yang there, flask and brushes and all, until the nurse runs past at 10:06; her uncle\'s seat is empty from about half past nine. At 9:20 Sinar\'s counsel goes into the witness room with an envelope and comes out two minutes later with the same envelope. At 9:28 the corporal\'s son is turned away at the door with the family flask, because Farah\'s order was nothing from outside. At some minute after half past, the canteen sells two teh, one of them kaw, with extra condensed milk, for cash. At 9:34 corridor camera 4 catches, from behind only, an old man in a white shirt with a tray. At 9:36 Asri takes the tray at the door without looking at it, as he would a tray from the canteen, carries it in, and hands it back out with one cup still on it. At 9:40 the witness drinks. Farah looks at the 9:34 frame for a long time. "From behind," she says. "Half the old men in this building are wearing a white shirt."',
@@ -430,7 +428,7 @@ export const CASE11 = {
         answer: 'ahkow',
       },
       evidence: {
-        img: 'ev_c11_saucer', hotspot: HOT(),
+        img: 'ev_c11_saucer', hotspot: { x: 0.32, y: 0.45, r: 0.15 },
         title: 'A thumb on the saucer',
         short: 'On the cup: Tarmizi\'s prints, and Asri\'s, who carried the tray in. On the underside of the saucer, where you hold a saucer to carry it: Teoh Ah Kow\'s thumb. Siew Yang\'s prints are nowhere on cup or saucer, and her flask holds kopi and nothing else.',
         text: 'The cup tells you who drank and who served: Tarmizi\'s fingers round the body and the handle, and on the rim of the saucer where a man lifts it off a tray, Sjn. Asri\'s, who took the tray at the door and set the cup down in front of the witness without looking at it. The underside of a saucer is where it is carried from, by somebody who has carried a great many saucers: one clean thumb in the middle, pressed into a smear of condensed milk. Teoh Ah Kow\'s, from the visitor\'s pass he signed on Monday. Siew Yang\'s prints are on her own flask and on her brushes and nowhere on the canteen\'s china, and the flask, which she hands over without being asked, holds black kopi and nothing else. Sister Kalai, told, nods as though she had expected it. "In Kelantan the old men grind the seeds for their joints," she says. "A little, in coconut oil, on the skin. Never in a drink. In a drink it makes a man see his whole life standing in the room with him."',
@@ -456,7 +454,7 @@ export const CASE11 = {
         answer: 'note_left',
       },
       evidence: {
-        img: 'ev_c11_twothumbs', hotspot: HOT(),
+        img: 'ev_c11_twothumbs', hotspot: { x: 0.48, y: 0.58, r: 0.20 },
         title: 'The morning after',
         short: 'The thumb the driver rolled at Balai Jugra on the morning of 1 December 1986 is the borrower\'s left thumb on the Melaka note of 2 December 1986: the same nine clear points. Not Muthu\'s, not the brother\'s. He gave his statement on the first, and borrowed the money on the second.',
         text: 'Nine points, the same nine that the national search said were not enough in December, and still not enough: twelve to search, nine to be sure of only one thing. The thumb at the foot of a statement about a drowning at Jugra on the first of December 1986 and the borrower\'s thumb on a loan of eighteen thousand ringgit in Melaka on the second are the same left thumb. Not Muthu\'s, whose thumbs are both on file. Not the brother\'s, who rolled his at the mortuary that morning. Hamidah writes the two dates one under the other on her pad. "He gave the police his statement on the Monday," she says, "and on the Tuesday he drove to Melaka and borrowed against a dead man\'s lorry. Nine points is a man. It is still not a name."',
@@ -508,7 +506,7 @@ export const CASE11 = {
         clue: 'Farah, from the door: "He keeps his hands flat on his knees. He is not hiding a weapon. He is hiding a phone."',
       },
       evidence: {
-        img: 'ev_c11_voicenotes', hotspot: HOT(),
+        img: 'ev_c11_voicenotes', hotspot: { x: 0.55, y: 0.62, r: 0.15 },
         title: 'Five voice notes',
         short: 'Caught in one lie, Ridzuan goes out to his tow truck and comes back with his father\'s phone from the toolbox. On Monday night he deleted five voice notes his father had sent to the family group, about the money, the house, and 1986. "He said he would tell them everything. I thought: then they take the house." On Wednesday he never got in. The sergeant sent him away at the door: nothing from outside.',
         text: 'He does not cry and he does not shout. He goes out to the car park with Farah\'s constable, opens the toolbox on the back of his tow truck, and comes back with an old phone in a plastic bag, which he puts on the table in front of his father\'s empty chair. Five voice notes, he says, sent to the family group between Sunday and Monday night, his father talking to his phone the way old men do: the thousand a month, the house, the corporal\'s stripes in 1986 and what they cost. He deleted them from his own phone and from his mother\'s, and hid the phone they came from, because a man who tells a court where his money came from can lose the house it built. On Wednesday morning he brought the family flask, as he did on Monday and Tuesday, and the sergeant at the door said, politely, "Encik, nothing from outside. Inspector\'s orders," and he went and sat in his truck. "I was angry," he says. "I thought, they will give him canteen teh. Too sweet. Bad for his sugar." Then he hears what he has said, and puts his face in his hands.',
@@ -523,7 +521,7 @@ export const CASE11 = {
         clue: 'Selangor landlines start 03 and have ten digits. He dialled it slowly, like a number he had kept on paper for a long time.',
       },
       evidence: {
-        img: 'ev_c11_phone', hotspot: HOT(),
+        img: 'ev_c11_phone', hotspot: { x: 0.40, y: 0.58, r: 0.15 },
         title: 'Including you',
         short: 'Tuesday, 9:10 PM, picked up by his own phone: the corporal dials 03-3187 6692 on the house line and says, "Esok saya cakap semua. Termasuk awak." Tomorrow I tell everything. Including you. The number is a landline in Banting, behind the wet market: Teoh Ah Kow\'s.',
         text: 'The tones are slow and careful, a man reading a number off a scrap of paper by the light of a front step. A ring. Somebody picks up and says nothing. Then the corporal, quietly, in Malay, not angry, almost kind: "Esok saya cakap semua. Termasuk awak." Tomorrow I will tell everything. Including you. A long silence on the line, and the click of it being put down at the other end without a word. Then, for three more minutes, the sound of an old man breathing on his step, and a motorbike passing, and his wife calling him in. The number is a Telekom landline at a terrace house behind the Banting wet market, in the name of Teoh Ah Kow. Telekom\'s record has the call answered at 9:10 PM and lasting forty-one seconds. On Wednesday morning at 9:15 the man who answered it was sitting in the front row of the gallery beside his niece, turning his beads.',
@@ -537,7 +535,7 @@ export const CASE11 = {
       brief: 'Sister Kalai was right: Hospital Shah Alam finds scopolamine in the corporal\'s blood by lunchtime. The sediment from his cup goes to the Forest Research Institute at Kepong, where Dr. Nadia Rahim\'s plant lab can tell one kecubung shrub from another by its DNA. At noon Hamidah\'s botanist took cuttings from every datura within reach of the case: by Pak Itam\'s hut at Jugra, behind the terraces at the Banting wet market, and along the fence of a tow-truck yard. It is half past five, and FRIM closes at six. Read the bands with her.',
       params: { suspects: 7 },
       evidence: {
-        img: 'ev_c11_frim', hotspot: HOT(),
+        img: 'ev_c11_frim', hotspot: { x: 0.68, y: 0.55, r: 0.15 },
         title: 'From the shrub behind the market',
         short: 'The sediment in the corporal\'s cup is ground datura seed, kecubung, from two plants: a mother shrub and a cutting taken from it, growing together at the back fence of a terrace behind the Banting wet market. Teoh Ah Kow\'s. Not the shrub by Pak Itam\'s hut at Jugra, and not the one along the tow-truck yard.',
         text: 'Dr. Nadia lays the gel on the light box and reads it the way a doctor reads an X-ray to a family. The grey grit at the bottom of the cup is seed coat, ground, from Datura metel, the kecubung that every kampung grows somewhere for the old men\'s joints and the young men\'s dares: scopolamine and atropine, a man seeing his whole life in the room, pupils wide, skin hot and dry. Two plants in the paste, not one, and the two are mother and child: kecubung grows from cuttings, and somebody took a cutting years ago and planted it beside the first. The pair matches the cuttings from the back fence of the third terrace behind the Banting wet market, where the botanist reached over a wall at noon. The shrub by the watchman\'s hut at Jugra is a different plant, and so is the one that grows wild along the tow-truck yard. Dr. Nadia writes the address on the report herself. The house behind the wet market belongs to Teoh Ah Kow.',
@@ -566,7 +564,7 @@ export const CASE11 = {
         clue: 'He is twenty-two, and he will not drop the bag. Whatever is in it, somebody told him to burn.',
       },
       evidence: {
-        img: 'ev_c11_sketchbook', hotspot: HOT(),
+        img: 'ev_c11_sketchbook', hotspot: { x: 0.48, y: 0.58, r: 0.18 },
         title: 'The sketchbook',
         short: 'You bring him down on the Prai wharf: Teoh Wei Liang, 22, Ah Kow\'s grandson. In his bag, wrapped in a Chinese New Year newspaper, a 1986 school sketchbook with T.S.Y. on the cover, water-stained. He broke into Siew Yang\'s shop on Monday night. "Ah Kong asked me. He said burn it. A man at the terminal said a drawing of the Sinar yard is worth money."',
         text: 'He goes down on the wet planks of the Prai wharf with George Town lit up across the channel behind him like a party he was not invited to, and he holds the bag against his chest with both arms even with your knee in his back. Teoh Wei Liang, twenty-two, a delivery rider from Banting, Teoh Ah Kow\'s grandson. In the bag, wrapped in a newspaper full of Chinese New Year adverts, a school sketchbook from 1986, the cover soft as felt and lettered T.S.Y. in a girl\'s capitals, the bottom third of every page stained brown where water got into a box under a shop counter years ago. He broke into his aunt\'s shop in Bagan Luar on Monday night with a screwdriver. "Ah Kong asked me," he says into the planks. "On Sunday. He said, take the old school books from under her counter and burn them, all of them, do not open them. I opened them." A man who buys old photographs at the ferry terminal had told him that anything about the Sinar yard from the eighties was worth money now. "I was going to burn it after," he says. "After I sold it." Like every frightened man in this, he kept something back.',
@@ -594,7 +592,7 @@ export const CASE11 = {
         ],
       },
       evidence: {
-        img: 'ev_c11_page', hotspot: HOT(),
+        img: 'ev_c11_page', hotspot: { x: 0.55, y: 0.42, r: 0.20 },
         title: 'His back, at ten past two',
         short: 'Siew Yang\'s pencil, the week after: the ramp; the cab under the water; a man in the water at the door, from behind, in a white singlet, his hair wet; a figure on the bank with a torch; and in the corner a clock with its hands at ten past two, pressed so hard the pencil went through the paper. Her father\'s watch stopped at ten past two. The man in the water kept it. It is always ten past two because of this minute.',
         text: 'Square by square, under Madam Ong\'s light, a fifteen-year-old\'s drawing comes back out of the stain. The ramp running down from the left into a straight black line of water. Under the line, the box of the cab. At the cab door, in the water to his shoulders, a man drawn from behind, a white singlet, the back of a head of wet hair, no face, because she never saw one. On the bank, a stick figure holding something up, and a cone of light from it laid across the water to the man\'s head. In the top corner, a clock, the hands at ten past two, gone over and over until the pencil cut through. On the phone from Shah Alam Siew Yang says she drew it on 2 December 1986, in the morning, because her uncle had told her she dreamed it and she wanted to keep the dream where nobody could take it. The watch in the photograph from Box 14, TEOH A.C. 1979, stopped at ten past two with river mud in its crown. A lamp on Level 14 that comes on at ten past two. A telephone at Restoran Bala at ten past two. A black car outside it at ten past two. Daniel looks at the drawing for a long time, and for once does not say anything at all.',
@@ -611,7 +609,7 @@ export const CASE11 = {
         clue: 'The numbered flowerpots say how many lamps stand right beside them. A lamp lights its row and its column until a pot or a wall stops it.',
       },
       evidence: {
-        img: 'ev_c11_garden', hotspot: HOT(),
+        img: 'ev_c11_garden', hotspot: { x: 0.50, y: 0.62, r: 0.12 },
         title: 'Stripped pods',
         short: 'At the back fence, a kecubung shrub and the cutting beside it, both stripped: a dozen stalks where the spiny pods were twisted off. In the outdoor kitchen, a granite mortar with a grey paste dried in its bowl. In the drain, split husks. On the Kuan Yin altar, a fresh joss stick, lit tonight.',
         text: 'Lit bed by bed, the garden is a careful old man\'s garden: chillies staked with chopsticks, pandan in a tyre, the altar to Kuan Yin swept and a joss stick on it lit some time tonight. At the back fence the two datura stand together, the big one and the one grown from its cutting, white trumpets hanging open in the floodlight, and on both, a dozen green stalks with nothing on them where somebody twisted off the spiny pods, the breaks still pale. In the drain along the lane, split husks and the flat brown seeds that fell out of them. In the outdoor kitchen under the zinc, a granite lesung, the stone mortar every Malaysian kitchen has, and in its bowl a grey paste dried hard round the pestle, which somebody washed and did not wash well enough. The Kuala Langat constable with the lamp will not go near the shrubs. "My nenek says you sleep under kecubung, you dream," he says. "You drink it, you do not wake up the same."',
@@ -630,7 +628,7 @@ export const CASE11 = {
         clue: 'The owner: "One sheet only. He watched it go in. He said it came in a red packet, like for the new year."',
       },
       evidence: {
-        img: 'ev_c11_order', hotspot: HOT(),
+        img: 'ev_c11_order', hotspot: { x: 0.66, y: 0.53, r: 0.18 },
         title: 'The corporal first',
         short: 'The order, taped back together: "OFFICE OF THE CHAIRMAN. To: T.A.K. Sunday, 22:00. The corporal first. Then the girl\'s book. You have kept quiet for forty years. Keep quiet for four days. Nothing on the phones." Left at Ah Kow\'s gate on Sunday night in a red packet, and shredded on Monday morning "for privacy".',
         text: 'Ten strips and a roll of tape on the copy shop\'s counter, and the page comes back in the flat printed type that every order of the Office has come in since Lebuh Chulia. To T.A.K., Sunday, ten at night, the night before the inquest opened. Two things, in the order he did them: the corporal first, on Wednesday morning, with a tray; then the girl\'s book, which he sent his grandson to steal on Monday night and burn, and which his grandson did not burn. Then the line that is not an order at all, but a reminder of what he had already been paid for: forty years of quiet, and four days more. The copy shop owner says the uncle brought it in a red packet, the kind you give children at the new year, and stood at the shredder until the last strip went through, and paid two ringgit, and said, "For privacy." Hamidah looks at the strips for a long time. "He could have burned it in his kitchen in ten seconds," she says. "He wanted to watch somebody else\'s machine do it."',
@@ -669,7 +667,7 @@ export const CASE11 = {
         liars: ['ahkow', 'shamir'],
       },
       evidence: {
-        img: 'ev_c11_statements', hotspot: HOT(),
+        img: 'ev_c11_statements', hotspot: { x: 0.45, y: 0.52, r: 0.20 },
         title: 'Day two, again',
         short: 'Two liars under oath. Teoh Ah Kow says he spoke to nobody on Tuesday night; his telephone says he listened to the corporal for forty-one seconds. Shamir Kassim says he went into the witness room to say the court would sit late; he went in with an envelope. Siew Yang never left the gallery. Kak Ros sold two teh to an old uncle in a white shirt.',
         text: 'Read back to them in open court, under oath, the five statements sort themselves. Siew Yang\'s is true to the minute, and she says it to the coroner without turning her head toward the man beside her. Pak Itam\'s two sentences are about other people, as all his sentences are, and both are true. Kak Ros, who has run the canteen for nineteen years and has been asked nothing in all of them, describes the uncle and his two teh and his cash with the pleasure of a woman finally consulted. Shamir Kassim\'s is a lawyer\'s lie, which is to say mostly true: he did tell the corporal the court would sit late, and he also put RM 50,000 on the table and said "think of your son\'s house", and took it back when the old man pushed it away. And Teoh Ah Kow\'s is an old man\'s lie, which is to say very simple: he spoke to nobody. When the clerk reads out the forty-one seconds from Telekom\'s record, he puts his beads down on the bench beside him, for the first time in four days.',
@@ -699,7 +697,7 @@ export const CASE11 = {
         ],
       },
       evidence: {
-        img: 'ev_c11_grid', hotspot: HOT(),
+        img: 'ev_c11_grid', hotspot: { x: 0.38, y: 0.38, r: 0.18 },
         title: 'Nine-forty on one page',
         short: 'At 9:40 on Wednesday: Teoh Ah Kow in the corridor by the toilets with a tray and one cup. Siew Yang in the gallery with her flask of kopi. Ridzuan in the car park with his father\'s flask. Shamir in the robing room with his envelope. Pak Itam in the court surau with a prayer mat.',
         text: 'From 9:36, when the tray went in at the witness room door, to 9:40, when the old man inside it drank. Teoh Ah Kow in the corridor by the toilets, holding a tray with his own teh still on it, which he poured down the sink of the men\'s toilet at 9:41; the cleaner found the cup in the bin. Siew Yang in the front row of the gallery with her kopi. Ridzuan in the cab of his tow truck in the car park, with his mother\'s teh in his father\'s flask going cold on the seat beside him. Shamir Kassim in the robing room with his gown on and his envelope open, counting. Pak Itam in the surau on the ground floor with his shoes at the door, on a prayer mat, where the imam says he sat from nine until the ambulance came, and did not pray, and did not move.',
@@ -722,7 +720,7 @@ export const CASE11 = {
         clue: 'Hamidah taps the sheet. "Three I can prove. Four, and you can have the flask."',
       },
       evidence: {
-        img: 'ev_c11_report', hotspot: HOT(),
+        img: 'ev_c11_report', hotspot: { x: 0.45, y: 0.60, r: 0.15 },
         title: 'Forty years and four days',
         short: 'Hamidah reads your report twice and writes the charge against Teoh Ah Kow: attempted murder of a witness. Under it, "and abetment by", the line she has left blank all season, and she leaves it blank again. "He started this in 1986, detective. I cannot charge a man for a page that was torn out. Yet."',
         text: 'Hamidah Yusof reads it twice with the pencil she never uses, and then for the first time this season she uses it, to underline two dates one above the other: 2.12.86, and 3.2.27. "Forty years and four days," she says. She writes the charge herself, Section 307, attempted murder, against an old man in a white shirt who has been paid three hundred ringgit on the morning after the first of every month since 1987 to keep a door shut that somebody else held shut first. Then she puts the pencil on the line under it, "and abetment by", and holds it there. "An order in a red packet, signed by an office. A page torn out with a ruler in 1987. A left thumb on a deed in Singapore. A hand that writes thank you." She lifts the pencil. "I can charge a man for a cup of tea. I cannot charge a man for a page that is not there. Yet."',
@@ -775,7 +773,7 @@ export const CASE11 = {
         clue: 'Hamidah, from the door: "He has not looked at his niece once in four days. Ask him why."',
       },
       evidence: {
-        img: 'ev_c11_watch', hotspot: HOT(),
+        img: 'ev_c11_watch', hotspot: { x: 0.52, y: 0.52, r: 0.16 },
         title: 'I will keep the time',
         short: '"At three o\'clock he came to my door wet to the knees, with A-hia\'s watch in his hand. He said, your debts are finished; tell them it was the brakes. He gave me the watch to hold. Then he took it back. He said: I will keep the time." Ah Kow said brakes, signed the yard to Sinar Pengangkutan, and paid the corporal. On Sunday a red packet came to his gate.',
         text: 'He does not ask for a lawyer. He puts his beads on the table, in a circle, and talks to them. "I owed A-hia nine thousand ringgit. Mahjong. In 1986 nine thousand was a house. At three o\'clock that night somebody knocked. He was wet to the knees. He had A-hia\'s watch in his hand, still wet, and he said, your debts are finished, tell them it was the brakes. He gave me the watch to hold. Then he took it back from me. He said: I will keep the time." In the morning Ah Kow went to the yard, and looked at his brother on the ramp, and said the word he had been given, and told his niece she had dreamed it. On the third he signed the yard and the lorry to a company called Sinar Pengangkutan, named for a sun a girl had painted, and he paid the corporal two thousand ringgit out of an envelope he had been handed, and paid him again a year later. In 1987 the corporal gave him a page to burn. "I burned it in the kitchen fire. I did not read it. I did not want to know a name I would have to forget." Since then, three hundred ringgit, every month, the morning after the first. On Sunday night a red packet at his gate. On Tuesday night the corporal on the telephone. "Forty years I was quiet. He was going to stop being quiet, and say my name with his." Asked for the driver\'s name, he turns one bead, and says nothing at all.',

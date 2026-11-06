@@ -42,8 +42,6 @@ const HELD7 = (f) => (!!f.DANIEL_TAKEN || !f.DANIEL_FOUND) && !f.ARCHIVE_SEIZED;
 const WAS_HELD = HELD7; // he rode hooded in the back seat on 1 December
 const DNAA = (f) => !!f.DANIEL_CHARGED; // his charge was withdrawn as a discharge not amounting to acquittal
 
-// Real hotspots come after the art exists; until then every exhibit circles the middle of the photograph.
-const HOT = () => ({ x: 0.5, y: 0.5, r: 0.12 });
 
 const CERT = [
   { id: 'chairman', label: 'The Chairman of Sinar Holdings', note: 'The man whose thumb is on the 1987 deed, on nine points of sixteen.' },
@@ -208,7 +206,7 @@ export const CASE12 = {
         messageSpaced: 'DEAD BEFORE THE FIRE',
       },
       evidence: {
-        img: 'ev_c12_survived', hotspot: HOT(),
+        img: 'ev_c12_survived', hotspot: { x: 0.40, y: 0.42, r: 0.20 },
         title: 'Dead before the fire',
         short: 'Rosli\'s list, and under it his note: DEAD BEFORE THE FIRE. No soot in the dead man\'s nose or mouth. The fire began in the front footwell on the driver\'s side, with petrol, and ran backwards; the man behind the driver\'s seat was already dead when it reached him.',
         text: 'Rosli writes the way he talks, in short lines. The steel of the doors. The springs of the seats. The chrome of the handles, gone brown. The headrest behind the driver, its cover gone, its foam a black sponge. The small cushion that lives on the back seat, half burnt, lying on the floor at the dead man\'s feet instead of behind his back. A silver flip-top lighter, in a fist. A white collar, a cravat, a card in a breast pocket. And where it began: the front footwell on the driver\'s side, a puddle-shaped burn that only petrol leaves, and a char line that runs low and fast from the front of the car to the back, the way fire runs when somebody has given it a road. Under the list, in capitals, the thing Rosli wanted you to read first. There is no soot in the dead man\'s nose or mouth, and his skin is not the colour smoke leaves. "He did not breathe the fire, Tuan," Rosli says. "He was sitting in it. Somebody sat him there."',
@@ -244,7 +242,7 @@ export const CASE12 = {
         ],
       },
       evidence: {
-        img: 'ev_c12_hut', hotspot: HOT(),
+        img: 'ev_c12_hut', hotspot: { x: 0.90, y: 0.42, r: 0.12 },
         title: 'The gate at one-fifty',
         short: 'Pak Itam: a call to his hut at 1:00, "open the gate at ten to two, do not look at the driver". One black car, a driver in a cap, a passenger in white behind him. At ten past two a light, then fire; he rang Bomba at 2:16. At twenty past two a big car stopped at the gate for a minute or two, and went back the way it came.',
         text: 'The hut is a box of planks with a telephone on the wall, a clock beside it, a rice tin, a mat and a hurricane lamp. The log of its line, which Farah has from the telco by eight: one incoming call at 1:00:14, forty seconds, from a number the telco cannot put a name to; one outgoing call at 2:16:03, to Balai Bomba Banting. Pak Itam opened the gate for a car he was told not to look at, and he did not look at it, and he says so as if not looking were a trade he had learned. A driver in a cap; a passenger in white, behind the driver; a light inside the car that went on once and off; a door, and a man walking in the palms; at ten past two a flare, and fire. At twenty past two, a big car with its headlights full on him for a minute or two, nobody getting out, and then a three-point turn in the road and gone. The chain hangs on its nail in the hut with its padlock open. "Forty years I keep the gate," he says. "This is the first car that did not leave."',
@@ -256,7 +254,7 @@ export const CASE12 = {
       brief: 'The oil palm comes right up to the yard on the lighthouse side: rows of trunks, a floor of cut fronds and wet black earth. Rosli lays his lamp flat in the first row, twenty metres from the car, and the mud stands up in relief. Somebody stood here a long time in the dark, facing the gate, and then ran. Name the tread, then find the shoe.',
       params: { shoes: 9 },
       evidence: {
-        img: 'ev_c12_trainers', hotspot: HOT(),
+        img: 'ev_c12_trainers', hotspot: { x: 0.48, y: 0.62, r: 0.18 },
         title: 'Running shoes in the palms',
         short: 'A woman\'s trainers, size 5, twenty metres from the car in the first row of palms: a flattened patch where somebody knelt and stood for a long time facing the gate, then long running strides away from the car, toward the lighthouse road on Bukit Jugra. The tread is the brand Nurul Ain has worn to every crime scene since her father\'s.',
         text: 'Under the raking lamp the mud gives up a story in two halves. First, stillness: two knee marks, the square print of a bag set down, a pair of small trainers turned toward the gate and shifting their weight from heel to heel over a long time, the way a person stands who is waiting for something to happen and is afraid it will. Then flight: the same trainers, toe-deep, strides a metre and a half long, away from the car and never toward it, through four rows of palms and up the slope toward the lighthouse road on Bukit Jugra, until the earth turns to gravel and the trail ends. Nowhere in the first row do the prints come closer to the car than twenty metres. A woman\'s size 5, a running shoe with a chevron tread worn smooth at the outside of the heel. Farah knows the brand before Rosli says it. "Ain," she says. "She wears them to every scene. She wore them to her father\'s."',
@@ -270,7 +268,7 @@ export const CASE12 = {
       brief: 'There is one petrol station open all night between Jenjarom and Banting, and on the fifteenth night of the new year its attendant, a boy called Hafiz with a phone in his hand, had exactly one customer who bought nothing. A man pulled in at pump four, asked him the way to the old Sinar gate, and drove off south before Hafiz had finished pointing. Hafiz saw him in the forecourt light. Look at the frame, fast, and pick the face.',
       params: { rounds: 3, studySeconds: [10, 8, 6] },
       evidence: {
-        img: 'ev_c12_petrol', hotspot: HOT(),
+        img: 'ev_c12_petrol', hotspot: { x: 0.38, y: 0.68, r: 0.13 },
         title: 'Asking the way to Jugra',
         short: 'Three times out of three Hafiz picks the same face: Tan Sri Azhar Kamaruddin, at 2:12 AM at pump four of the Jenjarom petrol station, at the wheel of a dark Mercedes, asking "Which way to the old Sinar gate?" He drove south before Hafiz had finished pointing.',
         text: 'The forecourt camera keeps the minute: 02:12:31. A dark Mercedes saloon at pump four with its engine running and the driver\'s window down, and nobody else in the car. Hafiz goes to the window because a car like that at two in the morning is either lost or trouble. A man with silver hair and a white moustache, in a jacket and no tie, asks him the way to the old Sinar gate, "the yard, under the hill", and Hafiz starts to tell him and gets as far as the second left before the window goes up and the car pulls out south toward Banting. Three times Hafiz picks the face out of the row, and the third time he does not look at the others. "Tan Sri," he says. "From the television. The one from the dinner." He did not buy anything. Hafiz wrote the time on his hand, because his mother told him to write down anything strange that happens on a holiday.',
@@ -298,7 +296,7 @@ export const CASE12 = {
         ],
       },
       evidence: {
-        img: 'ev_c12_recorder', hotspot: HOT(),
+        img: 'ev_c12_recorder', hotspot: { x: 0.45, y: 0.50, r: 0.15 },
         title: 'The car records itself',
         short: 'A fireproof recorder under the back seat: a rule nobody wrote down. Every drive of this car is recorded, sound only, from the moment the engine starts. The fire took the middle of the chip. What survives is the oldest drive on it, yours of 1 December, and the last fifteen minutes of the last one, from 1:53 to the fire.',
         text: 'The technician at Bukit Aman\'s audio lab has never seen a box like it in a car, only in lorries, where owners want to know what their drivers say. It starts recording when the engine starts and does not stop until the engine does, and it has been in this car a long time: the oldest drive on the chip is from the first of December. He plays you thirty seconds of it to show you it works. Wipers. An indicator ticking. A voice you know saying "Brickfields Road, then Birch Road." You ask him to stop it. The nine rules on the card in the boot that night never mentioned that the car listens. The fire reached the middle of the chip and took everything from the second drive to the last one; what is left of the last is fifteen minutes, from 1:53 on Sunday morning until the heat killed it. An engine ticking as it cools. A fan. A small sound like a ring on glass. A long nothing. At 2:01 a burst of something electronic. At 2:08, a hiss.',
@@ -310,7 +308,7 @@ export const CASE12 = {
       brief: 'Farah finds Nurul Ain at nine in the morning in the surau at Kampung Jugra, asleep against the wall with her camera bag in her arms. She will not give up the bag. She will show you two frames on its screen, side by side, taken thirteen minutes apart from the first row of the palms, and let you look as long as you like. Find what changed.',
       params: { differences: 10 },
       evidence: {
-        img: 'ev_c12_frames', hotspot: HOT(),
+        img: 'ev_c12_frames', hotspot: { x: 0.48, y: 0.52, r: 0.15 },
         title: 'Two frames from the palms',
         short: 'Ain\'s camera, 1:52 and 2:05. At 1:52 the car\'s interior light is on: a driver in a cap and a navy police raincoat with the reflective tape torn off its back, his face turned away; behind him, upright, a passenger in white. At 2:05 the passenger is slumped against the door and the driver is walking into the palms with a jerry can. Pak Itam stands at the gate post in both. In her bag, a typed card: "Ten past two. The gate at Jugra. Bring your camera."',
         text: 'A typed card came under her door on Friday, with no name and no envelope: "Ten past two. The gate at Jugra. Bring your camera." She did what her father\'s daughter does with an invitation from the Office of the Chairman: she came early, on a borrowed motorbike, and hid. 1:52:40. The interior light is on, and the car is a lantern in the dark. At the wheel, a man in a cap and a navy raincoat of the kind Bukit Aman issues, a pale stripe across its back where the reflective tape has been torn away, his face turned from the lens toward the back seat. Behind him, upright, a passenger in a white shirt, collar buttoned. 2:05:12. The light is off. The passenger has slumped against the rear door. The driver\'s door is open and the driver is walking away from the car into the palms on the other side, a red jerry can in his hand. In both frames, at the edge, Pak Itam at the gate post with his face to the ground. "I ran when I saw the can," Ain says. "I thought he was going to burn the palms with me in them. I am not brave. I am early."',
@@ -330,7 +328,7 @@ export const CASE12 = {
         clue: 'A police handset signs every press of its key with its own number. If it was close enough, the car heard it.',
       },
       evidence: {
-        img: 'ev_c12_handset', hotspot: HOT(),
+        img: 'ev_c12_handset', hotspot: { x: 0.30, y: 0.60, r: 0.15 },
         title: 'Handset forty-one',
         short: 'At 2:01:12, inside the car, the burst a police handset sends when its key is pressed: D9-HT-41. D9\'s handset 41 is issued to Sjn. Mohd. Asri. At 2:01, on Farah\'s channel, Asri said he had lost the car at Jenjarom. The car had been standing at the gate for eleven minutes, and his handset was close enough for the car to hear it.',
         text: 'The burst is a smear of tones a quarter of a second long, and on the spectrogram it writes its own name in the noise: D9-HT-41. The stores register at D9 has handset 41 signed out since 2023 to one man, Sjn. Mohd. Asri bin Ghazali, Farah\'s sergeant. Farah\'s own radio log has the transmission it signed, to the second: 2:01:12, "Puan, saya hilang dia di Jenjarom." At 2:01 the car had been standing on the laterite inside the Jugra gate for eleven minutes, twenty kilometres south of Jenjarom, and the man who said he had lost it was close enough for its recorder to hear him press his key. Farah listens to the burst four times. She does not say anything. Then she unclips her own handset and lays it face down on the bench, as if it might hear her.',
@@ -344,7 +342,7 @@ export const CASE12 = {
       brief: 'Dr. Lim Siew Ping does the post-mortem herself at two on Sunday afternoon, with a Sinar lawyer outside her door asking every half hour for a name. On her steel table, under a sheet, the man from the back seat; on the bench beside him, everything that came off him and out of the car. Find everything she laid out. The list shows only outlines.',
       params: { scene: 'desk', targets: 14, objects: 76 },
       evidence: {
-        img: 'ev_c12_table', hotspot: HOT(),
+        img: 'ev_c12_table', hotspot: { x: 0.70, y: 0.60, r: 0.18 },
         title: 'No voice',
         short: 'Under the cravat, an old, healed laryngectomy: "He has not spoken with his own throat for ten years or more." Temazepam in his blood; smothered with the back-seat cushion at about 1:56; no soot. Leong Brothers\' label in his collar. In his fist, a silver flip-top lighter with a small brass sun on the lid. In his breast pocket, a typed card: the nine rules, and a tenth. "10. Whoever drives me last."',
         text: 'Dr. Lim says it in the order she found it. A silk cravat, knotted high; under it, at the base of the throat, a neat round opening, long healed: a laryngectomy stoma. "His voice box came out a long time ago. Ten years, more. He breathed through this. He has not said a word to anybody with his own throat since." Temazepam in his blood, enough to make an old man sleep. Rosli looked at his mouth, she says, which was the right instinct and the wrong place: a man like this does not breathe through his mouth at all. He breathes through the throat. Cotton fibres from the small back-seat cushion are packed into the stoma, and the skin round it is marked by something pressed down hard for about two minutes: smothered, at about four minutes to two. Below the stoma, his airway is clean. No soot. His teeth have never been treated by anyone who kept a record. A white shirt with Leong Brothers\' label in the collar. The lighter his left hand would not give up: silver, flip-top, a small brass sun set into the lid, and nothing engraved; not the D.R. lighter, which has been in a Bukit Aman evidence bag since November. The card from his breast pocket, scorched at the edges: the nine rules from your boot on the first of December, typed the same, and under them a tenth. "10. Whoever drives me last." Farah asks one more thing, for the file: the watchman. Dr. Lim has looked at Pak Itam\'s hands. "Somebody held that cushion down for two minutes, with both hands and his weight. That old man\'s knuckles are like walnuts. He cannot close his fist round a cup."',
@@ -356,7 +354,7 @@ export const CASE12 = {
       brief: 'Dr. Lim sends two kinds of test. The ordinary one comes back by evening and matches nobody in any file in the country. The second takes a night: mitochondrial DNA, which a man gets only from his mother, and which is all anybody can read from a grey hair with no root. Read the bands with her at six on Monday morning.',
       params: { suspects: 7 },
       evidence: {
-        img: 'ev_c12_hair', hotspot: HOT(),
+        img: 'ev_c12_hair', hotspot: { x: 0.42, y: 0.60, r: 0.15 },
         title: 'His mother\'s line',
         short: 'His nuclear DNA matches nothing, anywhere. His mitochondrial DNA matches the grey rootless hair from the black car\'s headrest and from the escort\'s back seat on 1 December. That is him, or a brother, or anyone born of his mother\'s line. "Mitochondria give you a family," Dr. Lim says. "They do not give you a man."',
         text: 'Nothing in the national index, nothing in the immigration files, nothing in the prisons, nothing in the army. A man of about seventy-five with no record of his body anywhere in Malaysia, which Dr. Lim says is harder to arrange than a record. Then the second test, the slow one. Mitochondrial DNA comes down the mother\'s side only, unchanged, from a mother to all her children; a rootless hair has nothing else in it. On the first of December two such hairs were swabbed, one from the headrest behind the driver of the black car and one from the back seat of the escort\'s Land Cruiser, and they matched each other and nobody. They match the man on her table. "Him," Dr. Lim says, writing it down as she says it. "Or his brother. Or his sister\'s son, or his mother\'s sister\'s grandson. Anybody born of his mother\'s line. Mitochondria give you a family. They do not give you a man."',
@@ -382,7 +380,7 @@ export const CASE12 = {
         answer: 'deed',
       },
       evidence: {
-        img: 'ev_c12_thumb', hotspot: HOT(),
+        img: 'ev_c12_thumb', hotspot: { x: 0.58, y: 0.48, r: 0.20 },
         title: 'Nine points',
         short: 'The dead man\'s left thumb against the left thumb on the 1987 Jugra Trust deed: nine matching points of sixteen, and nothing that disagrees. Dr. Lim: "Consistent. Not conclusive. In this country, not a name." A court wants twelve.',
         text: 'The deed is a certified copy from the High Court in Singapore, and its thumbprint is forty years old, rolled in a car at dusk on the Johor shore by a man who would not cross the water. The thumb on Dr. Lim\'s card was rolled on Sunday night from a hand that would not open. The print room\'s examiner works for three hours under a lamp with a pointer and a pencil, and stops at nine: nine ridge endings and forks in the same places, in the same order, and not one that disagrees. The rest of the old print is smudged where the settlor pressed too hard, and the rest of the new one is blistered where the fire came close. Nine is a lot. Twelve is a name. "Consistent," Dr. Lim says. "Not conclusive. In this country, not a name." Sinar\'s lawyer, outside the door, is told the number by somebody before she has finished saying it.',
@@ -395,7 +393,7 @@ export const CASE12 = {
       brief: 'Desmond Yap has been in Sungai Buloh since November waiting for a trial in May, and for twenty-nine years before that he had one man\'s voice in his ear. Farah takes him the recorder\'s last fifteen minutes on Monday morning, and a pair of headphones. Before he will listen to anything, he makes you copy a reel of old practice code from his RTM days, "so your ears are clean". Copy it with him.',
       params: { difficulty: 'medium' },
       evidence: {
-        img: 'ev_c12_ring', hotspot: HOT(),
+        img: 'ev_c12_ring', hotspot: { x: 0.58, y: 0.62, r: 0.18 },
         title: 'No breath',
         short: 'At 1:55, a ring tapped on the inside of the rear window glass, slow and then fast: TOLONG. Help. Desmond listens three times. "That is not the man in my ear. He breathes in before every sentence. This one had no breath to speak with."',
         text: 'With his ears clean, Desmond listens to the last fifteen minutes with his eyes shut and his hand over his right ear, as if the headset were still on it. At 1:55, under the ticking of the engine, a small hard sound on glass, the sound a ring makes, slow and then fast and then slow: T-O-L-O-N-G. Help. Then a minute of nothing, and then a sound he will not describe. He plays the minute before it three times. Then he asks to hear thirty seconds of the first of December, the oldest drive on the chip, and when the voice from the back seat says "Brickfields Road, then Birch Road" he nods as if somebody had said his own name. "That is the man in my ear. He breathes in before every sentence. I would know it in a stadium." He takes the headphones off. "The one tapping on the window is not him. That one had no breath to speak with."',
@@ -449,7 +447,7 @@ export const CASE12 = {
         clue: 'Farah, from the door: "He came in a hurry and he left in a hurry. Ask him why he was in a hurry."',
       },
       evidence: {
-        img: 'ev_c12_summons', hotspot: HOT(),
+        img: 'ev_c12_summons', hotspot: { x: 0.45, y: 0.55, r: 0.12 },
         title: 'The summons',
         short: 'Caught in one lie, Tan Sri Azhar takes a card from his breast pocket and lays it on the table: typed, unsigned, under his door on Friday. "Ten past two. The gate. Drive me last." He went to be the last driver, and the next Chairman. He was late, he saw the fire, and he drove away. "I wanted to sit in the chair. Somebody knew that before I did."',
         text: 'He does not ask his lawyer anything. He takes a white card out of his breast pocket, the size of a place card at a dinner, and lays it on the table squarely, the way he lays papers in front of a board. Typed, unsigned, no envelope, under his door on Friday night: "Ten past two. The gate. Drive me last." "Everyone on the board knows the sentence by now," he says. "The Trust is to be directed by whoever drives him last. It is not a legal sentence. I thought it might become one." He went alone, in his own car, because a man who means to be the last driver does not bring one. He did not know the old road. He asked a boy at a petrol station, who started to tell him, and he did not wait. He reached the gate and the car was already burning under the sun, and an old man at the gate post had a bucket in his hand and his face to the ground. "I sat there with my lights on that old man for a minute," he says. "Then I understood that whoever was in the back seat had been driven last already, and not by me." He turned round in the road. "I wanted to sit in the chair," he says, as he said it in November. "Somebody knew that before I did."',
@@ -466,7 +464,7 @@ export const CASE12 = {
         clue: 'Raja: "Twenty years I look at my feet. My feet are very well known to me."',
       },
       evidence: {
-        img: 'ev_c12_v2', hotspot: HOT(),
+        img: 'ev_c12_v2', hotspot: { x: 0.40, y: 0.40, r: 0.18 },
         title: 'Two cars, two keys',
         short: 'Bay V2, behind a roller shutter on Basement 2: a second sun on the floor and a second black car with no plates, the twin of the one that burned, its engine still warm on Sunday night. Raja: "One went out at ten to one with a policeman\'s walk at the wheel. The other went at twenty past one, and I did not see who was in it." Two cars. Two keys.',
         text: 'With the directors\' cars rolled back, the second car stands alone on its sun: the same long black saloon, the same black glass, no plates front or back, a fine red dust of laterite along its sills, and its bonnet still warm under your palm at nine on Sunday night. In its ignition, a key on a ring with a small brass sun, the twin of the one in your pocket. The barrier log at the foot of the ramp has a fob for each bay. V1: out at 00:50:07, and never back. V2: out at 01:20:41, in at 03:58:12. Raja tells it looking at his feet, out of habit. "One went out at ten to one. The driver walked to it with his hands behind his back and a cap on, like a policeman at a funeral. A policeman\'s walk. Somebody was in the back already. The other one went at twenty past one, and I did not see who was in it. I did not see who brought it back." He looks up, once. "Nobody told me there were two. Twenty years, I thought there was one car."',
@@ -504,7 +502,7 @@ export const CASE12 = {
         ],
       },
       evidence: {
-        img: 'ev_c12_collar', hotspot: HOT(),
+        img: 'ev_c12_collar', hotspot: { x: 0.45, y: 0.55, r: 0.18 },
         title: 'It fits him',
         short: 'Leong Kam Wah, shown only the collar: "It is my shirt. I made it in December for the man I have measured in the dark for forty years. It fits this man the way it would fit him. I could not swear to a face. I could swear to a collar."',
         text: 'He holds the collar between finger and thumb and turns it to the light, and finds his own label inside it on the left, where his father put the first one. Collar fifteen and a half; sleeve thirty-three; the right cuff three-quarters of an inch wider than the left. The shirt he finished at two in the morning on the first of December, "for a long journey", and handed through a car window at 2:24. Dr. Lim lets him measure the arm on the table under the sheet, and he does it without looking at anything but the tape, and writes the figure in his order book in pencil, under December, as if it were a fitting. Then he closes the book. "It is my shirt. I made it in December for the man I have measured in the dark for forty years. It fits this man the way it would fit him." He puts his glasses in his pocket. "I could not swear to a face. I have never seen his face. I could swear to a collar." At the door he turns round. "Two men with the same neck would wear it the same way," he says. "A tailor knows that. A tailor makes shirts for brothers."',
@@ -519,7 +517,7 @@ export const CASE12 = {
       brief: 'On Monday at noon a grey sedan stops across the road from Restoran Bala with its engine running. WXY 1408. Jason Ooi sees you see him and goes, into the one-way streets of Brickfields between the sari shops and the temple, obeying every arrow, one last time. You do not have to.',
       params: { rounds: 2 },
       evidence: {
-        img: 'ev_c12_lighthouse', hotspot: HOT(),
+        img: 'ev_c12_lighthouse', hotspot: { x: 0.55, y: 0.50, r: 0.20 },
         title: 'From the lighthouse road',
         short: 'Jason Ooi drove the second car. At 1:20 from Bay V2, one passenger in the back, by the expressways to the lighthouse road on Bukit Jugra, and he wound the back window down. At ten past two they watched the gate burn from the hill, and came back. "He said thank you. He always says thank you."',
         text: 'You box the sedan in behind a lorry of marigolds on Jalan Scott, and Jason does not run this time. He sits with both hands on the wheel and talks to the windscreen. At twenty past one on Sunday he took the second car out of V2 with one passenger already in the back, as he was told, the fast way, by the expressways to Banting and round by the coast, to the lighthouse road on Bukit Jugra, where the trees open and you can see the yard below. He stopped where he was told to stop and wound the back window down, as he was told. At ten past two a light came up at the gate, and then fire, and the man in the back watched it, and Jason watched the fire and not the mirror. "I did not look," he says. "Nobody looks. I drive." At twenty to three he was told to go home, and he did, and he put the car back in V2 at two minutes to four. "Before I got out he said thank you." Jason looks at you for the first time. "He always says thank you."',
@@ -538,7 +536,7 @@ export const CASE12 = {
         clue: 'Farah\'s printout is from last Monday. The duty system was opened under Asri\'s own login on Sunday at 3:40 PM, while he was at the hospital with you.',
       },
       evidence: {
-        img: 'ev_c12_overtime', hotspot: HOT(),
+        img: 'ev_c12_overtime', hotspot: { x: 0.62, y: 0.62, r: 0.20 },
         title: 'Overtime',
         short: 'Restored: Asri\'s duty for Saturday night, "surveillance, B2, all night", was typed in on Sunday at 3:40 PM, after the fire. His household account: RM 3,000 a month since 2019 from a Sinar Cold Chain "consultancy", and on Friday 19 February, the day before the fire, RM 250,000.',
         text: 'Three cells, put back to what Farah printed a week ago. Overtime, February: twelve hours for Saturday night, "surveillance, Menara Sinar B2, all night, then pursuit", typed into the system on Sunday at 3:40 PM under his own login, while he stood beside you at HKL telling Sinar\'s lawyer to be patient. The B2 barrier log and Raja\'s ramp have no sergeant on Basement 2 after ten to one. Transfers in: RM 3,000 on the first of every month since March 2019, into his wife\'s account at a bank in Kota Bharu, from Sinar Cold Chain Sdn Bhd, "consultancy retainer"; somebody had changed February\'s figure to nothing. And Friday 19 February, the day before the fire: RM 250,000, from the same account, "consultancy, special". Farah reads the restored sheet without sitting down. "Four years," she says. "I signed every one of his overtime claims. I thought the house in Kota Bharu was his father\'s."',
@@ -551,7 +549,7 @@ export const CASE12 = {
       brief: 'The archive of Level 14 has sat in a Bukit Aman store room since November, ninety officers reading it a carton at a time, and every carton has a sign-out sheet. Carton A is the police: one folder per officer, with a monthly figure. The clerk who keeps the sheets checks every row and column by its sum, in pencil, in the margin. One row has stopped adding up. Fill the grid and find it.',
       params: { difficulty: 'hard' },
       evidence: {
-        img: 'ev_c12_cartona', hotspot: HOT(),
+        img: 'ev_c12_cartona', hotspot: { x: 0.30, y: 0.42, r: 0.17 },
         title: 'Carton A',
         short: 'Carton A\'s sign-out sheet: on 3 December 2026, two days after the drive, one folder was taken out by Sjn. M. Asri and never returned. The folder is gone. Its index card is still in the drawer: "Asri, M. RM 3,000 a month since 2019."',
         text: 'Asri knows the archive store better than its clerks; he has signed out cartons for Farah all season and driven them wherever she needed them. On 3 December 2026, two days after the first of December, he signed out one folder from carton A "for Insp. F. Iskandar", and the column where a folder comes back is empty. Farah never asked for it. The folder is gone. Its card in the index drawer, typed on the same machine as every card in the archive, is still there: "Asri, M. Sjn., D9. RM 3,000 a month since 2019. Car." The last word is the Office\'s note of what he is for. The clerk who keeps the sheets tells Farah he wondered about it in December. "He is your sergeant, Puan," he says. "I thought you knew."',
@@ -570,7 +568,7 @@ export const CASE12 = {
         clue: 'The shredder\'s little counter says one sheet, on Saturday at 11:42 PM.',
       },
       evidence: {
-        img: 'ev_c12_order', hotspot: HOT(),
+        img: 'ev_c12_order', hotspot: { x: 0.58, y: 0.48, r: 0.20 },
         title: 'The car first',
         short: 'Reassembled: "OFFICE OF THE CHAIRMAN. To: M.A. Friday, 23:00. Bay V1 at 0:45. The gate at 1:50. The car first. Then the certificate. Nothing on the phones." In the locker, folded on the top shelf, a navy police raincoat with a strip of reflective tape torn off its back, smelling of petrol. He was told to burn it. He kept it.',
         text: 'The Office\'s pairs, as always. Bay V1 at a quarter to one; the gate at ten to two. The car first: the car, and whoever is in the back of it. Then the certificate: a man who is in the room when the form is filled in, and says every day, quietly, to everybody, that everybody knows who it is. Shredded at 11:42 on Saturday night, eight minutes before Farah rang him from Bala\'s counter and told him to watch V1, which is exactly what the order had told him to do. In the locker, behind his spare uniform, folded small on the top shelf: a navy police raincoat, Bukit Aman stores issue, with a strip of the silver reflective tape torn off across its back and the stitching holes left behind. It smells of petrol. Farah holds it up by the shoulders. "Stores counts raincoats," she says. "He would have had to sign for a new one."',
@@ -584,7 +582,7 @@ export const CASE12 = {
       brief: 'Back at Jugra on Monday night, with the yard taped off and the gate chained by the police, Rosli walks the palms on the other side of the car from Ain\'s prints: the driver\'s side, where nobody has thought to look because nobody got out of the car. Name the tread, then find the boot.',
       params: { shoes: 10 },
       evidence: {
-        img: 'ev_c12_boots', hotspot: HOT(),
+        img: 'ev_c12_boots', hotspot: { x: 0.42, y: 0.75, r: 0.15 },
         title: 'Three hundred metres',
         short: 'Police-issue patrol boots, size 8, from the car\'s driver\'s door into the palms and back to it, then three hundred metres through the estate to a cleared patch where a motorbike stood on its stand. Petrol in the first prints. The boots are on Asri\'s feet at Bukit Aman, the left heel worn on the outside exactly as the mud has it.',
         text: 'Rosli\'s lamp finds them at the driver\'s door, under the ash: the deep square heel and bar tread of a police patrol boot, the kind every constable in the country signs for. They go from the driver\'s door to the front wing and back, twice, the way a man walks who is pouring something; into the first row of palms on the driver\'s side, and back to the edge, where they stand still; then away, at a walk, not a run, three hundred metres through the estate in a straight line to a clearing where a motorbike stood long enough on its side stand to sink it into the earth. The first prints by the car smell of petrol when Rosli puts his nose to the cast. Size 8, the outside of the left heel worn down by a man who walks with his weight on that edge. At Bukit Aman, the boots are on Asri\'s feet. He has stood in them all day beside Farah\'s desk.',
@@ -599,7 +597,7 @@ export const CASE12 = {
         clue: 'Rosli: "Whoever left from here did it in the dark, in a hurry. He will have dropped something. They always drop something."',
       },
       evidence: {
-        img: 'ev_c12_tape', hotspot: HOT(),
+        img: 'ev_c12_tape', hotspot: { x: 0.80, y: 0.28, r: 0.12 },
         title: 'A strip of tape',
         short: 'In the clearing: an empty twenty-litre jerry can, a spent marine flare case, and, caught on a frond, a strip of silver reflective tape torn from a police raincoat. It matches the tear across the back of the raincoat in Asri\'s locker, stitch hole for stitch hole.',
         text: 'Lit from eight sides at once the clearing has nowhere left to hide anything. A red twenty-litre jerry can, empty, its cap gone, its handle wiped. The cardboard case of a hand-held marine flare, the kind fishing boats at Kuala Langat carry, fired and dropped. The side stand\'s hole in the earth, and the tyre\'s crescent where the bike was swung round to face the estate track that runs out to the Jenjarom road. And on a dry frond at the height of a man\'s back, snagged and fluttering, a strip of silver reflective tape a hand\'s width long, its edge ragged where it was torn. At Bukit Aman Farah lays it on the raincoat from Asri\'s locker. It fits the tear across the back stitch hole for stitch hole, like the last piece of a jigsaw. Rosli looks at it for a long time. "He tore it off so the fire would not light him up," he says. "And then he walked under a frond."',
@@ -626,7 +624,7 @@ export const CASE12 = {
         solvedText: 'The night plays in order. The car left V1 with one man at the wheel and no motorbike behind it, and the sergeant who lost it at Jenjarom was close enough to it at 2:01 for it to hear him.',
       },
       evidence: {
-        img: 'ev_c12_route', hotspot: HOT(),
+        img: 'ev_c12_route', hotspot: { x: 0.45, y: 0.60, r: 0.20 },
         title: 'Bay V1 to the gate',
         short: 'In order: "Car still in V1" at 0:45; V1 out at 0:50; the black car through Jenjarom at 1:34 with no motorbike behind it; at the gate by 1:50; the passenger upright at 1:52; handset 41 keyed inside the car at 2:01; fire at 2:08; and at 2:34 a police sergeant arriving by motorbike "from the Jenjarom road".',
         text: 'Pinned in a line across the board, with red thread, the night has only one driver in it. A sergeant reports the car still in its bay at a quarter to one; five minutes later its fob goes out of the barrier, and nobody has seen the sergeant on Basement 2 since. The car passes Jenjarom at 1:34 alone: the junction camera has six clear minutes behind it and nothing on two wheels. At ten to two the watchman takes the chain off for it, as he was told on the telephone at one. At 1:52 a driver in a police raincoat turns round in his seat toward the passenger. At 2:01 a police handset is keyed inside the car, and the sergeant\'s voice tells his inspector he has lost the car twenty kilometres away. At 2:08 a flare. At 2:34 the sergeant arrives at the gate on a motorbike, from the north, on a road the car used an hour before. Farah stands in front of the board with her arms folded. "One car," she says. "One driver. And he told me where he was every half hour."',
@@ -663,7 +661,7 @@ export const CASE12 = {
         liars: ['asri', 'azhar'],
       },
       evidence: {
-        img: 'ev_c12_five', hotspot: HOT(),
+        img: 'ev_c12_five', hotspot: { x: 0.50, y: 0.55, r: 0.18 },
         title: 'Five at the gate',
         short: 'Two liars: Sjn. Asri, who says he never reached the gate before Bomba, and Tan Sri Azhar, who says he has never been to Jugra. Ain\'s frames at 1:52 and 2:05 are true to the second: her camera\'s clock agrees with the Bomba log. Pak Itam never left the gate post.',
         text: 'Read back to back, the five statements sort themselves. Zaki, who drove the Banting pump, has the call book: Pak Itam\'s call at 2:16, the pump at the gate at 2:27, and a police sergeant on a motorbike at 2:34. Ain\'s camera clock is right to the second against the call book and the hut telephone, so her two frames are where she says they are, and Pak Itam is at the gate post in both of them, as he says. Tan Sri Azhar has never been to Jugra, he says, in a statement his own lawyer has already withdrawn. And Sjn. Asri, who typed his own statement on Sunday afternoon at the desk beside Farah\'s, says he lost the car at Jenjarom and never reached the gate before Bomba. Hamidah puts his statement face down on the table, on top of the others.',
@@ -693,7 +691,7 @@ export const CASE12 = {
         ],
       },
       evidence: {
-        img: 'ev_c12_grid', hotspot: HOT(),
+        img: 'ev_c12_grid', hotspot: { x: 0.30, y: 0.62, r: 0.18 },
         title: 'Five people, one night',
         short: 'Sjn. Asri beside the black car with his handset. Tan Sri Azhar at the Jenjarom petrol station with his summons card, asking the way. Ain in the palms with her camera. Pak Itam at the gate post with the chain. You on the Banting road, late, with the plate on the back seat.',
         text: 'One page. Sjn. Mohd. Asri bin Ghazali beside the black car from ten to two until eight minutes past, his handset on his belt, a cushion and a jerry can within reach. Tan Sri Azhar Kamaruddin at pump four in Jenjarom at 2:12 with a typed card in his breast pocket, asking a boy the way to a gate he says he has never seen. Nurul Ain in the first row of palms, twenty metres off, with her camera up. Pak Itam at the gate post with the chain he took off at ten to two, looking at the ground. And you, on the Banting road with Farah, with a rusted plate on the back seat because a voice asked you to bring it, late, as Daniel said you would be.',
@@ -716,7 +714,7 @@ export const CASE12 = {
         clue: 'Hamidah taps the sheet. "Three I can prove. Four, and I will sleep tonight."',
       },
       evidence: {
-        img: 'ev_c12_report', hotspot: HOT(),
+        img: 'ev_c12_report', hotspot: { x: 0.45, y: 0.50, r: 0.18 },
         title: 'Write only what you can prove',
         short: 'Hamidah reads your report twice and writes the charge against Sjn. Mohd. Asri bin Ghazali herself: murder, and arson. Then she lays the burial permit from HKL on top of it, with its empty box for a name. "Write only what you can prove," she says. "Henry Goh wrote \'match\' once."',
         text: 'She reads it with the pencil she never uses held in her teeth, then takes it out and draws a line under one sentence of yours: he could not speak. "That sentence is the only thing in this file that tells me who a man was not," she says. "Everything else tells me who he might be." She writes the charge herself, against Sjn. Mohd. Asri bin Ghazali, Section 302 and Section 435, and does not look at Farah while she writes it. Then she takes the burial permit out of its plastic sleeve and lays it on top. Name of deceased: an empty box. "Sinar\'s lawyers want a name in that box by noon. So do the papers. So, if I am honest, do I." She caps her flask. "Write only what you can prove, detective. Henry Goh wrote \'match\' once, on an X-ray, and a man lay under the wrong name in Cheras for five years. Not on my desk."',
@@ -770,7 +768,7 @@ export const CASE12 = {
         clue: 'Farah, from the door, very quietly: "He will tell you he is sorry before he tells you anything else. Let him. Then show him the radio."',
       },
       evidence: {
-        img: 'ev_c12_silence', hotspot: HOT(),
+        img: 'ev_c12_silence', hotspot: { x: 0.45, y: 0.68, r: 0.14 },
         title: 'He will not speak',
         short: 'Caught in one lie, Asri unclips his handset and lays it on the table himself. "They told me he was the Chairman. I asked how I would know him. They said: he will not speak. He did not speak. He tapped on the window, twice, and then he stopped." He has never seen the face of the man who sends the orders either.',
         text: 'He unclips the handset from his belt and lays it on the table between you, square to the edge, the way he lays down Farah\'s teh. "Since 2019, three thousand a month," he says. "For what is said in Puan\'s car. Nothing on the phones. Printed, in an envelope, in my locker." He does not look at the door, where Farah is. "In January they asked me what time the Tuan would see the old man in Singapore. I told them. They said they knew already. They only wanted to see if I would tell." On Friday the order said the car first, then the certificate, and the money came to his wife the same afternoon. He took the bike down to the palms on Saturday and came back on the Banting bus. At a quarter to one he walked into V1 and the car was waiting with its key in it and a man in the back in a white shirt, sitting very straight. "They told me he was the Chairman. I asked how I would know him. They said: he will not speak." He folds his hands. "He did not speak. Not on the road, not at the gate. He tapped on the window with his ring, twice, and then he stopped." Who sends the orders? He shakes his head. "Gapo demo nok, Tuan? I have never seen his face. I have never seen anybody\'s face. Only paper." The certificate was his too: he was to stand at the hospital every day and say to everybody, quietly, that everybody knows who it is. "I said it to you," he says. "On Sunday. Twice."',
