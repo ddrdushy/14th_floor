@@ -31,9 +31,9 @@ export const CUES = {
   theme_case05: { file: 'music_theme_case05', gain: 0.85, xloop: true, fallback: 'puzzle' },
   theme_case06: { file: 'music_theme_case06', gain: 0.85, xloop: true, fallback: 'puzzle' },
   theme_case07: { file: 'music_theme_case07', gain: 0.85, xloop: true, fallback: 'puzzle' },
-  puzzle_a: { file: 'music_puzzle_a', gain: 0.5, xloop: true, fallback: 'puzzle' },
-  puzzle_b: { file: 'music_puzzle_b', gain: 0.5, xloop: true, fallback: 'puzzle' },
-  puzzle_c: { file: 'music_puzzle_c', gain: 0.5, xloop: true, fallback: 'puzzle' },
+  puzzle_a: { file: 'music_puzzle_a', gain: 0.62, xloop: true, fallback: 'puzzle' },
+  puzzle_b: { file: 'music_puzzle_b', gain: 0.62, xloop: true, fallback: 'puzzle' },
+  puzzle_c: { file: 'music_puzzle_c', gain: 0.62, xloop: true, fallback: 'puzzle' },
   interrogation: { file: 'music_interrogation', gain: 0.6, xloop: true, fallback: 'tension' },
   deduction: { file: 'music_deduction', gain: 0.85, xloop: true, fallback: 'tension' },
   memory: { file: 'music_memory', gain: 0.85, xloop: true, fallback: 'closed' },
@@ -43,12 +43,23 @@ export const CUES = {
 
 /** The music for a case's own screens (map, board): its theme (the investigation loop until it exists). */
 export const caseTheme = (caseId) => (caseId && CUES[`theme_${caseId}`] ? `theme_${caseId}` : 'puzzle');
-/** One of the puzzle loops, the same one every time for a given level. */
+// A puzzle can last twenty minutes, and one track looping that long puts people to sleep. Puzzles play a
+// playlist instead: at each track's end the next one crossfades in. The pool is the more driving tracks
+// (the slow, sparse ones stay out), ordered so two similar tracks never meet.
+export const PLAYLISTS = {
+  drive: ['puzzle_b', 'tension', 'theme_side01', 'puzzle_a', 'theme_case05', 'deduction', 'theme_case03', 'theme_case06', 'theme_case04', 'puzzle'],
+};
+/** The puzzle playlist, starting at a track picked by the level (so each level opens differently). */
 export function puzzleCue(levelId = '') {
   let x = 0;
   for (const ch of String(levelId)) x = (x * 31 + ch.charCodeAt(0)) >>> 0;
-  return ['puzzle_a', 'puzzle_b', 'puzzle_c'][x % 3];
+  return `mix:drive:${x % PLAYLISTS.drive.length}`;
 }
+
+// Music pace (settings.musicPace): the tracks play a little faster, pitch kept, so slow loops do not drag.
+export const PACES = { calm: 1, lively: 1.07, fast: 1.14 };
+const STORY_CUES = new Set(['intro', 'memory', 'resolution', 'closed', 'chairman']); // cinematic moments keep their tempo
+const paceRate = (cue) => (STORY_CUES.has(cue) ? 1 : PACES[state().settings?.musicPace] || PACES.lively);
 
 // story cues used in case data, mapped onto the tracks we have
 const ALIASES = {
@@ -73,6 +84,7 @@ let live = null; // deck currently audible
 let wanted = null; // cue the game wants right now
 let lastLoop = null; // last looping cue, for returning after a stinger
 let gestured = false;
+let playlist = null; // { name, list, i } while a playlist is playing
 let ctx = null;
 let bus = null; // music volume
 let duckNode = null;
@@ -85,7 +97,8 @@ const level = () => {
   const lin = Number.isFinite(v) ? Math.max(0, Math.min(1, v)) : 0.6;
   return lin * lin; // perceptual curve for the slider
 };
-const cueGain = (cue) => CUES[cue]?.gain ?? 1;
+const MIX_GAIN = 0.7; // every playlist track at one level, so the handover does not jump
+const cueGain = (cue) => (playlist && playlist.list.includes(cue) ? MIX_GAIN : CUES[cue]?.gain ?? 1);
 
 /** Find the first playable file for a cue. Resolves to a URL or null. */
 function locate(cue) {
@@ -195,10 +208,22 @@ function load(deck, cue, url, at) {
   deck.handedOff = false;
   deck.el.loop = CUES[cue].loop !== false; // xloop cues also loop natively, as a safety net
   if (!deck.el.src.endsWith(url)) deck.el.src = url;
+  setRate(deck);
   try { deck.el.currentTime = at; } catch { /* set once metadata loads */ }
   if (at) deck.el.addEventListener('loadedmetadata', () => { try { deck.el.currentTime = at; } catch { /* ignore */ } }, { once: true });
   if (deck.gain) deck.gain.gain.value = 0;
   ramp(deck, 0, 0.01);
+}
+
+function setRate(deck) {
+  const r = paceRate(deck.cue);
+  try {
+    deck.el.preservesPitch = true;
+    deck.el.mozPreservesPitch = true;
+    deck.el.webkitPreservesPitch = true;
+    deck.el.defaultPlaybackRate = r;
+    deck.el.playbackRate = r;
+  } catch { /* old browsers: normal speed */ }
 }
 
 async function begin(deck, fade) {
@@ -240,14 +265,37 @@ function checkLoop(deck) {
   const cfg = CUES[deck.cue];
   const d = deck.el.duration;
   if (!cfg?.xloop || !(d > LOOP_FADE * 4) || deck.el.paused) return;
-  if (d - deck.el.currentTime > LOOP_FADE + 0.3) return;
+  if ((d - deck.el.currentTime) / (deck.el.playbackRate || 1) > LOOP_FADE + 0.3) return;
   deck.handedOff = true;
+  if (playlist && playlist.list[playlist.i] === deck.cue) { nextInPlaylist(deck); return; }
   const url = deck.el.currentSrc || deck.el.src;
   const next = pickDeck();
   live = next;
   load(next, deck.cue, url, 0);
   fadeOut(deck, LOOP_FADE, { keep: false });
   begin(next, LOOP_FADE);
+}
+
+/** A playlist track is ending: crossfade into the next track that has a file (or loop this one). */
+async function nextInPlaylist(deck) {
+  const pl = playlist;
+  const here = deck.el.currentSrc || deck.el.src;
+  let cue = deck.cue;
+  let url = here;
+  for (let k = 1; k <= pl.list.length; k++) {
+    const c = pl.list[(pl.i + k) % pl.list.length];
+    const u = CUES[c] ? await locate(c) : null;
+    if (u) { pl.i = (pl.i + k) % pl.list.length; cue = c; url = u; break; }
+  }
+  if (playlist !== pl || live !== deck) return; // the game moved on meanwhile
+  wanted = cue;
+  const next = pickDeck();
+  live = next;
+  load(next, cue, url, 0);
+  fadeOut(deck, LOOP_FADE * 1.6, { keep: false });
+  if (CUES[cue].loop !== false) lastLoop = cue;
+  begin(next, LOOP_FADE * 1.6);
+  locate(pl.list[(pl.i + 1) % pl.list.length]); // have the one after ready in time
 }
 
 function onEnded(deck) {
@@ -266,6 +314,17 @@ export const music = {
 
   /** Crossfade to a cue. Safe to call before the first gesture: it starts on unlock. */
   play(cue, opts) {
+    const mix = /^mix:([a-z_]+):(\d+)$/.exec(String(cue || ''));
+    if (mix && PLAYLISTS[mix[1]]) {
+      const list = PLAYLISTS[mix[1]];
+      // the same playlist asked for again (another puzzle): keep the track that is playing
+      if (playlist?.name === mix[1] && live?.cue && list.includes(live.cue) && !live.el.paused) { wanted = live.cue; return; }
+      playlist = { name: mix[1], list, i: Number(mix[2]) % list.length };
+      cue = list[playlist.i];
+      locate(list[(playlist.i + 1) % list.length]);
+    } else {
+      playlist = null;
+    }
     cue = ALIASES[cue] || cue;
     if (!cue || !CUES[cue]) return;
     wanted = cue;
@@ -276,6 +335,7 @@ export const music = {
 
   stop(fade = 1.6) {
     wanted = null;
+    playlist = null;
     if (live) fadeOut(live, fade);
     live = null;
   },
@@ -311,6 +371,13 @@ export const music = {
     this.apply();
   },
 
+  /** 'calm' | 'lively' | 'fast': how fast the tracks play (pitch kept). */
+  setPace(p) {
+    settings().musicPace = PACES[p] ? p : 'lively';
+    save();
+    decks?.forEach((d) => { if (d.cue) setRate(d); });
+  },
+
   setEnabled(on) {
     settings().music = !!on;
     save();
@@ -334,7 +401,7 @@ export const music = {
   get wanted() { return wanted; },
   /** For debugging: what each deck is doing. */
   debug() {
-    return decks?.map((d) => ({ cue: d.cue, t: Math.round(d.el.currentTime * 10) / 10, paused: d.el.paused, gain: d.gain ? Math.round(d.gain.gain.value * 100) / 100 : d.el.volume, live: d === live, src: d.el.src.split('/').pop().slice(0, 24) }));
+    return decks?.map((d) => ({ cue: d.cue, t: Math.round(d.el.currentTime * 10) / 10, paused: d.el.paused, gain: d.gain ? Math.round(d.gain.gain.value * 100) / 100 : d.el.volume, live: d === live, src: d.el.src.split('/').pop().slice(0, 24), rate: d.el.playbackRate }));
   },
   /** For testing: jump the live track to a time (negative = seconds before the end). */
   seek(t) {

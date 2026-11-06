@@ -26,6 +26,17 @@ function sliderRow(label, id, get, set, onRelease) {
   return h('div', { class: 'set-row set-row--slider' }, h('label', { for: id }, label), input, out);
 }
 
+// Music pace: the tracks play slightly faster (pitch kept) so long puzzles do not drag. core/music.js PACES.
+function paceRow(s) {
+  const opts = [['calm', 'Calm'], ['lively', 'Lively'], ['fast', 'Fast']];
+  const cur = () => s.musicPace || 'lively';
+  const btns = opts.map(([v, label]) => h('button', { type: 'button', class: 'set-seg-btn', 'aria-pressed': String(cur() === v), onclick: () => {
+    app.music.setPace(v);
+    btns.forEach((b, i) => b.setAttribute('aria-pressed', String(opts[i][0] === cur())));
+  } }, label));
+  return h('div', { class: 'set-row' }, h('span', { id: 'set-pace-label' }, 'Music pace'), h('div', { class: 'set-seg', role: 'group', 'aria-labelledby': 'set-pace-label' }, btns));
+}
+
 // Leaderboard and privacy (read by core/telemetry.js through the save):
 //   shareProgress: send progress + cloud save (default on)   showOnBoard: show the detective name (default off)
 function leaderboardGroup(s) {
@@ -87,7 +98,8 @@ export function openSettings() {
       h('section', { class: 'set-group' },
         h('h3', {}, 'Music'),
         toggleRow('Music', 'set-music', () => s.music !== false, (v) => app.music.setEnabled(v)),
-        sliderRow('Music volume', 'set-music-vol', () => s.musicVolume ?? 0.6, (v) => app.music.setVolume(v))),
+        sliderRow('Music volume', 'set-music-vol', () => s.musicVolume ?? 0.6, (v) => app.music.setVolume(v)),
+        paceRow(s)),
       h('section', { class: 'set-group' },
         h('h3', {}, 'Sound effects'),
         toggleRow('Rain, thunder and clicks', 'set-sound', () => s.sound !== false, (v) => {
